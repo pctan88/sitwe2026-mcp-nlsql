@@ -35,6 +35,8 @@ results/*.pid
 results/*.txt
 results/*.marker
 !results/summary.json
+!results/latency_profile.json
+!results/scalability_25iter.json
 !results/pilot_results_contaminated_*.csv
 !results/summary_contaminated_*.json
 # Vendor-native arm (reviewer R1-2/R2-2): keep the full evidence set —

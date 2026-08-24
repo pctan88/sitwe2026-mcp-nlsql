@@ -637,12 +637,13 @@ Pooled (v1)    & 60 & 12 & 0.92 & 0.300 & 0.453 \\
 On a 2024 commodity laptop the mean MCP middleware overhead
 (\texttt{schema/} \texttt{fingerprint} diff $+$ \texttt{query/relink}
 AST rewrite $+$ \texttt{query/validate} execution and back-translation)
-is $0.22 \pm 0.43$~s per query (median $0.00$~s, range $[0.00, 1.12]$~s),
-on top of the baseline configuration's $1.13 \pm 0.19$~s LLM generation
-(median $1.06$~s, range $[0.88, 1.58]$~s) that the MCP path reuses as
-its input. The distribution is right-skewed: most queries clear the middleware in
-under $0.05$~s; the tail comes from the $\sim 1$~s back-translation.
-The MCP-mediated end-to-end path is therefore $\approx 1.35$~s per query,
+is $0.70 \pm 0.79$~s per query (median $0.85$~s, range $[0.00, 3.05]$~s),
+on top of the baseline configuration's $1.16 \pm 0.37$~s LLM generation
+(median $1.07$~s, range $[0.82, 3.38]$~s) that the MCP path reuses as
+its input. The distribution is right-skewed: just under half of the queries
+($49\,\%$) clear the middleware in under $0.05$~s; the tail comes from
+the single LLM re-prompt issued when validation flags the relinked SQL.
+The MCP-mediated end-to-end path is therefore $\approx 1.86$~s per query,
 with a second LLM call incurred only on validation failure,
 confirming the bounded-cost property posited in Section~III: at most
 one initial generation plus one optional re-prompt per query.
@@ -653,7 +654,7 @@ prices: single-call arms average $240$--$336$ input tokens
 $2507$--$4838$ tokens (USD $0.0061$--$0.0072$). A full two-database,
 five-operator sweep costs under USD $3$ per model; the $199$-item
 EvoSchema run cost USD $0.72$ (Haiku) and USD $1.25$ (GPT-4o). All middleware runs CPU-only, MiniLM validator included. With
-Table~\ref{tab:scalability}'s sub-$120$\,ms primitives, the marginal
+Table~\ref{tab:scalability}'s sub-$5$\,ms primitives, the marginal
 cost is the single optional re-prompt.
 
 \subsection{Error Analysis of the Stale-Schema Baseline}
@@ -952,8 +953,8 @@ To confirm the bounded-cost design at schema sizes beyond the pilot
 databases, the \texttt{schema/fingerprint} diff and the \texttt{query/relink}
 AST pass were timed on synthetic schemas of $10$, $100$, and $1000$ tables
 ($25$-iteration medians). Table~\ref{tab:scalability} reports the results.
-Both primitives stay under $120$\,ms at $1000$ tables (fingerprint
-median $86$\,ms, relink median $113$\,ms) and grow sub-linearly in
+Both primitives stay under $5$\,ms at $1000$ tables (fingerprint
+median $3.4$\,ms, relink median $4.7$\,ms) and grow sub-linearly in
 the table count.
 
 \begin{table}[t]
@@ -965,9 +966,9 @@ size (median and IQR over 25 iterations, seconds).}
 \toprule
 \textbf{Tables} & \textbf{FP median} & \textbf{FP IQR} & \textbf{Relink median} & \textbf{Relink IQR} \\
 \midrule
-10   & 0.0007 & 0.0002 & 0.0031 & 0.0010 \\
-100  & 0.0062 & 0.0051 & 0.0108 & 0.0094 \\
-1000 & 0.0863 & 0.0182 & 0.1133 & 0.0414 \\
+10   & 0.00005 & $<$0.00001 & 0.00020 & 0.00001 \\
+100  & 0.00038 & 0.00001 & 0.00061 & 0.00002 \\
+1000 & 0.00341 & 0.00014 & 0.00467 & 0.00031 \\
 \bottomrule
 \end{tabular}
 \end{table}

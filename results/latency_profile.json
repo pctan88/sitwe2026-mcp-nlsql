@@ -1,0 +1,58 @@
+{
+  "_note": "Latency profile from the canonical Haiku 4.5 concert_singer run (results/concert_singer/pilot_results_concert_singer_{OPERATOR}.csv). 'scored_n76' covers the 76 scored queries (paper statistics); 'executed_n80' adds the 4 expected-failure controls. latency_mcp_s is middleware-only (AST relink + validate + at most one LLM re-prompt; the baseline generation is reused, not re-timed). latency_baseline_s is the stale-schema LLM generation call. fraction_under_50ms = share of queries whose middleware path finished in under 0.05 s (deterministic path, no re-prompt). The latency tail is the re-prompt path taken when query/validate flags the relinked SQL; per-final-verdict means in middleware_latency_by_final_verdict.",
+  "scored_n76": {
+    "middleware_overhead_s": {
+      "n": 76,
+      "mean": 0.7002,
+      "sd": 0.7902,
+      "median": 0.8492,
+      "min": 0.0018,
+      "max": 3.0468
+    },
+    "baseline_generation_s": {
+      "n": 76,
+      "mean": 1.162,
+      "sd": 0.3656,
+      "median": 1.0697,
+      "min": 0.8161,
+      "max": 3.3835
+    },
+    "fraction_under_50ms": 0.4868,
+    "end_to_end_estimate_s": 1.86
+  },
+  "executed_n80": {
+    "middleware_overhead_s": {
+      "n": 80,
+      "mean": 0.7265,
+      "sd": 0.8122,
+      "median": 0.8528,
+      "min": 0.0018,
+      "max": 3.0468
+    },
+    "baseline_generation_s": {
+      "n": 80,
+      "mean": 1.1495,
+      "sd": 0.3607,
+      "median": 1.0662,
+      "min": 0.8161,
+      "max": 3.3835
+    },
+    "fraction_under_50ms": 0.475,
+    "end_to_end_estimate_s": 1.88
+  },
+  "middleware_latency_by_final_verdict": {
+    "execution_error": {
+      "n": 5,
+      "mean_s": 2.576
+    },
+    "silent_failure_suspected": {
+      "n": 7,
+      "mean_s": 1.114
+    },
+    "valid": {
+      "n": 64,
+      "mean_s": 0.508
+    }
+  },
+  "source": "results/concert_singer/pilot_results_concert_singer_{OP}.csv"
+}
