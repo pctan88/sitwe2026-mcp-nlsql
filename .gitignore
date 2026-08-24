@@ -56,6 +56,7 @@ CLAUDE_CODE_RUNBOOK.md
 # Generated paper outputs — regenerate from build_docx.py / pdflatex
 paper/*.pdf
 paper/*.docx
+!paper/sitwe2026_paper_camera_ready.docx
 paper/figures/*.pdf
 
 # Workspace-root architecture mock-ups (superseded by paper/fig_arch.png)

@@ -523,11 +523,11 @@ the arrow marks the pooled Recovery Rate of $0.80$.
 
 Table~\ref{tab:perpert} disaggregates results by operator across the
 76-query evaluation. The TABLE\_RENAME, TABLE\_SPLIT, and COLUMN\_RENAME
-operators show high recovery (MCP correct $\geq 90\%$ of pre-time
-correct queries) because the deterministic AST relinker handles
+operators show high recovery (MCP correct for $75$--$92\,\%$ of
+refreshed-schema correct queries) because the deterministic AST relinker handles
 identifier substitution without error. TABLE\_MERGE recovery is
 slightly lower; notably the MCP path corrects $11$ queries against a
-pre-perturbation ceiling of $10$, giving a per-operator RR of $1.125$.
+refreshed-schema ceiling of $10$, giving a per-operator RR of $1.125$.
 This marginal overshoot occurs when relinking outperforms regeneration
 from scratch (same effect as cross-model RR $> 1.0$ noted in
 Section~\ref{sec:results}-C). The COLUMN\_MERGE operator is the
@@ -550,13 +550,13 @@ questions are exercised by the EvoSchema subset
 \begin{table}[h!]
 \centering
 \caption{Per-perturbation breakdown across all five EvoSchema operators
-($n = 76$, \texttt{concert\_singer}, Haiku~4.5). Pre = refreshed-schema
+($n = 76$, \texttt{concert\_singer}, Haiku~4.5). Refr.\ = refreshed-schema
 correct (recovery ceiling); Base = stale-schema baseline correct;
 MCP = MCP-mediated correct; Rec.\ = queries recovered by MCP (MCP $-$ Base).}
 \label{tab:perpert}
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Pert.} & \textbf{N} & \textbf{Pre} & \textbf{Base} & \textbf{MCP} & \textbf{Rec.} \\
+\textbf{Pert.} & \textbf{N} & \textbf{Refr.} & \textbf{Base} & \textbf{MCP} & \textbf{Rec.} \\
 \midrule
 TABLE\_RENAME   & 16 & 12 & 1  & 9  & 8  \\
 TABLE\_SPLIT    & 16 & 12 & 1  & 10 & 9  \\
@@ -1220,8 +1220,8 @@ doi:10.1109/TKDE.2025.3609486.
 \bibitem{li2026deepeyesql}
 B.~Li, C.~Chen, Z.~Xue, Y.~Mei, and Y.~Luo, ``DeepEye-SQL: A
 software-engineering-inspired text-to-SQL framework,''
-\emph{Proc.\ ACM Manag.\ Data}, vol.~4, no.~3, Art.~158, 2026,
-doi:10.1145/3788284.
+\emph{Proc.\ ACM Manag.\ Data}, vol.~4, no.~3, pp.~1--28, 2026,
+doi:10.1145/3802035.
 
 \bibitem{lei2026crl}
 J.~Lei, R.~He, and Y.~Wang, ``Enhanced Text-to-SQL using cooperative
