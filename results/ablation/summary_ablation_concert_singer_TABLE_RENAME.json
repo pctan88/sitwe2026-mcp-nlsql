@@ -1,0 +1,64 @@
+{
+  "database_id": "concert_singer_TABLE_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "configs": {
+    "A_full_mcp": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "B_no_fingerprint": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "C_no_relink": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "D_no_validate": {
+      "ex": 0.5625,
+      "n_correct": 9
+    }
+  },
+  "baseline": {
+    "ex": 0.0625,
+    "n_correct": 1
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "singer",
+      "to": "artist"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "befe776345c2064b",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ]
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  }
+}

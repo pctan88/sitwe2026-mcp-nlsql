@@ -1,0 +1,163 @@
+[
+  {
+    "id": "hr_cr_01",
+    "question": "List employee first and last names.",
+    "gold_pre": "SELECT first_name, last_name FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT fname, last_name FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_02",
+    "question": "Count employees.",
+    "gold_pre": "SELECT COUNT(*) FROM employees",
+    "gold_post": "SELECT COUNT(*) FROM employees",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_03",
+    "question": "Employees with salary over 7000.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE salary > 7000 ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_04",
+    "question": "Average employee salary.",
+    "gold_pre": "SELECT AVG(salary) FROM employees",
+    "gold_post": "SELECT AVG(monthly_salary) FROM employees",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_05",
+    "question": "List employee emails.",
+    "gold_pre": "SELECT email FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT email FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_06",
+    "question": "List employee IDs with salaries.",
+    "gold_pre": "SELECT employee_id, salary FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT employee_id, monthly_salary FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_07",
+    "question": "Employees with first names starting with A.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE first_name LIKE 'A%'",
+    "gold_post": "SELECT employee_id FROM employees WHERE fname LIKE 'A%'",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_08",
+    "question": "Employees with commissions.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_09",
+    "question": "Job title for employee 1.",
+    "gold_pre": "SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1",
+    "gold_post": "SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees",
+      "jobs"
+    ]
+  },
+  {
+    "id": "hr_cr_10",
+    "question": "Count employees per department.",
+    "gold_pre": "SELECT department_id, COUNT(*) FROM employees GROUP BY department_id ORDER BY department_id",
+    "gold_post": "SELECT department_id, COUNT(*) FROM employees GROUP BY department_id ORDER BY department_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_11",
+    "question": "Employees managed by 1.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE manager_id=1 ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM employees WHERE manager_id=1 ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_12",
+    "question": "Employees hired after 2007-06-20.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE hire_date > '2007-06-20' ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM employees WHERE hire_date > '2007-06-20' ORDER BY employee_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_13",
+    "question": "List employees by salary descending.",
+    "gold_pre": "SELECT first_name, salary FROM employees ORDER BY salary DESC",
+    "gold_post": "SELECT fname, monthly_salary FROM employees ORDER BY monthly_salary DESC",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_14",
+    "question": "Count employees with salary between 6000 and 8000.",
+    "gold_pre": "SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000",
+    "gold_post": "SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cr_15",
+    "question": "List region names.",
+    "gold_pre": "SELECT region_name FROM regions ORDER BY region_id",
+    "gold_post": "SELECT region_name FROM regions ORDER BY region_id",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "regions"
+    ]
+  },
+  {
+    "id": "hr_cr_16",
+    "question": "Count jobs.",
+    "gold_pre": "SELECT COUNT(*) FROM jobs",
+    "gold_post": "SELECT COUNT(*) FROM jobs",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "jobs"
+    ]
+  }
+]

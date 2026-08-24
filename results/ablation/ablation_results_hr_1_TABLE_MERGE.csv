@@ -1,0 +1,111 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+hr_tm_01,TABLE_MERGE,False,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,"SELECT d.department_name, d.city FROM department_location AS d",execution_error,1,"SELECT d.department_name, d.city
+FROM department_location d",execution_error,1,"SELECT d.department_name, d.city
+FROM department_location d",execution_error,0,"SELECT d.department_name, l.city FROM departments AS d JOIN locations AS l ON d.location_id = l.location_id",skipped
+hr_tm_02,TABLE_MERGE,False,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,0,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count FROM countries AS c LEFT JOIN department_location AS dl ON c.country_id = dl.country_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",execution_error,0,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count
+FROM countries c
+LEFT JOIN department_location dl ON c.country_id = dl.country_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",execution_error,0,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count
+FROM countries c
+LEFT JOIN department_location dl ON c.country_id = dl.country_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",execution_error,0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count FROM countries AS c LEFT JOIN locations AS l ON c.country_id = l.country_id LEFT JOIN departments AS d ON l.location_id = d.location_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",skipped
+hr_tm_03,TABLE_MERGE,False,"SELECT street_address
+FROM locations
+WHERE location_id = (
+  SELECT location_id
+  FROM departments
+  WHERE department_id = 10
+)",0,1,SELECT street_address FROM department_location WHERE department_id = 10,execution_error,1,"SELECT street_address
+FROM department_location
+WHERE department_id = 10",execution_error,1,"SELECT street_address
+FROM department_location
+WHERE department_id = 10",execution_error,0,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),skipped
+hr_tm_04,TABLE_MERGE,False,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,0,"SELECT DISTINCT department_id, department_name FROM department_location WHERE city = 'City1'",execution_error,0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",execution_error,0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",execution_error,0,"SELECT DISTINCT d.department_id, d.department_name FROM departments AS d JOIN locations AS l ON d.location_id = l.location_id WHERE l.city = 'City1'",skipped
+hr_tm_05,TABLE_MERGE,False,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",execution_error,1,"SELECT DISTINCT department_name, postal_code
+FROM department_location
+ORDER BY department_name",execution_error,1,"SELECT DISTINCT department_name, postal_code
+FROM department_location
+ORDER BY department_name",execution_error,0,"SELECT DISTINCT d.department_name, l.postal_code FROM departments AS d JOIN locations AS l ON d.location_id = l.location_id ORDER BY d.department_name",skipped
+hr_tm_06,TABLE_MERGE,False,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',execution_error,1,"SELECT COUNT(DISTINCT department_id)
+FROM department_location
+WHERE state_province = 'State1'",execution_error,1,"SELECT COUNT(DISTINCT department_id)
+FROM department_location
+WHERE state_province = 'State1'",execution_error,0,SELECT COUNT(DISTINCT d.department_id) FROM departments AS d JOIN locations AS l ON d.location_id = l.location_id WHERE l.state_province = 'State1',skipped
+hr_tm_07,TABLE_MERGE,False,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,"SELECT DISTINCT dl.location_id, dl.department_name FROM department_location AS dl ORDER BY dl.location_id",execution_error,1,"SELECT dl.location_id, dl.department_name
+FROM department_location dl
+ORDER BY dl.location_id",execution_error,1,"SELECT DISTINCT dl.location_id, dl.department_name
+FROM department_location dl
+ORDER BY dl.location_id",execution_error,0,"SELECT l.location_id, d.department_name FROM locations AS l LEFT JOIN departments AS d ON l.location_id = d.location_id ORDER BY l.location_id",skipped
+hr_tm_08,TABLE_MERGE,False,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,0,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",execution_error,0,"SELECT DISTINCT dl.department_id, dl.department_name
+FROM department_location dl
+WHERE dl.country_id = 'C01'",execution_error,0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE country_id = 'C01'",execution_error,0,"SELECT DISTINCT d.department_id, d.department_name FROM departments AS d JOIN locations AS l ON d.location_id = l.location_id WHERE l.country_id = 'C01'",skipped
+hr_tm_09,TABLE_MERGE,False,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,SELECT COUNT(DISTINCT city) FROM department_location,execution_error,1,"SELECT COUNT(DISTINCT city)
+FROM department_location",execution_error,1,"SELECT COUNT(DISTINCT city)
+FROM department_location",execution_error,0,SELECT COUNT(DISTINCT l.city) FROM locations AS l INNER JOIN departments AS d ON l.location_id = d.location_id,skipped
+hr_tm_10,TABLE_MERGE,False,"SELECT department_name, manager_id FROM departments",0,1,"SELECT department_name, manager_id FROM department_location",execution_error,1,"SELECT department_name, manager_id FROM department_location",execution_error,1,"SELECT department_name, manager_id FROM department_location",execution_error,0,"SELECT department_name, manager_id FROM departments",skipped
+hr_tm_11,TABLE_MERGE,False,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,0,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name FROM employees AS e JOIN department_location AS dl ON e.department_id = dl.department_id ORDER BY e.first_name, e.last_name, dl.department_name",execution_error,0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    dl.department_name
+FROM employees e
+JOIN department_location dl ON e.department_id = dl.department_id
+ORDER BY e.first_name, e.last_name, dl.department_name",execution_error,0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    dl.department_name
+FROM employees e
+JOIN department_location dl ON e.department_id = dl.department_id
+ORDER BY e.first_name, e.last_name, dl.department_name",execution_error,0,"SELECT DISTINCT e.first_name, e.last_name, d.department_name FROM employees AS e JOIN departments AS d ON e.department_id = d.department_id ORDER BY e.first_name, e.last_name, d.department_name",skipped
+hr_tm_12,TABLE_MERGE,False,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,0,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,execution_error,0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",execution_error,0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",execution_error,0,SELECT DISTINCT l.city FROM job_history AS jh JOIN departments AS d ON jh.department_id = d.department_id JOIN locations AS l ON d.location_id = l.location_id ORDER BY l.city,skipped
+hr_tm_13,TABLE_MERGE,False,SELECT DISTINCT job_title FROM jobs,1,1,SELECT DISTINCT job_title FROM jobs,valid,1,SELECT DISTINCT job_title FROM jobs,valid,1,SELECT DISTINCT job_title FROM jobs,valid,1,SELECT DISTINCT job_title FROM jobs,skipped
+hr_tm_14,TABLE_MERGE,False,SELECT COUNT(*) FROM regions,1,1,SELECT COUNT(*) FROM regions,valid,1,SELECT COUNT(*) FROM regions,valid,1,SELECT COUNT(*) FROM regions,valid,1,SELECT COUNT(*) FROM regions,skipped
+hr_tm_15,TABLE_MERGE,True,SELECT DISTINCT city FROM locations,,,SELECT DISTINCT city FROM department_location,execution_error,,SELECT DISTINCT city FROM department_location,execution_error,,SELECT DISTINCT city FROM department_location,execution_error,,SELECT DISTINCT city FROM locations,skipped
+hr_tm_16,TABLE_MERGE,True,SELECT COUNT(*) FROM locations,,,SELECT COUNT(*) FROM department_location,execution_error,,SELECT COUNT(*) FROM department_location,execution_error,,SELECT COUNT(*) FROM department_location,execution_error,,SELECT COUNT(*) FROM locations,skipped

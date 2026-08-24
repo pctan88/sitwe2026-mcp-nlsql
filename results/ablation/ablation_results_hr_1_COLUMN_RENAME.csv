@@ -1,0 +1,71 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+hr_cr_01,COLUMN_RENAME,False,"SELECT first_name, last_name FROM employees",0,1,"SELECT fname, last_name FROM employees",valid,1,"SELECT fname, last_name FROM employees",execution_error,1,"SELECT fname, last_name FROM employees",execution_error,1,"SELECT fname, last_name FROM employees",skipped
+hr_cr_02,COLUMN_RENAME,False,SELECT COUNT(*) FROM employees,1,1,SELECT COUNT(*) FROM employees,valid,1,SELECT COUNT(*) FROM employees,valid,1,SELECT COUNT(*) FROM employees,valid,1,SELECT COUNT(*) FROM employees,skipped
+hr_cr_03,COLUMN_RENAME,False,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,0,"SELECT employee_id, fname, last_name, monthly_salary FROM employees WHERE monthly_salary > 7000 ORDER BY monthly_salary DESC",valid,0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+WHERE monthly_salary > 7000
+ORDER BY monthly_salary DESC",execution_error,0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+WHERE monthly_salary > 7000
+ORDER BY monthly_salary DESC",execution_error,0,"SELECT employee_id, fname, last_name, monthly_salary FROM employees WHERE monthly_salary > 7000 ORDER BY monthly_salary DESC",skipped
+hr_cr_04,COLUMN_RENAME,False,SELECT AVG(salary) FROM employees,0,1,SELECT AVG(monthly_salary) FROM employees,valid,1,SELECT AVG(monthly_salary) FROM employees,execution_error,1,SELECT AVG(monthly_salary) FROM employees,execution_error,1,SELECT AVG(monthly_salary) FROM employees,skipped
+hr_cr_05,COLUMN_RENAME,False,SELECT email FROM employees,1,1,SELECT email FROM employees,valid,1,SELECT email FROM employees,valid,1,SELECT email FROM employees,valid,1,SELECT email FROM employees,skipped
+hr_cr_06,COLUMN_RENAME,False,"SELECT employee_id, salary FROM employees",0,1,"SELECT employee_id, monthly_salary FROM employees",valid,1,"SELECT employee_id, monthly_salary FROM employees",execution_error,1,"SELECT employee_id, monthly_salary FROM employees",execution_error,1,"SELECT employee_id, monthly_salary FROM employees",skipped
+hr_cr_07,COLUMN_RENAME,False,SELECT * FROM employees WHERE first_name LIKE 'A%',0,0,SELECT * FROM employees WHERE fname LIKE 'A%',valid,0,SELECT * FROM employees WHERE fname LIKE 'A%',execution_error,0,SELECT * FROM employees WHERE fname LIKE 'A%',execution_error,0,SELECT * FROM employees WHERE fname LIKE 'A%',skipped
+hr_cr_08,COLUMN_RENAME,False,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,0,"SELECT employee_id, fname, last_name, commission_pct FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0 ORDER BY employee_id",silent_failure_suspected,0,"SELECT employee_id, fname, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",execution_error,0,"SELECT employee_id, fname, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",execution_error,0,"SELECT employee_id, fname, last_name, commission_pct FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",skipped
+hr_cr_09,COLUMN_RENAME,False,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,1,SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,valid,1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",valid,1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",valid,1,SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,skipped
+hr_cr_10,COLUMN_RENAME,False,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,0,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN employees AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",valid,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",valid,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",valid,0,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN employees AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",skipped
+hr_cr_11,COLUMN_RENAME,False,SELECT * FROM employees WHERE manager_id = 1,0,0,SELECT * FROM employees WHERE manager_id = 1,valid,0,SELECT * FROM employees WHERE manager_id = 1,valid,0,SELECT * FROM employees WHERE manager_id = 1,valid,0,SELECT * FROM employees WHERE manager_id = 1,skipped
+hr_cr_12,COLUMN_RENAME,False,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,0,SELECT * FROM employees WHERE hire_date > '2007-06-20',valid,0,SELECT * FROM employees WHERE hire_date > '2007-06-20',valid,0,SELECT * FROM employees WHERE hire_date > '2007-06-20',valid,0,SELECT * FROM employees WHERE hire_date > '2007-06-20',skipped
+hr_cr_13,COLUMN_RENAME,False,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+ORDER BY salary DESC",0,0,"SELECT employee_id, fname, last_name, monthly_salary FROM employees ORDER BY monthly_salary DESC",valid,0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+ORDER BY monthly_salary DESC",execution_error,0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+ORDER BY monthly_salary DESC",execution_error,0,"SELECT employee_id, fname, last_name, monthly_salary FROM employees ORDER BY monthly_salary DESC",skipped
+hr_cr_14,COLUMN_RENAME,False,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,0,1,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,valid,1,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,execution_error,1,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,execution_error,1,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,skipped
+hr_cr_15,COLUMN_RENAME,False,SELECT DISTINCT region_name FROM regions,1,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,skipped
+hr_cr_16,COLUMN_RENAME,False,SELECT COUNT(*) FROM jobs,1,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,skipped

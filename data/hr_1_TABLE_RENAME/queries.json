@@ -1,0 +1,179 @@
+[
+  {
+    "id": "hr_tr_01",
+    "question": "List employee first and last names.",
+    "gold_pre": "SELECT first_name, last_name FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT first_name, last_name FROM staff ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_02",
+    "question": "Count employees.",
+    "gold_pre": "SELECT COUNT(*) FROM employees",
+    "gold_post": "SELECT COUNT(*) FROM staff",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_03",
+    "question": "Employees with salary over 7000.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE salary > 7000 ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM staff WHERE salary > 7000 ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_04",
+    "question": "Average employee salary.",
+    "gold_pre": "SELECT AVG(salary) FROM employees",
+    "gold_post": "SELECT AVG(salary) FROM staff",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_05",
+    "question": "List employee emails.",
+    "gold_pre": "SELECT email FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT email FROM staff ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_06",
+    "question": "Employees in department 10.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE department_id=10",
+    "gold_post": "SELECT employee_id FROM staff WHERE department_id=10",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_07",
+    "question": "List employee job IDs.",
+    "gold_pre": "SELECT employee_id, job_id FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT employee_id, job_id FROM staff ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_08",
+    "question": "Count employees per department.",
+    "gold_pre": "SELECT department_id, COUNT(*) FROM employees GROUP BY department_id ORDER BY department_id",
+    "gold_post": "SELECT department_id, COUNT(*) FROM staff GROUP BY department_id ORDER BY department_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_09",
+    "question": "Employees with commissions.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM staff WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_10",
+    "question": "Employees managed by 1.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE manager_id=1 ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM staff WHERE manager_id=1 ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_11",
+    "question": "Job title for employee 1.",
+    "gold_pre": "SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1",
+    "gold_post": "SELECT j.job_title FROM staff e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff",
+      "jobs"
+    ]
+  },
+  {
+    "id": "hr_tr_12",
+    "question": "Department name for employee 1.",
+    "gold_pre": "SELECT d.department_name FROM employees e JOIN departments d ON e.department_id=d.department_id WHERE e.employee_id=1",
+    "gold_post": "SELECT d.department_name FROM staff e JOIN departments d ON e.department_id=d.department_id WHERE e.employee_id=1",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff",
+      "departments"
+    ]
+  },
+  {
+    "id": "hr_tr_13",
+    "question": "Job history start date for employee 1.",
+    "gold_pre": "SELECT j.start_date FROM job_history j JOIN employees e ON j.employee_id=e.employee_id WHERE e.employee_id=1",
+    "gold_post": "SELECT j.start_date FROM job_history j JOIN staff e ON j.employee_id=e.employee_id WHERE e.employee_id=1",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff",
+      "job_history"
+    ]
+  },
+  {
+    "id": "hr_tr_14",
+    "question": "Employees hired after 2007-06-20.",
+    "gold_pre": "SELECT employee_id FROM employees WHERE hire_date > '2007-06-20' ORDER BY employee_id",
+    "gold_post": "SELECT employee_id FROM staff WHERE hire_date > '2007-06-20' ORDER BY employee_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "employees",
+      "staff"
+    ]
+  },
+  {
+    "id": "hr_tr_15",
+    "question": "List region names.",
+    "gold_pre": "SELECT region_name FROM regions ORDER BY region_id",
+    "gold_post": "SELECT region_name FROM regions ORDER BY region_id",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "regions"
+    ]
+  },
+  {
+    "id": "hr_tr_16",
+    "question": "Count jobs.",
+    "gold_pre": "SELECT COUNT(*) FROM jobs",
+    "gold_post": "SELECT COUNT(*) FROM jobs",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "jobs"
+    ]
+  }
+]

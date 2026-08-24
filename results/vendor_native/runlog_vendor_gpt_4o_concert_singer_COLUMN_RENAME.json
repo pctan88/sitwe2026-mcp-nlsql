@@ -1,0 +1,24 @@
+{
+  "database_id": "concert_singer_COLUMN_RENAME",
+  "model": "gpt-4o",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "cs_cr_01",
+    "cs_cr_02",
+    "cs_cr_03",
+    "cs_cr_04",
+    "cs_cr_05",
+    "cs_cr_06",
+    "cs_cr_07",
+    "cs_cr_08",
+    "cs_cr_09",
+    "cs_cr_10",
+    "cs_cr_11",
+    "cs_cr_12",
+    "cs_cr_13",
+    "cs_cr_14",
+    "cs_cr_15",
+    "cs_cr_16"
+  ]
+}

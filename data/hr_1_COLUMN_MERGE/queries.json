@@ -1,0 +1,167 @@
+[
+  {
+    "id": "hr_cm_01",
+    "question": "List merged employee full names.",
+    "gold_pre": "SELECT first_name || ' ' || last_name AS full_name FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT full_name FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_02",
+    "question": "Count employees with last names starting with S.",
+    "gold_pre": "SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%'",
+    "gold_post": "SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%'",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_03",
+    "question": "Full name for employee 1.",
+    "gold_pre": "SELECT first_name || ' ' || last_name FROM employees WHERE employee_id=1",
+    "gold_post": "SELECT full_name FROM employees WHERE employee_id=1",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_04",
+    "question": "Full names for employees with salary over 7000.",
+    "gold_pre": "SELECT first_name || ' ' || last_name FROM employees WHERE salary > 7000 ORDER BY employee_id",
+    "gold_post": "SELECT full_name FROM employees WHERE salary > 7000 ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_05",
+    "question": "Full names with emails.",
+    "gold_pre": "SELECT first_name || ' ' || last_name AS full_name, email FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT full_name, email FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_06",
+    "question": "Full names with department IDs.",
+    "gold_pre": "SELECT first_name || ' ' || last_name, department_id FROM employees ORDER BY employee_id",
+    "gold_post": "SELECT full_name, department_id FROM employees ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_07",
+    "question": "Full names and job IDs for the first five employees.",
+    "gold_pre": "SELECT first_name || ' ' || last_name, job_id FROM employees WHERE employee_id <= 5 ORDER BY employee_id",
+    "gold_post": "SELECT full_name, job_id FROM employees WHERE employee_id <= 5 ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_08",
+    "question": "Count employees with 'a' in their full name.",
+    "gold_pre": "SELECT COUNT(*) FROM employees WHERE (first_name || ' ' || last_name) LIKE '%a%'",
+    "gold_post": "SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%'",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_09",
+    "question": "Full names for employees with commissions.",
+    "gold_pre": "SELECT first_name || ' ' || last_name FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "gold_post": "SELECT full_name FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_10",
+    "question": "Job history start date with full name for employee 1.",
+    "gold_pre": "SELECT j.start_date, (e.first_name || ' ' || e.last_name) FROM job_history j JOIN employees e ON j.employee_id=e.employee_id WHERE e.employee_id=1",
+    "gold_post": "SELECT j.start_date, e.full_name FROM job_history j JOIN employees e ON j.employee_id=e.employee_id WHERE e.employee_id=1",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees",
+      "job_history"
+    ]
+  },
+  {
+    "id": "hr_cm_11",
+    "question": "Full names for employees managed by 1.",
+    "gold_pre": "SELECT first_name || ' ' || last_name FROM employees WHERE manager_id=1 ORDER BY employee_id",
+    "gold_post": "SELECT full_name FROM employees WHERE manager_id=1 ORDER BY employee_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_12",
+    "question": "Count employees with salary at least 6000.",
+    "gold_pre": "SELECT COUNT(*) FROM employees WHERE salary >= 6000",
+    "gold_post": "SELECT COUNT(*) FROM employees WHERE salary >= 6000",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ]
+  },
+  {
+    "id": "hr_cm_13",
+    "question": "List region names.",
+    "gold_pre": "SELECT region_name FROM regions ORDER BY region_id",
+    "gold_post": "SELECT region_name FROM regions ORDER BY region_id",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "regions"
+    ]
+  },
+  {
+    "id": "hr_cm_14",
+    "question": "Count jobs.",
+    "gold_pre": "SELECT COUNT(*) FROM jobs",
+    "gold_post": "SELECT COUNT(*) FROM jobs",
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "jobs"
+    ]
+  },
+  {
+    "id": "hr_cm_15",
+    "question": "List employee first names.",
+    "gold_pre": "SELECT first_name FROM employees ORDER BY employee_id",
+    "gold_post": null,
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_COLUMN_MERGE"
+  },
+  {
+    "id": "hr_cm_16",
+    "question": "List employee last names.",
+    "gold_pre": "SELECT last_name FROM employees ORDER BY employee_id",
+    "gold_post": null,
+    "perturbation": "COLUMN_MERGE",
+    "touches": [
+      "employees"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_COLUMN_MERGE"
+  }
+]

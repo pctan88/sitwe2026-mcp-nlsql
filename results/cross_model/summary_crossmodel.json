@@ -1,0 +1,71 @@
+{
+  "_note": "Canonical cross-model matrix (4 models x 2 databases, 5 operators, N=76 each). Regenerated 2026-06-09 by pooling per-operator strict-mode runs. Matches SITWE paper Table V.",
+  "generated": "2026-06-09",
+  "n_per_combination": 76,
+  "results": [
+    {
+      "model": "haiku",
+      "database": "concert_singer",
+      "ex_stale": 0.1053,
+      "ex_refreshed": 0.7105,
+      "ex_mcp": 0.5921,
+      "recovery_rate": 0.8043
+    },
+    {
+      "model": "haiku",
+      "database": "hr_1",
+      "ex_stale": 0.2105,
+      "ex_refreshed": 0.6711,
+      "ex_mcp": 0.6184,
+      "recovery_rate": 0.8857
+    },
+    {
+      "model": "gpt_4o",
+      "database": "concert_singer",
+      "ex_stale": 0.1579,
+      "ex_refreshed": 0.8158,
+      "ex_mcp": 0.7895,
+      "recovery_rate": 0.96
+    },
+    {
+      "model": "gpt_4o",
+      "database": "hr_1",
+      "ex_stale": 0.2105,
+      "ex_refreshed": 0.6842,
+      "ex_mcp": 0.6579,
+      "recovery_rate": 0.9444
+    },
+    {
+      "model": "gemini",
+      "database": "concert_singer",
+      "ex_stale": 0.1579,
+      "ex_refreshed": 0.8816,
+      "ex_mcp": 0.8289,
+      "recovery_rate": 0.9273
+    },
+    {
+      "model": "gemini",
+      "database": "hr_1",
+      "ex_stale": 0.2105,
+      "ex_refreshed": 0.6842,
+      "ex_mcp": 0.6579,
+      "recovery_rate": 0.9444
+    },
+    {
+      "model": "llama31",
+      "database": "concert_singer",
+      "ex_stale": 0.1579,
+      "ex_refreshed": 0.8553,
+      "ex_mcp": 0.8026,
+      "recovery_rate": 0.9245
+    },
+    {
+      "model": "llama31",
+      "database": "hr_1",
+      "ex_stale": 0.2237,
+      "ex_refreshed": 0.7237,
+      "ex_mcp": 0.7105,
+      "recovery_rate": 0.9737
+    }
+  ]
+}

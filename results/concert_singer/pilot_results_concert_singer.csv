@@ -1,0 +1,119 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+Q01,TABLE_RENAME,How many singers do we have?,SELECT COUNT(*) FROM artist,False,,SELECT COUNT(*) FROM singer,1,SELECT COUNT(*) FROM singer,0,SELECT COUNT(DISTINCT Singer_ID) FROM artist,1,SELECT COUNT(*) FROM singer,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist,ast,valid,1,1,0,3.436,0.8799,0.8723,0.865,0.0185,16.676235,anthropic
+Q02,TABLE_RENAME,What is the name and country of every singer?,"SELECT Name, Country FROM artist",False,,"SELECT Name, Country FROM singer",1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM artist",1,"SELECT Name, Country FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, Country FROM artist",ast,valid,1,1,0,1.1556,1.5762,1.0543,0.8538,0.002,0.563985,anthropic
+Q03,TABLE_RENAME,List the names of singers from France.,SELECT Name FROM artist WHERE Country = 'France',False,,SELECT Name FROM singer WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,SELECT DISTINCT Name FROM artist WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE Country = 'France',ast,valid,1,1,0,1.2982,1.0274,1.075,2.4485,0.0027,0.650074,anthropic
+Q04,TABLE_RENAME,What are the names of all singers ordered by age from oldest to youngest?,SELECT Name FROM artist ORDER BY Age DESC,False,,SELECT Name FROM singer ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,SELECT Name FROM artist ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC,ast,valid,1,1,0,1.1758,1.0971,0.9138,1.0044,0.0028,0.73536,anthropic
+Q05,TABLE_RENAME,How many male singers are there?,SELECT COUNT(*) FROM artist WHERE Is_male = 'T',False,,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'M',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',ast,valid,1,1,0,3.1136,1.2438,1.3793,1.2032,0.0036,1.475223,anthropic
+Q06,TABLE_RENAME,"What is the average, minimum, and maximum age of all singers?","SELECT AVG(Age), MIN(Age), MAX(Age) FROM artist",False,,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,1,no such table: singer,anthropic,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",ast,valid,1,1,0,1.8488,0.9737,4.4856,1.0084,0.0026,0.975158,anthropic
+Q07,TABLE_RENAME,List each country and the number of singers from that country.,"SELECT Country, COUNT(*) FROM artist GROUP BY Country",False,,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,1,no such table: singer,anthropic,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",ast,valid,1,1,0,1.2609,1.1826,0.9472,1.1472,0.0026,0.925919,anthropic
+Q08,TABLE_RENAME,Show the name of the oldest singer.,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,False,,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,ast,valid,1,1,0,1.0361,1.2609,1.0036,1.0456,0.0029,0.722584,anthropic
+Q09,TABLE_RENAME,Show the names of all singers and the names of concerts they performed in.,"SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",False,,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",1,"SELECT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+LEFT JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",1,"SELECT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,1,no such table: singer,anthropic,"SELECT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",ast,valid,1,1,0,1.1088,1.4165,1.1425,1.0562,0.0038,1.583912,anthropic
+Q10,TABLE_RENAME,List the names of singers who performed in a concert with theme 'Wide Awake'.,SELECT T2.Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake',False,,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',ast,valid,1,1,0,1.1068,1.0546,1.4805,1.1501,0.0036,1.295573,anthropic
+Q11,NONE,Count how many singers performed in each concert.,"SELECT T2.concert_Name, COUNT(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID GROUP BY T2.concert_Name",False,,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(sic.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,,anthropic,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",ast,valid,0,0,0,1.255,1.3405,1.4481,0.0012,0.0096,7.234178,anthropic
+Q12,TABLE_RENAME,Show the names of singers who did not perform in any concert.,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),False,,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT DISTINCT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),ast,silent_failure_suspected,1,1,0,1.4858,1.0556,1.036,1.0643,1.0364,0.953,anthropic
+Q13,TABLE_AND_COLUMN_RENAME,Show each singer's name and their song name.,"SELECT Name, song_title FROM artist",False,,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT a.Name, a.song_title
+FROM artist a",1,"SELECT Name, Song_Name
+FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, song_title FROM artist",ast,valid,1,1,0,3.413,1.1278,0.9725,1.0672,1.0317,0.653105,anthropic
+Q14,TABLE_AND_COLUMN_RENAME,List the song name of each singer ordered by release year ascending.,SELECT song_title FROM artist ORDER BY debut_year ASC,False,,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such table: singer,anthropic,SELECT song_title FROM artist ORDER BY debut_year ASC,ast,valid,1,1,0,1.1195,0.899,4.3288,1.5008,0.0021,0.600144,anthropic
+Q15,TABLE_AND_COLUMN_RENAME,What is the song name of the youngest singer?,SELECT song_title FROM artist ORDER BY Age ASC LIMIT 1,False,,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,1,no such table: singer,anthropic,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),ast,valid,1,1,0,1.2083,1.038,1.2811,1.3344,0.0027,0.907526,anthropic
+Q16,TABLE_AND_COLUMN_RENAME,Count songs released after 2010.,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,False,,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,ast,silent_failure_suspected,1,1,0,1.0778,1.0189,0.9489,1.5834,1.1234,0.777711,anthropic
+Q17,TABLE_AND_COLUMN_RENAME,Show the song name and release year of every French singer.,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",False,,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,1,no such table: singer,anthropic,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",ast,valid,1,1,0,1.0463,1.053,1.6012,1.0578,0.0024,0.781946,anthropic
+Q18,TABLE_AND_COLUMN_RENAME,Show the average song release year per country.,"SELECT Country, AVG(debut_year) FROM artist GROUP BY Country",False,,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",1,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",0,"SELECT Country, AVG(debut_year) as average_debut_year
+FROM artist
+GROUP BY Country",1,"SELECT Country, AVG(Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY Country",0,1,no such table: singer,anthropic,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year FROM artist GROUP BY artist.Country",ast,valid,1,1,0,0.9769,1.0534,0.9574,1.0459,1.0551,0.905166,anthropic
+Q19,TABLE_AND_COLUMN_RENAME,Show the song name of every singer who performed in the 'Auditions' concert.,SELECT T2.song_title FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions',False,,"SELECT DISTINCT s.Song_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.song_title FROM artist AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID INNER JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',ast,valid,1,1,0,1.3298,1.4272,2.2319,1.2146,0.0033,1.308627,anthropic
+Q20,NONE,Find the stadium with the largest capacity.,SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1,False,,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,0,,anthropic,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,ast,valid,0,0,0,1.0851,0.9592,0.846,0.001,0.0024,0.728265,anthropic

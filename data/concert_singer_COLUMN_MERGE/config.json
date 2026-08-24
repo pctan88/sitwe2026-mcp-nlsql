@@ -1,0 +1,37 @@
+{
+  "database_id": "concert_singer_COLUMN_MERGE",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "b66966337026a91b",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Name",
+          "Country"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Country",
+          "Name"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "reversible": false
+      }
+    ]
+  }
+}

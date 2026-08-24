@@ -1,0 +1,143 @@
+{
+  "database_id": "hr_1_TABLE_RENAME",
+  "model": "gpt-4o",
+  "model_id": "gpt-4o",
+  "backend": "openai_compat",
+  "validate_mode": "embedding",
+  "strict_mode": true,
+  "max_turns": 8,
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "ex_stale_sanity": 0.1875,
+  "sanity_agreement_with_canonical": 1.0,
+  "ex_diff_in_prompt": 0.5625,
+  "ex_vendor_native": 0.5625,
+  "canonical_ex_stale": 0.1875,
+  "canonical_ex_refreshed": 0.5625,
+  "canonical_ex_mcp": 0.5625,
+  "canonical_recovery_rate": 1.0,
+  "rr_diff_in_prompt": 1.0,
+  "rr_vendor_native": 1.0,
+  "wilson_ci": {
+    "stale_sanity": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "diff_in_prompt": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    },
+    "vendor_native": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    }
+  },
+  "mcnemar": {
+    "vendor_vs_mcp": {
+      "b": 1,
+      "c": 1,
+      "statistic": 0.5,
+      "p_value": 1.0
+    },
+    "diff_vs_mcp": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "vendor_vs_diff": {
+      "b": 1,
+      "c": 1,
+      "statistic": 0.5,
+      "p_value": 1.0
+    }
+  },
+  "latency_stats": {
+    "sanity_s": {
+      "n": 16,
+      "mean": 1.091875,
+      "median": 0.97255,
+      "q1": 0.89305,
+      "q3": 1.0736,
+      "iqr": 0.18055,
+      "p95": 2.5509,
+      "min": 0.8009,
+      "max": 2.5509
+    },
+    "diff_in_prompt_s": {
+      "n": 16,
+      "mean": 1.193681,
+      "median": 1.01905,
+      "q1": 0.9421,
+      "q3": 1.11845,
+      "iqr": 0.17635,
+      "p95": 2.9407,
+      "min": 0.8056,
+      "max": 2.9407
+    },
+    "vendor_native_s": {
+      "n": 16,
+      "mean": 3.80765,
+      "median": 3.9388,
+      "q1": 3.56915,
+      "q3": 4.34335,
+      "iqr": 0.7742,
+      "p95": 6.5565,
+      "min": 1.6647,
+      "max": 6.5565
+    }
+  },
+  "cost": {
+    "prices_usd_per_mtok": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "sanity": {
+      "tokens_in": 3981,
+      "tokens_out": 349,
+      "usd": 0.013442,
+      "usd_per_query": 0.00084,
+      "mean_tokens_in": 248.8,
+      "mean_tokens_out": 21.8
+    },
+    "diff_in_prompt": {
+      "tokens_in": 5069,
+      "tokens_out": 287,
+      "usd": 0.015543,
+      "usd_per_query": 0.000971,
+      "mean_tokens_in": 316.8,
+      "mean_tokens_out": 17.9
+    },
+    "vendor_native": {
+      "tokens_in": 38783,
+      "tokens_out": 1083,
+      "usd": 0.107788,
+      "usd_per_query": 0.006737,
+      "mean_tokens_in": 2423.9,
+      "mean_tokens_out": 67.7
+    }
+  },
+  "tool_loop": {
+    "mean_tool_calls_per_query": 2.562,
+    "mean_api_calls_per_query": 3.375,
+    "pct_queries_using_tool": {
+      "get_schema_diff": 0.9375,
+      "relink_sql": 0.8125,
+      "validate_sql": 0.8125
+    },
+    "pct_queries_no_tools": 0.0625,
+    "pct_queries_capped": 0.0
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0
+}

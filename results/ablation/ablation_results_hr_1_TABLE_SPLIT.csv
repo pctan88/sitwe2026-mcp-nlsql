@@ -1,0 +1,194 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+hr_ts_01,TABLE_SPLIT,False,"SELECT first_name, last_name FROM employees",0,1,"SELECT first_name, last_name FROM employee_personal",execution_error,1,"SELECT first_name, last_name FROM employee_personal",execution_error,1,"SELECT first_name, last_name FROM employee_personal",execution_error,0,"SELECT first_name, last_name FROM employees",skipped
+hr_ts_02,TABLE_SPLIT,False,SELECT COUNT(*) FROM employees,0,1,SELECT COUNT(DISTINCT employee_id) FROM employee_job,execution_error,1,SELECT COUNT(*) FROM employee_personal,execution_error,1,SELECT COUNT(DISTINCT employee_id) FROM employee_job,execution_error,0,SELECT COUNT(*) FROM employees,skipped
+hr_ts_03,TABLE_SPLIT,False,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.salary > 7000 ORDER BY ej.salary DESC",execution_error,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.salary > 7000
+ORDER BY ej.salary DESC",execution_error,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.salary > 7000
+ORDER BY ej.salary DESC",execution_error,0,"SELECT employee_id, first_name, last_name, salary FROM employees WHERE salary > 7000 ORDER BY salary DESC",skipped
+hr_ts_04,TABLE_SPLIT,False,SELECT AVG(salary) FROM employees,0,1,SELECT AVG(salary) FROM employee_job,execution_error,1,SELECT AVG(salary) FROM employee_job,execution_error,1,SELECT AVG(salary) FROM employee_job,execution_error,0,SELECT AVG(salary) FROM employees,skipped
+hr_ts_05,TABLE_SPLIT,False,SELECT email FROM employees,0,1,SELECT email FROM employee_personal,execution_error,1,SELECT email FROM employee_personal,execution_error,1,SELECT email FROM employee_personal,execution_error,0,SELECT email FROM employees,skipped
+hr_ts_06,TABLE_SPLIT,False,SELECT * FROM employees WHERE department_id = 10,0,0,"SELECT 
+    ep.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_personal ep
+INNER JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.department_id = 10",execution_error,0,"SELECT 
+  ep.employee_id,
+  ep.first_name,
+  ep.last_name,
+  ep.email,
+  ep.phone_number,
+  ej.hire_date,
+  ej.job_id,
+  ej.salary,
+  ej.commission_pct,
+  ej.manager_id,
+  ej.department_id
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.department_id = 10",execution_error,0,"SELECT 
+    ep.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_personal ep
+INNER JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.department_id = 10",execution_error,0,SELECT * FROM employees WHERE department_id = 10,skipped
+hr_ts_07,TABLE_SPLIT,False,SELECT DISTINCT job_id FROM employees,0,0,SELECT DISTINCT job_id FROM employee_job,execution_error,0,SELECT DISTINCT job_id FROM employee_job,execution_error,0,SELECT DISTINCT job_id FROM employee_job,execution_error,0,SELECT DISTINCT job_id FROM employees,skipped
+hr_ts_08,TABLE_SPLIT,False,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,0,"SELECT d.department_id, d.department_name, COUNT(ej.employee_id) AS employee_count FROM departments AS d LEFT JOIN employee_job AS ej ON d.department_id = ej.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",execution_error,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(ej.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employee_job ej ON d.department_id = ej.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",execution_error,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(ej.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employee_job ej ON d.department_id = ej.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",execution_error,0,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN employees AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",skipped
+hr_ts_09,TABLE_SPLIT,False,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct 
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0 
+ORDER BY ep.employee_id",execution_error,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0
+ORDER BY ep.employee_id",execution_error,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0
+ORDER BY ep.employee_id",execution_error,0,"SELECT employee_id, first_name, last_name, commission_pct FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",skipped
+hr_ts_10,TABLE_SPLIT,False,SELECT * FROM employees WHERE manager_id = 1,0,0,"SELECT 
+  ej.employee_id,
+  ep.first_name,
+  ep.last_name,
+  ep.email,
+  ep.phone_number,
+  ej.hire_date,
+  ej.job_id,
+  ej.salary,
+  ej.commission_pct,
+  ej.manager_id,
+  ej.department_id
+FROM employee_job ej
+JOIN employee_personal ep ON ej.employee_id = ep.employee_id
+WHERE ej.manager_id = 1",execution_error,0,"SELECT 
+  ep.employee_id,
+  ep.first_name,
+  ep.last_name,
+  ep.email,
+  ep.phone_number,
+  ej.hire_date,
+  ej.job_id,
+  ej.salary,
+  ej.commission_pct,
+  ej.manager_id,
+  ej.department_id
+FROM employee_personal ep
+LEFT JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.manager_id = 1",execution_error,0,"SELECT 
+  ej.employee_id,
+  ep.first_name,
+  ep.last_name,
+  ep.email,
+  ep.phone_number,
+  ej.hire_date,
+  ej.job_id,
+  ej.salary,
+  ej.commission_pct,
+  ej.manager_id,
+  ej.department_id
+FROM employee_job ej
+JOIN employee_personal ep ON ej.employee_id = ep.employee_id
+WHERE ej.manager_id = 1",execution_error,0,SELECT * FROM employees WHERE manager_id = 1,skipped
+hr_ts_11,TABLE_SPLIT,False,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1,SELECT j.job_title FROM employee_job AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,execution_error,1,"SELECT j.job_title
+FROM employee_job e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",execution_error,1,"SELECT j.job_title
+FROM employee_job e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",execution_error,0,SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,skipped
+hr_ts_12,TABLE_SPLIT,False,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,1,SELECT d.department_name FROM employee_job AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,execution_error,1,"SELECT d.department_name
+FROM employee_job e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",execution_error,1,"SELECT d.department_name
+FROM employee_job e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",execution_error,0,SELECT d.department_name FROM employees AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,skipped
+hr_ts_13,TABLE_SPLIT,False,SELECT start_date FROM job_history WHERE employee_id = 1,1,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,skipped
+hr_ts_14,TABLE_SPLIT,False,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,0,"SELECT 
+    ej.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_job ej
+JOIN employee_personal ep ON ej.employee_id = ep.employee_id
+WHERE ej.hire_date > '2007-06-20'",execution_error,0,"SELECT ep.*, ej.* FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.hire_date > '2007-06-20'",execution_error,0,"SELECT 
+    ej.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_job ej
+JOIN employee_personal ep ON ej.employee_id = ep.employee_id
+WHERE ej.hire_date > '2007-06-20'",execution_error,0,SELECT * FROM employees WHERE hire_date > '2007-06-20',skipped
+hr_ts_15,TABLE_SPLIT,False,SELECT region_name FROM regions,1,1,SELECT region_name FROM regions,valid,1,SELECT region_name FROM regions,valid,1,SELECT region_name FROM regions,valid,1,SELECT region_name FROM regions,skipped
+hr_ts_16,TABLE_SPLIT,False,SELECT COUNT(*) FROM jobs,1,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,skipped

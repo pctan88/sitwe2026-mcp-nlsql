@@ -1,0 +1,356 @@
+{
+  "database_id": "concert_singer_TABLE_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "TABLE_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.7857,
+  "ex_post_baseline": 0.1429,
+  "ex_post_refreshed_schema": 0.8571,
+  "ex_post_error_feedback": 0.1429,
+  "ex_post_mcp": 0.7857,
+  "recovery_rate": 0.9,
+  "silent_failure_detection_rate": 1.0,
+  "mean_baseline_latency_s": 1.4288,
+  "mean_refreshed_schema_latency_s": 2.9857,
+  "mean_error_feedback_latency_s": 3.3111,
+  "mean_mcp_latency_s": 2.3657,
+  "latencies": {
+    "pre_s": [
+      4.6984,
+      1.8853,
+      1.3883,
+      1.4393,
+      1.4235,
+      1.6099,
+      1.5271,
+      1.4386,
+      2.1637,
+      1.2083,
+      2.3368,
+      1.3533,
+      1.1046,
+      1.0591
+    ],
+    "baseline_s": [
+      1.3544,
+      1.8328,
+      1.0208,
+      1.7389,
+      1.0509,
+      1.2987,
+      1.4948,
+      1.4567,
+      1.7852,
+      0.8944,
+      1.9706,
+      1.6948,
+      1.157,
+      1.2536
+    ],
+    "refreshed_schema_s": [
+      2.4804,
+      0.9411,
+      1.2514,
+      25.4209,
+      1.1973,
+      1.0198,
+      1.4827,
+      0.839,
+      0.9569,
+      0.9444,
+      1.6305,
+      1.6663,
+      1.1119,
+      0.8577
+    ],
+    "error_feedback_s": [
+      2.9699,
+      3.5798,
+      7.3303,
+      3.9071,
+      3.2015,
+      3.5516,
+      3.5152,
+      3.7245,
+      4.1957,
+      3.2489,
+      3.8089,
+      3.3194,
+      0.001,
+      0.001
+    ],
+    "mcp_s": [
+      1.8141,
+      3.5391,
+      3.0868,
+      3.1447,
+      2.814,
+      3.0078,
+      2.2317,
+      2.1569,
+      3.2381,
+      1.6538,
+      3.2873,
+      3.1416,
+      0.002,
+      0.002
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 1.759729,
+      "median": 1.43895,
+      "q1": 1.3533,
+      "q3": 1.8853,
+      "iqr": 0.532,
+      "p95": 4.6984,
+      "min": 1.0591,
+      "max": 4.6984
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.428829,
+      "median": 1.40555,
+      "q1": 1.157,
+      "q3": 1.7389,
+      "iqr": 0.5819,
+      "p95": 1.9706,
+      "min": 0.8944,
+      "max": 1.9706
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 2.985736,
+      "median": 1.1546,
+      "q1": 0.9444,
+      "q3": 1.6305,
+      "iqr": 0.6861,
+      "p95": 25.4209,
+      "min": 0.839,
+      "max": 25.4209
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 3.311057,
+      "median": 3.5334,
+      "q1": 3.2015,
+      "q3": 3.8089,
+      "iqr": 0.6074,
+      "p95": 7.3303,
+      "min": 0.001,
+      "max": 7.3303
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 2.365707,
+      "median": 2.9109,
+      "q1": 1.8141,
+      "q3": 3.1447,
+      "iqr": 1.3306,
+      "p95": 3.5391,
+      "min": 0.002,
+      "max": 3.5391
+    }
+  },
+  "fingerprint_diff_ms": 0.27067,
+  "ast_relink_ms": [
+    14.689932,
+    0.953517,
+    1.676325,
+    1.287874,
+    0.531076,
+    1.055958,
+    0.986043,
+    0.797103,
+    1.259911,
+    0.656547,
+    1.88535,
+    1.237119,
+    0.50429,
+    0.550211
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.27067,
+      "median": 0.27067,
+      "q1": 0.27067,
+      "q3": 0.27067,
+      "iqr": 0.0,
+      "p95": 0.27067,
+      "min": 0.27067,
+      "max": 0.27067
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 2.00509,
+      "median": 1.021,
+      "q1": 0.656547,
+      "q3": 1.287874,
+      "iqr": 0.631327,
+      "p95": 14.689932,
+      "min": 0.50429,
+      "max": 14.689932
+    }
+  },
+  "per_operator": {
+    "TABLE_MERGE": {
+      "n": 14,
+      "baseline_correct": 2,
+      "refreshed_schema_correct": 12,
+      "error_feedback_correct": 2,
+      "mcp_correct": 11,
+      "recovered": 9,
+      "degraded": 0,
+      "baseline_ex": 0.1429,
+      "refreshed_schema_ex": 0.8571,
+      "error_feedback_ex": 0.1429,
+      "mcp_ex": 0.7857
+    }
+  },
+  "error_categories": {
+    "correct": 2,
+    "execution_error": 12,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 9,
+      "c": 0,
+      "statistic": 7.111111,
+      "p_value": 0.003906
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 10,
+      "c": 0,
+      "statistic": 8.1,
+      "p_value": 0.001953
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 9,
+      "statistic": 7.111111,
+      "p_value": 0.003906
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "refreshed_schema": {
+      "successes": 12,
+      "total": 14,
+      "lower": 0.600581,
+      "upper": 0.959907
+    },
+    "error_feedback": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "mcp": {
+      "successes": 11,
+      "total": 14,
+      "lower": 0.524103,
+      "upper": 0.924288
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 2.365707,
+      "lower": 1.732507,
+      "upper": 2.915086
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_MERGE",
+      "sources": [
+        "concert",
+        "singer_in_concert"
+      ],
+      "target": "concert_performance",
+      "key": "Concert_ID"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "c312fcd890112380",
+    "specs": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "concert",
+          "singer_in_concert"
+        ],
+        "target": "concert_performance",
+        "join_key": "Concert_ID"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "concert",
+          "singer_in_concert"
+        ],
+        "target": "concert_performance",
+        "key": "Concert_ID"
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "4c41caa39638894d2be42fdb44dcb32b76e0c6d47ba2260d56e735a5bf3d555a",
+  "backend": "gemini",
+  "model": "gemini-2.5-flash",
+  "model_short_name": "gemini",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 0.9286,
+  "seed_disagreements": [
+    {
+      "id": "cs_tm_09",
+      "pre_ok": [
+        1
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        0,
+        1
+      ]
+    }
+  ]
+}

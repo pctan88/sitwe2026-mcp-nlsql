@@ -1,0 +1,37 @@
+{
+  "database_id": "hr_1_COLUMN_MERGE",
+  "pre_db": "hr_1_pre.sqlite",
+  "post_db": "hr_1_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "f387e688668ff77c",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "employees",
+        "sources": [
+          "first_name",
+          "last_name"
+        ],
+        "target": "full_name",
+        "expression": "first_name || ' ' || last_name",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "employees",
+        "sources": [
+          "first_name",
+          "last_name"
+        ],
+        "target": "full_name",
+        "expression": "first_name || ' ' || last_name",
+        "reversible": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,1927 @@
+{
+  "_note": "Pooled aggregate over 5 EvoSchema operators on concert_singer with Claude Haiku 4.5. Generated from per-operator summary_concert_singer_*.json files. Paper numbers: N=76, EX_stale=0.11, EX_refreshed=0.71, EX_mcp=0.59, RR=0.80.",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "strict_mode": true,
+  "contaminated_queries": 0,
+  "n_queries": 76,
+  "n_queries_scored": 76,
+  "ex_post_baseline": 0.1053,
+  "ex_post_refreshed_schema": 0.7105,
+  "ex_post_error_feedback": 0.1053,
+  "ex_post_mcp": 0.5921,
+  "recovery_rate": 0.8043,
+  "_counts": {
+    "n_total": 76,
+    "stale_correct": 8,
+    "refreshed_correct": 54,
+    "error_feedback_correct": 8,
+    "mcp_correct": 45
+  },
+  "databases": {
+    "concert_singer_TABLE_RENAME": {
+      "database_id": "concert_singer_TABLE_RENAME",
+      "n_queries": 16,
+      "n_queries_scored": 16,
+      "expected_failures": {
+        "n": 0,
+        "by_operator": {},
+        "path_d_flagged": 0
+      },
+      "ex_pre": 0.5625,
+      "ex_post_baseline": 0.0625,
+      "ex_post_refreshed_schema": 0.75,
+      "ex_post_error_feedback": 0.0625,
+      "ex_post_mcp": 0.5625,
+      "recovery_rate": 0.7273,
+      "silent_failure_detection_rate": 0.1429,
+      "mean_baseline_latency_s": 1.1218,
+      "mean_refreshed_schema_latency_s": 1.0934,
+      "mean_error_feedback_latency_s": 0.9412,
+      "mean_mcp_latency_s": 0.1173,
+      "latencies": {
+        "pre_s": [
+          1.4043,
+          1.2439,
+          0.9785,
+          0.8897,
+          1.5458,
+          1.2137,
+          0.866,
+          1.0371,
+          1.1677,
+          1.9326,
+          0.8281,
+          1.3233,
+          1.1389,
+          0.8189,
+          1.3564,
+          0.7954
+        ],
+        "baseline_s": [
+          1.3182,
+          0.833,
+          1.0683,
+          0.9217,
+          1.1313,
+          0.9721,
+          1.8404,
+          1.0978,
+          1.3263,
+          0.9014,
+          0.8449,
+          1.5749,
+          1.1882,
+          0.8279,
+          1.286,
+          0.8161
+        ],
+        "refreshed_schema_s": [
+          1.1033,
+          0.9527,
+          0.9552,
+          1.4321,
+          1.1302,
+          1.0544,
+          0.9618,
+          1.0152,
+          1.1642,
+          1.3361,
+          0.9168,
+          1.0207,
+          0.9616,
+          1.0606,
+          1.3395,
+          1.0904
+        ],
+        "error_feedback_s": [
+          1.3008,
+          0.8937,
+          1.1153,
+          0.9522,
+          1.1641,
+          0.8404,
+          0.8322,
+          1.0992,
+          1.0587,
+          1.4109,
+          0.9782,
+          1.2338,
+          1.0376,
+          1.1396,
+          0.0012,
+          0.0012
+        ],
+        "mcp_s": [
+          0.0022,
+          0.0018,
+          0.0021,
+          0.0022,
+          1.8237,
+          0.0025,
+          0.0025,
+          0.0113,
+          0.0042,
+          0.0024,
+          0.002,
+          0.0037,
+          0.0095,
+          0.0023,
+          0.0022,
+          0.0022
+        ]
+      },
+      "latency_stats": {
+        "pre_s": {
+          "n": 16,
+          "mean": 1.158769,
+          "median": 1.1533,
+          "q1": 0.87785,
+          "q3": 1.33985,
+          "iqr": 0.462,
+          "p95": 1.9326,
+          "min": 0.7954,
+          "max": 1.9326
+        },
+        "baseline_s": {
+          "n": 16,
+          "mean": 1.121781,
+          "median": 1.08305,
+          "q1": 0.87315,
+          "q3": 1.3021,
+          "iqr": 0.42895,
+          "p95": 1.8404,
+          "min": 0.8161,
+          "max": 1.8404
+        },
+        "refreshed_schema_s": {
+          "n": 16,
+          "mean": 1.093425,
+          "median": 1.0575,
+          "q1": 0.9617,
+          "q3": 1.1472,
+          "iqr": 0.1855,
+          "p95": 1.4321,
+          "min": 0.9168,
+          "max": 1.4321
+        },
+        "error_feedback_s": {
+          "n": 16,
+          "mean": 0.941194,
+          "median": 1.04815,
+          "q1": 0.86705,
+          "q3": 1.15185,
+          "iqr": 0.2848,
+          "p95": 1.4109,
+          "min": 0.0012,
+          "max": 1.4109
+        },
+        "mcp_s": {
+          "n": 16,
+          "mean": 0.1173,
+          "median": 0.00235,
+          "q1": 0.0022,
+          "q3": 0.00395,
+          "iqr": 0.00175,
+          "p95": 1.8237,
+          "min": 0.0018,
+          "max": 1.8237
+        }
+      },
+      "fingerprint_diff_ms": 0.129769,
+      "ast_relink_ms": [
+        0.512999,
+        0.541707,
+        0.604233,
+        0.619587,
+        8.799527,
+        0.816144,
+        0.750875,
+        9.1611,
+        1.570027,
+        0.656719,
+        0.574763,
+        1.436403,
+        7.496924,
+        0.578514,
+        0.630154,
+        0.613143
+      ],
+      "step_latency_stats_ms": {
+        "fingerprint_diff_ms": {
+          "n": 1,
+          "mean": 0.129769,
+          "median": 0.129769,
+          "q1": 0.129769,
+          "q3": 0.129769,
+          "iqr": 0.0,
+          "p95": 0.129769,
+          "min": 0.129769,
+          "max": 0.129769
+        },
+        "ast_relink_ms": {
+          "n": 16,
+          "mean": 2.210176,
+          "median": 0.643436,
+          "q1": 0.591373,
+          "q3": 1.503215,
+          "iqr": 0.911841,
+          "p95": 9.1611,
+          "min": 0.512999,
+          "max": 9.1611
+        }
+      },
+      "per_operator": {
+        "TABLE_RENAME": {
+          "n": 16,
+          "baseline_correct": 1,
+          "refreshed_schema_correct": 12,
+          "error_feedback_correct": 1,
+          "mcp_correct": 9,
+          "recovered": 8,
+          "degraded": 0,
+          "baseline_ex": 0.0625,
+          "refreshed_schema_ex": 0.75,
+          "error_feedback_ex": 0.0625,
+          "mcp_ex": 0.5625
+        }
+      },
+      "error_categories": {
+        "correct": 1,
+        "execution_error": 14,
+        "silent_failure": 0,
+        "wrong_result": 1,
+        "unknown": 0
+      },
+      "mcnemar": {
+        "baseline_vs_mcp": {
+          "b": 8,
+          "c": 0,
+          "statistic": 6.125,
+          "p_value": 0.007812
+        },
+        "baseline_vs_refreshed_schema": {
+          "b": 11,
+          "c": 0,
+          "statistic": 9.090909,
+          "p_value": 0.000977
+        },
+        "baseline_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "mcp_vs_error_feedback": {
+          "b": 0,
+          "c": 8,
+          "statistic": 6.125,
+          "p_value": 0.007812
+        }
+      },
+      "wilson_ci": {
+        "baseline": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "refreshed_schema": {
+          "successes": 12,
+          "total": 16,
+          "lower": 0.505012,
+          "upper": 0.898181
+        },
+        "error_feedback": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "mcp": {
+          "successes": 9,
+          "total": 16,
+          "lower": 0.331782,
+          "upper": 0.769016
+        }
+      },
+      "bootstrap_ci": {
+        "mcp_latency_mean_s": {
+          "n": 16,
+          "estimate": 0.1173,
+          "lower": 0.002519,
+          "upper": 0.345037
+        }
+      },
+      "diff_events": [
+        {
+          "op": "TABLE_RENAME",
+          "from": "singer",
+          "to": "artist"
+        }
+      ],
+      "perturbation_manifest": {
+        "engine_version": "1.0.0",
+        "content_hash": "befe776345c2064b",
+        "specs": [
+          {
+            "op": "TABLE_RENAME",
+            "from": "singer",
+            "to": "artist"
+          }
+        ],
+        "events": [
+          {
+            "op": "TABLE_RENAME",
+            "from": "singer",
+            "to": "artist"
+          }
+        ]
+      },
+      "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+      "fingerprint_post": "b7b2289ea1d6c062aa8dfd530822e2aaa4255cac1a52a1ebcff56ba0dc6b89ed",
+      "backend": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "model_short_name": "haiku",
+      "anthropic_api_key_present": true,
+      "gemini_api_key_present": true,
+      "fallback_counts": {
+        "anthropic_fallback": 0,
+        "gemini_fallback": 0,
+        "openai_compat_fallback": 0
+      },
+      "contaminated_queries": 0,
+      "contamination_fraction": 0.0,
+      "strict_mode": true,
+      "n_seeds": 3,
+      "seed_stability_pre": 1.0,
+      "seed_stability_baseline": 1.0,
+      "seed_stability_mcp": 0.9375,
+      "seed_disagreements": [
+        {
+          "id": "cs_tr_05",
+          "pre_ok": [
+            0
+          ],
+          "baseline_ok": [
+            0
+          ],
+          "mcp_ok": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "concert_singer_TABLE_SPLIT": {
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "n_queries": 16,
+      "n_queries_scored": 16,
+      "expected_failures": {
+        "n": 0,
+        "by_operator": {},
+        "path_d_flagged": 0
+      },
+      "ex_pre": 0.625,
+      "ex_post_baseline": 0.0625,
+      "ex_post_refreshed_schema": 0.75,
+      "ex_post_error_feedback": 0.0625,
+      "ex_post_mcp": 0.625,
+      "recovery_rate": 0.8182,
+      "silent_failure_detection_rate": 0.1667,
+      "mean_baseline_latency_s": 1.2708,
+      "mean_refreshed_schema_latency_s": 1.1526,
+      "mean_error_feedback_latency_s": 0.9281,
+      "mean_mcp_latency_s": 1.0206,
+      "latencies": {
+        "pre_s": [
+          0.856,
+          1.1574,
+          0.932,
+          1.5352,
+          0.8992,
+          0.9412,
+          1.0287,
+          0.8799,
+          1.1579,
+          1.2165,
+          0.9144,
+          1.1039,
+          1.2804,
+          1.2877,
+          1.3396,
+          0.9408
+        ],
+        "baseline_s": [
+          0.9391,
+          1.0051,
+          0.9664,
+          3.3835,
+          1.2229,
+          1.9067,
+          1.4315,
+          0.9236,
+          1.0921,
+          1.1172,
+          0.8352,
+          1.1299,
+          1.2264,
+          1.1678,
+          0.9863,
+          0.9983
+        ],
+        "refreshed_schema_s": [
+          0.8506,
+          1.0377,
+          1.0114,
+          0.927,
+          0.9741,
+          1.0677,
+          1.4852,
+          1.1626,
+          1.3331,
+          1.3052,
+          0.8908,
+          0.9537,
+          1.4792,
+          1.1122,
+          1.9826,
+          0.869
+        ],
+        "error_feedback_s": [
+          1.0289,
+          1.4505,
+          0.9952,
+          0.9166,
+          1.0102,
+          0.9081,
+          1.1518,
+          0.8876,
+          1.129,
+          0.8962,
+          1.1239,
+          0.9756,
+          1.272,
+          1.1015,
+          0.0012,
+          0.001
+        ],
+        "mcp_s": [
+          0.8505,
+          0.9619,
+          0.8984,
+          0.9342,
+          0.8806,
+          2.1673,
+          1.1498,
+          1.2189,
+          1.0262,
+          1.1138,
+          1.1303,
+          1.0479,
+          1.4002,
+          1.5449,
+          0.0022,
+          0.0018
+        ]
+      },
+      "latency_stats": {
+        "pre_s": {
+          "n": 16,
+          "mean": 1.091925,
+          "median": 1.0663,
+          "q1": 0.9232,
+          "q3": 1.24845,
+          "iqr": 0.32525,
+          "p95": 1.5352,
+          "min": 0.856,
+          "max": 1.5352
+        },
+        "baseline_s": {
+          "n": 16,
+          "mean": 1.27075,
+          "median": 1.10465,
+          "q1": 0.97635,
+          "q3": 1.22465,
+          "iqr": 0.2483,
+          "p95": 3.3835,
+          "min": 0.8352,
+          "max": 3.3835
+        },
+        "refreshed_schema_s": {
+          "n": 16,
+          "mean": 1.152631,
+          "median": 1.0527,
+          "q1": 0.94035,
+          "q3": 1.31915,
+          "iqr": 0.3788,
+          "p95": 1.9826,
+          "min": 0.8506,
+          "max": 1.9826
+        },
+        "error_feedback_s": {
+          "n": 16,
+          "mean": 0.928081,
+          "median": 1.0027,
+          "q1": 0.90215,
+          "q3": 1.12645,
+          "iqr": 0.2243,
+          "p95": 1.4505,
+          "min": 0.001,
+          "max": 1.4505
+        },
+        "mcp_s": {
+          "n": 16,
+          "mean": 1.020556,
+          "median": 1.03705,
+          "q1": 0.8895,
+          "q3": 1.18435,
+          "iqr": 0.29485,
+          "p95": 2.1673,
+          "min": 0.0018,
+          "max": 2.1673
+        }
+      },
+      "fingerprint_diff_ms": 0.169709,
+      "ast_relink_ms": [
+        0.501466,
+        0.734406,
+        0.647401,
+        0.853187,
+        0.639569,
+        0.770014,
+        0.603909,
+        0.738913,
+        1.254132,
+        1.085381,
+        0.651029,
+        7.810995,
+        1.525973,
+        1.250234,
+        0.629629,
+        0.446158
+      ],
+      "step_latency_stats_ms": {
+        "fingerprint_diff_ms": {
+          "n": 1,
+          "mean": 0.169709,
+          "median": 0.169709,
+          "q1": 0.169709,
+          "q3": 0.169709,
+          "iqr": 0.0,
+          "p95": 0.169709,
+          "min": 0.169709,
+          "max": 0.169709
+        },
+        "ast_relink_ms": {
+          "n": 16,
+          "mean": 1.2589,
+          "median": 0.73666,
+          "q1": 0.634599,
+          "q3": 1.167807,
+          "iqr": 0.533208,
+          "p95": 7.810995,
+          "min": 0.446158,
+          "max": 7.810995
+        }
+      },
+      "per_operator": {
+        "TABLE_SPLIT": {
+          "n": 16,
+          "baseline_correct": 1,
+          "refreshed_schema_correct": 12,
+          "error_feedback_correct": 1,
+          "mcp_correct": 10,
+          "recovered": 9,
+          "degraded": 0,
+          "baseline_ex": 0.0625,
+          "refreshed_schema_ex": 0.75,
+          "error_feedback_ex": 0.0625,
+          "mcp_ex": 0.625
+        }
+      },
+      "error_categories": {
+        "correct": 1,
+        "execution_error": 14,
+        "silent_failure": 0,
+        "wrong_result": 1,
+        "unknown": 0
+      },
+      "mcnemar": {
+        "baseline_vs_mcp": {
+          "b": 9,
+          "c": 0,
+          "statistic": 7.111111,
+          "p_value": 0.003906
+        },
+        "baseline_vs_refreshed_schema": {
+          "b": 11,
+          "c": 0,
+          "statistic": 9.090909,
+          "p_value": 0.000977
+        },
+        "baseline_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "mcp_vs_error_feedback": {
+          "b": 0,
+          "c": 9,
+          "statistic": 7.111111,
+          "p_value": 0.003906
+        }
+      },
+      "wilson_ci": {
+        "baseline": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "refreshed_schema": {
+          "successes": 12,
+          "total": 16,
+          "lower": 0.505012,
+          "upper": 0.898181
+        },
+        "error_feedback": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "mcp": {
+          "successes": 10,
+          "total": 16,
+          "lower": 0.386406,
+          "upper": 0.81519
+        }
+      },
+      "bootstrap_ci": {
+        "mcp_latency_mean_s": {
+          "n": 16,
+          "estimate": 1.020556,
+          "lower": 0.777969,
+          "upper": 1.245888
+        }
+      },
+      "diff_events": [
+        {
+          "op": "TABLE_SPLIT",
+          "source": "singer",
+          "targets": [
+            "singer_info",
+            "singer_songs"
+          ],
+          "key": "Singer_ID"
+        }
+      ],
+      "perturbation_manifest": {
+        "engine_version": "1.0.0",
+        "content_hash": "884bbd53445ab920",
+        "specs": [
+          {
+            "op": "TABLE_SPLIT",
+            "source": "singer",
+            "targets": [
+              "singer_info",
+              "singer_songs"
+            ],
+            "key": "Singer_ID",
+            "partition": {
+              "singer_info": [
+                "Name",
+                "Country",
+                "Age",
+                "Is_male"
+              ],
+              "singer_songs": [
+                "Song_Name",
+                "Song_release_year"
+              ]
+            }
+          }
+        ],
+        "events": [
+          {
+            "op": "TABLE_SPLIT",
+            "source": "singer",
+            "targets": [
+              "singer_info",
+              "singer_songs"
+            ],
+            "key": "Singer_ID",
+            "partition": {
+              "singer_info": [
+                "Name",
+                "Country",
+                "Age",
+                "Is_male"
+              ],
+              "singer_songs": [
+                "Song_Name",
+                "Song_release_year"
+              ]
+            }
+          }
+        ]
+      },
+      "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+      "fingerprint_post": "de03032e351c9e2da2f01e39ae8f99714bcf878aeb387736e4c5ef06fd12dec9",
+      "backend": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "model_short_name": "haiku",
+      "anthropic_api_key_present": true,
+      "gemini_api_key_present": true,
+      "fallback_counts": {
+        "anthropic_fallback": 0,
+        "gemini_fallback": 0,
+        "openai_compat_fallback": 0
+      },
+      "contaminated_queries": 0,
+      "contamination_fraction": 0.0,
+      "strict_mode": true,
+      "n_seeds": 3,
+      "seed_stability_pre": 1.0,
+      "seed_stability_baseline": 1.0,
+      "seed_stability_mcp": 1.0,
+      "seed_disagreements": []
+    },
+    "concert_singer_TABLE_MERGE": {
+      "database_id": "concert_singer_TABLE_MERGE",
+      "n_queries": 16,
+      "n_queries_scored": 14,
+      "expected_failures": {
+        "n": 2,
+        "by_operator": {
+          "TABLE_MERGE": 2
+        },
+        "path_d_flagged": 0
+      },
+      "ex_pre": 0.7857,
+      "ex_post_baseline": 0.1429,
+      "ex_post_refreshed_schema": 0.7143,
+      "ex_post_error_feedback": 0.1429,
+      "ex_post_mcp": 0.7857,
+      "recovery_rate": 1.125,
+      "silent_failure_detection_rate": 0.0,
+      "mean_baseline_latency_s": 1.2243,
+      "mean_refreshed_schema_latency_s": 1.1623,
+      "mean_error_feedback_latency_s": 1.0412,
+      "mean_mcp_latency_s": 1.0132,
+      "latencies": {
+        "pre_s": [
+          1.3764,
+          1.3025,
+          1.1388,
+          1.5631,
+          1.093,
+          1.1249,
+          1.1487,
+          0.9886,
+          1.2174,
+          1.4216,
+          1.1326,
+          1.4727,
+          0.9098,
+          1.1021
+        ],
+        "baseline_s": [
+          1.565,
+          1.4177,
+          1.6087,
+          1.4161,
+          1.0161,
+          1.1462,
+          1.2799,
+          0.879,
+          1.1229,
+          0.9616,
+          1.5969,
+          1.218,
+          0.8475,
+          1.0652
+        ],
+        "refreshed_schema_s": [
+          1.0853,
+          1.154,
+          1.0013,
+          1.9936,
+          0.8363,
+          1.0037,
+          0.9622,
+          1.1649,
+          1.216,
+          0.8482,
+          1.0655,
+          2.1872,
+          0.956,
+          0.7977
+        ],
+        "error_feedback_s": [
+          1.2351,
+          2.1479,
+          1.9691,
+          1.0917,
+          0.7892,
+          1.0166,
+          1.4455,
+          0.8418,
+          1.1418,
+          0.7946,
+          1.0501,
+          1.0508,
+          0.0011,
+          0.001
+        ],
+        "mcp_s": [
+          1.9378,
+          1.1656,
+          1.3564,
+          1.4767,
+          0.9432,
+          1.1141,
+          1.0233,
+          0.9354,
+          1.0559,
+          0.9914,
+          1.2038,
+          0.977,
+          0.0021,
+          0.0021
+        ]
+      },
+      "latency_stats": {
+        "pre_s": {
+          "n": 14,
+          "mean": 1.213729,
+          "median": 1.14375,
+          "q1": 1.1021,
+          "q3": 1.3764,
+          "iqr": 0.2743,
+          "p95": 1.5631,
+          "min": 0.9098,
+          "max": 1.5631
+        },
+        "baseline_s": {
+          "n": 14,
+          "mean": 1.224343,
+          "median": 1.1821,
+          "q1": 1.0161,
+          "q3": 1.4177,
+          "iqr": 0.4016,
+          "p95": 1.6087,
+          "min": 0.8475,
+          "max": 1.6087
+        },
+        "refreshed_schema_s": {
+          "n": 14,
+          "mean": 1.162279,
+          "median": 1.0346,
+          "q1": 0.956,
+          "q3": 1.1649,
+          "iqr": 0.2089,
+          "p95": 2.1872,
+          "min": 0.7977,
+          "max": 2.1872
+        },
+        "error_feedback_s": {
+          "n": 14,
+          "mean": 1.041164,
+          "median": 1.05045,
+          "q1": 0.7946,
+          "q3": 1.2351,
+          "iqr": 0.4405,
+          "p95": 2.1479,
+          "min": 0.001,
+          "max": 2.1479
+        },
+        "mcp_s": {
+          "n": 14,
+          "mean": 1.0132,
+          "median": 1.0396,
+          "q1": 0.9432,
+          "q3": 1.2038,
+          "iqr": 0.2606,
+          "p95": 1.9378,
+          "min": 0.0021,
+          "max": 1.9378
+        }
+      },
+      "fingerprint_diff_ms": 0.449177,
+      "ast_relink_ms": [
+        3.745674,
+        2.538568,
+        1.643009,
+        1.418809,
+        0.771428,
+        1.297347,
+        1.121935,
+        0.865284,
+        1.49958,
+        0.544436,
+        1.812348,
+        0.918931,
+        0.466738,
+        0.595305
+      ],
+      "step_latency_stats_ms": {
+        "fingerprint_diff_ms": {
+          "n": 1,
+          "mean": 0.449177,
+          "median": 0.449177,
+          "q1": 0.449177,
+          "q3": 0.449177,
+          "iqr": 0.0,
+          "p95": 0.449177,
+          "min": 0.449177,
+          "max": 0.449177
+        },
+        "ast_relink_ms": {
+          "n": 14,
+          "mean": 1.374242,
+          "median": 1.209641,
+          "q1": 0.771428,
+          "q3": 1.643009,
+          "iqr": 0.871581,
+          "p95": 3.745674,
+          "min": 0.466738,
+          "max": 3.745674
+        }
+      },
+      "per_operator": {
+        "TABLE_MERGE": {
+          "n": 14,
+          "baseline_correct": 2,
+          "refreshed_schema_correct": 10,
+          "error_feedback_correct": 2,
+          "mcp_correct": 11,
+          "recovered": 9,
+          "degraded": 0,
+          "baseline_ex": 0.1429,
+          "refreshed_schema_ex": 0.7143,
+          "error_feedback_ex": 0.1429,
+          "mcp_ex": 0.7857
+        }
+      },
+      "error_categories": {
+        "correct": 2,
+        "execution_error": 12,
+        "silent_failure": 0,
+        "wrong_result": 0,
+        "unknown": 0
+      },
+      "mcnemar": {
+        "baseline_vs_mcp": {
+          "b": 9,
+          "c": 0,
+          "statistic": 7.111111,
+          "p_value": 0.003906
+        },
+        "baseline_vs_refreshed_schema": {
+          "b": 8,
+          "c": 0,
+          "statistic": 6.125,
+          "p_value": 0.007812
+        },
+        "baseline_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "mcp_vs_error_feedback": {
+          "b": 0,
+          "c": 9,
+          "statistic": 7.111111,
+          "p_value": 0.003906
+        }
+      },
+      "wilson_ci": {
+        "baseline": {
+          "successes": 2,
+          "total": 14,
+          "lower": 0.040093,
+          "upper": 0.399419
+        },
+        "refreshed_schema": {
+          "successes": 10,
+          "total": 14,
+          "lower": 0.453505,
+          "upper": 0.882788
+        },
+        "error_feedback": {
+          "successes": 2,
+          "total": 14,
+          "lower": 0.040093,
+          "upper": 0.399419
+        },
+        "mcp": {
+          "successes": 11,
+          "total": 14,
+          "lower": 0.524103,
+          "upper": 0.924288
+        }
+      },
+      "bootstrap_ci": {
+        "mcp_latency_mean_s": {
+          "n": 14,
+          "estimate": 1.0132,
+          "lower": 0.744307,
+          "upper": 1.260257
+        }
+      },
+      "diff_events": [
+        {
+          "op": "TABLE_MERGE",
+          "sources": [
+            "concert",
+            "singer_in_concert"
+          ],
+          "target": "concert_performance",
+          "key": "Concert_ID"
+        }
+      ],
+      "perturbation_manifest": {
+        "engine_version": "1.0.0",
+        "content_hash": "c312fcd890112380",
+        "specs": [
+          {
+            "op": "TABLE_MERGE",
+            "sources": [
+              "concert",
+              "singer_in_concert"
+            ],
+            "target": "concert_performance",
+            "join_key": "Concert_ID"
+          }
+        ],
+        "events": [
+          {
+            "op": "TABLE_MERGE",
+            "sources": [
+              "concert",
+              "singer_in_concert"
+            ],
+            "target": "concert_performance",
+            "key": "Concert_ID"
+          }
+        ]
+      },
+      "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+      "fingerprint_post": "4c41caa39638894d2be42fdb44dcb32b76e0c6d47ba2260d56e735a5bf3d555a",
+      "backend": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "model_short_name": "haiku",
+      "anthropic_api_key_present": true,
+      "gemini_api_key_present": true,
+      "fallback_counts": {
+        "anthropic_fallback": 0,
+        "gemini_fallback": 0,
+        "openai_compat_fallback": 0
+      },
+      "contaminated_queries": 0,
+      "contamination_fraction": 0.0,
+      "strict_mode": true,
+      "n_seeds": 3,
+      "seed_stability_pre": 1.0,
+      "seed_stability_baseline": 1.0,
+      "seed_stability_mcp": 1.0,
+      "seed_disagreements": []
+    },
+    "concert_singer_COLUMN_RENAME": {
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "n_queries": 16,
+      "n_queries_scored": 16,
+      "expected_failures": {
+        "n": 0,
+        "by_operator": {},
+        "path_d_flagged": 0
+      },
+      "ex_pre": 0.75,
+      "ex_post_baseline": 0.0625,
+      "ex_post_refreshed_schema": 0.8125,
+      "ex_post_error_feedback": 0.0625,
+      "ex_post_mcp": 0.75,
+      "recovery_rate": 0.9167,
+      "silent_failure_detection_rate": 0.4286,
+      "mean_baseline_latency_s": 1.1861,
+      "mean_refreshed_schema_latency_s": 1.0916,
+      "mean_error_feedback_latency_s": 1.3214,
+      "mean_mcp_latency_s": 0.2076,
+      "latencies": {
+        "pre_s": [
+          1.0437,
+          1.0026,
+          1.1133,
+          0.9538,
+          0.9876,
+          1.1084,
+          1.061,
+          1.2723,
+          0.9905,
+          0.9478,
+          1.1551,
+          1.1303,
+          1.0742,
+          1.0623,
+          0.9199,
+          0.9056
+        ],
+        "baseline_s": [
+          1.2211,
+          0.9938,
+          1.4444,
+          0.9814,
+          0.9469,
+          1.0815,
+          1.2246,
+          1.3268,
+          1.0007,
+          1.0564,
+          1.1666,
+          1.0711,
+          1.3131,
+          1.0266,
+          0.9647,
+          2.1585
+        ],
+        "refreshed_schema_s": [
+          1.0379,
+          0.8986,
+          1.0756,
+          0.9461,
+          0.8906,
+          1.2452,
+          1.3172,
+          1.0869,
+          1.6887,
+          1.1702,
+          1.0035,
+          0.9737,
+          1.1796,
+          0.9413,
+          0.9837,
+          1.0266
+        ],
+        "error_feedback_s": [
+          1.748,
+          1.9479,
+          2.3511,
+          0.9568,
+          2.0803,
+          1.1428,
+          1.4425,
+          0.9965,
+          1.0412,
+          1.2455,
+          1.2036,
+          1.0231,
+          1.3453,
+          2.6074,
+          0.0026,
+          0.0071
+        ],
+        "mcp_s": [
+          0.0047,
+          0.991,
+          0.0038,
+          0.0062,
+          0.0058,
+          0.0048,
+          0.0047,
+          0.0058,
+          0.9443,
+          0.0053,
+          0.0076,
+          0.0077,
+          0.008,
+          1.3083,
+          0.0079,
+          0.0058
+        ]
+      },
+      "latency_stats": {
+        "pre_s": {
+          "n": 16,
+          "mean": 1.045525,
+          "median": 1.05235,
+          "q1": 0.9707,
+          "q3": 1.11085,
+          "iqr": 0.14015,
+          "p95": 1.2723,
+          "min": 0.9056,
+          "max": 1.2723
+        },
+        "baseline_s": {
+          "n": 16,
+          "mean": 1.186138,
+          "median": 1.0763,
+          "q1": 0.99725,
+          "q3": 1.26885,
+          "iqr": 0.2716,
+          "p95": 2.1585,
+          "min": 0.9469,
+          "max": 2.1585
+        },
+        "refreshed_schema_s": {
+          "n": 16,
+          "mean": 1.091587,
+          "median": 1.03225,
+          "q1": 0.9599,
+          "q3": 1.1749,
+          "iqr": 0.215,
+          "p95": 1.6887,
+          "min": 0.8906,
+          "max": 1.6887
+        },
+        "error_feedback_s": {
+          "n": 16,
+          "mean": 1.321356,
+          "median": 1.22455,
+          "q1": 1.0098,
+          "q3": 1.84795,
+          "iqr": 0.83815,
+          "p95": 2.6074,
+          "min": 0.0026,
+          "max": 2.6074
+        },
+        "mcp_s": {
+          "n": 16,
+          "mean": 0.207606,
+          "median": 0.006,
+          "q1": 0.00505,
+          "q3": 0.00795,
+          "iqr": 0.0029,
+          "p95": 1.3083,
+          "min": 0.0038,
+          "max": 1.3083
+        }
+      },
+      "fingerprint_diff_ms": 0.218206,
+      "ast_relink_ms": [
+        0.84301,
+        1.104503,
+        0.952372,
+        2.750283,
+        1.842463,
+        1.2898,
+        1.258037,
+        1.837853,
+        1.067225,
+        1.218177,
+        2.042123,
+        2.168818,
+        2.680372,
+        1.901098,
+        1.368825,
+        1.740585
+      ],
+      "step_latency_stats_ms": {
+        "fingerprint_diff_ms": {
+          "n": 1,
+          "mean": 0.218206,
+          "median": 0.218206,
+          "q1": 0.218206,
+          "q3": 0.218206,
+          "iqr": 0.0,
+          "p95": 0.218206,
+          "min": 0.218206,
+          "max": 0.218206
+        },
+        "ast_relink_ms": {
+          "n": 16,
+          "mean": 1.629096,
+          "median": 1.554705,
+          "q1": 1.16134,
+          "q3": 1.971611,
+          "iqr": 0.810271,
+          "p95": 2.750283,
+          "min": 0.84301,
+          "max": 2.750283
+        }
+      },
+      "per_operator": {
+        "COLUMN_RENAME": {
+          "n": 16,
+          "baseline_correct": 1,
+          "refreshed_schema_correct": 13,
+          "error_feedback_correct": 1,
+          "mcp_correct": 12,
+          "recovered": 11,
+          "degraded": 0,
+          "baseline_ex": 0.0625,
+          "refreshed_schema_ex": 0.8125,
+          "error_feedback_ex": 0.0625,
+          "mcp_ex": 0.75
+        }
+      },
+      "error_categories": {
+        "correct": 1,
+        "execution_error": 14,
+        "silent_failure": 0,
+        "wrong_result": 1,
+        "unknown": 0
+      },
+      "mcnemar": {
+        "baseline_vs_mcp": {
+          "b": 11,
+          "c": 0,
+          "statistic": 9.090909,
+          "p_value": 0.000977
+        },
+        "baseline_vs_refreshed_schema": {
+          "b": 12,
+          "c": 0,
+          "statistic": 10.083333,
+          "p_value": 0.000488
+        },
+        "baseline_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "mcp_vs_error_feedback": {
+          "b": 0,
+          "c": 11,
+          "statistic": 9.090909,
+          "p_value": 0.000977
+        }
+      },
+      "wilson_ci": {
+        "baseline": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "refreshed_schema": {
+          "successes": 13,
+          "total": 16,
+          "lower": 0.569906,
+          "upper": 0.934085
+        },
+        "error_feedback": {
+          "successes": 1,
+          "total": 16,
+          "lower": 0.011119,
+          "upper": 0.283293
+        },
+        "mcp": {
+          "successes": 12,
+          "total": 16,
+          "lower": 0.505012,
+          "upper": 0.898181
+        }
+      },
+      "bootstrap_ci": {
+        "mcp_latency_mean_s": {
+          "n": 16,
+          "estimate": 0.207606,
+          "lower": 0.006306,
+          "upper": 0.468037
+        }
+      },
+      "diff_events": [
+        {
+          "op": "COLUMN_RENAME",
+          "table": "singer",
+          "from": "Song_Name",
+          "to": "song_title"
+        },
+        {
+          "op": "COLUMN_RENAME",
+          "table": "singer",
+          "from": "Song_release_year",
+          "to": "debut_year"
+        }
+      ],
+      "perturbation_manifest": {
+        "engine_version": "1.0.0",
+        "content_hash": "816fc0c958aa741b",
+        "specs": [
+          {
+            "op": "COLUMN_RENAME",
+            "table": "singer",
+            "from": "Song_Name",
+            "to": "song_title"
+          },
+          {
+            "op": "COLUMN_RENAME",
+            "table": "singer",
+            "from": "Song_release_year",
+            "to": "debut_year"
+          }
+        ],
+        "events": [
+          {
+            "op": "COLUMN_RENAME",
+            "table": "singer",
+            "from": "Song_Name",
+            "to": "song_title"
+          },
+          {
+            "op": "COLUMN_RENAME",
+            "table": "singer",
+            "from": "Song_release_year",
+            "to": "debut_year"
+          }
+        ]
+      },
+      "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+      "fingerprint_post": "caa2f448e3af5f63bbe22ce5694f98770ddf68064de4dde387e74ae0622e7473",
+      "backend": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "model_short_name": "haiku",
+      "anthropic_api_key_present": true,
+      "gemini_api_key_present": true,
+      "fallback_counts": {
+        "anthropic_fallback": 0,
+        "gemini_fallback": 0,
+        "openai_compat_fallback": 0
+      },
+      "contaminated_queries": 0,
+      "contamination_fraction": 0.0,
+      "strict_mode": true,
+      "n_seeds": 3,
+      "seed_stability_pre": 1.0,
+      "seed_stability_baseline": 1.0,
+      "seed_stability_mcp": 1.0,
+      "seed_disagreements": []
+    },
+    "concert_singer_COLUMN_MERGE": {
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "n_queries": 16,
+      "n_queries_scored": 14,
+      "expected_failures": {
+        "n": 2,
+        "by_operator": {
+          "COLUMN_MERGE": 2
+        },
+        "path_d_flagged": 1
+      },
+      "ex_pre": 0.3571,
+      "ex_post_baseline": 0.2143,
+      "ex_post_refreshed_schema": 0.5,
+      "ex_post_error_feedback": 0.2143,
+      "ex_post_mcp": 0.2143,
+      "recovery_rate": 0.0,
+      "silent_failure_detection_rate": 0.3333,
+      "mean_baseline_latency_s": 0.9938,
+      "mean_refreshed_schema_latency_s": 1.1488,
+      "mean_error_feedback_latency_s": 1.0326,
+      "mean_mcp_latency_s": 1.2504,
+      "latencies": {
+        "pre_s": [
+          0.8177,
+          0.8853,
+          0.8987,
+          0.9879,
+          1.4005,
+          0.9673,
+          0.9472,
+          1.5277,
+          1.3086,
+          1.5576,
+          1.3042,
+          0.8473,
+          1.1744,
+          0.8094
+        ],
+        "baseline_s": [
+          0.8263,
+          0.9034,
+          0.8965,
+          1.0637,
+          1.066,
+          1.0806,
+          1.0664,
+          1.2727,
+          0.991,
+          1.1893,
+          0.991,
+          0.8325,
+          0.8831,
+          0.8511
+        ],
+        "refreshed_schema_s": [
+          0.9336,
+          1.7102,
+          0.9535,
+          0.9389,
+          1.0327,
+          0.9632,
+          1.1426,
+          1.6472,
+          0.8473,
+          1.2879,
+          1.8849,
+          0.9299,
+          0.9819,
+          0.8296
+        ],
+        "error_feedback_s": [
+          1.4163,
+          3.1443,
+          2.3524,
+          2.3296,
+          0.9202,
+          0.0014,
+          0.9773,
+          1.2656,
+          0.954,
+          1.0917,
+          0.0011,
+          0.001,
+          0.0012,
+          0.001
+        ],
+        "mcp_s": [
+          1.8615,
+          0.8479,
+          2.6209,
+          2.3359,
+          2.3764,
+          0.0024,
+          2.4999,
+          3.0468,
+          0.8552,
+          1.0369,
+          0.0141,
+          0.0022,
+          0.0023,
+          0.0037
+        ]
+      },
+      "latency_stats": {
+        "pre_s": {
+          "n": 14,
+          "mean": 1.102414,
+          "median": 0.9776,
+          "q1": 0.8853,
+          "q3": 1.3086,
+          "iqr": 0.4233,
+          "p95": 1.5576,
+          "min": 0.8094,
+          "max": 1.5576
+        },
+        "baseline_s": {
+          "n": 14,
+          "mean": 0.993829,
+          "median": 0.991,
+          "q1": 0.8831,
+          "q3": 1.0664,
+          "iqr": 0.1833,
+          "p95": 1.2727,
+          "min": 0.8263,
+          "max": 1.2727
+        },
+        "refreshed_schema_s": {
+          "n": 14,
+          "mean": 1.148814,
+          "median": 0.97255,
+          "q1": 0.9336,
+          "q3": 1.2879,
+          "iqr": 0.3543,
+          "p95": 1.8849,
+          "min": 0.8296,
+          "max": 1.8849
+        },
+        "error_feedback_s": {
+          "n": 14,
+          "mean": 1.03265,
+          "median": 0.96565,
+          "q1": 0.0012,
+          "q3": 1.4163,
+          "iqr": 1.4151,
+          "p95": 3.1443,
+          "min": 0.001,
+          "max": 3.1443
+        },
+        "mcp_s": {
+          "n": 14,
+          "mean": 1.250436,
+          "median": 0.94605,
+          "q1": 0.0037,
+          "q3": 2.3764,
+          "iqr": 2.3727,
+          "p95": 3.0468,
+          "min": 0.0022,
+          "max": 3.0468
+        }
+      },
+      "fingerprint_diff_ms": 0.175117,
+      "ast_relink_ms": [
+        0.50722,
+        0.751943,
+        0.591504,
+        0.738857,
+        1.180116,
+        0.788325,
+        0.816025,
+        7.739126,
+        0.859815,
+        1.38555,
+        0.875425,
+        0.677872,
+        0.669767,
+        1.124687
+      ],
+      "step_latency_stats_ms": {
+        "fingerprint_diff_ms": {
+          "n": 1,
+          "mean": 0.175117,
+          "median": 0.175117,
+          "q1": 0.175117,
+          "q3": 0.175117,
+          "iqr": 0.0,
+          "p95": 0.175117,
+          "min": 0.175117,
+          "max": 0.175117
+        },
+        "ast_relink_ms": {
+          "n": 14,
+          "mean": 1.336159,
+          "median": 0.802175,
+          "q1": 0.677872,
+          "q3": 1.124687,
+          "iqr": 0.446815,
+          "p95": 7.739126,
+          "min": 0.50722,
+          "max": 7.739126
+        }
+      },
+      "per_operator": {
+        "COLUMN_MERGE": {
+          "n": 14,
+          "baseline_correct": 3,
+          "refreshed_schema_correct": 7,
+          "error_feedback_correct": 3,
+          "mcp_correct": 3,
+          "recovered": 0,
+          "degraded": 0,
+          "baseline_ex": 0.2143,
+          "refreshed_schema_ex": 0.5,
+          "error_feedback_ex": 0.2143,
+          "mcp_ex": 0.2143
+        }
+      },
+      "error_categories": {
+        "correct": 3,
+        "execution_error": 9,
+        "silent_failure": 0,
+        "wrong_result": 2,
+        "unknown": 0
+      },
+      "mcnemar": {
+        "baseline_vs_mcp": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "baseline_vs_refreshed_schema": {
+          "b": 4,
+          "c": 0,
+          "statistic": 2.25,
+          "p_value": 0.125
+        },
+        "baseline_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        },
+        "mcp_vs_error_feedback": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_value": 1.0
+        }
+      },
+      "wilson_ci": {
+        "baseline": {
+          "successes": 3,
+          "total": 14,
+          "lower": 0.075712,
+          "upper": 0.475897
+        },
+        "refreshed_schema": {
+          "successes": 7,
+          "total": 14,
+          "lower": 0.267989,
+          "upper": 0.732011
+        },
+        "error_feedback": {
+          "successes": 3,
+          "total": 14,
+          "lower": 0.075712,
+          "upper": 0.475897
+        },
+        "mcp": {
+          "successes": 3,
+          "total": 14,
+          "lower": 0.075712,
+          "upper": 0.475897
+        }
+      },
+      "bootstrap_ci": {
+        "mcp_latency_mean_s": {
+          "n": 14,
+          "estimate": 1.250436,
+          "lower": 0.660643,
+          "upper": 1.786657
+        }
+      },
+      "diff_events": [
+        {
+          "op": "COLUMN_RENAME",
+          "table": "singer",
+          "from": "Country",
+          "to": "Name_Country"
+        },
+        {
+          "op": "COLUMN_REMOVE",
+          "table": "singer",
+          "column": "Name"
+        }
+      ],
+      "perturbation_manifest": {
+        "engine_version": "1.0.0",
+        "content_hash": "b66966337026a91b",
+        "specs": [
+          {
+            "op": "COLUMN_MERGE",
+            "table": "singer",
+            "sources": [
+              "Name",
+              "Country"
+            ],
+            "target": "Name_Country",
+            "expression": "Name || ' - ' || Country",
+            "target_type": "TEXT",
+            "reversible": false
+          }
+        ],
+        "events": [
+          {
+            "op": "COLUMN_MERGE",
+            "table": "singer",
+            "sources": [
+              "Country",
+              "Name"
+            ],
+            "target": "Name_Country",
+            "expression": "Name || ' - ' || Country",
+            "reversible": false
+          }
+        ]
+      },
+      "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+      "fingerprint_post": "7e71964bb5df4c6dcd5988b5d424f8d45c3aab3cf669ec9215622b34df626377",
+      "backend": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "model_short_name": "haiku",
+      "anthropic_api_key_present": true,
+      "gemini_api_key_present": true,
+      "fallback_counts": {
+        "anthropic_fallback": 0,
+        "gemini_fallback": 0,
+        "openai_compat_fallback": 0
+      },
+      "contaminated_queries": 0,
+      "contamination_fraction": 0.0,
+      "strict_mode": true,
+      "n_seeds": 3,
+      "seed_stability_pre": 1.0,
+      "seed_stability_baseline": 1.0,
+      "seed_stability_mcp": 1.0,
+      "seed_disagreements": []
+    }
+  },
+  "scalability": {
+    "cases": [
+      {
+        "db_uri": "sqlite:///:memory:",
+        "tables": 10,
+        "iterations": 5,
+        "fingerprint_latency_s": [
+          0.000158,
+          0.000132,
+          0.000125,
+          0.000122,
+          0.000122
+        ],
+        "fingerprint_hash_latency_s": [
+          9.8e-05,
+          4.5e-05,
+          4.6e-05,
+          4.2e-05,
+          4.1e-05
+        ],
+        "relink_latency_s": [
+          0.045376,
+          0.000679,
+          0.000603,
+          0.000564,
+          0.000847
+        ],
+        "fingerprint_mean_s": 0.000132,
+        "fingerprint_median_s": 0.000125,
+        "fingerprint_q1_s": 0.000122,
+        "fingerprint_q3_s": 0.000145,
+        "fingerprint_iqr_s": 2.3e-05,
+        "fingerprint_hash_mean_s": 5.4e-05,
+        "relink_mean_s": 0.009614,
+        "relink_median_s": 0.000679,
+        "relink_q1_s": 0.000583,
+        "relink_q3_s": 0.023112,
+        "relink_iqr_s": 0.022528,
+        "relink_idempotent": true,
+        "sample_relinked_sql": "SELECT c1 FROM renamed_00000 WHERE id = 1"
+      },
+      {
+        "db_uri": "sqlite:///:memory:",
+        "tables": 100,
+        "iterations": 5,
+        "fingerprint_latency_s": [
+          0.001132,
+          0.001247,
+          0.001143,
+          0.000989,
+          0.001096
+        ],
+        "fingerprint_hash_latency_s": [
+          0.000338,
+          0.000382,
+          0.000381,
+          0.000439,
+          0.000384
+        ],
+        "relink_latency_s": [
+          0.001827,
+          0.00174,
+          0.001686,
+          0.001686,
+          0.001585
+        ],
+        "fingerprint_mean_s": 0.001121,
+        "fingerprint_median_s": 0.001132,
+        "fingerprint_q1_s": 0.001043,
+        "fingerprint_q3_s": 0.001195,
+        "fingerprint_iqr_s": 0.000153,
+        "fingerprint_hash_mean_s": 0.000385,
+        "relink_mean_s": 0.001705,
+        "relink_median_s": 0.001686,
+        "relink_q1_s": 0.001635,
+        "relink_q3_s": 0.001783,
+        "relink_iqr_s": 0.000148,
+        "relink_idempotent": true,
+        "sample_relinked_sql": "SELECT c1 FROM renamed_00000 WHERE id = 1"
+      },
+      {
+        "db_uri": "sqlite:///:memory:",
+        "tables": 1000,
+        "iterations": 5,
+        "fingerprint_latency_s": [
+          0.009165,
+          0.009787,
+          0.009461,
+          0.009377,
+          0.009034
+        ],
+        "fingerprint_hash_latency_s": [
+          0.003343,
+          0.003095,
+          0.003205,
+          0.002988,
+          0.003572
+        ],
+        "relink_latency_s": [
+          0.012043,
+          0.011276,
+          0.010859,
+          0.011364,
+          0.011716
+        ],
+        "fingerprint_mean_s": 0.009365,
+        "fingerprint_median_s": 0.009377,
+        "fingerprint_q1_s": 0.009099,
+        "fingerprint_q3_s": 0.009624,
+        "fingerprint_iqr_s": 0.000525,
+        "fingerprint_hash_mean_s": 0.003241,
+        "relink_mean_s": 0.011451,
+        "relink_median_s": 0.011364,
+        "relink_q1_s": 0.011068,
+        "relink_q3_s": 0.011879,
+        "relink_iqr_s": 0.000812,
+        "relink_idempotent": true,
+        "sample_relinked_sql": "SELECT c1 FROM renamed_00000 WHERE id = 1"
+      }
+    ]
+  }
+}

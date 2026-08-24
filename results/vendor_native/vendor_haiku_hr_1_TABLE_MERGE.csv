@@ -1,0 +1,91 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+hr_tm_01,TABLE_MERGE,List department names with cities.,False,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1.2,300,34,0,1,"SELECT d.department_name, d.city
+FROM department_location d",1,0.9956,388,20,"SELECT department_name, city FROM department_location",1,4.3098,4360,184,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_name, city FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_02,TABLE_MERGE,Count departments per country.,False,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1.3053,299,85,0,0,"SELECT c.country_id, c.country_name, COUNT(DISTINCT dl.department_id) as department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN department_location dl ON l.location_id = dl.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_id",0,1.3437,387,93,"SELECT country_id, COUNT(*) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,4.4572,4373,221,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT country_id, COUNT(*) as department_count\nFROM department_location\nGROUP BY country_id\nORDER BY country_id;""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_03,TABLE_MERGE,Street address for department 10.,False,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1.2141,301,29,0,1,"SELECT street_address
+FROM department_location
+WHERE department_id = 10",1,1.0482,389,21,SELECT street_address FROM department_location WHERE department_id = 10,1,3.7251,4366,192,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT street_address FROM department_location WHERE department_id = 10""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_04,TABLE_MERGE,Departments in City1.,False,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1.0857,300,51,0,0,"SELECT DISTINCT department_name
+FROM department_location
+WHERE city = 'City1'",1,1.1334,388,28,"SELECT department_id, department_name FROM department_location WHERE city = 'City1'",0,4.6095,4358,198,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_id, department_name FROM department_location WHERE city = 'City1'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_05,TABLE_MERGE,Department names with postal codes.,False,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1.274,300,46,0,1,"SELECT d.department_name, d.postal_code
+FROM department_location d",1,2.4325,388,22,"SELECT department_name, postal_code FROM department_location",1,3.7927,4363,192,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_name, postal_code FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_06,TABLE_MERGE,Count departments in State1.,False,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1.2934,300,52,0,1,SELECT COUNT(*) FROM department_location WHERE state_province = 'State1',1,1.3986,388,26,SELECT COUNT(*) FROM department_location WHERE state_province = 'State1',1,3.8151,4369,203,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM department_location WHERE state_province = 'State1'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_07,TABLE_MERGE,List location IDs with department names.,False,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1.0209,302,45,0,1,"SELECT dl.location_id, dl.department_name
+FROM department_location dl",1,1.1108,390,22,"SELECT location_id, department_name FROM department_location",1,3.527,4371,189,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT location_id, department_name FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_08,TABLE_MERGE,Departments in country C01.,False,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1.1108,301,55,0,0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+JOIN countries c ON d.country_id = c.country_id
+WHERE c.country_id = 'C01'",0,1.0335,389,57,"SELECT department_id, department_name FROM department_location WHERE country_id = 'C01'",0,4.2073,4374,208,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_id, department_name FROM department_location WHERE country_id = 'C01'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_09,TABLE_MERGE,Count distinct cities with departments.,False,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1.3816,300,35,0,1,SELECT COUNT(DISTINCT city) FROM department_location,1,1.0121,388,20,SELECT COUNT(DISTINCT city) FROM department_location,1,3.8196,4356,183,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT city) FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_10,TABLE_MERGE,List department names with manager IDs.,False,"SELECT department_name, manager_id FROM departments",0,0.9703,302,14,0,1,"SELECT department_name, manager_id FROM department_location",1,1.0461,390,16,"SELECT department_name, manager_id FROM department_location",1,4.2956,4370,188,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_name, manager_id FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_11,TABLE_MERGE,Employee departments by name.,False,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1.6388,299,70,0,0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,0.9886,387,31,"I need to understand what you're asking for. ""Employee departments by name"" could mean:
+
+1. List all employees grouped by their department names
+2. List all departments with their employees
+3. List employees sorted by department name
+4. Something else?
+
+Could you clarify what information you'd like to see in the result? For example:
+- Should it show employee names and their department names?
+- Should it show department names with a count of employees?
+- Should it show all departments even if they have no employees?
+- Any specific sorting or filtering?
+
+Please provide more details about what the output should look like.",0,2.0721,1158,136,1,0,0,[],anthropic
+hr_tm_12,TABLE_MERGE,Job history cities.,False,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,2.0701,298,56,0,0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+WHERE dl.city IS NOT NULL
+ORDER BY dl.city",0,1.3106,386,55,"SELECT DISTINCT jh.employee_id, dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY jh.employee_id, dl.city",1,4.819,4443,299,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT jh.employee_id, dl.city\nFROM job_history jh\nJOIN department_location dl ON jh.department_id = dl.department_id\nORDER BY jh.employee_id, dl.city""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_13,TABLE_MERGE,List job titles.,False,SELECT DISTINCT job_title FROM jobs,1,0.9806,298,12,1,1,SELECT DISTINCT job_title FROM jobs,1,1.0444,386,12,SELECT job_title FROM jobs,1,3.8803,4355,184,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT job_title FROM jobs""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_14,TABLE_MERGE,Count regions.,False,SELECT COUNT(*) FROM regions,1,0.909,297,10,1,1,SELECT COUNT(*) FROM regions,1,0.9236,385,10,SELECT COUNT(*) FROM regions,1,3.8785,4354,186,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM regions""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_15,TABLE_MERGE,List all cities.,True,SELECT DISTINCT city FROM locations,,1.0892,298,10,,,SELECT DISTINCT city FROM department_location,,1.0423,386,12,SELECT DISTINCT city FROM department_location,,4.2887,4360,189,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT city FROM department_location""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_tm_16,TABLE_MERGE,Count locations.,True,SELECT COUNT(*) FROM locations,,0.8589,297,10,,,SELECT COUNT(*) FROM locations,,0.9,385,10,SELECT COUNT(DISTINCT location_id) FROM department_location,,4.591,4394,238,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT location_id) FROM department_location;""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

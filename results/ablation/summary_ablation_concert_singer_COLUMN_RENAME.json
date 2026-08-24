@@ -1,0 +1,85 @@
+{
+  "database_id": "concert_singer_COLUMN_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "configs": {
+    "A_full_mcp": {
+      "ex": 0.75,
+      "n_correct": 12
+    },
+    "B_no_fingerprint": {
+      "ex": 0.6875,
+      "n_correct": 11
+    },
+    "C_no_relink": {
+      "ex": 0.75,
+      "n_correct": 12
+    },
+    "D_no_validate": {
+      "ex": 0.75,
+      "n_correct": 12
+    }
+  },
+  "baseline": {
+    "ex": 0.0625,
+    "n_correct": 1
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "singer",
+      "from": "Song_release_year",
+      "to": "debut_year"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "singer",
+      "from": "Song_Name",
+      "to": "song_title"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "816fc0c958aa741b",
+    "specs": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ]
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  }
+}

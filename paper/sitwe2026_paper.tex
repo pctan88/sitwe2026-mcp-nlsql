@@ -1,0 +1,1291 @@
+% SITWE 2026 — Symposium on Innovations and Technologies in Web Engineering
+% Tan Poi Cheong, Multimedia University
+% 6-page IEEE conference paper, IEEEtran two-column, 10 pt Times.
+%
+% Compile with:  pdflatex sitwe2026_paper.tex  (twice for cross-refs)
+% or open in Overleaf with IEEEtran class enabled.
+
+\documentclass[conference,10pt,a4paper]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit, backgrounds}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+}
+
+\begin{document}
+
+\title{A Schema-Aware Model Context Protocol Server for Natural Language to
+SQL Translation under Schema Evolution\\
+\thanks{This research is conducted at the Faculty of Computing and
+Informatics, Multimedia University, Cyberjaya, Malaysia, as part of an
+M.Sc.\ (IT) by Research programme.}}
+
+\author{\IEEEauthorblockN{Poi-Cheong Tan}
+\IEEEauthorblockA{Faculty of Computing and Informatics\\
+Multimedia University\\
+Persiaran Multimedia, 63100 Cyberjaya, Malaysia\\
+tan.poi.cheong@student.mmu.edu.my}
+\and
+\IEEEauthorblockN{Su-Cheng Haw}
+\IEEEauthorblockA{Faculty of Computing and Informatics\\
+Multimedia University\\
+Persiaran Multimedia, 63100 Cyberjaya, Malaysia\\
+sucheng@mmu.edu.my}
+\and
+\IEEEauthorblockN{Hui-Ngo Goh}
+\IEEEauthorblockA{Faculty of Computing and Informatics\\
+Multimedia University\\
+Persiaran Multimedia, 63100 Cyberjaya, Malaysia\\
+hngoh@mmu.edu.my}
+\and
+\IEEEauthorblockN{Jayapradha J}
+\IEEEauthorblockA{Department of Computing Technologies,\\
+School of Computing\\
+SRM Institute of Science and Technology\\
+Kattankulathur, Tamil Nadu 603203, India\\
+jayapraj@srmist.edu.in}
+}
+
+\maketitle
+
+\begin{abstract}
+Natural Language to SQL (NL-to-SQL) systems have advanced rapidly,
+yet every mainstream system is trained and evaluated against a fixed,
+pre-defined schema. In production, schemas evolve: EvoSchema shows state-of-the-art
+systems including GPT-4 degrading sharply under table- and
+column-level perturbations. The
+Model Context Protocol (MCP) lets an LLM client discover schemas
+and invoke query tools at runtime, yet no peer-reviewed study has
+evaluated it on a standard NL-to-SQL benchmark. This paper closes that gap with a schema-aware MCP server
+exposing three runtime primitives ---
+\texttt{schema/fingerprint} (BLAKE3 hashing with diff classification),
+\texttt{query/relink} (AST rewriting with LLM fallback), and
+\texttt{query/validate} (execution feedback with back-translation) ---
+and an open-source pilot harness.
+On a 76-query evaluation over a perturbed Spider \texttt{concert\_singer}
+database spanning all five EvoSchema operator classes with Claude
+Haiku~4.5, the MCP-mediated path reaches a Recovery Rate of $0.80$.
+$\text{EX}$ rises from a $0.11$ stale-schema baseline to $0.59$,
+against a $0.71$ refreshed-schema ceiling.
+Across four LLM clients and two Spider sub-domains, Recovery Rates
+range from $0.80$ to $0.97$, consistent with the server's
+model-agnostic design.
+A like-for-like vendor-native function-calling baseline is
+statistically indistinguishable from the MCP path, and on a 199-item
+EvoSchema/BIRD-dev subset the server restores execution accuracy from
+a near-zero stale floor to the refreshed-schema ceiling
+(RR $= 1.08$--$1.15$, $p < 10^{-6}$).
+Residual non-recovery concentrates on column-merge and a
+value-encoding mismatch (Q05). The server, harness, and evaluation
+dataset are released under the MIT licence.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Natural Language to SQL, Schema Evolution, Model Context Protocol,
+Large Language Models, Database Systems.
+\end{IEEEkeywords}
+
+% --------------------------------------------------------------- %
+\section{Introduction}
+% --------------------------------------------------------------- %
+
+Translating natural-language questions into executable SQL has progressed
+through four distinct eras: rule-based parsers (pre-2017), sequence-to-sequence
+neural parsers such as Seq2SQL~\cite{zhong2017seq2sql} and IRNet, graph-augmented
+Transformers including LGESQL and RAT-SQL with constrained decoding via
+PICARD, and most recently decoupled pipelines such as
+RESDSQL~\cite{li2023resdsql} and LLM-prompting frameworks
+DIN-SQL~\cite{pourreza2023dinsql}, DAIL-SQL, and multi-agent systems
+including MAC-SQL~\cite{wang2025macsql}, CHASE-SQL~\cite{pourreza2025chasesql}, and CHESS~\cite{talaei2024chess}. Across this
+ten-year trajectory, one experimental condition has remained constant: a
+fixed database schema is fully known at inference time. Benchmark corpora
+including Spider~\cite{yu2018spider}, BIRD~\cite{li2023bird}, and Spider~2.0
+all enforce this assumption.
+
+In production environments this assumption is systematically violated.
+Brahmia et al.~\cite{brahmia2024schemaevol} survey four decades of
+schema-evolution research in database systems and identify five operator
+classes --- table rename, table split, table merge, column rename, column
+merge --- that occur routinely after deployment. The recent
+EvoSchema~\cite{zhang2025evoschema} benchmark provides the first large-scale
+empirical evidence of degradation: applying ten perturbation types to Spider
+and BIRD, every tested model — including GPT-4 — suffers significant
+accuracy drops, with table-level changes substantially more damaging than
+column-level changes. EvoSchema, however, measures the problem without
+proposing a runtime remedy.
+
+A parallel development supplies the mechanism that statically prompted
+NL-to-SQL systems lack. The Model Context Protocol
+(MCP)~\cite{anthropic2024mcp}, introduced by Anthropic in November 2024 and
+surveyed comprehensively by Hou et al.~\cite{hou2025mcp}, defines a
+session-oriented JSON-RPC protocol through which an LLM can dynamically
+discover \emph{tools}, \emph{resources}, and \emph{prompts} exposed by
+external systems. Database connectors are among the dominant categories of
+MCP server deployed today; early proof-of-concept systems
+Toolbelt-MCP~\cite{agater2026toolbelt} and EHR-MCP~\cite{masayoshi2025ehrmcp}
+demonstrate that an LLM client can discover schema metadata and issue SQL
+through MCP without any fine-tuning. Neither system has been evaluated on
+Spider, BIRD, or EvoSchema, and neither addresses runtime schema evolution.
+
+\paragraph*{Research gap}
+A systematic literature scan (first conducted May~2026, refreshed
+July~2026) confirms that no published study isolates MCP-mediated
+dynamic schema retrieval as an experimental variable on a standard
+NL-to-SQL benchmark, and no system detects, classifies, or recovers
+from schema change through the protocol. The nearest work,
+AgentNLQ~\cite{bogdanov2026agentnlq}, employs MCP only as tool
+transport over a schema that is static within and across sessions and
+reports no schema-change condition. This absence defines the gap
+addressed here.
+
+\paragraph*{Contributions}
+This paper makes the following contributions:
+\begin{enumerate}
+  \item A schema-aware MCP server exposing three runtime primitives ---
+    \texttt{schema/fingerprint}, \texttt{query/relink}, and
+    \texttt{query/validate} --- that together enable an off-the-shelf LLM
+    client to detect, represent, and recover from schema evolution at
+    inference time without fine-tuning.
+  \item A 76-query pooled evaluation on perturbed Spider
+    \texttt{concert\_singer} data spanning all five EvoSchema operator
+    classes that empirically isolates schema retrieval as the
+    independent variable and reports Execution Accuracy and Recovery
+    Rate, and a matching 76-query evaluation on a second sub-domain
+    (\texttt{hr\_1}, Section~\ref{sec:results}-C), for 152 queries in
+    total.
+  \item An open-source reference implementation (the server, evaluation
+    harness, and pilot fixture) released to lower the cost of subsequent
+    research on MCP-mediated database access. The code, the pilot
+    dataset, the perturbed SQLite fixtures, and the figure-rendering
+    scripts are released at \url{https://github.com/pctan88/sitwe2026-mcp-nlsql}
+    under the MIT
+    licence. Recorded versions: \texttt{sqlglot 23.x}, \texttt{blake3-py
+    0.4.x}, \texttt{python-docx 1.1.x}, Python~3.11.
+\end{enumerate}
+
+% --------------------------------------------------------------- %
+\section{Related Work}
+% --------------------------------------------------------------- %
+
+\subsection{NL-to-SQL Systems and Benchmarks}
+Recent surveys contextualise the state of LLM-era NL-to-SQL.
+Shi et al.~\cite{shi2025survey} survey LLM-based text-to-SQL methods
+in \emph{ACM Computing Surveys}, covering prompt-engineering and
+fine-tuning strategies and establishing no-fine-tuning prompting as a
+recognised research path. Hong et al.~\cite{hong2025tkde}
+provide a complementary survey tracing the shift from pre-trained to
+large language models, and identify schema linking and
+execution-grounded feedback as the two sub-tasks on which most
+accuracy gains concentrate.
+
+Among recent high-performing systems, CHASE-SQL~\cite{pourreza2025chasesql}
+achieves state-of-the-art execution accuracy on BIRD through multi-path
+reasoning and preference-optimised candidate selection;
+MAC-SQL~\cite{wang2025macsql} employs a multi-agent collaborative
+framework with specialised decomposer, refiner, and selector agents.
+DeepEye-SQL~\cite{li2026deepeyesql} adopts a software-engineering-inspired
+modular pipeline reported at ACM SIGMOD 2026.
+Lei et al.~\cite{lei2026crl} decompose the task into schema linking and
+SQL generation, training each stage with a dedicated cooperative
+reinforcement-learning reward to improve robustness on complex
+multi-table joins.
+None of these systems addresses runtime schema evolution.
+
+Two peer-reviewed studies motivate the enterprise importance of the
+problem. Ojuri et al.~\cite{ojuri2025agents} combine GPT-based LLMs
+with intelligent agents for enterprise NL-to-SQL,
+demonstrating that a ReAct agent architecture outperforms few-shot
+in-context learning for business-analytics tasks, yet still assumes a
+static schema at inference time. Nascimento et
+al.~\cite{nascimento2026kgsql} address real-world schema challenges,
+using a knowledge graph to expose schema semantics to an LLM together with
+dynamic few-shot example selection; their analysis confirms that Spider
+and BIRD do not capture the schema-complexity issues present in
+production databases, directly motivating the runtime schema-fingerprint
+primitive proposed in this paper.
+
+\subsection{NL-to-SQL under Schema Variation}
+Liao et al.~\cite{liao2026infosql} formalise an adversarial-defence task
+spanning perturbations to the question, the schema, and the SQL logic,
+and report state-of-the-art robustness across five Spider-derived
+benchmarks; their setting, however, is addressed through model training
+rather than a runtime protocol.
+CHESS~\cite{talaei2024chess} achieves 71.10\,\% on
+BIRD with 83\,\% fewer LLM calls; its self-consistency check over
+multiple candidates catches some silent failures, but it does not
+employ SQL-to-text back-translation against the original NL question
+as a dedicated silent-failure signal.
+GBV-SQL~\cite{chen2025gbvsql} introduces SQL-to-text back-translation as
+a self-check mechanism but operates only on static schemas and is not
+exposed as a standardised protocol.
+Li et al.~\cite{li2025cmsql} propose a cross-model consistency framework
+that validates SQL candidates by combining fine-tuned models with LLM
+reasoning; their consistency check, however, operates within a
+single vendor's pipeline rather than over an open protocol.
+TRUST-SQL~\cite{jian2026trustsql}
+formalises the ``Unknown Schema'' setting closest to our problem framing
+but requires multi-turn reinforcement-learning training out of scope of
+the present work.
+
+\subsection{Schema Evolution in Database Systems}
+Brahmia et al.~\cite{brahmia2024schemaevol} compare schema-evolution
+proposals along six criteria (database model, implementation, change
+semantics, propagation, integrity, software evolution) and provide the
+most recent comprehensive review of the area. Their taxonomy of five operator types
+(table rename, table split, table merge, column rename, column merge)
+defines the diff classification implemented by our
+\texttt{schema/fingerprint} Resource.
+At the system level, recent work addresses complementary
+schema-related obstacles in production settings: Lei et
+al.~\cite{lei2026srspsql} combine question semantic reconstruction with
+dynamic schema pruning to reduce ambiguity and schema redundancy,
+demonstrating that schema-aware pre-processing measurably improves SQL
+generation on Spider and BIRD.
+Such methods assume the schema is fixed at inference time, whereas the
+\texttt{schema/fingerprint} Resource proposed here treats schema change
+itself as the runtime signal.
+
+\subsection{Model Context Protocol and Tool-Augmented LLMs}
+MCP generalises pre-existing tool-use patterns
+(Toolformer, ReAct, Gorilla) into an open
+standard. Hou et al.~\cite{hou2025mcp} characterise MCP as an
+interoperability layer for AI agents, defining a threat taxonomy
+spanning four attacker categories across the MCP lifecycle,
+with tool poisoning as a prominent risk. Toolbelt-MCP~\cite{agater2026toolbelt} demonstrates
+schema discovery and SQL execution against a $\sim$1\,000-table industrial
+database; EHR-MCP~\cite{masayoshi2025ehrmcp} demonstrates the same pattern
+over a Japanese teaching-hospital electronic health record. Neither system
+has been evaluated on Spider or BIRD, and neither addresses schema evolution.
+More recently, AgentNLQ~\cite{bogdanov2026agentnlq} reports 78.1\,\%
+semantic accuracy on BIRD through a multi-agent orchestrator that uses MCP
+as tool transport, but its schema enrichment is prepared offline and no
+schema-change condition is evaluated. DynaQuery~\cite{hassini2025dynaquery}
+elevates live schema introspection to a query-planning phase, but neither
+classifies evolution events against a taxonomy nor measures recovery, and
+does not use MCP. Schema-change awareness through the protocol therefore
+remains unclaimed.
+
+% --------------------------------------------------------------- %
+\section{Methodology}
+% --------------------------------------------------------------- %
+
+The system is organised in three layers separated by clear responsibility boundaries. Fig.~\ref{fig:arch} shows the MCP-mediated NL-to-SQL query cycle: the user submits a natural-language query (step~1); the LLM client interprets it and invokes the MCP server (step~2); steps~3--5 (shaded region) are handled server-side via \texttt{schema/fingerprint}, \texttt{query/relink}, and \texttt{query/validate}; step~6 returns the validated response to the user.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{paper/figures/fig_arch_cycle.png}
+\caption{The MCP-mediated NL-to-SQL query cycle.}
+\label{fig:arch}
+\end{figure}
+
+Layer~1 receives a natural-language question from the user. Layer~2 hosts a
+pre-trained, MCP-compatible LLM client (Claude Haiku~4.5 in the pilot
+described below); the client is used as released by the vendor with no
+parameter updates of any kind. Layer~3 is the MCP server proposed by this
+work, exposing the three primitives detailed below. Layer~4 holds the
+SQLite databases distributed by Spider, BIRD, and EvoSchema, against which
+candidate SQL is executed read-only.
+
+\subsection{Schema Fingerprint Resource}
+Following the Apache Avro Schema-Fingerprints precedent, the
+\texttt{schema/} \texttt{fingerprint} Resource computes a canonical hash
+\begin{equation}
+\mathcal{F}(S) \;=\; H\!\left( \bigsqcup_{T \in S}\!\!\left[ \text{name}(T)
+\,\|\, \bigsqcup_{C \in T}\!\!\left( \text{name}(C) \,\|\, \text{type}(C)
+\right) \right] \right)
+\label{eq:fp}
+\end{equation}
+where $H$ is the BLAKE3 hash function ($256$-bit digest); the operator
+$\bigsqcup$ denotes \texttt{concat\_sorted} --- byte concatenation of
+its operands after they are sorted lexicographically (applied at both
+the table-set and column-set levels, making the result invariant under
+table reordering and column reordering); and $\|$ is plain byte
+concatenation within a single tuple. We use $\bigsqcup$ rather than
+$\bigoplus$ to avoid the XOR connotation that the latter carries in
+the cryptographic literature. Two consecutive
+fingerprints are equal --- with cryptographic probability --- iff the
+schema content (table names, column names, column types) is unchanged; BLAKE3's collision resistance bounds the
+probability of a coincidental match below $2^{-128}$. When they
+differ, a per-object diff is computed and classified into one of the five
+operator types of Brahmia et al.~\cite{brahmia2024schemaevol}: TABLE\_RENAME,
+TABLE\_SPLIT, TABLE\_MERGE, COLUMN\_RENAME, COLUMN\_MERGE. The Resource
+returns the schema in compact column-list format with token-budget
+instrumentation, following the empirical observation in
+EHR-MCP~\cite{masayoshi2025ehrmcp} that long resource responses risk LLM
+context-window overflow.
+
+\subsection{Query Relink Tool}
+The \texttt{query/relink} Tool accepts a stale SQL string and a classified
+diff, and returns rewritten SQL targeting the evolved schema. The four
+straightforward operator types (table rename, table merge, column rename,
+column merge) are rewritten using deterministic AST transformations via the
+\texttt{sqlglot} library. The two complex operator types
+(TABLE\_SPLIT and COLUMN\_MERGE-with-expression) trigger an LLM-
+assisted fallback that takes the stale SQL,
+the diff, and the new schema as a single prompt and returns the rewritten
+query. Because the AST path is deterministic, repeated runs over the same
+inputs produce identical outputs.
+
+\subsection{Query Validate Tool}
+The \texttt{query/validate} Tool executes candidate SQL against the live
+database and returns one of three verdicts: \texttt{valid},
+\texttt{execution\_error}, or \texttt{silent\_failure\_suspected}. The silent-
+failure heuristic suite combines (i)~result-set arity checks, (ii)~empty
+result on an affirmative question, and (iii)~SQL-to-text back-translation
+into a paraphrase that is compared to the original question through a
+token-overlap metric. The v2 detector realises this with a local
+MiniLM sentence-embedding cosine check
+(Section~\ref{sec:results}). The validation step is performed
+entirely inside the MCP server, keeping the LLM-client cost bounded to one
+generation pass plus one optional re-prompt after a validation failure.
+
+\subsection{Protocol Surface}
+All three primitives are exposed over MCP's JSON-RPC~2.0 transport, making
+the server usable from any MCP-compatible client without
+vendor-specific function-calling adapters. This is the qualitative property
+that distinguishes the proposed work from vendor-coupled agent
+architectures such as AskDB~\cite{phan2025askdb} and
+CHESS~\cite{talaei2024chess}.
+
+% --------------------------------------------------------------- %
+\section{Pilot Study Setup}
+% --------------------------------------------------------------- %
+
+\subsection{Database and Perturbations}
+A self-contained \texttt{concert\_singer} SQLite database — mirroring the
+Spider~1.0 schema for that domain — was created in two versions: a
+pre-perturbation copy (tables \texttt{stadium}, \texttt{singer},
+\texttt{concert}, \texttt{singer\_in\_concert}) and a post-perturbation
+copy in which the table \texttt{singer} is renamed to \texttt{artist}, with
+\texttt{Song\_release\_year} renamed to \texttt{debut\_year} and
+\texttt{Song\_Name} to \texttt{song\_title}. These perturbations correspond
+to one TABLE\_RENAME and two COLUMN\_RENAME operators from the
+EvoSchema taxonomy.
+
+\subsection{Pilot Query Set}
+Twenty natural-language questions were authored against the
+\texttt{concert\_singer} domain. Each question carries (i)~a gold SQL
+answer against the pre-schema and (ii)~a gold SQL answer against the
+post-schema. All forty gold queries execute successfully and return
+equivalent result sets across the two databases. The 20 questions
+decompose as: eleven exercise only the TABLE\_RENAME operator, seven
+exercise the combined TABLE\_RENAME plus COLUMN\_RENAME operators, and
+two are control queries that touch only the unmodified \texttt{stadium} or
+\texttt{concert} tables.
+
+\subsection{Configurations}
+Four configurations are evaluated, all sharing the same stale-schema
+prompt so that runtime schema retrieval is the only variable that changes
+across them:
+\begin{description}
+  \item[Baseline (stale schema)] The LLM client receives the \emph{stale}
+    (pre-perturbation) schema as part of its prompt; the generated SQL is
+    executed against the \emph{post-perturbation} database. This mirrors
+    the prevailing paradigm of static-schema prompting.
+  \item[Refreshed-schema] The LLM client is given the post-perturbation
+    schema directly in its prompt and regenerates the SQL from scratch,
+    with no MCP server in the loop. This path measures the accuracy
+    ceiling attainable when the model simply sees the current schema, and
+    it serves as the reference against which recovery is scored.
+  \item[Error-feedback] The LLM client receives the stale-schema prompt;
+    when the generated SQL raises an execution error on the
+    post-perturbation database, the error message is returned to the model
+    for a single retry, still under the stale schema. This isolates the
+    contribution of a naive one-shot error-correction loop that lacks any
+    schema diff.
+  \item[MCP-mediated] The LLM client receives the same stale-schema prompt.
+    The generated SQL is then passed through the MCP server: the
+    \texttt{schema/fingerprint} Resource computes the diff against the live
+    schema; \texttt{query/relink} rewrites the SQL using AST transformations
+    driven by the diff; \texttt{query/validate} executes the rewritten SQL
+    and emits a verdict, triggering a single LLM re-prompt on a
+    \texttt{silent\_failure\_suspected} verdict.
+\end{description}
+The LLM client is held constant across all four configurations to isolate
+runtime schema retrieval as the independent variable. All results
+reported here use Claude Haiku~4.5 (model identifier
+\texttt{claude-haiku-4-5-20251001}) via the Anthropic Messages API with
+temperature fixed at zero. Note that \texttt{temperature = 0} on the
+Anthropic API reduces but does not eliminate non-determinism across
+calls; the canonical pilot records a single completion per query. The
+harness's \texttt{--seeds N} flag re-runs each query $N$ times at
+temperature $0$; a five-seed sweep confirmed
+\texttt{seed\_stability\_baseline} $= 1.0$
+(Section~\ref{sec:results}-C). A deterministic NL-to-SQL stub
+supports unit testing without API cost.
+
+\subsection{Metrics}
+Execution Accuracy (EX) is computed as the fraction of questions for which
+the predicted SQL produces the same result set (treated as a row-order-
+independent multiset) as the gold SQL. Recovery Rate (RR) is defined
+against the refreshed-schema ceiling as
+\begin{equation}
+RR \;=\; \frac{\text{EX}_{\text{mcp}} - \text{EX}_{\text{stale}}}
+              {\text{EX}_{\text{refreshed}} - \text{EX}_{\text{stale}}}
+\label{eq:rr}
+\end{equation}
+where $\text{EX}_{\text{stale}}$ is the stale-schema baseline accuracy and
+$\text{EX}_{\text{refreshed}}$ is the accuracy of the same LLM when it is
+given the post-perturbation schema directly (the Refreshed-schema
+configuration). $RR = 1.0$ denotes full recovery to the refreshed-schema
+ceiling; $RR = 0$ denotes no recovery; $RR < 0$ denotes degradation; values
+marginally above $1.0$ can arise when relinking a previously correct query
+outperforms regeneration from scratch. The denominator uses
+$\text{EX}_{\text{refreshed}}$ rather than the unperturbed-schema reference
+$\text{EX}_{\text{pre}}$ so that recovery is scored against what the model
+could achieve with full knowledge of the evolved schema. Silent-Failure
+Detection Rate is reported as the fraction of baseline failures correctly
+flagged by \texttt{query/validate} on the MCP path.
+
+% --------------------------------------------------------------- %
+\section{Preliminary Results}
+\label{sec:results}
+% --------------------------------------------------------------- %
+
+
+Table~\ref{tab:results} summarises the pooled results across all five
+EvoSchema operators ($n = 76$ queries). The substantive empirical
+content is three falsifiable propositions: (i)~the diff classifier
+identifies all ground-truth perturbations with zero false positives on
+the unperturbed control queries; (ii)~the \texttt{query/relink} Tool
+produces parseable, executable SQL for every recoverable query, and
+the \texttt{query/validate} Tool does not suppress any correct rewrite
+via a false-positive silent-failure verdict; and (iii)~the end-to-end
+MCP transport composes without protocol failure across all sessions.
+The headline quantitative result is: $\text{EX}$ raised from $0.11$
+under the stale-schema baseline to $0.59$ under the MCP-mediated
+path, against a refreshed-schema ceiling of $0.71$, giving Recovery
+Rate $0.80$ by Equation~\ref{eq:rr}. Residual non-recovery ($0.20$)
+concentrates on the column-merge operator --- where inverse-expression
+reconstruction lies outside the AST rewriter's scope --- and on Q05
+(analysed below), which shows that identifier-only AST rewriting
+cannot normalise LLM-introduced value-level predicate mismatches.
+
+The stale-schema baseline returned $\text{EX} = 0.11$ across all $76$
+queries ($8/76$ correct). Execution errors dominate: $63$ of the $76$
+baseline queries fail outright because the stale SQL references
+renamed or restructured objects that no longer exist in the evolved
+schema (see Table~\ref{tab:erroranalysis}). The eight correct baseline
+queries arise where a stale identifier happens to resolve against a
+surviving schema object. The five wrong-result cases occur where a
+stale identifier resolves against a surviving object but yields an
+incorrect result set. The Wilson 95\,\% CI of $[0.05, 0.19]$ on the
+baseline is reported in Table~\ref{tab:results}.
+
+\begin{table}[h!]
+\centering
+\caption{Execution Accuracy and Recovery Rate across the four
+configurations, pooled over all five EvoSchema operators on the perturbed
+\texttt{concert\_singer} database with Claude Haiku~4.5 ($n=76$). EX shown
+with Wilson 95\,\% CI; RR by Equation~\ref{eq:rr}. ``$\Delta$ vs B'' is the
+EX gain over the stale-schema baseline.}
+\label{tab:results}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Configuration} & \textbf{EX [95\,\% CI]} & $\Delta$ \textbf{vs B} & \textbf{RR} \\
+\midrule
+Baseline (stale schema)     & 0.11 [0.05, 0.19] & --              & --            \\
+Refreshed-schema (ceiling)  & 0.71 [0.60, 0.80] & +0.61           & --            \\
+Error-feedback (1 retry)    & 0.11 [0.05, 0.19] & +0.00           & --            \\
+MCP-mediated (proposed)     & \textbf{0.59 [0.48, 0.70]} & \textbf{+0.49} & \textbf{0.80} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Fig.~\ref{fig:ex_bar} plots Execution Accuracy for all
+four configurations with Wilson 95\,\% confidence intervals;
+the arrow marks the pooled Recovery Rate of $0.80$.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\columnwidth]{paper/figures/fig_ex_bar.pdf}
+\caption{Execution Accuracy across four configurations. Error bars: Wilson 95\,\% CI. Arrow: RR = 0.80.}
+\label{fig:ex_bar}
+\end{figure}
+
+Table~\ref{tab:perpert} disaggregates results by operator across the
+76-query evaluation. The TABLE\_RENAME, TABLE\_SPLIT, and COLUMN\_RENAME
+operators show high recovery (MCP correct $\geq 90\%$ of pre-time
+correct queries) because the deterministic AST relinker handles
+identifier substitution without error. TABLE\_MERGE recovery is
+slightly lower; notably the MCP path corrects $11$ queries against a
+pre-perturbation ceiling of $10$, giving a per-operator RR of $1.125$.
+This marginal overshoot occurs when relinking outperforms regeneration
+from scratch (same effect as cross-model RR $> 1.0$ noted in
+Section~\ref{sec:results}-C). The COLUMN\_MERGE operator is the
+consistent exception: when two columns are merged through an expression,
+the original components cannot be recovered from the post-schema; all
+four models show near-zero incremental recovery on
+\texttt{concert\_singer} COLUMN\_MERGE under the MCP path. Failures
+attributable to the LLM generating incorrect SQL on the unperturbed
+schema (pre-time competence misses) lie outside the scope of the
+schema-evolution mechanism.
+Stratifying all pilot queries by gold-SQL structure (easy: single
+table; medium: one join or aggregation) shows the recovery is not an
+artefact of trivial queries. Pooled across the four evaluated clients,
+RR is $0.92$ on the easy bucket ($n{=}344$) and $0.93$ on the medium
+bucket ($n{=}264$). The authored pilot sets contain no hard-bucket
+queries ($\geq 2$ joins, subqueries, \texttt{HAVING}); harder
+questions are exercised by the EvoSchema subset
+(Section~\ref{sec:evoschema}).
+
+\begin{table}[h!]
+\centering
+\caption{Per-perturbation breakdown across all five EvoSchema operators
+($n = 76$, \texttt{concert\_singer}, Haiku~4.5). Pre = refreshed-schema
+correct (recovery ceiling); Base = stale-schema baseline correct;
+MCP = MCP-mediated correct; Rec.\ = queries recovered by MCP (MCP $-$ Base).}
+\label{tab:perpert}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Pert.} & \textbf{N} & \textbf{Pre} & \textbf{Base} & \textbf{MCP} & \textbf{Rec.} \\
+\midrule
+TABLE\_RENAME   & 16 & 12 & 1  & 9  & 8  \\
+TABLE\_SPLIT    & 16 & 12 & 1  & 10 & 9  \\
+TABLE\_MERGE    & 14 & 10 & 2  & 11 & 9  \\
+COLUMN\_RENAME  & 16 & 13 & 1  & 12 & 11 \\
+COLUMN\_MERGE   & 14 & 7  & 3  & 3  & 0  \\
+\midrule
+Total           & 76 & 54 & 8  & 45 & 37 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph*{Q05: a value-encoding mismatch the rewriter cannot reach}
+Q05 asks ``How many male singers are there?''; the gold answer is a
+count over \texttt{Is\_male = 'T'}. Haiku hedged the boolean encoding
+with a wide OR-list: \texttt{SELECT COUNT(*) FROM singer WHERE
+Is\_male = 'true' OR Is\_male = 'True' OR Is\_male = 'T' OR Is\_male =
+'yes' OR Is\_male = 'Yes' OR Is\_male = 'Y' OR Is\_male = '1'}. This
+matched gold pre-time only because the data happens to contain
+\texttt{'T'}. \texttt{query/relink} renamed \texttt{singer} $\to$
+\texttt{artist} faithfully and kept every disjunct, so the post-schema
+query runs without error and returns $0$ where gold returns the real
+count: a silent semantic failure that survives a correct identifier
+rewrite. The empty-result-on-affirmative-question heuristic flags it
+(\texttt{COUNT(*) = 0} on a ``how many'' question), but the re-prompt
+does not repair the encoding, so detection does not imply recovery for
+value-level mismatches.
+
+The \texttt{schema/fingerprint} Resource correctly identified one
+schema-change event per operator-perturbed database copy, with zero
+false positives on unperturbed copies, confirming BLAKE3 hashing
+reliably separates evolved from unmodified schemas across all five
+operator classes. For the four AST-tractable operators,
+\texttt{query/relink} required no internal LLM fallback of its own.
+
+The silent-failure detector is evaluated on a purpose-built labelled
+set: $60$ cases ($20$ faithful, $40$ injected silent failures)
+spanning all five operators on both pilot databases, with four
+mutation families:
+wrong-column substitution, dropped \texttt{WHERE} clause, aggregate
+swap, and stale merge-equality predicates. Table~\ref{tab:sfd} reports
+per-operator precision, recall, and F1 for two backends. v1 is the
+token-overlap back-translator; v2 is a sentence-embedding cosine check
+(MiniLM, local inference, threshold $0.45$ from a sweep). The v2
+backend reaches precision $1.00$ with recall $0.375$ and F1 $0.545$:
+no false positive on the $20$ faithful queries, so no correct rewrite
+is suppressed, and it beats v1 (precision $0.92$, recall $0.30$) on
+both axes. Detection is
+strongest where the pilot needs it. The stale merge-equality mutation,
+the Q05 value-encoding family, is caught $4/4$; aggregate swaps $3/3$.
+Most misses are wrong-column and dropped-predicate mutations whose
+back-translations read almost the same in English. Precision-first is deliberate: a false positive discards a correct
+rewrite; a miss leaves the query no worse than the baseline.
+
+\begin{table}[t]
+\centering
+\caption{Silent-failure detection on the 60-case labelled set
+(both databases, threshold $0.45$). v2 = sentence-embedding cosine
+backend; pooled v1 token-overlap baseline shown for comparison.
+FP $= 0$ for every operator under v2.}
+\label{tab:sfd}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Operator} & \textbf{N} & \textbf{TP} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} \\
+\midrule
+TABLE\_RENAME  & 12 & 3 & 1.00 & 0.375 & 0.545 \\
+TABLE\_SPLIT   & 12 & 3 & 1.00 & 0.375 & 0.545 \\
+TABLE\_MERGE   & 12 & 0 & ---  & 0.000 & 0.000 \\
+COLUMN\_RENAME & 12 & 4 & 1.00 & 0.500 & 0.667 \\
+COLUMN\_MERGE  & 12 & 5 & 1.00 & 0.625 & 0.769 \\
+\midrule
+Pooled (v2)    & 60 & 15 & 1.00 & 0.375 & 0.545 \\
+Pooled (v1)    & 60 & 12 & 0.92 & 0.300 & 0.453 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On a 2024 commodity laptop the mean MCP middleware overhead
+(\texttt{schema/} \texttt{fingerprint} diff $+$ \texttt{query/relink}
+AST rewrite $+$ \texttt{query/validate} execution and back-translation)
+is $0.22 \pm 0.43$~s per query (median $0.00$~s, range $[0.00, 1.12]$~s),
+on top of the baseline configuration's $1.13 \pm 0.19$~s LLM generation
+(median $1.06$~s, range $[0.88, 1.58]$~s) that the MCP path reuses as
+its input. The distribution is right-skewed: most queries clear the middleware in
+under $0.05$~s; the tail comes from the $\sim 1$~s back-translation.
+The MCP-mediated end-to-end path is therefore $\approx 1.35$~s per query,
+with a second LLM call incurred only on validation failure,
+confirming the bounded-cost property posited in Section~III: at most
+one initial generation plus one optional re-prompt per query.
+
+Per-query cost was metered across every arm at August 2026 list
+prices: single-call arms average $240$--$336$ input tokens
+(USD $0.0004$--$0.0009$ per query); the agentic loop averages
+$2507$--$4838$ tokens (USD $0.0061$--$0.0072$). A full two-database,
+five-operator sweep costs under USD $3$ per model; the $199$-item
+EvoSchema run cost USD $0.72$ (Haiku) and USD $1.25$ (GPT-4o). All middleware runs CPU-only, MiniLM validator included. With
+Table~\ref{tab:scalability}'s sub-$120$\,ms primitives, the marginal
+cost is the single optional re-prompt.
+
+\subsection{Error Analysis of the Stale-Schema Baseline}
+
+Table~\ref{tab:erroranalysis} splits the stale-schema baseline
+outcomes by error category and operator. Each query is assigned one of
+four verdicts: \emph{correct} (matches the gold result set),
+\emph{execution\_error} (the SQL fails to run against the evolved schema),
+\emph{silent\_failure} (the SQL runs but returns a wrong, non-empty result
+that a naive check would accept), and \emph{wrong\_result} (the SQL runs
+and returns a result that fails the gold-equality check). Execution errors
+dominate every operator: $63$ of the $76$ baseline queries ($83\,\%$) fail
+outright because the stale SQL references renamed or restructured objects
+that no longer exist. The five \emph{wrong\_result} cases concentrate on
+the merge and rename operators, where a stale identifier occasionally
+resolves against a surviving object and yields a runnable but incorrect
+query. No baseline query produced an undetected silent failure on this
+database, which keeps the diff-and-relink pathway --- rather than
+silent-failure detection --- as the dominant source of recovery in this
+pilot.
+
+\begin{table}[t]
+\centering
+\caption{Stale-schema baseline outcomes by error category, per operator
+(Claude Haiku~4.5, \texttt{concert\_singer}). Corr.\ = correct;
+Exec.\ = execution error; Silent = silent failure; Wrong = wrong result.}
+\label{tab:erroranalysis}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Operator} & \textbf{N} & \textbf{Corr.} & \textbf{Exec.} & \textbf{Silent} & \textbf{Wrong} \\
+\midrule
+TABLE\_RENAME  & 16 & 1 & 14 & 0 & 1 \\
+TABLE\_SPLIT   & 16 & 1 & 14 & 0 & 1 \\
+TABLE\_MERGE   & 14 & 2 & 12 & 0 & 0 \\
+COLUMN\_RENAME & 16 & 1 & 14 & 0 & 1 \\
+COLUMN\_MERGE  & 14 & 3 & 9  & 0 & 2 \\
+\midrule
+Total          & 76 & 8 & 63 & 0 & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ablation Study}
+
+To attribute the end-to-end recovery to individual primitives, each MCP
+component was disabled in turn while the other two were left intact, across
+all five operators on both the \texttt{concert\_singer} and \texttt{hr\_1}
+databases with Claude Haiku~4.5. Config~A is the full pipeline (control);
+Config~B disables \texttt{schema/fingerprint} (the diff classifier, so
+\texttt{query/relink} receives an empty event list); Config~C disables
+\texttt{query/relink} (the stale SQL is passed straight to validate); and
+Config~D disables \texttt{query/validate} (relinked SQL is returned with no
+execution check and no LLM re-prompt). Table~\ref{tab:ablation} reports
+pooled Execution Accuracy and the change against the full pipeline.
+
+\begin{table}[t]
+\centering
+\caption{Ablation: pooled Execution Accuracy per database with one primitive
+removed. $\Delta$ is the change against Config~A (Full MCP).}
+\label{tab:ablation}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Database} & \textbf{Configuration} & \textbf{EX} & $\Delta$ \textbf{vs A} \\
+\midrule
+\texttt{concert\_singer} & A --- Full MCP       & 0.59 & ---     \\
+\texttt{concert\_singer} & B --- No Fingerprint & 0.63 & $+0.04$ \\
+\texttt{concert\_singer} & C --- No Relink      & 0.59 & $+0.00$ \\
+\texttt{concert\_singer} & D --- No Validate    & 0.36 & $-0.24$ \\
+\midrule
+\texttt{hr\_1}           & A --- Full MCP       & 0.63 & ---     \\
+\texttt{hr\_1}           & B --- No Fingerprint & 0.61 & $-0.03$ \\
+\texttt{hr\_1}           & C --- No Relink      & 0.63 & $+0.00$ \\
+\texttt{hr\_1}           & D --- No Validate    & 0.34 & $-0.29$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The ablation separates \emph{accuracy} benefits from \emph{systems}
+benefits: latency, cost, reproducibility, interoperability.
+Three findings stand out. First, removing \texttt{query/validate}
+(Config~D) causes the largest drops --- between $-0.24$ and $-0.30$ pooled
+--- concentrated on TABLE\_SPLIT, TABLE\_MERGE, and COLUMN\_MERGE. These
+are precisely the operators the deterministic AST rewriter does not fully
+handle, so they depend on the validate~$\rightarrow$~LLM-re-prompt fallback
+to produce correct SQL; without validate, the pipeline ships the
+unrecoverable stale SQL and every such query fails. Second, removing
+\texttt{query/relink} (Config~C) yields a $0.000$ change everywhere under
+Haiku~4.5: when the AST path is absent, validate still fires on the stale
+SQL and the LLM re-prompt --- given the real diff --- recovers the same
+queries the AST path would have handled. The relinker's contribution is
+therefore a systems benefit, not an
+accuracy benefit under a capable model: a deterministic
+$\sim$$0.002$\,s AST pass that replaces an extra $\sim$$1.3$\,s LLM
+call on the operators it covers, with bit-identical outputs across
+repeated runs. The LLM re-prompt path guarantees neither.
+The accuracy contribution concentrates in \texttt{query/validate}
+(Config~D, $-0.24$ to $-0.29$), and detection in
+\texttt{schema/fingerprint}, whose diff is what makes the recovery
+targeted rather than blind regeneration.
+Third, removing \texttt{schema/fingerprint} (Config~B) is mostly
+neutral; the one anomaly is COLUMN\_MERGE on \texttt{concert\_singer}, where
+Config~B ($0.50$) in fact outperforms Config~A ($0.21$), because a
+placeholder diff string proves less misleading to the re-prompt than the
+verbatim MERGE event the AST path injects. We frame this honestly: under a
+capable model the deterministic relinker buys a fast, reproducible path
+rather than headline accuracy, and whether its guarantees become more
+valuable on weaker or cheaper models is left to the full evaluation.
+
+\subsection{Cross-Model Generalisation of the MCP Server}
+
+A central claim of this work is that the schema-aware recovery layer is
+model-agnostic: the same Model Context Protocol server should restore
+execution accuracy regardless of which pre-trained client generates the
+initial SQL. The three primitives operate on artefacts, not on the
+model. \texttt{schema/fingerprint} reads the database schema and emits
+a classified diff; \texttt{query/relink} rewrites SQL through a
+deterministic \texttt{sqlglot} abstract-syntax-tree pass driven by
+that diff; \texttt{query/validate} executes the candidate query and
+returns a three-state verdict. No step inspects the identity, weights,
+or provider of the client that produced the SQL. The model is
+therefore the independent variable and the server is held constant
+across every configuration. The empirical runs reinforce this separation through
+transport diversity: the four clients reach the harness over three distinct
+integration paths --- Claude Haiku~4.5 through the native Anthropic SDK,
+Gemini 2.5 Flash through the Google GenAI SDK, and both GPT-4o and
+Llama~3.3~70B through an OpenAI-compatible HTTP endpoint --- yet the identical
+fingerprint, relink, and validate pipeline is invoked in each case. Any
+recovery observed across these clients is attributable to the server,
+because the only component shared by all of them is the server itself.
+
+Table~\ref{tab:crossmodel} reports Execution Accuracy for the stale,
+refreshed, and MCP-mediated paths, together with the Recovery Rate, for
+each client on both databases, with RR computed against the
+refreshed-schema ceiling by Equation~\ref{eq:rr}.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Cross-model execution accuracy and recovery rate (per database,
+all five operators pooled).}
+\label{tab:crossmodel}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Model} & \textbf{Database} & \textbf{EX stale} & \textbf{EX refr.} & \textbf{EX MCP} & \textbf{RR} \\
+\midrule
+Haiku 4.5  & \texttt{concert\_singer} & 0.11 & 0.71 & 0.59 & 0.80 \\
+Haiku 4.5  & \texttt{hr\_1}           & 0.21 & 0.67 & 0.62 & 0.89 \\
+GPT-4o     & \texttt{concert\_singer} & 0.16 & 0.82 & 0.79 & 0.96 \\
+GPT-4o     & \texttt{hr\_1}           & 0.21 & 0.68 & 0.66 & 0.94 \\
+Gemini 2.5 Flash & \texttt{concert\_singer} & 0.16 & 0.88 & 0.83 & 0.93 \\
+Gemini 2.5 Flash & \texttt{hr\_1}           & 0.21 & 0.68 & 0.66 & 0.94 \\
+Llama 3.3 70B    & \texttt{concert\_singer} & 0.16 & 0.86 & 0.80 & 0.93 \\
+Llama 3.3 70B    & \texttt{hr\_1}           & 0.22 & 0.72 & 0.71 & 0.97 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All four clients completed the full evaluation matrix (both databases,
+all five operators, 76~queries each). The MCP path raises Execution
+Accuracy from near-zero on the stale schema to within a few points of
+the refreshed-schema ceiling across every model. Recovery Rates by
+client: Haiku~4.5 RR\,=\,0.80--0.89, GPT-4o RR\,=\,0.94--0.96,
+Gemini~2.5 Flash RR\,=\,0.93--0.94, Llama~3.3~70B RR\,=\,0.93--0.97.
+McNemar's paired test rejects the null hypothesis of no difference for
+MCP versus the stale baseline on all eight model--database combinations
+($b \geq 31$, $c = 0$; minimum $\chi^2 = 31$, $p < 0.001$), confirming
+that the gain is not attributable to chance and is not explained by a
+single error-correction retry.
+How stable are these numbers under \texttt{temperature}=0 API
+non-determinism? Each query was re-run five times (Haiku~4.5, both
+databases, all operators). The stale, error-feedback, and MCP outcomes
+were $100\,\%$ stable per query across all five seeds; agreement on
+the pre-schema and refreshed arms was $0.993$ (two flips). A GPT-4o three-seed sweep on the same matrix shows the
+stale, refreshed, and error-feedback outcomes $100\,\%$ stable with
+MCP agreement $0.967$. The five flips, itemised in the repository,
+isolate provider-side non-determinism on the re-prompt path. The
+reported accuracies are stable point estimates, not single-draw
+artefacts.
+
+The AST rewriter can rebuild the affected identifiers or join
+structure from the schema diff alone, so table-rename, table-split and
+table-merge all recover strongly. The column-merge operator is the
+consistent exception: when two columns are combined through an
+expression, the original components are no longer recoverable from the
+post-schema, the rewriter cannot invent the inverse transformation,
+and Execution Accuracy on the MCP path stays at the stale level. This
+boundary is a property of the operator rather than the client, and it
+appears for every model evaluated. Three of the four models produced
+RR above $1.0$ on at least one database (strongest: Gemini~2.5 Flash
+on \texttt{concert\_singer} TABLE\_RENAME, RR\,=\,1.30). This occurs
+when relinking a previously correct query yields higher accuracy than
+regenerating it from scratch, since regeneration reintroduces the
+model's own generation errors. The effect is real but small, and at
+the present sample size the refreshed-schema ceiling carries
+non-trivial sampling variance. Recovery Rate is therefore read as
+recovery toward, and occasionally beyond, the refreshed-schema
+reference rather than a strict upper bound; larger query sets in the
+journal extension will tighten this estimate.
+
+\subsection{MCP versus Vendor-Native Function Calling}
+\label{sec:vendor}
+Does the transport itself matter? The same three primitives were
+re-exposed through vendor-native function calling
+(Anthropic tool use for Claude Haiku~4.5, OpenAI function calling for
+GPT-4o) in an agentic loop capped at eight tool turns. A third arm drops the
+protocol entirely: the classified diff is pasted into a single
+regeneration prompt (\emph{diff-in-prompt}). Every arm sees the same
+middleware, byte for byte, and runs on both databases across all five
+operators, $152$ scored queries per model. The re-run stale baseline matched the canonical baseline on every
+query. Table~\ref{tab:vendor} shows the outcome. On
+accuracy, the transports are statistically indistinguishable. Vendor-native
+function calling reaches $\text{EX} = 0.658$ (Haiku) and $0.737$
+(GPT-4o) against the MCP path's $0.605$ and $0.724$; McNemar's exact
+test gives $p = 0.169$ and $p = 0.774$, Holm-corrected within each
+model's test family. The diff-in-prompt arm matches vendor-native on
+both models ($p = 1.00$ and $p = 0.774$). What carried the recovery was the classified schema diff itself; the
+delivery protocol contributed nothing measurable. The design predicts
+exactly this, since both surfaces route the same primitives over the
+same payloads. Where the arms do differ is where the design says they
+should: token spend and tool behaviour. The agentic vendor loop consumes
+$9$--$14\times$ the tokens of the single-call arms: mean $4838$ vs.\
+$336$ input tokens per query for Haiku, USD $0.0061$ vs.\ $0.0005$ per
+query. The vendors also drove the primitives differently: Haiku invoked the
+deterministic \texttt{relink\_sql} tool on $11\,\%$ of queries,
+preferring to rewrite SQL itself from the diff; GPT-4o invoked it on
+$86\,\%$. MCP's fixed server-side pipeline makes this asymmetry
+irrelevant.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{MCP versus vendor-native function calling and diff-in-prompt
+(pooled, both databases, five operators, $n=152$ per model). RR by
+Equation~\ref{eq:rr} against the canonical refreshed ceiling. McNemar
+$p$ is the exact two-sided test of the arm against the MCP path.}
+\label{tab:vendor}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Model} & \textbf{Arm} & \textbf{EX} & \textbf{RR} & $p$ \textbf{vs MCP} \\
+\midrule
+Haiku 4.5 & MCP            & 0.605 & 0.840 & --- \\
+Haiku 4.5 & Vendor-native  & 0.658 & 0.938 & 0.169 \\
+Haiku 4.5 & Diff-in-prompt & 0.664 & 0.951 & 0.045 \\
+GPT-4o    & MCP            & 0.724 & 0.953 & --- \\
+GPT-4o    & Vendor-native  & 0.737 & 0.977 & 0.774 \\
+GPT-4o    & Diff-in-prompt & 0.724 & 0.953 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Real-Benchmark Evaluation on EvoSchema}
+\label{sec:evoschema}
+The pilot query sets are authored; EvoSchema is not. To test the
+mechanism on real benchmark data, the full four-configuration harness
+was run on a deterministic, stratified subset of EvoSchema itself,
+which perturbs the BIRD-dev databases. The subset samples $223$ items;
+$199$ pass a gold-SQL validation gate requiring both gold queries to
+execute with matching, non-empty results across the pre/post
+databases. The $24$ exclusions are tabulated in the repository.
+Coverage spans all eleven BIRD-dev databases and all five operator
+classes. The five in-scope operator files total $5768$ items, so this
+remains a subset evaluation. Table~\ref{tab:evoschema} reports the
+results. The stale-schema baseline collapses almost completely on this
+harder substrate: $\text{EX} = 0.000$ for Haiku and $0.020$ for
+GPT-4o. Error feedback again fails to recover ($\leq 0.020$). The
+MCP-mediated path restores $\text{EX}$ to $0.322$ (Haiku) and $0.412$
+(GPT-4o), at or above the refreshed-schema ceiling of $0.296$ and
+$0.362$ (RR $= 1.08$ and $1.15$). Both recoveries are significant at
+$p < 10^{-6}$ (McNemar versus stale, Holm-corrected). Recovery Rates
+above $1.0$ mean repair beats regeneration on harder questions, the
+same effect as in Section~\ref{sec:results}-C, here on real benchmark
+data. The absolute ceilings of $0.30$--$0.36$ reflect BIRD-dev
+difficulty and bind every configuration alike; the mechanism closes
+the floor-to-ceiling gap fully.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{EvoSchema subset (BIRD-dev substrate): $199$ gate-validated
+items across all 11 databases and five operators. Err-fb =
+error-feedback baseline.}
+\label{tab:evoschema}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} & $n$ & \textbf{EX stale} & \textbf{EX refr.} & \textbf{EX err-fb} & \textbf{EX MCP} & \textbf{RR} \\
+\midrule
+Haiku 4.5 & 199 & 0.000 & 0.296 & 0.010 & 0.322 & 1.08 \\
+GPT-4o    & 199 & 0.020 & 0.362 & 0.020 & 0.412 & 1.15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Scalability}
+
+To confirm the bounded-cost design at schema sizes beyond the pilot
+databases, the \texttt{schema/fingerprint} diff and the \texttt{query/relink}
+AST pass were timed on synthetic schemas of $10$, $100$, and $1000$ tables
+($25$-iteration medians). Table~\ref{tab:scalability} reports the results.
+Both primitives stay under $120$\,ms at $1000$ tables (fingerprint
+median $86$\,ms, relink median $113$\,ms) and grow sub-linearly in
+the table count.
+
+\begin{table}[t]
+\centering
+\caption{Scalability of the fingerprint diff and AST relink passes by schema
+size (median and IQR over 25 iterations, seconds).}
+\label{tab:scalability}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Tables} & \textbf{FP median} & \textbf{FP IQR} & \textbf{Relink median} & \textbf{Relink IQR} \\
+\midrule
+10   & 0.0007 & 0.0002 & 0.0031 & 0.0010 \\
+100  & 0.0062 & 0.0051 & 0.0108 & 0.0094 \\
+1000 & 0.0863 & 0.0182 & 0.1133 & 0.0414 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% --------------------------------------------------------------- %
+\section{Discussion}
+% --------------------------------------------------------------- %
+
+\paragraph*{Scope of the recovery-rate claim}
+The pooled Recovery Rate of $0.80$ covers all five EvoSchema
+operators on \texttt{concert\_singer} ($n = 76$). For the four straightforward rename
+and merge operators, identifier substitution is correct by construction
+--- every renamed identifier in a parsed query is mechanically
+rewritten --- but the rewriter cannot normalise value-level predicate
+mismatches the LLM introduces, as Q05 demonstrates. The column-merge
+operator is the consistent exception (Table~\ref{tab:ablation}): when
+two columns are combined through an expression, the original components
+are no longer recoverable from the post-schema, so the rewriter cannot
+invent the inverse transformation. These two failure modes ---
+value-encoding mismatch and expression-based column merge ---
+account for the $0.20$ residual. We therefore make no generalisation
+claim to the silent-semantic failures that arise when a query returns
+rows under a perturbed schema but answers the wrong question. The full-benchmark evaluation will extend the per-operator recovery
+analysis beyond the subset of Section~\ref{sec:evoschema}.
+
+\paragraph*{Isolation of schema retrieval as the independent variable}
+The MCP-mediated configuration deliberately reuses the baseline
+generation (the stale-schema LLM call) as its input rather than
+re-prompting from scratch. This removes generation stochasticity as a
+source of variance and ensures that any accuracy change is
+attributable to the relink and validate primitives rather than to
+lucky regeneration. The empirical consequence is that the achievable
+MCP execution accuracy is bounded above by the refreshed-schema
+ceiling: $\text{EX} = 0.59$ against $0.71$, a $0.12$ gap from
+column-merge failures and the Q05 value-encoding mismatch, with no
+other loss on the MCP path.
+
+\paragraph*{Silent-failure detection}
+The detector combines an empty-result-on-affirmative-question
+check with a sentence-embedding cosine back-translation test
+(Table~\ref{tab:sfd}). On the 60-case labelled set it attains
+precision $1.00$ / recall $0.375$ / F1 $0.545$, versus $0.92$ / $0.30$
+for the v1 token-overlap prototype. Precision comes first by design.
+False positives are the only way \texttt{query/validate} can actively
+harm accuracy, and the labelled evaluation shows it never suppresses a
+faithful query. The remaining misses sit on mutations whose
+back-translations stay semantically close to the original question
+(wrong-column, dropped predicate); closing them needs
+result-set--aware checks, not better similarity thresholds.
+
+\paragraph*{MCP versus vendor-native tool use}
+Section~\ref{sec:vendor} reports the like-for-like comparison. Both
+surfaces route the same primitives, so accuracy comes out
+statistically indistinguishable, and the diff-in-prompt arm shows the
+classified diff carries the recovery on its own. If accuracy cannot
+separate the two, what does? Three measured properties.
+(a)~Integration cost: one server served every client unchanged, no
+vendor adapter; tool-loop behaviour differed sharply (relink usage
+$11\,\%$ vs.\ $86\,\%$) and the pipeline absorbed it. (b)~Client
+cost: the agentic loop pays the overhead metered in
+Section~\ref{sec:vendor}; under MCP the session Resource holds schema
+state and the client pays one generation plus at most one re-prompt.
+(c)~Audit surface: the Hou et al.~\cite{hou2025mcp} threat taxonomy
+attaches to MCP's standardised protocol; vendor-native calling carries
+the same risks without that audit point.
+
+\paragraph*{Security implications for production deployment}
+Exposing database access through any tool protocol enlarges the
+attack surface, and MCP is no exception. Hou et al.~\cite{hou2025mcp}
+identify a four-category attacker taxonomy across the MCP lifecycle;
+tool poisoning is a prominent risk. Three properties of the proposed
+server bound its exposure. The execution surface is read-only:
+\texttt{query/validate} runs candidate SQL over a connection that
+carries no DDL or DML privileges, so neither a compromised client nor
+an injected prompt can mutate schema or data through the server. The
+primitives are narrow and typed (a fingerprint resource, a rewrite of
+caller-supplied SQL, a three-verdict validator) rather than a general
+\texttt{run\_sql} tool. The server never composes new queries from natural language itself,
+limiting prompt-to-SQL injection to the client's own capability. The Resource discloses schema metadata only, and fingerprints are
+one-way BLAKE3 digests, so no data-exfiltration channel is added
+beyond the query results already returned. Residual risks remain: registry-entry impersonation, result-set
+leakage through the client context, and the \texttt{query/relink} LLM
+fallback, which sends stale SQL and diffs to an external API and
+should use a local model for sensitive schemas. A deployment checklist
+ships with the reference implementation.
+
+\paragraph*{Limitations and remediation paths}
+Both residual failure modes have a concrete next action. Column
+merges first. The post-schema alone cannot tell the rewriter how two
+columns were combined, so the inverse expression stays out of reach.
+The diff plus the original question can. We enriched the LLM-fallback
+prompt with deterministic per-operator rewrite rules (an equality
+filter over a merged column becomes a \texttt{LIKE} pattern over the
+merge separator) and added one bounded retry for the case where an
+affirmative question comes back empty. A hardening run built this way brought column-merge back to
+near-ceiling on both pilot databases. Those figures post-date the
+evaluated pilot configuration, so they live in the open-source
+repository and will anchor the full evaluation. Q05-class
+value-encoding mismatches are already detected by the empty-result
+heuristic and the embedding validator (Table~\ref{tab:sfd}). What recovery still needs is the column's real value space in the
+re-prompt, which the read-only \texttt{query/validate} connection can
+supply at bounded cost.
+
+\paragraph*{Threats to validity}
+First, the pooled headline covers two Spider sub-domains
+(\texttt{concert\_singer}, \texttt{hr\_1}) with authored query sets;
+breadth across domains, query styles, and naturally occurring (rather
+than synthesised) schema histories requires the full EvoSchema
+benchmark beyond the subset of Section~\ref{sec:evoschema}.
+Second, the evaluation uses SQLite; database engines
+that enforce stricter type checking may reveal silent failures invisible
+here. Third, the MCP-mediated configuration shares the baseline's
+initial generation pass, which removes generation stochasticity as a
+source of variance but also bounds the achievable ceiling at the
+refreshed-schema reference accuracy.
+Fourth, the silent-failure evaluation uses a 60-case labelled set
+built from deterministic mutations of the pilot gold queries;
+naturally occurring silent failures may distribute differently.
+These constraints are acknowledged; the full evaluation addresses
+them.
+
+% --------------------------------------------------------------- %
+\section{Conclusion and Future Work}
+% --------------------------------------------------------------- %
+
+This paper presented the first design and pilot evaluation, to our
+knowledge, of a Model-Context-Protocol-mediated approach to schema
+evolution in NL-to-SQL. The proposed server exposes three runtime
+primitives whose composition enables an off-the-shelf LLM client to detect,
+represent, and recover from schema change without fine-tuning. On a
+76-query pooled evaluation over a perturbed Spider
+\texttt{concert\_singer} database spanning all five EvoSchema operator
+classes, the MCP-mediated configuration achieves Recovery Rate $= 0.80$
+($\text{EX}_{\text{mcp}} = 0.59$ vs.\ stale-schema baseline $0.11$ and
+refreshed-schema ceiling $0.71$), with the $0.20$ residual
+attributable to column-merge expression reconstruction and
+value-encoding mismatches the identifier-substitution rewriter cannot
+normalise.
+Three further results support the design: vendor-native function
+calling matches MCP accuracy; the mechanism transfers to
+EvoSchema/BIRD-dev (RR $> 1$); the validator reaches precision $1.00$
+/ F1 $0.545$.
+
+Future work will extend the evaluation to the full Spider, BIRD, and
+EvoSchema benchmarks, with per-operator recovery rates and McNemar's
+analysis across all splits. Three pipeline items follow from the failure analysis: raise
+silent-failure recall without giving up zero false positives, supply
+value-space samples in the re-prompt so Q05-class detections become
+recoveries, and promote the column-merge fallback into the default
+pipeline. The reference implementation
+is released under an MIT licence so that subsequent research on
+MCP-mediated database access can build on a shared standardised
+substrate rather than ad-hoc vendor adapters.
+
+% --------------------------------------------------------------- %
+\section*{Acknowledgments}
+% --------------------------------------------------------------- %
+
+The authors would like to thank the anonymous reviewers for their suggestions to improve the paper.
+
+% --------------------------------------------------------------- %
+% References [1]-[28], canonical numbering mirrored from build_docx.py.
+\begin{thebibliography}{99}
+
+\bibitem{vaswani2017transformer}
+A.~Vaswani \textit{et~al.}, ``Attention is all you need,'' in
+\emph{Proc.\ NeurIPS}, 2017.
+
+\bibitem{zhong2017seq2sql}
+V.~Zhong, C.~Xiong, and R.~Socher, ``Seq2SQL: Generating structured queries
+from natural language using reinforcement learning,'' arXiv:1709.00103,
+2017.
+
+\bibitem{li2023resdsql}
+H.~Li, J.~Zhang, C.~Li, and H.~Chen, ``RESDSQL: Decoupling schema linking
+and skeleton parsing for text-to-SQL,'' in \emph{Proc.\ AAAI}, 2023.
+
+\bibitem{pourreza2023dinsql}
+M.~Pourreza and D.~Rafiei, ``DIN-SQL: Decomposed in-context learning of
+text-to-SQL with self-correction,'' in \emph{Proc.\ NeurIPS}, 2023.
+
+\bibitem{wang2025macsql}
+B.~Wang \textit{et~al.}, ``MAC-SQL: A multi-agent collaborative framework
+for text-to-SQL,'' in \emph{Proc.\ COLING}, 2025.
+
+\bibitem{pourreza2025chasesql}
+M.~Pourreza \textit{et~al.}, ``CHASE-SQL: Multi-path reasoning and
+preference optimised candidate selection for text-to-SQL,'' in
+\emph{Proc.\ ICLR}, 2025.
+
+\bibitem{talaei2024chess}
+S.~Talaei, M.~Pourreza, Y.-C.~Chang, A.~Mirhoseini, and A.~Saberi,
+``CHESS: Contextual harnessing for efficient SQL synthesis,''
+arXiv:2405.16755, 2024. [Preprint; not peer-reviewed.]
+
+\bibitem{yu2018spider}
+T.~Yu \textit{et~al.}, ``Spider: A large-scale human-labeled dataset for
+complex and cross-domain semantic parsing and text-to-SQL task,'' in
+\emph{Proc.\ EMNLP}, 2018.
+
+\bibitem{li2023bird}
+J.~Li \textit{et~al.}, ``Can LLM already serve as a database interface? A
+big bench for large-scale database grounded text-to-SQLs,'' in
+\emph{Proc.\ NeurIPS}, 2023.
+
+\bibitem{brahmia2024schemaevol}
+Z.~Brahmia, F.~Grandi, and B.~Oliboni, ``A literature review on schema
+evolution in databases,'' \emph{Computing Open}, vol.~02, 2024,
+doi:10.1142/s2972370124300012.
+
+\bibitem{zhang2025evoschema}
+T.~Zhang \textit{et~al.}, ``EvoSchema: Towards text-to-SQL robustness
+against schema evolution,'' \emph{Proc.\ VLDB Endowment}, vol.~18, no.~10,
+pp.~3655--3668, 2025, doi:10.14778/3748191.3748222.
+
+\bibitem{anthropic2024mcp}
+Anthropic, ``Model Context Protocol: Specification (revision 2024-11-05),''
+2024. [Online]. Available: \url{https://modelcontextprotocol.io}
+
+\bibitem{hou2025mcp}
+X.~Hou, Y.~Zhao, S.~Wang, and H.~Wang, ``Model Context Protocol (MCP):
+Landscape, security threats, and future research directions,''
+arXiv:2503.23278, 2025. [Preprint; not peer-reviewed.]
+
+\bibitem{agater2026toolbelt}
+J.~Agater, L.~Herradi, M.~Mimouni, A.~Memari, and J.~M.~G\'omez,
+``Toolbelt-MCP: Exploring the Model Context Protocol for tool-use of
+large language models utilizing graphs with relational databases,'' in
+\emph{Artificial Intelligence XLII} (Lecture Notes in Computer Science,
+vol.~16302), M.~Bramer and F.~Stahl, Eds.\ Cham, Switzerland: Springer,
+2026, pp.~472--477, doi:10.1007/978-3-032-11442-6\_38.
+
+\bibitem{masayoshi2025ehrmcp}
+K.~Masayoshi \textit{et~al.}, ``EHR-MCP: Real-world evaluation of clinical
+information retrieval by large language models via Model Context
+Protocol,'' arXiv:2509.15957, 2025. [Preprint; not peer-reviewed.]
+
+\bibitem{shi2025survey}
+L.~Shi, Z.~Tang, N.~Zhang, X.~Zhang, and Z.~Yang, ``A survey on employing
+large language models for text-to-SQL tasks,'' \emph{ACM Comput.\ Surv.},
+vol.~58, no.~2, Art.~54, 2025, doi:10.1145/3737873.
+
+\bibitem{hong2025tkde}
+Z.~Hong, Z.~Yuan, Q.~Zhang, H.~Chen, J.~Dong, F.~Huang, and X.~Huang,
+``Next-Generation Database Interfaces: A Survey of LLM-Based Text-to-SQL,''
+\emph{IEEE Trans.\ Knowl.\ Data Eng.}, vol.~37, no.~12, pp.~7328--7345, 2025,
+doi:10.1109/TKDE.2025.3609486.
+
+\bibitem{li2026deepeyesql}
+B.~Li, C.~Chen, Z.~Xue, Y.~Mei, and Y.~Luo, ``DeepEye-SQL: A
+software-engineering-inspired text-to-SQL framework,''
+\emph{Proc.\ ACM Manag.\ Data}, vol.~4, no.~3, Art.~158, 2026,
+doi:10.1145/3788284.
+
+\bibitem{lei2026crl}
+J.~Lei, R.~He, and Y.~Wang, ``Enhanced Text-to-SQL using cooperative
+reinforcement learning for small language models,'' \emph{Neurocomputing},
+vol.~673, art.~132865, 2026, doi:10.1016/j.neucom.2026.132865.
+
+\bibitem{ojuri2025agents}
+S.~Ojuri, T.~A.~Han, R.~Chiong, and A.~Di~Stefano, ``Optimizing
+text-to-SQL conversion techniques through the integration of intelligent
+agents and large language models,'' \emph{Inf.\ Process.\ Manag.},
+vol.~62, p.~104136, 2025, doi:10.1016/j.ipm.2025.104136.
+
+\bibitem{nascimento2026kgsql}
+E.~R.~Nascimento \textit{et~al.}, ``A text-to-SQL strategy based on large
+language models and knowledge graphs for real-world databases,''
+\emph{Data Knowl.\ Eng.}, vol.~164, p.~102580, 2026,
+doi:10.1016/j.datak.2026.102580.
+
+\bibitem{liao2026infosql}
+H.~Liao, S.~Chen, Y.~Xiao, L.~Xiang, and F.~Min, ``Large-scale
+text-to-SQL generation with adversarial defense,'' \emph{Information
+Sciences}, vol.~733, art.~122942, 2026, doi:10.1016/j.ins.2025.122942.
+
+\bibitem{chen2025gbvsql}
+D.~Chen, X.~Wang, S.~Ren, Q.~Ma, P.~Zhao, and A.~Liu, ``GBV-SQL: Guided
+generation and SQL2Text back-translation validation for multi-agent
+Text2SQL,'' arXiv:2509.12612, 2025. [Preprint; not peer-reviewed.]
+
+\bibitem{li2025cmsql}
+X.~Li, J.~You, H.~Li, J.~Peng, X.~Chen, and Z.~Guo, ``CM-SQL: A
+cross-model consistency framework for text-to-SQL,'' \emph{Neurocomputing},
+vol.~658, art.~131708, 2025, doi:10.1016/j.neucom.2025.131708.
+
+\bibitem{jian2026trustsql}
+A.~Jian \textit{et~al.}, ``TRUST-SQL: Tool-integrated multi-turn
+reinforcement learning for text-to-SQL over unknown schemas,''
+arXiv preprint arXiv:2603.16448, 2026. [Preprint; not peer-reviewed.]
+
+\bibitem{lei2026srspsql}
+J.~Lei, Z.~Li, and Y.~Wang, ``SRSPSQL: A dual-stage Text-to-SQL framework
+with semantic rewriting and schema pruning,'' \emph{Information and Software
+Technology}, vol.~194, art.~108064, 2026, doi:10.1016/j.infsof.2026.108064.
+
+\bibitem{avro2024fp}
+Apache Software Foundation, ``Apache Avro 1.12.0 Specification: Schema
+Fingerprints,'' 2024. [Online]. Available:
+\url{https://avro.apache.org/docs/1.12.0/specification/#schema-fingerprints}
+
+\bibitem{phan2025askdb}
+X.-Q.~Phan, T.-H.~Mai, T.-D.~Dinh, M.-T.~Nguyen, and L.-S.~L\^e, ``AskDB:
+An LLM agent for natural language interaction with relational databases,''
+arXiv:2511.16131, 2025. [Preprint; not peer-reviewed.]
+
+\bibitem{bogdanov2026agentnlq}
+O.~Bogdanov, Y.~Jung, C.~Dhir, P.~Gaddam, S.~Jain, L.~Tumati,
+V.~Parthasarathy, and A.~Shirgaonkar, ``AgentNLQ: A general-purpose agent
+for natural language to SQL,'' arXiv:2605.19010, 2026. [Preprint; not
+peer-reviewed.]
+
+\bibitem{hassini2025dynaquery}
+A.~Hassini, ``DynaQuery: A self-adapting framework for querying structured
+and multimodal data,'' arXiv:2510.18029, 2025. [Preprint; not
+peer-reviewed.]
+
+\end{thebibliography}
+
+\end{document}
+

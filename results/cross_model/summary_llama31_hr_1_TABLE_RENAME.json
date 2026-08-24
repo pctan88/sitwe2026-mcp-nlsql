@@ -1,0 +1,340 @@
+{
+  "database_id": "hr_1_TABLE_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.625,
+  "ex_post_baseline": 0.1875,
+  "ex_post_refreshed_schema": 0.6875,
+  "ex_post_error_feedback": 0.1875,
+  "ex_post_mcp": 0.625,
+  "recovery_rate": 0.875,
+  "silent_failure_detection_rate": 0.5,
+  "mean_baseline_latency_s": 1.6413,
+  "mean_refreshed_schema_latency_s": 1.1893,
+  "mean_error_feedback_latency_s": 0.9513,
+  "mean_mcp_latency_s": 0.2897,
+  "latencies": {
+    "pre_s": [
+      2.494,
+      0.8766,
+      1.1953,
+      0.9584,
+      0.9481,
+      0.7365,
+      1.2412,
+      0.5796,
+      1.2565,
+      1.0222,
+      1.5603,
+      1.5245,
+      1.2547,
+      1.0783,
+      0.812,
+      1.3195
+    ],
+    "baseline_s": [
+      0.638,
+      1.1284,
+      0.6951,
+      2.9249,
+      4.3699,
+      0.6404,
+      4.4778,
+      1.0583,
+      1.8182,
+      0.7524,
+      1.1617,
+      1.2724,
+      0.7734,
+      1.3248,
+      2.0533,
+      1.1712
+    ],
+    "refreshed_schema_s": [
+      0.5466,
+      1.0464,
+      0.7529,
+      1.8004,
+      0.8829,
+      2.608,
+      1.1897,
+      1.0141,
+      1.3311,
+      1.1616,
+      2.2503,
+      0.8202,
+      0.8188,
+      0.9006,
+      1.0198,
+      0.8852
+    ],
+    "error_feedback_s": [
+      1.1064,
+      0.7141,
+      1.3982,
+      1.9772,
+      1.2379,
+      1.7151,
+      0.8405,
+      0.6877,
+      1.2725,
+      0.7336,
+      1.0556,
+      0.7801,
+      0.0011,
+      1.6986,
+      0.0015,
+      0.0012
+    ],
+    "mcp_s": [
+      0.0022,
+      0.0025,
+      0.0018,
+      0.0033,
+      0.002,
+      0.0037,
+      0.0021,
+      0.0047,
+      2.42,
+      1.1456,
+      0.0025,
+      0.0053,
+      0.0133,
+      1.0222,
+      0.0023,
+      0.0021
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 1.178606,
+      "median": 1.1368,
+      "q1": 0.91235,
+      "q3": 1.288,
+      "iqr": 0.37565,
+      "p95": 2.494,
+      "min": 0.5796,
+      "max": 2.494
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 1.641263,
+      "median": 1.16645,
+      "q1": 0.7629,
+      "q3": 1.93575,
+      "iqr": 1.17285,
+      "p95": 4.4778,
+      "min": 0.638,
+      "max": 4.4778
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.189288,
+      "median": 1.01695,
+      "q1": 0.85155,
+      "q3": 1.2604,
+      "iqr": 0.40885,
+      "p95": 2.608,
+      "min": 0.5466,
+      "max": 2.608
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 0.951331,
+      "median": 0.94805,
+      "q1": 0.7009,
+      "q3": 1.33535,
+      "iqr": 0.63445,
+      "p95": 1.9772,
+      "min": 0.0011,
+      "max": 1.9772
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 0.289725,
+      "median": 0.0029,
+      "q1": 0.00215,
+      "q3": 0.0093,
+      "iqr": 0.00715,
+      "p95": 2.42,
+      "min": 0.0018,
+      "max": 2.42
+    }
+  },
+  "fingerprint_diff_ms": 0.227088,
+  "ast_relink_ms": [
+    0.528375,
+    0.692876,
+    0.631409,
+    1.031005,
+    0.419153,
+    0.714041,
+    0.482506,
+    1.030748,
+    0.70698,
+    0.62738,
+    0.68098,
+    1.438594,
+    0.55498,
+    0.65975,
+    0.489926,
+    0.522262
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.227088,
+      "median": 0.227088,
+      "q1": 0.227088,
+      "q3": 0.227088,
+      "iqr": 0.0,
+      "p95": 0.227088,
+      "min": 0.227088,
+      "max": 0.227088
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 0.700685,
+      "median": 0.645579,
+      "q1": 0.525319,
+      "q3": 0.710511,
+      "iqr": 0.185192,
+      "p95": 1.438594,
+      "min": 0.419153,
+      "max": 1.438594
+    }
+  },
+  "per_operator": {
+    "TABLE_RENAME": {
+      "n": 16,
+      "baseline_correct": 3,
+      "refreshed_schema_correct": 11,
+      "error_feedback_correct": 3,
+      "mcp_correct": 10,
+      "recovered": 7,
+      "degraded": 0,
+      "baseline_ex": 0.1875,
+      "refreshed_schema_ex": 0.6875,
+      "error_feedback_ex": 0.1875,
+      "mcp_ex": 0.625
+    }
+  },
+  "error_categories": {
+    "correct": 3,
+    "execution_error": 13,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 7,
+      "c": 0,
+      "statistic": 5.142857,
+      "p_value": 0.015625
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 8,
+      "c": 0,
+      "statistic": 6.125,
+      "p_value": 0.007812
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 7,
+      "statistic": 5.142857,
+      "p_value": 0.015625
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "refreshed_schema": {
+      "successes": 11,
+      "total": 16,
+      "lower": 0.444039,
+      "upper": 0.858356
+    },
+    "error_feedback": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "mcp": {
+      "successes": 10,
+      "total": 16,
+      "lower": 0.386406,
+      "upper": 0.81519
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 0.289725,
+      "lower": 0.066081,
+      "upper": 0.662462
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "employees",
+      "to": "staff"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "6ad56b7c0503dcf7",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "100e16a3a7c773c91a2110e1f9af6a33a48f7d9442309a1df399572dbfb98b05",
+  "backend": "openai_compat",
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "model_short_name": "llama31",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": []
+}

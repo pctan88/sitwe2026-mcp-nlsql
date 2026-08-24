@@ -1,0 +1,705 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tm_01,TABLE_MERGE,False,0,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, city FROM department_location ORDER BY department_name, city",ast,valid,1,1.2201,1.3273,1.0475,1.1269,1.1389,1.336291,anthropic
+hr_tm_01,TABLE_MERGE,False,1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, city FROM department_location ORDER BY department_name, city",ast,valid,1,1.0184,1.0294,1.1102,1.2933,1.8622,1.952167,anthropic
+hr_tm_01,TABLE_MERGE,False,2,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,anthropic,"SELECT department_name, city FROM department_location",ast,valid,1,1.1456,1.3664,0.9427,0.9587,1.0643,1.580833,anthropic
+hr_tm_01,TABLE_MERGE,False,3,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, city FROM department_location ORDER BY department_name, city",ast,valid,1,1.2113,1.2185,1.794,1.1241,1.1544,1.55725,anthropic
+hr_tm_01,TABLE_MERGE,False,4,"SELECT DISTINCT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name, l.city",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,anthropic,"SELECT department_name, city FROM department_location",ast,valid,1,1.2645,1.4216,0.9705,1.1795,0.9684,1.077916,anthropic
+hr_tm_02,TABLE_MERGE,False,0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count 
+FROM countries AS c 
+LEFT JOIN department_location AS dl ON c.country_id = dl.country_id 
+GROUP BY c.country_id, c.country_name 
+ORDER BY c.country_name",ast,valid,0,1.2441,1.8395,1.0036,3.3884,1.266,1.898625,anthropic
+hr_tm_02,TABLE_MERGE,False,1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count FROM countries AS c LEFT JOIN department_location AS dl ON c.country_id = dl.country_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",ast,valid,0,1.6238,1.289,1.0726,1.3562,1.3749,4.529666,anthropic
+hr_tm_02,TABLE_MERGE,False,2,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count FROM countries AS c LEFT JOIN department_location AS dl ON c.country_id = dl.country_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",ast,valid,0,1.2759,1.3327,1.4227,1.432,1.4922,1.917084,anthropic
+hr_tm_02,TABLE_MERGE,False,3,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count FROM countries AS c LEFT JOIN department_location AS dl ON c.country_id = dl.country_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",ast,valid,0,1.583,1.5811,1.097,1.8212,1.2434,2.616167,anthropic
+hr_tm_02,TABLE_MERGE,False,4,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count FROM countries AS c LEFT JOIN department_location AS dl ON c.country_id = dl.country_id GROUP BY c.country_id, c.country_name ORDER BY c.country_name",ast,valid,0,1.4669,2.1092,1.514,1.2472,1.1381,2.666333,anthropic
+hr_tm_03,TABLE_MERGE,False,0,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,1.5464,1.167,2.0135,0.9498,2.6761,1.270833,anthropic
+hr_tm_03,TABLE_MERGE,False,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,1.146,1.3799,1.0307,1.0987,1.0568,1.13825,anthropic
+hr_tm_03,TABLE_MERGE,False,2,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,1.3928,1.0137,0.9727,1.2448,0.9656,1.472542,anthropic
+hr_tm_03,TABLE_MERGE,False,3,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,2.6118,2.0858,0.8924,1.5051,1.9354,1.142417,anthropic
+hr_tm_03,TABLE_MERGE,False,4,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,1.6314,1.1217,0.9765,0.9017,2.665,1.178833,anthropic
+hr_tm_04,TABLE_MERGE,False,0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT dl.department_id, dl.department_name FROM department_location AS dl WHERE dl.city = 'City1'",ast,valid,0,0.9976,1.0315,1.1706,1.1704,1.1237,1.277875,anthropic
+hr_tm_04,TABLE_MERGE,False,1,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT dl.department_id, dl.department_name FROM department_location AS dl WHERE dl.city = 'City1'",ast,valid,0,0.9889,0.9067,0.9639,1.0226,1.2384,1.900375,anthropic
+hr_tm_04,TABLE_MERGE,False,2,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE city = 'City1'",ast,valid,0,1.6541,2.3586,1.152,0.9813,1.0753,0.478417,anthropic
+hr_tm_04,TABLE_MERGE,False,3,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT dl.department_id, dl.department_name FROM department_location AS dl WHERE dl.city = 'City1'",ast,valid,0,0.999,1.1225,1.6145,1.2201,1.1128,1.428333,anthropic
+hr_tm_04,TABLE_MERGE,False,4,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT dl.department_id, dl.department_name FROM department_location AS dl WHERE dl.city = 'City1'",ast,valid,0,1.1673,0.9628,1.0667,1.1769,1.0985,1.295833,anthropic
+hr_tm_05,TABLE_MERGE,False,0,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1.0886,1.0581,1.011,0.9727,2.1343,1.785208,anthropic
+hr_tm_05,TABLE_MERGE,False,1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1.5262,1.803,1.121,0.9941,1.0867,1.860417,anthropic
+hr_tm_05,TABLE_MERGE,False,2,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1.2371,1.2159,1.2963,0.9868,1.0171,0.994666,anthropic
+hr_tm_05,TABLE_MERGE,False,3,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1.1493,2.245,0.9951,1.3435,1.7808,1.243166,anthropic
+hr_tm_05,TABLE_MERGE,False,4,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1.0472,1.2383,1.948,1.0225,1.0095,1.302792,anthropic
+hr_tm_06,TABLE_MERGE,False,0,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1.0859,1.5919,0.9246,2.4232,0.9396,1.085708,anthropic
+hr_tm_06,TABLE_MERGE,False,1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1.321,1.2064,1.4359,1.1067,1.244,0.768917,anthropic
+hr_tm_06,TABLE_MERGE,False,2,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1.5996,1.3283,1.4718,0.9899,0.9999,1.891625,anthropic
+hr_tm_06,TABLE_MERGE,False,3,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1.2414,1.2022,1.0634,1.1367,1.0259,1.971125,anthropic
+hr_tm_06,TABLE_MERGE,False,4,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1.3276,1.9219,0.9939,1.001,1.0796,1.467583,anthropic
+hr_tm_07,TABLE_MERGE,False,0,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT dl.location_id, dl.department_name FROM department_location AS dl ORDER BY dl.location_id",ast,valid,1,1.4576,2.5369,1.0859,1.1437,1.8069,1.323959,anthropic
+hr_tm_07,TABLE_MERGE,False,1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT dl.location_id, dl.department_name FROM department_location AS dl ORDER BY dl.location_id",ast,valid,1,1.0357,1.2134,0.8864,0.9712,1.1527,1.848708,anthropic
+hr_tm_07,TABLE_MERGE,False,2,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT location_id, department_name FROM department_location ORDER BY location_id",ast,valid,1,1.0403,1.5365,1.214,1.0654,1.2111,1.373833,anthropic
+hr_tm_07,TABLE_MERGE,False,3,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT dl.location_id, dl.department_name FROM department_location AS dl ORDER BY dl.location_id",ast,valid,1,1.0477,2.0454,2.6645,1.0654,1.0458,1.503042,anthropic
+hr_tm_07,TABLE_MERGE,False,4,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT location_id, department_name FROM department_location ORDER BY location_id",ast,valid,1,1.1597,1.304,0.9432,1.2082,1.1749,1.035458,anthropic
+hr_tm_08,TABLE_MERGE,False,0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,1.0681,1.1146,2.5473,1.0987,1.0296,1.841375,anthropic
+hr_tm_08,TABLE_MERGE,False,1,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,1.05,1.6234,1.1296,1.3727,1.2072,1.273292,anthropic
+hr_tm_08,TABLE_MERGE,False,2,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,1.3427,1.7279,1.1336,1.3394,1.0447,1.480208,anthropic
+hr_tm_08,TABLE_MERGE,False,3,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,1.0713,1.0944,1.0725,1.1147,1.5281,1.310833,anthropic
+hr_tm_08,TABLE_MERGE,False,4,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,1.2496,1.0448,1.5035,1.0164,2.648,1.907792,anthropic
+hr_tm_09,TABLE_MERGE,False,0,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,SELECT COUNT(DISTINCT city) FROM locations WHERE location_id IN (SELECT location_id FROM departments),0,SELECT COUNT(DISTINCT city) FROM department_location,1,SELECT COUNT(DISTINCT city) FROM locations WHERE location_id IN (SELECT location_id FROM departments),0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,0.98,1.152,0.9948,1.1032,0.9786,1.716208,anthropic
+hr_tm_09,TABLE_MERGE,False,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1.6537,1.082,1.0279,1.2142,1.1635,1.349416,anthropic
+hr_tm_09,TABLE_MERGE,False,2,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1.0774,1.7608,0.9132,1.282,1.8441,1.258333,anthropic
+hr_tm_09,TABLE_MERGE,False,3,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1.2609,1.3638,1.6285,1.1517,1.2261,1.148125,anthropic
+hr_tm_09,TABLE_MERGE,False,4,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1.1725,1.2264,2.8253,1.3027,1.1917,1.313333,anthropic
+hr_tm_10,TABLE_MERGE,False,0,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1.0764,1.1797,1.0178,1.041,0.9548,0.952834,anthropic
+hr_tm_10,TABLE_MERGE,False,1,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1.0303,0.9773,1.3221,0.8498,1.0856,0.742416,anthropic
+hr_tm_10,TABLE_MERGE,False,2,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,0.9228,1.1065,0.9671,0.9552,1.2317,1.302167,anthropic
+hr_tm_10,TABLE_MERGE,False,3,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1.0936,0.9474,1.0798,2.6443,1.0476,0.758792,anthropic
+hr_tm_10,TABLE_MERGE,False,4,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,0.9112,1.0006,1.0237,0.9906,1.1589,0.824833,anthropic
+hr_tm_11,TABLE_MERGE,False,0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,1.1329,1.4004,1.128,1.5898,1.2134,1.556208,anthropic
+hr_tm_11,TABLE_MERGE,False,1,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,1.1573,1.5875,1.072,1.0797,1.2546,6.048125,anthropic
+hr_tm_11,TABLE_MERGE,False,2,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,1.1451,2.3917,1.1259,1.0482,1.3411,2.299041,anthropic
+hr_tm_11,TABLE_MERGE,False,3,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,1.2808,1.2494,1.0868,1.0986,2.0008,1.480625,anthropic
+hr_tm_11,TABLE_MERGE,False,4,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,1.6444,1.4551,1.0946,1.3704,1.1937,1.674541,anthropic
+hr_tm_12,TABLE_MERGE,False,0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,1.3371,1.1827,1.2883,1.8338,1.081,5.993,anthropic
+hr_tm_12,TABLE_MERGE,False,1,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,1.1283,1.1487,1.0215,1.656,1.0948,2.466916,anthropic
+hr_tm_12,TABLE_MERGE,False,2,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,1.0577,1.1712,1.1296,1.5118,1.0976,1.54925,anthropic
+hr_tm_12,TABLE_MERGE,False,3,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,1.2964,1.0971,1.4923,1.0993,1.2812,1.421916,anthropic
+hr_tm_12,TABLE_MERGE,False,4,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,1.3254,1.1792,1.107,1.1496,1.7563,1.495458,anthropic
+hr_tm_13,TABLE_MERGE,False,0,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,1.2374,1.0183,0.9161,0.0008,0.0316,0.791958,anthropic
+hr_tm_13,TABLE_MERGE,False,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,0.8878,0.924,1.8374,0.0012,0.0491,0.565708,anthropic
+hr_tm_13,TABLE_MERGE,False,2,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,1.0024,1.716,1.1752,0.0011,0.0443,0.971333,anthropic
+hr_tm_13,TABLE_MERGE,False,3,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,1.1094,0.8955,1.0423,0.0007,0.0469,0.696458,anthropic
+hr_tm_13,TABLE_MERGE,False,4,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,1.3786,0.8844,0.9777,0.0011,0.0472,0.946084,anthropic
+hr_tm_14,TABLE_MERGE,False,0,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,0.8848,0.8547,1.0293,0.001,0.0461,0.997334,anthropic
+hr_tm_14,TABLE_MERGE,False,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,0.9223,0.8715,0.9014,0.0006,0.0463,0.745458,anthropic
+hr_tm_14,TABLE_MERGE,False,2,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,0.8591,1.1944,0.7845,0.0008,0.0462,1.292083,anthropic
+hr_tm_14,TABLE_MERGE,False,3,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,1.0822,1.7769,0.8466,0.0008,0.0383,0.559792,anthropic
+hr_tm_14,TABLE_MERGE,False,4,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,0.832,1.0845,1.3738,0.0009,0.0261,0.529291,anthropic
+hr_tm_15,TABLE_MERGE,True,0,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,1.2742,1.506,1.3924,1.4844,0.9803,0.667459,anthropic
+hr_tm_15,TABLE_MERGE,True,1,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,1.0658,1.8849,0.9516,0.9984,0.9277,0.77175,anthropic
+hr_tm_15,TABLE_MERGE,True,2,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,1.0623,1.1064,0.9965,1.2497,1.0802,0.893,anthropic
+hr_tm_15,TABLE_MERGE,True,3,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,1.0535,1.0692,1.0024,0.9074,0.9744,0.886334,anthropic
+hr_tm_15,TABLE_MERGE,True,4,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,1.2227,1.1575,1.1542,0.9186,1.0039,0.992917,anthropic
+hr_tm_16,TABLE_MERGE,True,0,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,1.0642,0.8356,0.9087,0.8139,0.9781,0.977709,anthropic
+hr_tm_16,TABLE_MERGE,True,1,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,0.8553,1.4316,1.3419,0.9245,1.0277,0.9785,anthropic
+hr_tm_16,TABLE_MERGE,True,2,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,1.3657,1.2953,0.8914,0.9375,1.9482,1.025166,anthropic
+hr_tm_16,TABLE_MERGE,True,3,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,0.9101,0.9291,0.8802,0.9173,3.868,0.846125,anthropic
+hr_tm_16,TABLE_MERGE,True,4,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,1.566,0.9785,1.0523,1.0556,0.9468,0.481667,anthropic

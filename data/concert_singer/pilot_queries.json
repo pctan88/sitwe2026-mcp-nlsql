@@ -1,0 +1,176 @@
+{
+  "_meta": {
+    "description": "Pilot dataset for SITWE 2026 — 20 NL/SQL pairs over concert_singer with EvoSchema-style perturbations.",
+    "perturbation_pre_to_post": {
+      "TABLE_RENAME": [{"from": "singer", "to": "artist"}],
+      "COLUMN_RENAME": [
+        {"from": "singer.Song_release_year", "to": "artist.debut_year"},
+        {"from": "singer.Song_Name", "to": "artist.song_title"}
+      ]
+    },
+    "split": {"table_rename_only": 12, "table_and_column_rename": 8},
+    "evoschema_alignment": "Subset of EvoSchema (Zhang et al., 2025) table-level + column-level operators."
+  },
+  "queries": [
+    {
+      "id": "Q01",
+      "question": "How many singers do we have?",
+      "gold_pre": "SELECT COUNT(*) FROM singer",
+      "gold_post": "SELECT COUNT(*) FROM artist",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q02",
+      "question": "What is the name and country of every singer?",
+      "gold_pre": "SELECT Name, Country FROM singer",
+      "gold_post": "SELECT Name, Country FROM artist",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q03",
+      "question": "List the names of singers from France.",
+      "gold_pre": "SELECT Name FROM singer WHERE Country = 'France'",
+      "gold_post": "SELECT Name FROM artist WHERE Country = 'France'",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q04",
+      "question": "What are the names of all singers ordered by age from oldest to youngest?",
+      "gold_pre": "SELECT Name FROM singer ORDER BY Age DESC",
+      "gold_post": "SELECT Name FROM artist ORDER BY Age DESC",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q05",
+      "question": "How many male singers are there?",
+      "gold_pre": "SELECT COUNT(*) FROM singer WHERE Is_male = 'T'",
+      "gold_post": "SELECT COUNT(*) FROM artist WHERE Is_male = 'T'",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q06",
+      "question": "What is the average, minimum, and maximum age of all singers?",
+      "gold_pre": "SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer",
+      "gold_post": "SELECT AVG(Age), MIN(Age), MAX(Age) FROM artist",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q07",
+      "question": "List each country and the number of singers from that country.",
+      "gold_pre": "SELECT Country, COUNT(*) FROM singer GROUP BY Country",
+      "gold_post": "SELECT Country, COUNT(*) FROM artist GROUP BY Country",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q08",
+      "question": "Show the name of the oldest singer.",
+      "gold_pre": "SELECT Name FROM singer ORDER BY Age DESC LIMIT 1",
+      "gold_post": "SELECT Name FROM artist ORDER BY Age DESC LIMIT 1",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer"]
+    },
+    {
+      "id": "Q09",
+      "question": "Show the names of all singers and the names of concerts they performed in.",
+      "gold_pre": "SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",
+      "gold_post": "SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer", "concert", "singer_in_concert"]
+    },
+    {
+      "id": "Q10",
+      "question": "List the names of singers who performed in a concert with theme 'Wide Awake'.",
+      "gold_pre": "SELECT T2.Name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake'",
+      "gold_post": "SELECT T2.Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake'",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer", "concert", "singer_in_concert"]
+    },
+    {
+      "id": "Q11",
+      "question": "Count how many singers performed in each concert.",
+      "gold_pre": "SELECT T2.concert_Name, COUNT(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID GROUP BY T2.concert_Name",
+      "gold_post": "SELECT T2.concert_Name, COUNT(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID GROUP BY T2.concert_Name",
+      "perturbation": "NONE",
+      "touches": ["concert", "singer_in_concert"]
+    },
+    {
+      "id": "Q12",
+      "question": "Show the names of singers who did not perform in any concert.",
+      "gold_pre": "SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert)",
+      "gold_post": "SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert)",
+      "perturbation": "TABLE_RENAME",
+      "touches": ["singer", "singer_in_concert"]
+    },
+    {
+      "id": "Q13",
+      "question": "Show each singer's name and their song name.",
+      "gold_pre": "SELECT Name, Song_Name FROM singer",
+      "gold_post": "SELECT Name, song_title FROM artist",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_Name"]
+    },
+    {
+      "id": "Q14",
+      "question": "List the song name of each singer ordered by release year ascending.",
+      "gold_pre": "SELECT Song_Name FROM singer ORDER BY Song_release_year ASC",
+      "gold_post": "SELECT song_title FROM artist ORDER BY debut_year ASC",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_Name", "singer.Song_release_year"]
+    },
+    {
+      "id": "Q15",
+      "question": "What is the song name of the youngest singer?",
+      "gold_pre": "SELECT Song_Name FROM singer ORDER BY Age ASC LIMIT 1",
+      "gold_post": "SELECT song_title FROM artist ORDER BY Age ASC LIMIT 1",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_Name"]
+    },
+    {
+      "id": "Q16",
+      "question": "Count songs released after 2010.",
+      "gold_pre": "SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",
+      "gold_post": "SELECT COUNT(*) FROM artist WHERE debut_year > 2010",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_release_year"]
+    },
+    {
+      "id": "Q17",
+      "question": "Show the song name and release year of every French singer.",
+      "gold_pre": "SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",
+      "gold_post": "SELECT song_title, debut_year FROM artist WHERE Country = 'France'",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_Name", "singer.Song_release_year"]
+    },
+    {
+      "id": "Q18",
+      "question": "Show the average song release year per country.",
+      "gold_pre": "SELECT Country, AVG(Song_release_year) FROM singer GROUP BY Country",
+      "gold_post": "SELECT Country, AVG(debut_year) FROM artist GROUP BY Country",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_release_year"]
+    },
+    {
+      "id": "Q19",
+      "question": "Show the song name of every singer who performed in the 'Auditions' concert.",
+      "gold_pre": "SELECT T2.Song_Name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions'",
+      "gold_post": "SELECT T2.song_title FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions'",
+      "perturbation": "TABLE_AND_COLUMN_RENAME",
+      "touches": ["singer.Song_Name"]
+    },
+    {
+      "id": "Q20",
+      "question": "Find the stadium with the largest capacity.",
+      "gold_pre": "SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1",
+      "gold_post": "SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1",
+      "perturbation": "NONE",
+      "touches": ["stadium"]
+    }
+  ]
+}

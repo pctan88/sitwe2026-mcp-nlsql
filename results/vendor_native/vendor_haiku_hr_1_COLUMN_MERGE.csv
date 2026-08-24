@@ -1,0 +1,67 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+hr_cm_01,COLUMN_MERGE,List merged employee full names.,False,"SELECT DISTINCT CONCAT(e1.first_name, ' ', e1.last_name) AS full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id
+WHERE e1.first_name = e2.first_name AND e1.last_name = e2.last_name
+ORDER BY full_name",0,1.7404,300,95,0,0,SELECT full_name FROM employees,1,1.0997,411,15,SELECT full_name FROM employees,1,4.6103,4468,232,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_02,COLUMN_MERGE,Count employees with last names starting with S.,False,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,1.6203,303,20,0,0,"I need to analyze this carefully. The schema change events show that:
+
+1. The `first_name` column in `employees` was renamed to `full_name`
+2. The `last_name` column was removed from `employees`
+
+However, the question asks to ""Count employees with last names starting with S."" 
+
+Since the `last_name` column has been removed from the `employees` table, I cannot directly query it. The `full_name` column now contains what was previously `first_name`, not `last_name`.
+
+Given the schema changes that have been applied, there is no way to filter by last names starting with 'S' because that column no longer exists in the current schema. However, if I must provide a query based on the current schema, I would need to work with what's available.
+
+The most reasonable interpretation is that the question cannot be answered with the current schema since the last_name column has been removed. But if forced to provide a query, I could attempt to count all employees (though this wouldn't actually filter by last name):
+
+```sql
+SELECT COUNT(*) FROM employees;
+```
+
+However, this doesn't answer the actual question. Since the data structure no longer supports filtering by last name, the accurate answer is that this query cannot be properly constructed with the current schema. But providing the most literal interpretation of what can be queried:
+
+SELECT COUNT(*) FROM employees WHERE full_name LIKE 'S%'",0,3.6884,414,316,SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%',1,7.7287,6332,338,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%' OR full_name LIKE 'S%'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_03,COLUMN_MERGE,Full name for employee 1.,False,"SELECT first_name, last_name FROM employees WHERE employee_id = 1",0,1.0699,301,21,0,1,SELECT full_name FROM employees WHERE employee_id = 1,1,1.1362,412,17,SELECT full_name FROM employees WHERE employee_id = 1,1,4.2214,4431,197,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees WHERE employee_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_04,COLUMN_MERGE,Full names for employees with salary over 7000.,False,"SELECT first_name, last_name FROM employees WHERE salary > 7000",0,1.3165,305,20,0,1,SELECT full_name FROM employees WHERE salary > 7000,1,0.9168,416,16,SELECT full_name FROM employees WHERE salary > 7000,1,4.0311,4452,200,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees WHERE salary > 7000""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_05,COLUMN_MERGE,Full names with emails.,False,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM employees",0,1.0838,299,24,0,1,"SELECT full_name, email FROM employees",1,0.831,410,12,"SELECT full_name, email FROM employees",1,4.1197,4439,206,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name, email FROM employees""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_06,COLUMN_MERGE,Full names with department IDs.,False,"SELECT CONCAT(first_name, ' ', last_name) AS full_name, department_id
+FROM employees",0,1.0857,301,29,0,1,"SELECT full_name, department_id FROM employees",1,1.4501,412,19,"SELECT full_name, department_id FROM employees",1,3.7631,4433,194,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name, department_id FROM employees""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_07,COLUMN_MERGE,Full names and job IDs for the first five employees.,False,"SELECT first_name || ' ' || last_name AS full_name, job_id
+FROM employees
+LIMIT 5",0,0.9706,306,31,0,1,"SELECT full_name, job_id FROM employees LIMIT 5",1,1.0036,417,23,"Perfect! The query is valid.
+
+SELECT full_name, job_id FROM employees LIMIT 5",0,4.7784,4448,208,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name, job_id FROM employees LIMIT 5""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_08,COLUMN_MERGE,Count employees with 'a' in their full name.,False,SELECT COUNT(*) FROM employees WHERE first_name LIKE '%a%' OR last_name LIKE '%a%' OR first_name LIKE '%A%' OR last_name LIKE '%A%',0,1.1323,306,49,0,1,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%',1,0.8887,417,29,"Perfect! The query is valid. Here's the final SQL:
+
+```sql
+SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%'
+```
+
+SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%'",0,4.2972,4481,282,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_09,COLUMN_MERGE,Full names for employees with commissions.,False,"SELECT first_name, last_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",0,2.0052,302,32,0,1,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0,1,1.084,413,26,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0,1,5.5242,4447,220,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_10,COLUMN_MERGE,Job history start date with full name for employee 1.,False,"SELECT jh.start_date, e.first_name, e.last_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,1.1928,306,58,0,0,"SELECT jh.start_date, e.full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",1,1.1866,417,56,"SELECT jh.start_date, e.full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",1,6.0897,4492,272,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT jh.start_date, e.full_name\nFROM job_history jh\nJOIN employees e ON jh.employee_id = e.employee_id\nWHERE jh.employee_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_11,COLUMN_MERGE,Full names for employees managed by 1.,False,"SELECT first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,1.0303,303,23,0,1,SELECT full_name FROM employees WHERE manager_id = 1,1,1.0593,414,21,SELECT full_name FROM employees WHERE manager_id = 1,1,4.0443,4447,202,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees WHERE manager_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_12,COLUMN_MERGE,Count employees with salary at least 6000.,False,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,1.0841,304,16,1,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,0.939,415,16,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,3.75,4449,203,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM employees WHERE salary >= 6000""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_13,COLUMN_MERGE,List region names.,False,SELECT region_name FROM regions,1,1.4824,298,10,1,1,SELECT region_name FROM regions,1,0.9193,409,10,SELECT region_name FROM regions,1,3.8102,4405,179,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT region_name FROM regions""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_14,COLUMN_MERGE,Count jobs.,False,SELECT COUNT(*) FROM jobs,1,0.8883,297,10,1,1,SELECT COUNT(*) FROM jobs,1,0.9468,408,10,SELECT COUNT(*) FROM jobs,1,3.9011,4395,168,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM jobs""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_15,COLUMN_MERGE,List employee first names.,True,SELECT first_name FROM employees,,0.9426,299,10,,,SELECT full_name FROM employees,,1.3462,410,14,SELECT full_name FROM employees,,4.3355,4446,212,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT full_name FROM employees""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_cm_16,COLUMN_MERGE,List employee last names.,True,SELECT last_name FROM employees,,0.9547,299,10,,,"I cannot provide a valid SQL query for this request because the `last_name` column has been removed from the `employees` table according to the schema change events. The column no longer exists in the current database schema, so it's impossible to list employee last names from the employees table.
+
+If you need to retrieve employee information, you could query the `full_name` column instead, but that would contain full names rather than just last names.",,1.8954,410,95,"SELECT SUBSTR(full_name, INSTR(full_name, ' ') + 1) AS last_name FROM employees",,4.3777,4475,264,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT SUBSTR(full_name, INSTR(full_name, ' ') + 1) AS last_name FROM employees""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

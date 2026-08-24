@@ -1,0 +1,107 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+cs_tm_01,TABLE_MERGE,List concert names with singer IDs.,False,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+ORDER BY c.concert_Name, sic.Singer_ID",0,1.1544,180,58,0,1,"SELECT cp.concert_Name, cp.Singer_ID
+FROM concert_performance cp",1,0.9789,272,22,"Perfect! Since the tables have been merged, the query is now much simpler. Here's the final SQL:
+
+```sql
+SELECT concert_Name, Singer_ID FROM concert_performance
+```
+
+SELECT concert_Name, Singer_ID FROM concert_performance",0,7.6946,5373,336,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT c.concert_Name, sic.Singer_ID FROM concert c JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT concert_Name, Singer_ID FROM concert_performance""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_02,TABLE_MERGE,Count singers per concert.,False,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,1.4436,177,103,0,0,"SELECT Concert_ID, COUNT(Singer_ID) as singer_count
+FROM concert_performance
+GROUP BY Concert_ID",1,2.118,269,34,"SELECT Concert_ID, COUNT(Singer_ID) as singer_count FROM concert_performance GROUP BY Concert_ID",1,5.3638,5329,317,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT Concert_ID, COUNT(Singer_ID) as singer_count FROM singer_in_concert GROUP BY Concert_ID""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Concert_ID, COUNT(Singer_ID) as singer_count FROM concert_performance GROUP BY Concert_ID""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_03,TABLE_MERGE,Concerts in 2015 with singer IDs.,False,"SELECT c.Concert_ID, c.concert_Name, c.Year, sic.Singer_ID
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015
+ORDER BY c.Concert_ID, sic.Singer_ID",0,1.6953,184,78,0,0,"SELECT Concert_ID, concert_Name, Theme, Stadium_ID, Year, Singer_ID
+FROM concert_performance
+WHERE Year = 2015",0,1.0251,276,40,"SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year = 2015",1,6.0218,3758,208,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year = 2015""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_04,TABLE_MERGE,Themes with singer counts.,False,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Theme
+ORDER BY c.Theme",0,1.4681,178,80,0,1,"SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count
+FROM concert_performance
+WHERE Singer_ID IS NOT NULL
+GROUP BY Theme
+ORDER BY Theme",1,1.1237,270,45,"SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count
+FROM concert_performance
+GROUP BY Theme
+ORDER BY Theme",1,5.15,3738,222,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count\nFROM concert_performance\nGROUP BY Theme\nORDER BY Theme""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_05,TABLE_MERGE,Distinct concert names.,False,SELECT DISTINCT concert_Name FROM concert,0,0.8992,177,12,0,1,"SELECT DISTINCT concert_Name
+FROM concert_performance",1,1.173,269,15,SELECT DISTINCT concert_Name FROM concert_performance,1,6.3573,5230,266,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT DISTINCT concert_Name FROM concert""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT concert_Name FROM concert_performance""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_06,TABLE_MERGE,Singer names in concert 2.,False,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",0,1.1778,179,47,0,1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID
+WHERE cp.Concert_ID = 2",1,1.0727,271,47,SELECT s.Name FROM singer s JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID WHERE cp.Concert_ID = 2,1,5.682,5394,339,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT s.Name FROM singer s JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 2""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT s.Name FROM singer s JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID WHERE cp.Concert_ID = 2""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_07,TABLE_MERGE,Themes for singer 3.,False,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,1.1482,179,47,0,1,"SELECT DISTINCT c.Theme
+FROM concert_performance c
+WHERE c.Singer_ID = 3",1,1.4199,271,31,SELECT Theme FROM concert_performance WHERE Singer_ID = 3,1,4.4633,3773,241,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Theme FROM concert_performance WHERE Singer_ID = 3""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_08,TABLE_MERGE,Count distinct concerts for singer 5.,False,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,1.0963,180,26,0,1,"SELECT COUNT(DISTINCT Concert_ID)
+FROM concert_performance
+WHERE Singer_ID = 5",1,1.0352,272,26,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,1,6.4308,5325,297,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_09,TABLE_MERGE,List concert names with singer names.,False,"SELECT c.concert_Name, s.Name
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",0,1.2351,179,69,0,1,"SELECT c.concert_Name, s.Name
+FROM concert_performance c
+JOIN singer s ON c.Singer_ID = s.Singer_ID",1,1.1607,271,36,"Perfect! The query is valid. Here's the final SQL:
+
+```sql
+SELECT cp.concert_Name, s.Name
+FROM concert_performance cp
+JOIN singer s ON cp.Singer_ID = s.Singer_ID
+```
+
+SELECT cp.concert_Name, s.Name FROM concert_performance cp JOIN singer s ON cp.Singer_ID = s.Singer_ID",0,7.7392,5434,396,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT c.concert_Name, s.Name\nFROM concert c\nJOIN singer_in_concert sc ON c.Concert_ID = sc.Concert_ID\nJOIN singer s ON sc.Singer_ID = s.Singer_ID""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT cp.concert_Name, s.Name\nFROM concert_performance cp\nJOIN singer s ON cp.Singer_ID = s.Singer_ID""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_10,TABLE_MERGE,Concerts held in stadium 2.,False,SELECT * FROM concert WHERE Stadium_ID = 2,0,1.07,180,15,0,0,"SELECT DISTINCT cp.Concert_ID, cp.concert_Name, cp.Theme, cp.Stadium_ID, cp.Year
+FROM concert_performance cp
+WHERE cp.Stadium_ID = 2",0,1.223,272,48,"SELECT DISTINCT Concert_ID, concert_Name, Theme, Stadium_ID, Year FROM concert_performance WHERE Stadium_ID = 2",0,3.9911,3747,225,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Concert_ID, concert_Name, Theme, Stadium_ID, Year FROM concert_performance WHERE Stadium_ID = 2""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_11,TABLE_MERGE,Singer counts per theme in 2014.,False,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",0,1.0484,181,67,0,1,"SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count
+FROM concert_performance
+WHERE Year = 2014
+GROUP BY Theme",1,1.1144,273,39,"SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count
+FROM concert_performance
+WHERE Year = 2014
+GROUP BY Theme
+ORDER BY Theme",1,5.5088,3756,239,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count\nFROM concert_performance\nWHERE Year = 2014\nGROUP BY Theme\nORDER BY Theme;""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_12,TABLE_MERGE,Singer IDs for 'Week 1' concerts.,False,"SELECT DISTINCT s.Singer_ID
+FROM singer_in_concert s
+JOIN concert c ON s.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,1.5155,184,54,0,1,"SELECT DISTINCT Singer_ID
+FROM concert_performance
+WHERE concert_Name LIKE '%Week 1%'",1,1.3287,276,32,SELECT DISTINCT Singer_ID FROM concert_performance WHERE concert_Name = 'Week 1',1,4.8304,3853,309,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Singer_ID FROM concert_performance WHERE concert_Name = 'Week 1'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_13,TABLE_MERGE,List stadium locations.,False,SELECT DISTINCT Location FROM stadium,1,1.7122,176,10,1,1,SELECT DISTINCT Location FROM stadium,1,1.1639,268,10,SELECT Location FROM stadium,1,4.5855,3709,181,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Location FROM stadium""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_14,TABLE_MERGE,Count stadiums.,False,SELECT COUNT(*) FROM stadium,1,0.9391,176,10,1,1,SELECT COUNT(*) FROM stadium,1,0.9591,268,10,SELECT COUNT(*) FROM stadium,1,4.5377,3727,197,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM stadium""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_15,TABLE_MERGE,List all concert themes.,True,SELECT DISTINCT Theme FROM concert,,1.2388,177,10,,,SELECT DISTINCT Theme FROM concert_performance,,1.0131,269,12,SELECT DISTINCT Theme FROM concert_performance,,3.8545,3702,175,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Theme FROM concert_performance""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_tm_16,TABLE_MERGE,Count concerts by year.,True,"SELECT Year, COUNT(*) as concert_count
+FROM concert
+GROUP BY Year
+ORDER BY Year",,1.2191,177,25,,,"SELECT Year, COUNT(*) as concert_count
+FROM concert_performance
+GROUP BY Year
+ORDER BY Year",,1.4615,269,32,"SELECT Year, COUNT(*) AS concert_count FROM concert_performance GROUP BY Year ORDER BY Year",,5.1401,5280,288,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT Year, COUNT(*) as concert_count FROM concert GROUP BY Year ORDER BY Year""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Year, COUNT(*) AS concert_count FROM concert_performance GROUP BY Year ORDER BY Year""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

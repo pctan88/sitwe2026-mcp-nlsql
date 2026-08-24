@@ -1,0 +1,367 @@
+{
+  "benchmark": "EvoSchema (BIRD-dev substrate)",
+  "model": "gpt_4o",
+  "model_id": "gpt-4o",
+  "backend": "openai_compat",
+  "validate_mode": "embedding",
+  "strict_mode": true,
+  "sampling_rule": "per operator: first 4 per db_id by train_idx; COLUMN_MERGE: all merge-subset items",
+  "n_sampled": 223,
+  "n_excluded_by_gate": 24,
+  "n_evaluated": 199,
+  "n_databases": 11,
+  "full_benchmark_size_in_scope": 5768,
+  "ex_pre": 0.3668,
+  "ex_post_baseline": 0.0201,
+  "ex_post_refreshed_schema": 0.3618,
+  "ex_post_error_feedback": 0.0201,
+  "ex_post_mcp": 0.4121,
+  "recovery_rate": 1.1472,
+  "recovery_rate_error_feedback": 0.0,
+  "wilson_ci": {
+    "baseline": {
+      "successes": 4,
+      "total": 199,
+      "lower": 0.007844,
+      "upper": 0.050535
+    },
+    "refreshed_schema": {
+      "successes": 72,
+      "total": 199,
+      "lower": 0.298245,
+      "upper": 0.430607
+    },
+    "error_feedback": {
+      "successes": 4,
+      "total": 199,
+      "lower": 0.007844,
+      "upper": 0.050535
+    },
+    "mcp": {
+      "successes": 82,
+      "total": 199,
+      "lower": 0.345969,
+      "upper": 0.481483
+    }
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 78,
+      "c": 0,
+      "statistic": 76.012821,
+      "p_value": 0.0
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 68,
+      "c": 0,
+      "statistic": 66.014706,
+      "p_value": 0.0
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 78,
+      "statistic": 76.012821,
+      "p_value": 0.0
+    }
+  },
+  "per_operator": {
+    "COLUMN_MERGE": {
+      "n": 43,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.5349,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.5814,
+      "rr_mcp": 1.087,
+      "wilson_mcp": {
+        "successes": 25,
+        "total": 43,
+        "lower": 0.433283,
+        "upper": 0.716157
+      }
+    },
+    "COLUMN_RENAME": {
+      "n": 40,
+      "ex_stale": 0.1,
+      "ex_refreshed": 0.375,
+      "ex_error_feedback": 0.1,
+      "ex_mcp": 0.375,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 15,
+        "total": 40,
+        "lower": 0.242228,
+        "upper": 0.529678
+      }
+    },
+    "TABLE_MERGE": {
+      "n": 36,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.1944,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.3333,
+      "rr_mcp": 1.7143,
+      "wilson_mcp": {
+        "successes": 12,
+        "total": 36,
+        "lower": 0.202144,
+        "upper": 0.496663
+      }
+    },
+    "TABLE_RENAME": {
+      "n": 44,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.3636,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.3864,
+      "rr_mcp": 1.0625,
+      "wilson_mcp": {
+        "successes": 17,
+        "total": 44,
+        "lower": 0.25721,
+        "upper": 0.533767
+      }
+    },
+    "TABLE_SPLIT": {
+      "n": 36,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.3056,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.3611,
+      "rr_mcp": 1.1818,
+      "wilson_mcp": {
+        "successes": 13,
+        "total": 36,
+        "lower": 0.224754,
+        "upper": 0.524252
+      }
+    }
+  },
+  "per_database": {
+    "california_schools": {
+      "n": 18,
+      "ex_stale": 0.0556,
+      "ex_refreshed": 0.3333,
+      "ex_error_feedback": 0.0556,
+      "ex_mcp": 0.3889,
+      "rr_mcp": 1.2,
+      "wilson_mcp": {
+        "successes": 7,
+        "total": 18,
+        "lower": 0.20305,
+        "upper": 0.613813
+      }
+    },
+    "card_games": {
+      "n": 14,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.0,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.0,
+      "rr_mcp": null,
+      "wilson_mcp": {
+        "successes": 0,
+        "total": 14,
+        "lower": 0.0,
+        "upper": 0.215317
+      }
+    },
+    "codebase_community": {
+      "n": 16,
+      "ex_stale": 0.0625,
+      "ex_refreshed": 0.25,
+      "ex_error_feedback": 0.0625,
+      "ex_mcp": 0.5625,
+      "rr_mcp": 2.6667,
+      "wilson_mcp": {
+        "successes": 9,
+        "total": 16,
+        "lower": 0.331782,
+        "upper": 0.769016
+      }
+    },
+    "debit_card_specializing": {
+      "n": 14,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.4286,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.5,
+      "rr_mcp": 1.1667,
+      "wilson_mcp": {
+        "successes": 7,
+        "total": 14,
+        "lower": 0.267989,
+        "upper": 0.732011
+      }
+    },
+    "european_football_2": {
+      "n": 15,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.2,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.2,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 3,
+        "total": 15,
+        "lower": 0.070474,
+        "upper": 0.451859
+      }
+    },
+    "financial": {
+      "n": 15,
+      "ex_stale": 0.0667,
+      "ex_refreshed": 0.2,
+      "ex_error_feedback": 0.0667,
+      "ex_mcp": 0.2,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 3,
+        "total": 15,
+        "lower": 0.070474,
+        "upper": 0.451859
+      }
+    },
+    "formula_1": {
+      "n": 12,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.3333,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.3333,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 4,
+        "total": 12,
+        "lower": 0.138118,
+        "upper": 0.609382
+      }
+    },
+    "student_club": {
+      "n": 55,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.6182,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.6545,
+      "rr_mcp": 1.0588,
+      "wilson_mcp": {
+        "successes": 36,
+        "total": 55,
+        "lower": 0.522537,
+        "upper": 0.766375
+      }
+    },
+    "superhero": {
+      "n": 11,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.7273,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.7273,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 8,
+        "total": 11,
+        "lower": 0.43435,
+        "upper": 0.902541
+      }
+    },
+    "thrombosis_prediction": {
+      "n": 15,
+      "ex_stale": 0.0,
+      "ex_refreshed": 0.0667,
+      "ex_error_feedback": 0.0,
+      "ex_mcp": 0.1333,
+      "rr_mcp": 2.0,
+      "wilson_mcp": {
+        "successes": 2,
+        "total": 15,
+        "lower": 0.03736,
+        "upper": 0.378825
+      }
+    },
+    "toxicology": {
+      "n": 14,
+      "ex_stale": 0.0714,
+      "ex_refreshed": 0.2143,
+      "ex_error_feedback": 0.0714,
+      "ex_mcp": 0.2143,
+      "rr_mcp": 1.0,
+      "wilson_mcp": {
+        "successes": 3,
+        "total": 14,
+        "lower": 0.075712,
+        "upper": 0.475897
+      }
+    }
+  },
+  "latency_stats": {
+    "baseline": {
+      "n": 199,
+      "mean": 1.403196,
+      "median": 1.2706,
+      "q1": 1.0953,
+      "q3": 1.503,
+      "iqr": 0.4077,
+      "p95": 2.428,
+      "min": 0.7955,
+      "max": 3.6549
+    },
+    "refreshed_schema": {
+      "n": 199,
+      "mean": 1.331715,
+      "median": 1.2174,
+      "q1": 1.072,
+      "q3": 1.4351,
+      "iqr": 0.3631,
+      "p95": 1.9701,
+      "min": 0.7945,
+      "max": 4.5885
+    },
+    "error_feedback": {
+      "n": 199,
+      "mean": 1.448858,
+      "median": 1.3662,
+      "q1": 1.1874,
+      "q3": 1.6079,
+      "iqr": 0.4205,
+      "p95": 2.1645,
+      "min": 0.0008,
+      "max": 7.5953
+    },
+    "mcp": {
+      "n": 199,
+      "mean": 1.392721,
+      "median": 1.2845,
+      "q1": 1.0256,
+      "q3": 1.5609,
+      "iqr": 0.5353,
+      "p95": 2.8374,
+      "min": 0.0294,
+      "max": 10.9805
+    }
+  },
+  "cost": {
+    "prices_usd_per_mtok": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "tokens_in": 340965,
+    "tokens_out": 39406,
+    "usd": 1.2465
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "notes": [
+    "pre-EX reuses the stale generation's SQL scored on the pre-DB (no separate call; T=0)",
+    "EvoSchema perturbs BIRD-dev, not Spider \u2014 the brief's mention of Spider databases was corrected against the benchmark inventory",
+    "COLUMN_MERGE separator is a single space, fixed by EvoSchema's own gold SQL literals and verified per item by the gate"
+  ]
+}

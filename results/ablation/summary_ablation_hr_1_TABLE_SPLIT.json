@@ -1,0 +1,108 @@
+{
+  "database_id": "hr_1_TABLE_SPLIT",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "configs": {
+    "A_full_mcp": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "B_no_fingerprint": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "C_no_relink": {
+      "ex": 0.5625,
+      "n_correct": 9
+    },
+    "D_no_validate": {
+      "ex": 0.1875,
+      "n_correct": 3
+    }
+  },
+  "baseline": {
+    "ex": 0.1875,
+    "n_correct": 3
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_SPLIT",
+      "source": "employees",
+      "targets": [
+        "employee_job",
+        "employee_personal"
+      ],
+      "key": "employee_id"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "208fce1eb1d25c34",
+    "specs": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_personal",
+          "employee_job"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_job",
+          "employee_personal"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ]
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  }
+}

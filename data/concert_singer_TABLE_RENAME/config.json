@@ -1,0 +1,24 @@
+{
+  "database_id": "concert_singer_TABLE_RENAME",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "befe776345c2064b",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ]
+  }
+}

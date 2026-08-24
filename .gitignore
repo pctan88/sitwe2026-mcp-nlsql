@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Secrets — NEVER commit API keys
+.env
+*.key
+credentials*.json
+
+# OS / editor / transient lock files
+.DS_Store
+.idea/
+.vscode/
+# Word lock files (created when a .docx is open)
+~$*
+# SQLite write-ahead journal — transient
+*.sqlite-journal
+
+# Spider corpus (large, distributed separately under CC-BY-SA)
+data/spider/
+
+# Results — exclude exploration outputs but KEEP the canonical paper-driving
+# files and the contaminated-audit evidence so reviewers can reproduce.
+# Committed evaluation artifacts: everything under results/ in this release
+# is tracked deliberately (see README §layout). Fresh harness runs write to
+# results/ root and stay untracked unless whitelisted below.
+results/*.csv
+results/*.json
+results/*.log
+results/*.pid
+results/*.txt
+results/*.marker
+!results/summary.json
+!results/pilot_results_contaminated_*.csv
+!results/summary_contaminated_*.json
+# Vendor-native arm (reviewer R1-2/R2-2): keep the full evidence set —
+# report, per-query CSVs, per-config summaries, run logs.
+!results/vendor_native/
+!results/vendor_native/**
+
+# One-off scratch files from prep work (not part of the pilot harness)
+napkin_poll*.py
+request_response.json
+package/
+.claude/
+
+# Internal AI-handoff doc — not for public release
+CLAUDE_CODE_RUNBOOK.md
+
+# Generated paper outputs — regenerate from build_docx.py / pdflatex
+paper/*.pdf
+paper/*.docx
+paper/figures/*.pdf
+
+# Workspace-root architecture mock-ups (superseded by paper/fig_arch.png)
+System_Architecture_Design.png
+System_Architecture_Design.svg
+
+# Personal working files — not for public release
+SHARED_NOTES.md
+ABLATION_CLAUDE_CODE_PROMPT.md
+NL-to-SQL Query Cycle.pptx
+
+# LaTeX downloadable dependency
+paper/IEEEtran.cls
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.log
+paper/*.out
+
+# Internal draft superseded by final paper
+paper/cross_model_subsection_DRAFT.md
+# Scale-up outputs (Brief 2): keep evidence set
+!results/scaleup/
+!results/scaleup/**

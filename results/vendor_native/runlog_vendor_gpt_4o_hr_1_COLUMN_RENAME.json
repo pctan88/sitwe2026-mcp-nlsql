@@ -1,0 +1,24 @@
+{
+  "database_id": "hr_1_COLUMN_RENAME",
+  "model": "gpt-4o",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "hr_cr_01",
+    "hr_cr_02",
+    "hr_cr_03",
+    "hr_cr_04",
+    "hr_cr_05",
+    "hr_cr_06",
+    "hr_cr_07",
+    "hr_cr_08",
+    "hr_cr_09",
+    "hr_cr_10",
+    "hr_cr_11",
+    "hr_cr_12",
+    "hr_cr_13",
+    "hr_cr_14",
+    "hr_cr_15",
+    "hr_cr_16"
+  ]
+}

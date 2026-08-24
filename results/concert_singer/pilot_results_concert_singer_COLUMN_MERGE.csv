@@ -1,0 +1,153 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_cm_01,COLUMN_MERGE,List singer names with countries merged.,SELECT Name_Country FROM singer ORDER BY Singer_ID,False,,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,"SELECT Song_Name, Name_Country FROM singer",ast,valid,0,0,0,0.8177,0.8263,0.9336,1.4163,1.8615,0.50722,anthropic
+cs_cm_02,COLUMN_MERGE,Count singers from France.,SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '% - France',False,,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column ""Country"" does exist in the singer table according to the schema provided. However, since the error says ""no such column: Country"", the actual database schema must differ from what was stated. Let me provide a query that would work if Country doesn't exist but we need to count singers from France using available columns:
+
+SELECT COUNT(DISTINCT Singer_ID) FROM singer
+
+Actually, looking at the error more carefully - if Country column doesn't exist, I need to work with what's available. But the question specifically asks for singers from France. Given the schema shows Country exists but the error says it doesn't, the most likely scenario is the column name is different or the data is stored differently.
+
+Let me provide the most robust answer based on the stated schema:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,0,0,0.8853,0.9034,1.7102,3.1443,0.8479,0.751943,anthropic
+cs_cm_03,COLUMN_MERGE,Merged name for Singer_ID 1.,SELECT Name_Country FROM singer WHERE Singer_ID=1,False,,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me reconsider. The error says ""no such column: Name"" but the schema shows `Name TEXT` in the singer table. Let me check the actual column names more carefully.
+
+Looking at the schema again, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male
+
+The query `SELECT Name FROM singer WHERE Singer_ID = 1` should work. However, if the error persists, it might be a case sensitivity issue or the column might be named differently. Let me try with backticks or check if it's actually a different column name.
+
+Given the question asks for ""Merged name"" and the error, perhaps the column is actually named something else. But based on the schema provided, this should be correct:
+
+SELECT Name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,"The query is trying to select the `Name` column from the `singer` table, but according to the schema diff, the `Name` column has been removed from the `singer` table. Looking at the current schema, the `singer` table no longer has a `Name` column.
+
+Based on the available columns in the current `singer` table, there is no direct equivalent to the removed `Name` column. The query cannot be rewritten to return the same data because the `Name` column no longer exists and there's no clear mapping to another column.
+
+However, if the intent was to get information about a singer with Singer_ID = 1, the closest valid query would be:
+
+```sql
+SELECT Song_Name FROM singer WHERE Singer_ID = 1
+```
+
+If you need the singer's name from a different source, it may have been moved to another table or the schema change removed that data entirely.",ast,execution_error,0,0,0,0.8987,0.8965,0.9535,2.3524,2.6209,0.591504,anthropic
+cs_cm_04,COLUMN_MERGE,Merged names for singers over 40.,SELECT Name_Country FROM singer WHERE Age > 40 ORDER BY Name_Country,False,,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table. The original query attempts to select and concatenate the `Name` column, which no longer exists in the current schema.
+
+If you meant to use a different column (such as `Song_Name`), the rewritten query would be:
+
+```sql
+SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names FROM singer WHERE Age > 40
+```
+
+However, if the intent was different, please clarify which column should be used for the concatenation.",ast,execution_error,0,0,0,0.9879,1.0637,0.9389,2.3296,2.3359,0.738857,anthropic
+cs_cm_05,COLUMN_MERGE,Merged name for the song 'Sun'.,SELECT Name_Country FROM singer WHERE Song_Name='Sun',False,,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"The original query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. 
+
+However, if the intent was to work with the available data, here's what can be done:
+
+```sql
+SELECT GROUP_CONCAT(Singer_ID, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'
+```
+
+Alternatively, if you need to reference singer names from another source, you would need to join with a different table that contains name information. Based on the current schema provided, there is no other table with singer name data available.",ast,execution_error,0,0,0,1.4005,1.066,1.0327,0.9202,2.3764,1.180116,anthropic
+cs_cm_06,COLUMN_MERGE,Count singers with songs released since 2010.,SELECT COUNT(*) FROM singer WHERE Song_release_year >= 2010,False,,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,0,0,0.9673,1.0806,0.9632,0.0014,0.0024,0.788325,anthropic
+cs_cm_07,COLUMN_MERGE,List merged names and song titles.,"SELECT Name_Country, Song_Name FROM singer ORDER BY Singer_ID",False,,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. The query selects `s.Name` which is no longer available.
+
+However, if you meant to select `Singer_ID` or another identifier instead of the removed `Name` column, here's a possible rewrite:
+
+```sql
+SELECT DISTINCT s.Singer_ID, s.Song_Name FROM singer AS s ORDER BY s.Singer_ID, s.Song_Name
+```
+
+If you have additional context about what should replace the `Name` column in the output, please clarify.",ast,execution_error,0,0,0,0.9472,1.0664,1.1426,0.9773,2.4999,0.816025,anthropic
+cs_cm_08,COLUMN_MERGE,Merged names for male singers.,SELECT Name_Country FROM singer WHERE Is_male='T' ORDER BY Singer_ID,False,,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = 'M'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = '1'",0,1,no such column: Name,anthropic,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table in the current schema. The query selects `Name` which no longer exists.
+
+If you meant to select a different column (such as `Song_Name`), the rewritten query would be:
+
+```sql
+SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'
+```
+
+However, if the original intent was different, please clarify which column should be used instead of `Name`.",ast,execution_error,0,0,0,1.5277,1.2727,1.6472,1.2656,3.0468,7.739126,anthropic
+cs_cm_09,COLUMN_MERGE,Count singers from the United States.,SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '% - United States',False,,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,0,0,1.3086,0.991,0.8473,0.954,0.8552,0.859815,anthropic
+cs_cm_10,COLUMN_MERGE,Merged names for concert 1 singers.,SELECT s.Name_Country FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY s.Name_Country,False,,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Name,anthropic,"SELECT GROUP_CONCAT(s.Song_Name, ', ') AS merged_names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,0,0,1.5576,1.1893,1.2879,1.0917,1.0369,1.38555,anthropic
+cs_cm_11,COLUMN_MERGE,Merged names for songs released between 2000 and 2014.,SELECT Name_Country FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014 ORDER BY Singer_ID,False,,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ')
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,0,0,1.3042,0.991,1.8849,0.0011,0.0141,0.875425,anthropic
+cs_cm_12,COLUMN_MERGE,Count singers aged 30 or above.,SELECT COUNT(*) FROM singer WHERE Age >= 30,False,,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,0,0,0.8473,0.8325,0.9299,0.001,0.0022,0.677872,anthropic
+cs_cm_13,COLUMN_MERGE,List stadiums with capacity over 10000.,SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID,False,,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0,0,1.1744,0.8831,0.9819,0.0012,0.0023,0.669767,anthropic
+cs_cm_14,COLUMN_MERGE,Count concerts.,SELECT COUNT(*) FROM concert,False,,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,0,0,0.8094,0.8511,0.8296,0.001,0.0037,1.124687,anthropic
+cs_cm_15,COLUMN_MERGE,List all singer names.,,True,unanswerable_after_COLUMN_MERGE,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,"The original query `SELECT Name FROM singer` is no longer valid because:
+1. The `Name` column was removed from the `singer` table
+2. The `Country` column was renamed to `Name_Country`
+
+Looking at the current schema, the `singer` table has `Song_Name` as the closest text field that could represent a name. However, since the original query selected `Name` and that column no longer exists, and there's no direct equivalent, the query cannot be meaningfully rewritten.
+
+If the intent was to select the country name, the rewritten query would be:
+
+```sql
+SELECT Name_Country FROM singer
+```
+
+If the intent was to select song names, it would be:
+
+```sql
+SELECT Song_Name FROM singer
+```
+
+Given the column rename from `Country` to `Name_Country`, the most likely intended rewrite is:
+
+```sql
+SELECT Name_Country FROM singer",ast,execution_error,,0,0,0.8751,0.9761,1.0288,0.8622,2.858,1.23798,anthropic
+cs_cm_16,COLUMN_MERGE,List distinct singer countries.,,True,unanswerable_after_COLUMN_MERGE,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0,0,0.9844,0.8817,1.172,0.8916,0.0035,1.203872,anthropic

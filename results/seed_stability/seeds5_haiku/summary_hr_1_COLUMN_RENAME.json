@@ -1,0 +1,361 @@
+{
+  "database_id": "hr_1_COLUMN_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.5625,
+  "ex_post_baseline": 0.3125,
+  "ex_post_refreshed_schema": 0.5625,
+  "ex_post_error_feedback": 0.3125,
+  "ex_post_mcp": 0.5625,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.1429,
+  "mean_baseline_latency_s": 1.262,
+  "mean_refreshed_schema_latency_s": 1.143,
+  "mean_error_feedback_latency_s": 0.5494,
+  "mean_mcp_latency_s": 0.108,
+  "latencies": {
+    "pre_s": [
+      0.9207,
+      0.9849,
+      0.9969,
+      1.2685,
+      1.2005,
+      1.7709,
+      1.8631,
+      1.1489,
+      2.4757,
+      1.1935,
+      1.6147,
+      1.038,
+      1.1594,
+      1.0723,
+      2.3839,
+      0.9002
+    ],
+    "baseline_s": [
+      0.8284,
+      1.0038,
+      1.4367,
+      1.4962,
+      0.9718,
+      0.9879,
+      1.3426,
+      1.0703,
+      1.0578,
+      1.4802,
+      3.686,
+      1.0306,
+      0.9606,
+      0.9544,
+      0.9101,
+      0.9748
+    ],
+    "refreshed_schema_s": [
+      1.0561,
+      1.2191,
+      1.3617,
+      1.0736,
+      0.9928,
+      1.0778,
+      1.0777,
+      1.3831,
+      1.0351,
+      1.3061,
+      1.0714,
+      0.9781,
+      1.4964,
+      1.2426,
+      0.9979,
+      0.9178
+    ],
+    "error_feedback_s": [
+      1.0628,
+      0.0007,
+      1.0999,
+      1.5599,
+      0.0011,
+      0.8887,
+      0.9618,
+      1.0045,
+      0.0003,
+      0.0012,
+      0.0007,
+      0.0011,
+      0.9487,
+      1.2576,
+      0.0006,
+      0.0006
+    ],
+    "mcp_s": [
+      0.0493,
+      0.0452,
+      1.0139,
+      0.0499,
+      0.0464,
+      0.0504,
+      0.0501,
+      0.0724,
+      0.0381,
+      0.0481,
+      0.0459,
+      0.0472,
+      0.0481,
+      0.0489,
+      0.0268,
+      0.0465
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 1.374506,
+      "median": 1.17645,
+      "q1": 1.01745,
+      "q3": 1.6928,
+      "iqr": 0.67535,
+      "p95": 2.4757,
+      "min": 0.9002,
+      "max": 2.4757
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 1.262012,
+      "median": 1.0172,
+      "q1": 0.9662,
+      "q3": 1.38965,
+      "iqr": 0.42345,
+      "p95": 3.686,
+      "min": 0.8284,
+      "max": 3.686
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.142956,
+      "median": 1.07565,
+      "q1": 1.0165,
+      "q3": 1.27435,
+      "iqr": 0.25785,
+      "p95": 1.4964,
+      "min": 0.9178,
+      "max": 1.4964
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 0.549388,
+      "median": 0.44495,
+      "q1": 0.0007,
+      "q3": 1.03365,
+      "iqr": 1.03295,
+      "p95": 1.5599,
+      "min": 0.0003,
+      "max": 1.5599
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 0.10795,
+      "median": 0.0481,
+      "q1": 0.04615,
+      "q3": 0.05,
+      "iqr": 0.00385,
+      "p95": 1.0139,
+      "min": 0.0268,
+      "max": 1.0139
+    }
+  },
+  "fingerprint_diff_ms": 0.109833,
+  "ast_relink_ms": [
+    1.074625,
+    0.864958,
+    1.319208,
+    0.980333,
+    0.782916,
+    1.109042,
+    1.006916,
+    1.480625,
+    0.406917,
+    1.988167,
+    0.880792,
+    0.935083,
+    1.077875,
+    1.358208,
+    0.451417,
+    0.779
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.109833,
+      "median": 0.109833,
+      "q1": 0.109833,
+      "q3": 0.109833,
+      "iqr": 0.0,
+      "p95": 0.109833,
+      "min": 0.109833,
+      "max": 0.109833
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 1.031005,
+      "median": 0.993624,
+      "q1": 0.823937,
+      "q3": 1.214125,
+      "iqr": 0.390188,
+      "p95": 1.988167,
+      "min": 0.406917,
+      "max": 1.988167
+    }
+  },
+  "per_operator": {
+    "COLUMN_RENAME": {
+      "n": 16,
+      "baseline_correct": 5,
+      "refreshed_schema_correct": 9,
+      "error_feedback_correct": 5,
+      "mcp_correct": 9,
+      "recovered": 4,
+      "degraded": 0,
+      "baseline_ex": 0.3125,
+      "refreshed_schema_ex": 0.5625,
+      "error_feedback_ex": 0.3125,
+      "mcp_ex": 0.5625
+    }
+  },
+  "error_categories": {
+    "correct": 5,
+    "execution_error": 8,
+    "silent_failure": 0,
+    "wrong_result": 3,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 4,
+      "c": 0,
+      "statistic": 2.25,
+      "p_value": 0.125
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 4,
+      "c": 0,
+      "statistic": 2.25,
+      "p_value": 0.125
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 4,
+      "statistic": 2.25,
+      "p_value": 0.125
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 5,
+      "total": 16,
+      "lower": 0.141644,
+      "upper": 0.555961
+    },
+    "refreshed_schema": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    },
+    "error_feedback": {
+      "successes": 5,
+      "total": 16,
+      "lower": 0.141644,
+      "upper": 0.555961
+    },
+    "mcp": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 0.10795,
+      "lower": 0.045,
+      "upper": 0.229306
+    }
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "employees",
+      "from": "salary",
+      "to": "monthly_salary"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "employees",
+      "from": "first_name",
+      "to": "fname"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "02122907c812a1d9",
+    "specs": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "employees",
+        "from": "salary",
+        "to": "monthly_salary"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "employees",
+        "from": "first_name",
+        "to": "fname"
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "employees",
+        "from": "salary",
+        "to": "monthly_salary"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "employees",
+        "from": "first_name",
+        "to": "fname"
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "becfba1ae532bb6c1274b5c9bf3ce6ff14fc6f137e73a3033be4b8f866c5a0c1",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 5,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": []
+}

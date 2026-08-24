@@ -1,0 +1,59 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tm_01,TABLE_MERGE,List department names with cities.,"SELECT department_name, city FROM department_location ORDER BY department_id",False,,"SELECT T1.department_name, T3.city FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id JOIN countries AS T3 ON T2.country_id = T3.country_id",0,"SELECT T1.department_name, T3.city FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id JOIN countries AS T3 ON T2.country_id = T3.country_id",0,"ite
+SELECT department_name, city FROM department_location",0,"SELECT T1.department_name, T2.city FROM departments AS T1 JOIN locations AS",0,1,no such table: departments,gemini,"SELECT T1.department_name, T2.city FROM department_location AS T1 JOIN countries",ast,execution_error,0,0,0,5.2906,1.3973,1.2537,3.4929,3.351,15.473257,gemini
+hr_tm_02,TABLE_MERGE,Count departments per country.,"SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",False,,"ite
+SELECT T3.country_name, COUNT(T1.department_id) FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id INNER JOIN countries AS T3 ON T2.country_id = T3.country_id GROUP BY T3.country_name",0,"ite
+SELECT T3.country_name, COUNT(T1.department_id) FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id INNER JOIN countries AS T3 ON T2.country_id = T3.country_id GROUP BY T3.country_name",0,"SELECT T1.country_id, count(*) FROM department_location AS T1 JOIN countries AS T2 ON T1.country_id = T2.country_id GROUP BY T1.country_id",1,"SELECT T3.country_name, COUNT(T1.department_id) FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id INNER JOIN countries AS T3 ON T2.country_id = T3.country_id GROUP BY T3.country_name",0,1,"near ""ite"": syntax error",gemini,"SELECT T2.country_name, COUNT(T1.department_",parse_error,execution_error,0,0,0,2.1069,2.0897,1.0329,1.7807,3.4614,0.834109,gemini
+hr_tm_03,TABLE_MERGE,Street address for department 10.,SELECT street_address FROM department_location WHERE department_id=10,False,,SELECT T2.street_address FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T1.department_id = 10,1,SELECT T2.street_address FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T1.department_id = 10,0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT T2.street_address FROM departments AS T1 JOIN locations AS T2 ON T1,0,1,no such table: departments,gemini,SELECT T1.street_address FROM department_location AS T1 WHERE T1.department_id = 10,ast,valid,1,1,0,1.789,1.2586,1.309,3.1881,2.5797,1.350451,gemini
+hr_tm_04,TABLE_MERGE,Departments in City1.,SELECT department_name FROM department_location WHERE city='City1',False,,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.city = 'City1',1,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.city = 'City1',0,SELECT department_name FROM department_location WHERE city = 'City1',1,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2,0,1,no such table: departments,gemini,SELECT T1.department_name FROM department_location AS T1 WHERE T1.city = 'City1',ast,valid,1,1,0,1.5619,1.6504,1.4924,3.4364,2.1458,1.050862,gemini
+hr_tm_05,TABLE_MERGE,Department names with postal codes.,"SELECT department_name, postal_code FROM department_location ORDER BY department_id",False,,"SELECT T1.department_name, T2.postal_code FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id",1,"ite
+SELECT
+  T1.department_name,
+  T2.postal_code
+FROM departments AS T1
+INNER JOIN locations AS T2
+  ON T1.location_id = T2.location_id",0,"SELECT department_name, postal_code FROM department_location",1,"SELECT
+  T1.department_name,
+  T2.postal_code
+FROM departments AS T1
+INNER JOIN locations AS T2
+  ON T1.location_id = T2.location_id",0,1,"near ""ite"": syntax error",gemini,"SELECT
+  department_name,
+  postal_code
+FROM department_location",parse_error,valid,1,1,0,1.4513,1.5624,1.3852,1.9063,2.3581,0.332651,gemini
+hr_tm_06,TABLE_MERGE,Count departments in State1.,SELECT COUNT(*) FROM department_location WHERE state_province='State1',False,,SELECT count(*) FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.state_province = 'State1',1,SELECT count(*) FROM departments AS T1 JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.state_province = 'State1',0,SELECT count(department_id) FROM department_location WHERE state_province = 'State1',1,SELECT count(*) FROM departments AS T1 JOIN locations AS T2 ON T1.location_,0,1,no such table: departments,gemini,SELECT COUNT(*) FROM department_location WHERE state_province = 'State1',ast,valid,1,1,0,1.787,1.4924,1.1874,3.5478,2.6543,1.692061,gemini
+hr_tm_07,TABLE_MERGE,List location IDs with department names.,"SELECT location_id, department_name FROM department_location ORDER BY location_id",False,,"SELECT T1.location_id, T2.department_name FROM locations AS T1 JOIN departments AS T2 ON T1.location_id = T2.location_id",1,"SELECT T1.location_id, T2.department_name FROM locations AS T1 JOIN departments AS T2 ON T1.location_id = T2.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT location_id, department_name FROM departments",0,1,no such table: locations,gemini,"SELECT T1.location_id, T1.department_name FROM department_location AS T1",ast,valid,1,1,0,1.7446,1.2709,1.1469,3.5541,1.9683,0.854089,gemini
+hr_tm_08,TABLE_MERGE,Departments in country C01.,SELECT department_name FROM department_location WHERE country_id='C01',False,,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.country_id = 'C01',1,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id WHERE T2.country_id = 'C01',0,SELECT department_name FROM department_location WHERE country_id = 'C01',1,SELECT T1.department_name FROM departments AS T1 INNER JOIN locations AS T2 ON,0,1,no such table: departments,gemini,SELECT T1.department_name FROM department_location AS T1 WHERE T1.country_id = 'C01',ast,silent_failure_suspected,1,1,0,1.3918,1.2472,1.4771,3.6994,2.9077,0.910757,gemini
+hr_tm_09,TABLE_MERGE,Count distinct cities with departments.,SELECT COUNT(DISTINCT city) FROM department_location,False,,SELECT COUNT(DISTINCT T2.city) FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id,1,SELECT COUNT(DISTINCT T2.city) FROM departments AS T1 INNER JOIN locations AS T2 ON T1.location_id = T2.location_id,0,SELECT COUNT(DISTINCT city) FROM department_location,1,SELECT COUNT(DISTINCT T2.city) FROM departments AS T1 INNER JOIN locations AS T,0,1,no such table: departments,gemini,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1,0,1.5088,1.9072,1.3419,3.9088,2.2764,1.550839,gemini
+hr_tm_10,TABLE_MERGE,List department names with manager IDs.,"SELECT department_name, manager_id FROM department_location ORDER BY department_id",False,,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,gemini,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1,0,1.1424,1.3286,1.219,3.6035,1.6167,0.502496,gemini
+hr_tm_11,TABLE_MERGE,Employee departments by name.,"SELECT e.employee_id, dl.department_name FROM employees e JOIN department_location dl ON e.department_id=dl.department_id ORDER BY e.employee_id",False,,"SELECT T1.first_name, T1.last_name, T2.department_name FROM employees AS T1 JOIN departments AS T2 ON T1.department_id = T2.department_id",0,"SELECT T1.first_name, T1.last_name, T2.department_name FROM employees AS T1 JOIN departments AS T2 ON T1.department_id = T2.department_id",0,"ite
+SELECT
+  e.first_name,
+  e.last_name,
+  d.department_name
+FROM employees AS e
+JOIN department_location AS d
+  ON e.department_id = d.department_id",0,"SELECT T1.first_name, T1.last_name, T2.department",0,1,no such table: departments,gemini,"SELECT T1.first_name, T1.last_name, T2.department_name FROM employees AS T1 JOIN department_location AS T2 ON T1.department_id = T2.department_id",ast,valid,0,0,0,1.0405,0.9635,1.7863,3.7677,3.0837,0.876849,gemini
+hr_tm_12,TABLE_MERGE,Job history cities.,"SELECT j.employee_id, dl.city FROM job_history j JOIN department_location dl ON j.department_id=dl.department_id ORDER BY j.employee_id",False,,"SELECT DISTINCT
+  T3.city
+FROM job_history AS T1
+INNER JOIN departments AS T2
+  ON T1.department_id = T2.department_id
+INNER JOIN locations AS T3
+  ON T2.location_id = T3.location_id",0,"SELECT DISTINCT
+  T4.city
+FROM job_history AS T1
+INNER JOIN employees AS T2
+  ON T1.employee_id = T2.employee_id
+INNER JOIN departments AS T3
+  ON T2.department_id = T3.department_id
+INNER JOIN locations AS T4
+  ON T3.location_id = T4.location_id",0,SELECT DISTINCT T2.city FROM job_history AS T1 INNER JOIN department_location AS T2 ON T1.department_id = T2.department_id,0,"SELECT DISTINCT
+  T4.city
+FROM job_history AS T1
+INNER JOIN employees",0,1,no such table: departments,gemini,SELECT DISTINCT T3_4.city FROM job_history AS T1 INNER JOIN,ast,execution_error,0,0,0,1.9947,1.4596,1.5618,3.5401,3.3202,1.38765,gemini
+hr_tm_13,TABLE_MERGE,List job titles.,SELECT job_title FROM jobs ORDER BY job_id,False,,SELECT job_title FROM jobs,1,SELECT job_title FROM jobs,1,"ite
+SELECT job_title FROM jobs",0,SELECT job_title FROM jobs,1,0,,gemini,SELECT job_title FROM jobs,ast,valid,1,0,0,1.15,0.7599,1.2494,0.0014,0.0019,0.465439,gemini
+hr_tm_14,TABLE_MERGE,Count regions.,SELECT COUNT(*) FROM regions,False,,SELECT count(*) FROM regions,1,SELECT count(*) FROM regions,1,SELECT count(*) FROM regions,1,SELECT count(*) FROM regions,1,0,,gemini,SELECT COUNT(*) FROM regions,ast,valid,1,0,0,1.2333,1.9077,0.9152,0.0016,0.0033,0.963124,gemini
+hr_tm_15,TABLE_MERGE,List all cities.,,True,unanswerable_after_TABLE_MERGE,SELECT city FROM locations,,SELECT city FROM locations,,SELECT city FROM department_location,,SELECT city FROM locations,,1,no such table: locations,gemini,SELECT city FROM department_location,ast,valid,,0,0,1.0146,1.3487,1.0463,4.286,1.627,0.458355,gemini
+hr_tm_16,TABLE_MERGE,Count locations.,,True,unanswerable_after_TABLE_MERGE,SELECT count(*) FROM locations,,SELECT count(*) FROM locations,,SELECT count(location_id) FROM department_location,,SELECT count(*) FROM locations,,1,no such table: locations,gemini,SELECT COUNT(*) FROM department_location,ast,valid,,0,0,1.2677,2.3788,1.0425,2.8573,1.6876,0.988148,gemini

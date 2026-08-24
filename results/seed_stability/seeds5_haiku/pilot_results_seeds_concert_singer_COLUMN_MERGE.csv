@@ -1,0 +1,493 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_cm_01,COLUMN_MERGE,False,0,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,1,1.3433,1.0831,1.2846,0.9769,1.7606,1.14225,anthropic
+cs_cm_01,COLUMN_MERGE,False,1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,1,1.5293,2.5262,1.0554,1.0317,1.0223,0.844792,anthropic
+cs_cm_01,COLUMN_MERGE,False,2,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,1,2.8554,1.1001,1.4345,1.187,1.9599,0.874042,anthropic
+cs_cm_01,COLUMN_MERGE,False,3,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,1,1.5594,1.2092,1.1127,1.029,1.9146,0.521708,anthropic
+cs_cm_01,COLUMN_MERGE,False,4,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM singer",0,SELECT DISTINCT Name_Country FROM singer,1,"SELECT singer.Name, singer.Country FROM singer",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,1,2.0491,1.1532,1.1008,1.8006,1.2962,0.8425,anthropic
+cs_cm_02,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The error says ""no such column: Country"" but the schema shows `Country TEXT` in the singer table.
+
+Let me verify the actual column names in the singer table from the schema:
+- Singer_ID INTEGER
+- Name TEXT
+- Country TEXT
+- Song_Name TEXT
+- Song_release_year INTEGER
+- Age INTEGER
+- Is_male TEXT
+
+The Country column does exist. However, since the error explicitly states the column doesn't exist, the column name must be different. Looking at common variations, it might be case-sensitive or the actual column might be named differently. Let me try with the exact schema provided - it shows ""Country"" so the query should work, but given the error, I'll check if there's a different column name being used.
+
+Given the error and that I must produce a working query, and the schema clearly shows Country exists, the issue might be with how the database was actually created. However, based on the provided schema, the correct query is:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,1.104,1.5982,1.5353,3.4,1.3027,1.099709,anthropic
+cs_cm_02,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male
+
+The column ""Country"" does exist in the singer table according to the schema provided. However, since the error says ""no such column: Country"", the actual database schema must differ from what was stated. Let me provide a query that counts singers and filters by a country-related condition that might work:
+
+SELECT COUNT(*) FROM singer WHERE Name IN (SELECT Name FROM singer WHERE Country = 'France')
+
+Actually, if Country column doesn't exist, I need to work with available columns. But based on the schema showing Country exists, the most likely issue is a case sensitivity or the column truly doesn't exist in the actual database. Let me provide the corrected query assuming the schema is accurate:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+If that column truly doesn't exist in the actual database, there's insufficient information to correct it. However, based on the provided schema, the original query should work. If forced to correct based on the error, here's an alternative:
+
+SELECT COUNT(DISTINCT Singer_ID) FROM singer
+
+But the most logical correction given the schema is:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,1.2768,1.0774,1.0502,4.3131,1.0876,0.966167,anthropic
+cs_cm_02,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column ""Country"" does exist in the schema. Let me verify the exact column name by looking at the schema definition more carefully.
+
+Looking at the schema provided:
+`TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The Country column is listed. However, the error says ""no such column: Country"". This suggests the actual database schema might differ from what's documented. Let me check if there's a case sensitivity issue or if the column might be named differently.
+
+Given the error, I should try a query that works with the actual schema. Since the error indicates Country doesn't exist, perhaps the country information is stored differently. However, based on the schema provided, Country should exist.
+
+Let me output the corrected query assuming the schema is accurate:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,1.1578,0.9433,1.0812,2.8549,0.9965,1.249042,anthropic
+cs_cm_02,COLUMN_MERGE,False,3,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column ""Country"" does exist in the schema. Let me verify the exact column names in the singer table from the schema provided:
+- Singer_ID INTEGER
+- Name TEXT
+- Country TEXT
+- Song_Name TEXT
+- Song_release_year INTEGER
+- Age INTEGER
+- Is_male TEXT
+
+The query looks correct. However, since the error says ""no such column: Country"", this suggests the actual database schema might differ from what's documented. Let me check if there's a case sensitivity issue or if the column might be named differently.
+
+Given the error, I'll assume the column might not exist as documented. Looking at the available columns, the most likely scenario is that we need to work with what's actually in the database. Since the error explicitly states Country doesn't exist, but it's in the schema, this is contradictory. However, I'll provide the query as it should be based on the documented schema:
+
+SELECT COUNT(*) FROM singer WHERE Country = 'France'",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,0.9549,1.2967,0.8383,3.4705,1.0021,1.077458,anthropic
+cs_cm_02,COLUMN_MERGE,False,4,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,"SELECT COUNT(*) FROM singer WHERE Country = 'France'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column ""Country"" does exist in the singer table according to the schema provided. However, since the error says ""no such column: Country"", the actual database schema must differ from what was stated. Let me provide a query that counts singers and filters by a country value that might be stored differently:
+
+SELECT COUNT(*) FROM singer WHERE Name IN (SELECT Name FROM singer WHERE Country = 'France')
+
+Actually, if Country column doesn't exist, I need to work with available columns. Based on the error, let me try:
+
+SELECT COUNT(DISTINCT Singer_ID) FROM singer
+
+But that won't filter by France. Given the schema shows Country exists but the error says it doesn't, the most likely scenario is the column name is different. However, without knowing the actual column name, here's the most robust correction:
+
+SELECT COUNT(*) FROM singer",0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,0.9461,1.0879,1.2443,3.4229,1.1758,0.998333,anthropic
+cs_cm_03,COLUMN_MERGE,False,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me reconsider. The error says ""no such column: Name"" but looking at the schema, the singer table has a Name column. Let me check the actual column names more carefully.
+
+Looking at the schema again: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The Name column exists. However, the question asks for ""Merged name"" which might suggest concatenating fields. But given the error, let me verify the exact column name. The error might indicate the column doesn't exist as defined. Let me try with the exact schema provided:
+
+SELECT Name FROM singer WHERE Singer_ID = 1
+
+Actually, if the error persists, the column might be named differently in the actual database. But based on the schema provided, this should work. However, since the error occurred, perhaps I need to check if there's a different issue. Let me output the most logical correction:
+
+SELECT Name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer WHERE Singer_ID = 1,ast,valid,1,1.1621,1.1357,1.0053,3.5552,0.0455,1.032792,anthropic
+cs_cm_03,COLUMN_MERGE,False,1,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me reconsider. The error says ""no such column: Name"" but the schema shows `Name TEXT` in the singer table. Let me check the actual column names more carefully.
+
+Looking at the schema again, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male
+
+The query `SELECT Name FROM singer WHERE Singer_ID = 1` should work. However, if the error persists, it might be a case sensitivity issue or the column might be named differently. Let me try with backticks or check if it's actually a different column name.
+
+Given the question asks for ""Merged name"" and the error, perhaps the column is actually named something else. But based on the schema provided, this should be correct:
+
+SELECT Name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer WHERE Singer_ID = 1,ast,valid,1,0.9402,0.9409,2.4216,2.8825,0.0485,0.97575,anthropic
+cs_cm_03,COLUMN_MERGE,False,2,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me reconsider. The error says ""no such column: Name"" but looking at the schema, the singer table has a Name column. Let me check the actual column names more carefully.
+
+Looking at the schema again: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The Name column exists. However, the question asks for ""Merged name"" which might suggest concatenating fields. But given the error, let me verify the exact column name. The error might indicate the column doesn't exist as defined. Let me try with a different approach or check if there's a typo in the schema provided versus actual database.
+
+Given the error persists with a straightforward query, and the question says ""Merged name"", perhaps we need to concatenate Name with another field:
+
+SELECT Name || ' ' || Song_Name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer WHERE Singer_ID = 1,ast,valid,1,0.9456,1.5364,1.3584,3.7031,0.0471,1.207708,anthropic
+cs_cm_03,COLUMN_MERGE,False,3,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me reconsider. The error says ""no such column: Name"" but the schema shows `Name TEXT` in the singer table. Let me check the schema more carefully.
+
+Looking at the singer table definition: `singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column `Name` should exist. However, the question asks for ""Merged name"" which might suggest concatenating fields. Let me check if perhaps the actual column name is different or if we need to merge multiple name-related fields.
+
+Given the error and the question asking for ""Merged name"", perhaps we need to concatenate Song_Name with Name:
+
+SELECT Name || ' - ' || Song_Name FROM singer WHERE Singer_ID = 1
+
+Or perhaps just:
+
+SELECT Song_Name FROM singer WHERE Singer_ID = 1
+
+But the most likely issue is that the column might be named differently. Let me provide the most reasonable correction based on ""Merged name"":
+
+SELECT Name || ' ' || Song_Name AS merged_name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer WHERE Singer_ID = 1,ast,valid,1,0.9919,0.9638,1.2184,5.8202,0.0468,0.946666,anthropic
+cs_cm_03,COLUMN_MERGE,False,4,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name FROM singer WHERE Singer_ID = 1,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,"SELECT Name FROM singer WHERE Singer_ID = 1
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column ""Name"" should exist. Let me reconsider - perhaps the issue is that the actual table structure differs. Given the error ""no such column: Name"", I need to check what columns actually exist.
+
+Looking at the schema provided, ""Name"" is listed for the singer table. However, if the error says it doesn't exist, perhaps the column is named differently in the actual database. Common alternatives might be ""singer_name"" or similar.
+
+Given the context ""Merged name for Singer_ID 1"" and that we need a name field, let me try:
+
+SELECT * FROM singer WHERE Singer_ID = 1
+
+But that won't help identify the correct column name. Based on typical database naming and the error, the column might be stored differently. Let me assume it could be a case sensitivity or actual schema mismatch issue.
+
+The most likely scenario given standard schemas is:
+
+SELECT Name FROM singer WHERE Singer_ID = 1
+
+But if that fails, trying the actual available columns:
+
+SELECT * FROM singer WHERE Singer_ID = 1
+
+Given I must provide one answer and the schema shows ""Name"", but the error suggests it doesn't exist, the column might actually be named something else. However, based on the provided schema, here's the corrected query:
+
+SELECT Name FROM singer WHERE Singer_ID = 1",0,1,no such column: Name,anthropic,SELECT Name_Country FROM singer WHERE Singer_ID = 1,ast,valid,1,2.2375,0.97,1.2599,4.2839,0.05,0.94675,anthropic
+cs_cm_04,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Age > 40",ast,valid,0,1.2055,1.125,1.6756,1.3508,0.0467,1.274083,anthropic
+cs_cm_04,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Age > 40",ast,valid,0,1.5595,1.1674,1.4453,0.9708,0.0479,1.343167,anthropic
+cs_cm_04,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Age > 40",ast,valid,0,1.039,1.8115,1.9374,1.2123,0.0429,0.836042,anthropic
+cs_cm_04,COLUMN_MERGE,False,3,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Age > 40",ast,valid,0,1.0913,2.2962,1.1219,2.1367,0.0463,1.217667,anthropic
+cs_cm_04,COLUMN_MERGE,False,4,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Age > 40",ast,valid,0,1.1053,0.9977,1.163,1.5297,0.0451,1.370292,anthropic
+cs_cm_05,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",ast,valid,1,1.1668,1.3906,1.0812,1.1099,0.0578,1.532542,anthropic
+cs_cm_05,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",ast,valid,1,1.4017,1.2155,1.2832,1.2157,0.0468,1.399166,anthropic
+cs_cm_05,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",ast,valid,1,1.2542,1.0805,1.0875,1.0009,0.0441,1.251125,anthropic
+cs_cm_05,COLUMN_MERGE,False,3,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",ast,valid,1,1.102,1.4066,1.1855,1.1688,0.0458,1.493125,anthropic
+cs_cm_05,COLUMN_MERGE,False,4,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') as merged_name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT GROUP_CONCAT(singer.Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",ast,valid,1,1.0663,1.4832,1.2085,1.1518,0.0461,1.089833,anthropic
+cs_cm_06,COLUMN_MERGE,False,0,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.1939,1.0348,1.1044,0.0008,0.0494,1.260458,anthropic
+cs_cm_06,COLUMN_MERGE,False,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.0919,0.985,1.0746,0.0007,0.0477,1.115833,anthropic
+cs_cm_06,COLUMN_MERGE,False,2,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,0.9303,4.8692,1.0011,0.0008,0.0483,0.986542,anthropic
+cs_cm_06,COLUMN_MERGE,False,3,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.4559,1.1537,1.0083,0.0012,0.0482,1.26125,anthropic
+cs_cm_06,COLUMN_MERGE,False,4,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,0,,anthropic,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.071,1.0023,1.2543,0.0007,0.047,1.057542,anthropic
+cs_cm_07,COLUMN_MERGE,False,0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name",ast,valid,1,1.0479,1.065,1.0842,1.1526,0.0491,1.233333,anthropic
+cs_cm_07,COLUMN_MERGE,False,1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name",ast,valid,1,1.2501,1.3636,0.9253,1.5638,0.0453,1.266,anthropic
+cs_cm_07,COLUMN_MERGE,False,2,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name",ast,valid,1,1.0654,2.608,2.3528,1.1985,0.0491,1.526125,anthropic
+cs_cm_07,COLUMN_MERGE,False,3,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name",ast,valid,1,1.7862,1.1474,1.0616,1.045,0.0503,6.722416,anthropic
+cs_cm_07,COLUMN_MERGE,False,4,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,"SELECT s.Name_Country, s.Song_Name
+FROM singer s",1,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1,no such column: s.Name,anthropic,"SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name",ast,valid,1,1.0734,1.1768,1.89,1.4902,0.0546,1.539125,anthropic
+cs_cm_08,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'M' OR singer.Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",ast,valid,0,1.3377,1.3766,1.6806,1.0621,0.0498,1.541166,anthropic
+cs_cm_08,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = 'M'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",ast,valid,0,1.9647,1.4571,1.7158,1.4865,0.0476,1.178917,anthropic
+cs_cm_08,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'M' OR singer.Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",ast,valid,0,1.538,1.3741,1.4205,1.2214,0.0497,1.814459,anthropic
+cs_cm_08,COLUMN_MERGE,False,3,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = 'M'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = '1'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",ast,valid,0,1.4944,1.4744,1.3771,1.1034,0.0495,1.967959,anthropic
+cs_cm_08,COLUMN_MERGE,False,4,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+WHERE singer.Is_male = 'true' OR singer.Is_male = 'True' OR singer.Is_male = 'yes' OR singer.Is_male = 'Yes' OR singer.Is_male = 'M'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",ast,valid,0,1.5792,1.3321,2.3798,1.5868,0.0445,1.7275,anthropic
+cs_cm_09,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.1353,1.15,0.9342,0.9606,1.0761,1.549417,anthropic
+cs_cm_09,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.2362,1.3279,1.12,1.3031,2.4413,0.301416,anthropic
+cs_cm_09,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.1492,1.0969,1.1772,1.2198,1.2489,0.905459,anthropic
+cs_cm_09,COLUMN_MERGE,False,3,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.1536,1.1379,0.991,1.057,1.3029,1.112208,anthropic
+cs_cm_09,COLUMN_MERGE,False,4,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,anthropic,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.6975,1.1972,0.9666,0.9319,1.0387,0.670667,anthropic
+cs_cm_10,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Name,anthropic,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS merged_names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,1.244,1.8225,1.1669,1.1535,0.0556,1.947291,anthropic
+cs_cm_10,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Name,anthropic,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS merged_names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,1.1569,1.2068,1.5963,1.4417,0.0463,1.505958,anthropic
+cs_cm_10,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Name,anthropic,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS merged_names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,1.2299,1.6949,1.496,1.4914,0.0512,1.494833,anthropic
+cs_cm_10,COLUMN_MERGE,False,3,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1
+)",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') as merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS merged_names
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1
+)",0,1,no such column: Name,anthropic,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names FROM singer WHERE Singer_ID IN (SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1)",ast,valid,0,1.2122,1.4102,1.1651,1.0526,0.0488,1.581709,anthropic
+cs_cm_10,COLUMN_MERGE,False,4,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS merged_names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Name,anthropic,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS merged_names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,2.7058,1.2412,1.8345,1.4351,0.0543,2.301333,anthropic
+cs_cm_11,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.0338,1.0989,1.2709,0.0007,0.0478,1.147333,anthropic
+cs_cm_11,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.206,1.4657,1.0531,0.0007,0.0451,1.174208,anthropic
+cs_cm_11,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.0938,3.5829,1.1718,0.0007,0.0483,1.115334,anthropic
+cs_cm_11,COLUMN_MERGE,False,3,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.5953,1.7875,1.1724,0.0007,0.0418,1.141041,anthropic
+cs_cm_11,COLUMN_MERGE,False,4,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') as merged_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,anthropic,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.3364,1.2349,1.2642,0.0007,0.0364,1.10525,anthropic
+cs_cm_12,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,1.0199,1.0101,1.3133,0.001,0.0464,1.03475,anthropic
+cs_cm_12,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,0.8457,1.0373,1.0125,0.0008,0.0472,1.013042,anthropic
+cs_cm_12,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,0.9191,1.0388,1.0305,0.0006,0.0454,0.972583,anthropic
+cs_cm_12,COLUMN_MERGE,False,3,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,1.8603,1.7141,1.2901,0.0013,0.0458,1.31125,anthropic
+cs_cm_12,COLUMN_MERGE,False,4,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,anthropic,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,1.0268,1.9916,1.6467,0.0007,0.0462,0.982334,anthropic
+cs_cm_13,COLUMN_MERGE,False,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0.9585,0.9389,0.8652,0.0007,0.0478,0.915875,anthropic
+cs_cm_13,COLUMN_MERGE,False,1,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.0523,0.9794,1.0357,0.0007,0.0447,0.916958,anthropic
+cs_cm_13,COLUMN_MERGE,False,2,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.5227,1.6582,1.0397,0.0006,0.0255,0.551292,anthropic
+cs_cm_13,COLUMN_MERGE,False,3,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.168,0.896,1.0751,0.0008,0.0437,0.924792,anthropic
+cs_cm_13,COLUMN_MERGE,False,4,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.3409,0.9903,1.1933,0.0006,0.0474,0.8475,anthropic
+cs_cm_14,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,3.2548,1.2325,1.022,0.0007,0.0706,0.904875,anthropic
+cs_cm_14,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,0.8242,0.8594,0.8487,0.0006,0.0367,0.777166,anthropic
+cs_cm_14,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,0.967,1.4834,3.342,0.0013,0.0446,0.914167,anthropic
+cs_cm_14,COLUMN_MERGE,False,3,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,1.0958,0.9611,0.8201,0.0007,0.0488,0.876,anthropic
+cs_cm_14,COLUMN_MERGE,False,4,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,0.8891,0.9279,1.268,0.0008,0.0496,0.735292,anthropic
+cs_cm_15,COLUMN_MERGE,True,0,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,,0.9411,0.8589,1.0537,1.2364,0.07,0.956417,anthropic
+cs_cm_15,COLUMN_MERGE,True,1,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,,1.5288,1.03,1.0681,1.2003,0.0475,0.960833,anthropic
+cs_cm_15,COLUMN_MERGE,True,2,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,,1.0066,0.9764,0.893,0.859,0.046,0.923417,anthropic
+cs_cm_15,COLUMN_MERGE,True,3,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,,0.8437,0.9092,0.943,1.0624,0.0486,0.927042,anthropic
+cs_cm_15,COLUMN_MERGE,True,4,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,anthropic,SELECT Name_Country FROM singer,ast,valid,,0.8325,0.8635,0.91,1.0464,0.047,0.690209,anthropic
+cs_cm_16,COLUMN_MERGE,True,0,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.8837,1.7378,0.8843,0.9523,1.4099,1.236875,anthropic
+cs_cm_16,COLUMN_MERGE,True,1,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,1.0544,1.0102,1.7502,1.2263,0.9975,0.9425,anthropic
+cs_cm_16,COLUMN_MERGE,True,2,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.8647,1.0744,1.3972,0.936,1.0756,0.851292,anthropic
+cs_cm_16,COLUMN_MERGE,True,3,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.9063,1.1809,2.2597,1.3764,1.0293,0.753417,anthropic
+cs_cm_16,COLUMN_MERGE,True,4,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer WHERE Country IS NOT NULL,,1,no such column: Country,anthropic,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.8902,1.1354,1.7148,1.4106,1.1589,1.521125,anthropic

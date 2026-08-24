@@ -1,0 +1,115 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_ts_01,TABLE_SPLIT,List all singer names.,SELECT Name FROM singer_info ORDER BY Singer_ID,False,,SELECT Name FROM singer,1,SELECT Name FROM singer,0,SELECT DISTINCT Name FROM singer_info,1,SELECT Name FROM singer,0,1,no such table: singer,anthropic,SELECT Name FROM singer_info,ast,valid,1,1,0,0.9775,0.9607,1.5554,0.9652,1.158,0.55725,anthropic
+cs_ts_02,TABLE_SPLIT,Count singers from France.,SELECT COUNT(*) FROM singer_info WHERE Country='France',False,,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(DISTINCT Singer_ID) FROM singer_info WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM singer_info WHERE Country = 'France',ast,valid,1,1,0,1.3228,1.2068,1.0594,0.9965,1.0889,1.035708,anthropic
+cs_ts_03,TABLE_SPLIT,Find the song name for Singer_ID 1.,SELECT Song_Name FROM singer_songs WHERE Singer_ID=1,False,,SELECT Song_Name FROM singer WHERE Singer_ID = 1,1,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,1,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,1,no such table: singer,anthropic,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,ast,valid,1,1,0,0.8842,1.0968,1.317,0.9143,0.8984,1.017375,anthropic
+cs_ts_04,TABLE_SPLIT,List singer names and countries alphabetically.,"SELECT Name, Country FROM singer_info ORDER BY Name",False,,"SELECT Name, Country FROM singer ORDER BY Name, Country",1,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,"SELECT Name, Country FROM singer_info ORDER BY Name, Country",1,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,1,no such table: singer,anthropic,"SELECT Name, Country FROM singer_info ORDER BY Name, Country",ast,valid,1,1,0,0.8893,1.519,1.0073,0.9718,1.1395,1.098959,anthropic
+cs_ts_05,TABLE_SPLIT,List singer names with age over 40.,SELECT Name FROM singer_info WHERE Age > 40 ORDER BY Name,False,,SELECT Name FROM singer WHERE Age > 40,1,SELECT Name FROM singer WHERE Age > 40,0,"SELECT DISTINCT Name
+FROM singer_info
+WHERE Age > 40",1,SELECT Name FROM singer WHERE Age > 40,0,1,no such table: singer,anthropic,SELECT Name FROM singer_info WHERE Age > 40,ast,valid,1,1,0,0.9013,0.9477,1.0023,1.0177,1.0382,1.451416,anthropic
+cs_ts_06,TABLE_SPLIT,List song release years since 2010.,SELECT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010 ORDER BY Song_release_year,False,,"SELECT DISTINCT Song_release_year
+FROM singer
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",1,"SELECT DISTINCT Song_release_year
+FROM singer
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",0,"SELECT DISTINCT Song_release_year
+FROM singer_songs
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",1,"SELECT DISTINCT Song_release_year
+FROM singer
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",0,1,no such table: singer,anthropic,SELECT DISTINCT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010 ORDER BY Song_release_year,ast,valid,1,1,0,1.2319,1.2637,1.2286,1.0618,1.667,1.8385,anthropic
+cs_ts_07,TABLE_SPLIT,List singer names with their song titles.,"SELECT i.Name, s.Song_Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID ORDER BY i.Singer_ID",False,,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT si.Name, ss.Song_Name
+FROM singer_info si
+LEFT JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+ORDER BY si.Name, ss.Song_Name",1,"SELECT Name, Song_Name
+FROM singer",0,1,no such table: singer,anthropic,"SELECT singer_info.Name, singer_songs.Song_Name 
+FROM singer_info 
+JOIN singer_songs ON singer_info.Singer_ID = singer_songs.Singer_ID",ast,valid,1,1,0,1.0235,0.9062,1.1872,0.8658,1.1449,1.120167,anthropic
+cs_ts_08,TABLE_SPLIT,Which singer performs the song 'Sun'?,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_Name='Sun',False,,"SELECT DISTINCT s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",1,"SELECT DISTINCT s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_Name = 'Sun'",1,"SELECT DISTINCT s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,1,no such table: singer,anthropic,"SELECT DISTINCT si.Name 
+FROM singer_info AS si 
+JOIN singer_songs AS ss ON si.Singer_ID = ss.Singer_ID 
+WHERE ss.Song_Name = 'Sun'",ast,silent_failure_suspected,1,1,0,1.2355,1.1915,1.1909,0.9561,2.8492,0.973416,anthropic
+cs_ts_09,TABLE_SPLIT,Count male singers.,SELECT COUNT(*) FROM singer_info WHERE Is_male='T',False,,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,SELECT COUNT(DISTINCT Singer_ID) FROM singer_info WHERE Is_male = 'true',0,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM singer_info WHERE Is_male LIKE '%true%' OR Is_male LIKE '%True%' OR Is_male LIKE '%yes%' OR Is_male LIKE '%Yes%' OR Is_male LIKE '%Y%',ast,silent_failure_suspected,0,0,0,1.2169,1.2229,1.8988,0.9954,3.8585,2.031667,anthropic
+cs_ts_10,TABLE_SPLIT,Singers with songs released in 2014 or later.,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_release_year >= 2014 ORDER BY i.Name,False,,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year >= 2014
+ORDER BY s.Singer_ID",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Country, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year >= 2014",0,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+WHERE si.Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_songs
+  WHERE Song_release_year >= 2014
+)
+ORDER BY si.Singer_ID",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Country, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year >= 2014",0,1,no such table: singer,anthropic,"SELECT DISTINCT si.Singer_ID, si.Name, si.Country, ss.Song_Name, ss.Song_release_year 
+FROM singer_info AS si 
+JOIN singer_songs AS ss ON si.Singer_ID = ss.Singer_ID 
+WHERE ss.Song_release_year >= 2014",ast,valid,0,0,0,1.3393,3.0641,1.2745,1.1159,1.4707,1.493292,anthropic
+cs_ts_11,TABLE_SPLIT,Average age of French singers.,SELECT AVG(Age) FROM singer_info WHERE Country='France',False,,SELECT AVG(Age) FROM singer WHERE Country = 'France',1,SELECT AVG(Age) FROM singer WHERE Country = 'France',0,SELECT AVG(Age) FROM singer_info WHERE Country = 'France',1,SELECT AVG(Age) FROM singer WHERE Country = 'French',0,1,no such table: singer,anthropic,SELECT AVG(Age) FROM singer_info WHERE Country = 'France',ast,valid,1,1,0,1.2254,0.8876,1.0765,1.0113,0.9495,1.012667,anthropic
+cs_ts_12,TABLE_SPLIT,Which singers performed in concert 1?,SELECT i.Name FROM singer_info i JOIN singer_in_concert sc ON i.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY i.Name,False,,"SELECT s.Singer_ID, s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT s.Singer_ID, s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT si.Name
+FROM singer_in_concert sic
+JOIN singer_info si ON sic.Singer_ID = si.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Singer_ID, s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such table: singer,anthropic,"SELECT s.Singer_ID, s.Name FROM singer_info AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,0,0,1.0828,1.547,1.8769,1.2843,1.1746,1.332417,anthropic
+cs_ts_13,TABLE_SPLIT,Count concerts per singer.,"SELECT i.Name, COUNT(*) AS concert_count FROM singer_info i JOIN singer_in_concert sc ON i.Singer_ID=sc.Singer_ID GROUP BY i.Name ORDER BY concert_count DESC, i.Name",False,,"SELECT s.Singer_ID, s.Name, COUNT(sc.Concert_ID) as concert_count
+FROM singer s
+LEFT JOIN singer_in_concert sc ON s.Singer_ID = sc.Singer_ID
+GROUP BY s.Singer_ID, s.Name
+ORDER BY s.Singer_ID",0,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) as concert_count
+FROM singer s
+LEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID, s.Name
+ORDER BY s.Singer_ID",0,"SELECT 
+    si.Singer_ID,
+    si.Name,
+    COUNT(sic.Concert_ID) AS concert_count
+FROM singer_info si
+LEFT JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID
+GROUP BY si.Singer_ID, si.Name
+ORDER BY si.Singer_ID",0,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) as concert_count
+FROM singer s
+LEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID, s.Name
+ORDER BY s.Singer_ID",0,1,no such table: singer,anthropic,"SELECT si.Singer_ID, si.Name, COUNT(sic.Concert_ID) AS concert_count FROM singer_info AS si LEFT JOIN singer_in_concert AS sic ON si.Singer_ID = sic.Singer_ID GROUP BY si.Singer_ID, si.Name ORDER BY si.Singer_ID",ast,valid,0,0,0,1.3194,1.4502,1.2019,1.0784,1.2318,4.1715,anthropic
+cs_ts_14,TABLE_SPLIT,Singers with songs released between 2000 and 2014.,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_release_year BETWEEN 2000 AND 2014 ORDER BY i.Name,False,,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY s.Song_release_year",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY s.Song_release_year",0,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+INNER JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY s.Song_release_year",0,1,no such table: singer,anthropic,"SELECT DISTINCT si.Singer_ID, si.Name, ss.Song_Name, ss.Song_release_year 
+FROM singer_info AS si 
+JOIN singer_songs AS ss ON si.Singer_ID = ss.Singer_ID 
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014 
+ORDER BY ss.Song_release_year",ast,valid,0,0,0,1.1843,1.4956,1.2954,2.2865,1.3065,1.605209,anthropic
+cs_ts_15,TABLE_SPLIT,List stadiums with capacity over 10000.,SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID,False,,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0,0,0.9389,0.9556,1.2526,0.0007,0.0476,0.891542,anthropic
+cs_ts_16,TABLE_SPLIT,List concert themes.,SELECT Theme FROM concert ORDER BY Concert_ID,False,,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,0,,anthropic,SELECT DISTINCT Theme FROM concert,ast,valid,1,0,0,0.9572,1.3161,1.3264,0.0007,0.0452,0.7795,anthropic

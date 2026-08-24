@@ -1,0 +1,176 @@
+{
+  "sampling_rule": "per operator: first 4 items per db_id sorted by train_idx (COLUMN_MERGE: all merge-subset items); seed-free and deterministic",
+  "n_sampled": 223,
+  "n_included": 199,
+  "n_excluded": 24,
+  "excluded": [
+    {
+      "id": "evo_cm_01347",
+      "op": "COLUMN_MERGE",
+      "db_id": "student_club",
+      "train_idx": 1347,
+      "reason": "gold_post execution error: near \"Gallagher\": syntax error"
+    },
+    {
+      "id": "evo_cm_01381",
+      "op": "COLUMN_MERGE",
+      "db_id": "student_club",
+      "train_idx": 1381,
+      "reason": "materialize: MaterializeError: malformed COLUMN_MERGE spec (no table dicts)"
+    },
+    {
+      "id": "evo_cm_01384",
+      "op": "COLUMN_MERGE",
+      "db_id": "student_club",
+      "train_idx": 1384,
+      "reason": "materialize: MaterializeError: malformed COLUMN_MERGE spec (no table dicts)"
+    },
+    {
+      "id": "evo_cm_01385",
+      "op": "COLUMN_MERGE",
+      "db_id": "student_club",
+      "train_idx": 1385,
+      "reason": "materialize: MaterializeError: malformed COLUMN_MERGE spec (no table dicts)"
+    },
+    {
+      "id": "evo_cr_00002",
+      "op": "COLUMN_RENAME",
+      "db_id": "california_schools",
+      "train_idx": 2,
+      "reason": "gold_post empty result"
+    },
+    {
+      "id": "evo_cr_00848",
+      "op": "COLUMN_RENAME",
+      "db_id": "formula_1",
+      "train_idx": 848,
+      "reason": "gold_post execution error: no such column: T2.circuitID"
+    },
+    {
+      "id": "evo_cr_00849",
+      "op": "COLUMN_RENAME",
+      "db_id": "formula_1",
+      "train_idx": 849,
+      "reason": "gold_post execution error: no such column: T2.circuitID"
+    },
+    {
+      "id": "evo_cr_01151",
+      "op": "COLUMN_RENAME",
+      "db_id": "thrombosis_prediction",
+      "train_idx": 1151,
+      "reason": "gold_post execution error: near \"of\": syntax error"
+    },
+    {
+      "id": "evo_tm_00347",
+      "op": "TABLE_MERGE",
+      "db_id": "card_games",
+      "train_idx": 347,
+      "reason": "materialize: MaterializeError: merged column 'rulings_id' not found in cards or rulings"
+    },
+    {
+      "id": "evo_tm_01025",
+      "op": "TABLE_MERGE",
+      "db_id": "european_football_2",
+      "train_idx": 1025,
+      "reason": "materialize: MaterializeError: merged column 'league_name' not found in match or league"
+    },
+    {
+      "id": "evo_tm_00090",
+      "op": "TABLE_MERGE",
+      "db_id": "financial",
+      "train_idx": 90,
+      "reason": "materialize: MaterializeError: cannot determine join key for district x loan"
+    },
+    {
+      "id": "evo_tm_00849",
+      "op": "TABLE_MERGE",
+      "db_id": "formula_1",
+      "train_idx": 849,
+      "reason": "materialize: MaterializeError: merged column 'races_name' not found in races or circuits"
+    },
+    {
+      "id": "evo_tm_00850",
+      "op": "TABLE_MERGE",
+      "db_id": "formula_1",
+      "train_idx": 850,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_tm_00717",
+      "op": "TABLE_MERGE",
+      "db_id": "superhero",
+      "train_idx": 717,
+      "reason": "materialize: MaterializeError: merged column 'power_id' not found in superhero or superpower"
+    },
+    {
+      "id": "evo_tm_00719",
+      "op": "TABLE_MERGE",
+      "db_id": "superhero",
+      "train_idx": 719,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_tm_00720",
+      "op": "TABLE_MERGE",
+      "db_id": "superhero",
+      "train_idx": 720,
+      "reason": "gold_post execution error: no such column: super_hero_powerfull_name"
+    },
+    {
+      "id": "evo_ts_00341",
+      "op": "TABLE_SPLIT",
+      "db_id": "card_games",
+      "train_idx": 341,
+      "reason": "gold_post execution error: no such column: cardIdentifiers.cardKingdomId"
+    },
+    {
+      "id": "evo_ts_01472",
+      "op": "TABLE_SPLIT",
+      "db_id": "debit_card_specializing",
+      "train_idx": 1472,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_ts_01473",
+      "op": "TABLE_SPLIT",
+      "db_id": "debit_card_specializing",
+      "train_idx": 1473,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_ts_01315",
+      "op": "TABLE_SPLIT",
+      "db_id": "student_club",
+      "train_idx": 1315,
+      "reason": "materialize: MaterializeError: split table EventLink wants columns not in attendance: ['event_id']"
+    },
+    {
+      "id": "evo_ts_00718",
+      "op": "TABLE_SPLIT",
+      "db_id": "superhero",
+      "train_idx": 718,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_ts_00719",
+      "op": "TABLE_SPLIT",
+      "db_id": "superhero",
+      "train_idx": 719,
+      "reason": "gold_post execution error: no such column: T3.power_name"
+    },
+    {
+      "id": "evo_ts_00197",
+      "op": "TABLE_SPLIT",
+      "db_id": "toxicology",
+      "train_idx": 197,
+      "reason": "result-set mismatch pre vs post"
+    },
+    {
+      "id": "evo_ts_00198",
+      "op": "TABLE_SPLIT",
+      "db_id": "toxicology",
+      "train_idx": 198,
+      "reason": "gold_post execution error: no such column: T3.label"
+    }
+  ]
+}

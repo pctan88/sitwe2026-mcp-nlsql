@@ -1,0 +1,64 @@
+{
+  "database_id": "hr_1_TABLE_SPLIT",
+  "pre_db": "hr_1_pre.sqlite",
+  "post_db": "hr_1_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "208fce1eb1d25c34",
+    "specs": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_personal",
+          "employee_job"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_job",
+          "employee_personal"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ]
+  }
+}

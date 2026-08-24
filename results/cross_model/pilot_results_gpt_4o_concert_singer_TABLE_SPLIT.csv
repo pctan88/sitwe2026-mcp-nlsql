@@ -1,0 +1,80 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_ts_01,TABLE_SPLIT,List all singer names.,SELECT Name FROM singer_info ORDER BY Singer_ID,False,,SELECT Name FROM singer,1,SELECT Name FROM singer,0,SELECT Name FROM singer_info,1,SELECT Name FROM Singer,0,1,no such table: singer,openai_compat,SELECT Name FROM singer_info,ast,valid,1,1,0,0.7904,0.5321,0.7287,1.1023,0.6097,0.488921,openai_compat
+cs_ts_02,TABLE_SPLIT,Count singers from France.,SELECT COUNT(*) FROM singer_info WHERE Country='France',False,,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer_info WHERE Country = 'France',1,SELECT COUNT(*) FROM Singer WHERE Country = 'France',0,1,no such table: singer,openai_compat,SELECT COUNT(*) FROM singer_info WHERE Country = 'France',ast,valid,1,1,0,0.5567,0.6152,0.9073,1.8467,0.8337,0.756608,openai_compat
+cs_ts_03,TABLE_SPLIT,Find the song name for Singer_ID 1.,SELECT Song_Name FROM singer_songs WHERE Singer_ID=1,False,,SELECT Song_Name FROM singer WHERE Singer_ID = 1,1,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,1,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,1,no such table: singer,openai_compat,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,ast,valid,1,1,0,1.1457,0.7432,0.858,1.0695,0.8192,0.610591,openai_compat
+cs_ts_04,TABLE_SPLIT,List singer names and countries alphabetically.,"SELECT Name, Country FROM singer_info ORDER BY Name",False,,"SELECT Name, Country FROM singer ORDER BY Name, Country",1,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,"SELECT Name, Country FROM singer_info ORDER BY Name, Country",1,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,1,no such table: singer,openai_compat,"SELECT Name, Country FROM singer_info ORDER BY Name, Country",ast,valid,1,1,0,0.7665,0.7078,0.8704,0.9272,1.0294,0.768912,openai_compat
+cs_ts_05,TABLE_SPLIT,List singer names with age over 40.,SELECT Name FROM singer_info WHERE Age > 40 ORDER BY Name,False,,SELECT Name FROM singer WHERE Age > 40,1,SELECT Name FROM singer WHERE Age > 40,0,SELECT Name FROM singer_info WHERE Age > 40,1,SELECT Name FROM singer WHERE Age > 40,0,1,no such table: singer,openai_compat,SELECT Name FROM singer_info WHERE Age > 40,ast,valid,1,1,0,1.0117,0.7432,3.2761,0.8864,1.4338,0.636358,openai_compat
+cs_ts_06,TABLE_SPLIT,List song release years since 2010.,SELECT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010 ORDER BY Song_release_year,False,,SELECT DISTINCT Song_release_year FROM singer WHERE Song_release_year >= 2010,1,SELECT DISTINCT Song_release_year FROM singer WHERE Song_release_year >= 2010,0,"SELECT DISTINCT Song_release_year 
+FROM singer_songs 
+WHERE Song_release_year >= 2010",1,SELECT DISTINCT Song_release_year FROM singer WHERE Song_release_year >= 2010,0,1,no such table: singer,openai_compat,SELECT DISTINCT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010,ast,valid,1,1,0,0.7422,0.7241,0.7848,0.8242,0.9227,0.827422,openai_compat
+cs_ts_07,TABLE_SPLIT,List singer names with their song titles.,"SELECT i.Name, s.Song_Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID ORDER BY i.Singer_ID",False,,"SELECT Name, Song_Name FROM singer",1,"SELECT singer.Name, singer.Song_Name FROM singer",0,"SELECT si.Name, ss.Song_Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID",1,"SELECT Name, Song_Name FROM singer",0,1,no such table: singer,openai_compat,"SELECT singer_info.Name, singer_songs.Song_Name 
+FROM singer_info 
+JOIN singer_songs ON singer_info.Singer_ID = singer_songs.Singer_ID",ast,valid,1,1,0,0.6806,0.6381,1.0945,0.7013,0.8201,0.60443,openai_compat
+cs_ts_08,TABLE_SPLIT,Which singer performs the song 'Sun'?,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_Name='Sun',False,,"SELECT Name 
+FROM singer 
+WHERE Song_Name = 'Sun'",1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,"SELECT si.Name 
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_Name = 'Sun'",1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,1,no such table: singer,openai_compat,"SELECT si.Name 
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_Name = 'Sun'",ast,valid,1,1,0,0.5828,0.6681,0.903,0.8497,0.9464,13.493115,openai_compat
+cs_ts_09,TABLE_SPLIT,Count male singers.,SELECT COUNT(*) FROM singer_info WHERE Is_male='T',False,,SELECT COUNT(*) FROM singer WHERE Is_male = 'yes',0,SELECT COUNT(*) FROM singer WHERE Is_male = 'yes',0,SELECT COUNT(*) FROM singer_info WHERE Is_male = 'yes',0,SELECT COUNT(*) FROM singer WHERE Is_male = 'Y',0,1,no such table: singer,openai_compat,SELECT COUNT(*) FROM singer_info WHERE Is_male = 'yes',ast,silent_failure_suspected,0,0,0,0.6534,0.8038,0.9295,0.7096,0.779,0.496157,openai_compat
+cs_ts_10,TABLE_SPLIT,Singers with songs released in 2014 or later.,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_release_year >= 2014 ORDER BY i.Name,False,,"SELECT Name 
+FROM singer 
+WHERE Song_release_year >= 2014",1,SELECT Name FROM singer WHERE Song_release_year >= 2014,0,"SELECT DISTINCT si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year >= 2014",1,SELECT Name FROM singer WHERE Song_release_year >= 2014,0,1,no such table: singer,openai_compat,"SELECT si.Name 
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year >= 2014",ast,valid,1,1,0,0.7148,0.8235,1.1378,0.7542,1.1783,0.629654,openai_compat
+cs_ts_11,TABLE_SPLIT,Average age of French singers.,SELECT AVG(Age) FROM singer_info WHERE Country='France',False,,SELECT AVG(Age) FROM singer WHERE Country = 'France',1,SELECT AVG(Age) FROM singer WHERE Country = 'France',0,"SELECT AVG(Age) AS Average_Age
+FROM singer_info
+WHERE Country = 'France'",1,SELECT AVG(Age) FROM singer WHERE Country = 'French',0,1,no such table: singer,openai_compat,SELECT AVG(Age) FROM singer_info WHERE Country = 'France',ast,valid,1,1,0,0.8857,0.8865,0.8069,1.2329,0.685,0.747313,openai_compat
+cs_ts_12,TABLE_SPLIT,Which singers performed in concert 1?,SELECT i.Name FROM singer_info i JOIN singer_in_concert sc ON i.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY i.Name,False,,"SELECT s.Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT si.Name 
+FROM singer_info si
+JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Name 
+FROM singer AS s
+JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such table: singer,openai_compat,SELECT si.Name FROM singer_info AS si JOIN singer_in_concert AS sic ON si.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1,0,0.927,0.8383,1.0902,0.8625,1.0522,13.321421,openai_compat
+cs_ts_13,TABLE_SPLIT,Count concerts per singer.,"SELECT i.Name, COUNT(*) AS concert_count FROM singer_info i JOIN singer_in_concert sc ON i.Singer_ID=sc.Singer_ID GROUP BY i.Name ORDER BY concert_count DESC, i.Name",False,,"SELECT s.Name, COUNT(sic.Concert_ID) AS Concert_Count
+FROM singer s
+LEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID",1,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) AS Concert_Count
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID, s.Name",0,"SELECT si.Name, COUNT(sic.Concert_ID) AS Concert_Count
+FROM singer_info si
+JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID
+GROUP BY si.Singer_ID",1,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) AS Concert_Count
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID, s.Name",0,1,no such table: singer,openai_compat,"SELECT si.Singer_ID, si.Name, COUNT(sic.Concert_ID) AS Concert_Count 
+FROM singer_info AS si 
+JOIN singer_in_concert AS sic ON si.Singer_ID = sic.Singer_ID 
+GROUP BY si.Singer_ID, si.Name",ast,valid,0,0,0,1.0566,1.0718,1.1511,3.2501,1.3462,1.235876,openai_compat
+cs_ts_14,TABLE_SPLIT,Singers with songs released between 2000 and 2014.,SELECT i.Name FROM singer_info i JOIN singer_songs s ON i.Singer_ID=s.Singer_ID WHERE s.Song_release_year BETWEEN 2000 AND 2014 ORDER BY i.Name,False,,"SELECT Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",1,"SELECT Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT DISTINCT si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014",1,"SELECT Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such table: singer,openai_compat,"SELECT si.Name 
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014",ast,valid,1,1,0,0.7423,0.9373,1.7095,0.8907,0.9632,0.657969,openai_compat
+cs_ts_15,TABLE_SPLIT,List stadiums with capacity over 10000.,SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID,False,,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0,0,1.102,0.9293,0.7027,0.0009,0.002,0.539196,openai_compat
+cs_ts_16,TABLE_SPLIT,List concert themes.,SELECT Theme FROM concert ORDER BY Concert_ID,False,,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,SELECT DISTINCT Theme FROM concert,1,0,,openai_compat,SELECT DISTINCT Theme FROM concert,ast,valid,1,0,0,0.5926,0.6474,0.9631,0.0012,0.0021,0.501267,openai_compat

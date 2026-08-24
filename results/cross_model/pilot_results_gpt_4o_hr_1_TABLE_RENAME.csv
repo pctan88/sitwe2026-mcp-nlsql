@@ -1,0 +1,73 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tr_01,TABLE_RENAME,List employee first and last names.,"SELECT first_name, last_name FROM staff ORDER BY employee_id",False,,"SELECT first_name, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,"SELECT first_name, last_name FROM staff",1,"SELECT first_name, last_name FROM employees",0,1,no such table: employees,openai_compat,"SELECT first_name, last_name FROM staff",ast,valid,1,1,0,0.9079,0.929,0.7275,0.7774,0.0036,0.743339,openai_compat
+hr_tr_02,TABLE_RENAME,Count employees.,SELECT COUNT(*) FROM staff,False,,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,0,SELECT COUNT(*) FROM staff,1,SELECT COUNT(*) FROM employees,0,1,no such table: employees,openai_compat,SELECT COUNT(*) FROM staff,ast,valid,1,1,0,0.6319,0.6536,0.6839,0.8073,0.0023,0.610934,openai_compat
+hr_tr_03,TABLE_RENAME,Employees with salary over 7000.,SELECT employee_id FROM staff WHERE salary > 7000 ORDER BY employee_id,False,,SELECT * FROM employees WHERE salary > 7000,0,SELECT * FROM employees WHERE salary > 7000,0,"SELECT employee_id, first_name, last_name, salary FROM staff WHERE salary > 7000",0,SELECT * FROM employees WHERE salary > 7000,0,1,no such table: employees,openai_compat,SELECT * FROM staff WHERE salary > 7000,ast,valid,0,0,0,0.9728,1.4749,1.2262,0.9239,0.0025,0.627818,openai_compat
+hr_tr_04,TABLE_RENAME,Average employee salary.,SELECT AVG(salary) FROM staff,False,,SELECT AVG(salary) AS average_salary FROM employees,1,SELECT AVG(salary) AS average_salary FROM employees,0,SELECT AVG(salary) AS average_salary FROM staff,1,SELECT AVG(salary) AS average_salary FROM employees,0,1,no such table: employees,openai_compat,SELECT AVG(salary) AS average_salary FROM staff,ast,valid,1,1,0,1.3652,2.2323,1.2084,0.9912,0.0024,0.656719,openai_compat
+hr_tr_05,TABLE_RENAME,List employee emails.,SELECT email FROM staff ORDER BY employee_id,False,,SELECT email FROM employees,1,SELECT email FROM employees,0,SELECT email FROM staff,1,SELECT email FROM employees,0,1,no such table: employees,openai_compat,SELECT email FROM staff,ast,valid,1,1,0,0.7146,0.7469,0.8838,0.8224,0.0154,0.720286,openai_compat
+hr_tr_06,TABLE_RENAME,Employees in department 10.,SELECT employee_id FROM staff WHERE department_id=10,False,,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id 
+FROM employees 
+WHERE department_id = 10",0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id 
+FROM employees 
+WHERE department_id = 10",0,"SELECT first_name, last_name FROM staff WHERE department_id = 10",0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id 
+FROM employees 
+WHERE department_id = 10",0,1,no such table: employees,openai_compat,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id FROM staff WHERE department_id = 10",ast,silent_failure_suspected,0,0,0,1.1305,1.1445,0.8247,1.2781,0.9635,1.046465,openai_compat
+hr_tr_07,TABLE_RENAME,List employee job IDs.,"SELECT employee_id, job_id FROM staff ORDER BY employee_id",False,,SELECT job_id FROM employees,0,SELECT job_id FROM employees,0,SELECT DISTINCT job_id FROM staff,0,SELECT job_id FROM employees,0,1,no such table: employees,openai_compat,SELECT job_id FROM staff,ast,valid,0,0,0,0.7426,0.7652,0.7565,0.9908,0.0022,0.511961,openai_compat
+hr_tr_08,TABLE_RENAME,Count employees per department.,"SELECT department_id, COUNT(*) FROM staff GROUP BY department_id ORDER BY department_id",False,,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,"SELECT d.department_name, COUNT(s.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN staff s ON d.department_id = s.department_id
+GROUP BY d.department_id",0,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,1,no such table: employees,openai_compat,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN staff AS e ON d.department_id = e.department_id GROUP BY d.department_name",ast,valid,0,0,0,1.0134,1.1184,1.2888,1.4617,0.0036,1.329161,openai_compat
+hr_tr_09,TABLE_RENAME,Employees with commissions.,SELECT employee_id FROM staff WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,"SELECT first_name, last_name FROM staff WHERE commission_pct IS NOT NULL",0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,1,no such table: employees,openai_compat,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id FROM staff WHERE commission_pct IS NOT NULL",ast,silent_failure_suspected,0,0,0,1.1008,1.596,0.828,1.0,0.983,1.089655,openai_compat
+hr_tr_10,TABLE_RENAME,Employees managed by 1.,SELECT employee_id FROM staff WHERE manager_id=1 ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,"SELECT e.employee_id, e.first_name, e.last_name
+FROM employees e
+WHERE e.manager_id = 1",0,"SELECT first_name, last_name FROM staff WHERE manager_id = 1",0,"SELECT e.employee_id, e.first_name, e.last_name
+FROM employees e
+WHERE e.manager_id = 1",0,1,no such table: employees,openai_compat,"SELECT e.employee_id, e.first_name, e.last_name FROM staff AS e WHERE e.manager_id = 1",ast,silent_failure_suspected,0,0,0,0.8957,0.9096,0.9581,0.9238,3.8946,0.755709,openai_compat
+hr_tr_11,TABLE_RENAME,Job title for employee 1.,SELECT j.job_title FROM staff e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1,False,,"SELECT j.job_title 
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title 
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,"SELECT job_title 
+FROM staff 
+JOIN jobs ON staff.job_id = jobs.job_id 
+WHERE staff.employee_id = 1",1,"SELECT j.job_title 
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1,no such table: employees,openai_compat,SELECT j.job_title FROM staff AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,ast,valid,1,1,0,3.3789,5.3185,3.9509,1.0541,0.0031,1.030987,openai_compat
+hr_tr_12,TABLE_RENAME,Department name for employee 1.,SELECT d.department_name FROM staff e JOIN departments d ON e.department_id=d.department_id WHERE e.employee_id=1,False,,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",1,"SELECT d.department_name 
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,"SELECT d.department_name
+FROM staff s
+JOIN departments d ON s.department_id = d.department_id
+WHERE s.employee_id = 1",1,"SELECT d.department_name 
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,1,no such table: employees,openai_compat,SELECT d.department_name FROM staff AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,ast,valid,1,1,0,1.5374,1.3498,1.2725,0.7842,0.0111,8.726674,openai_compat
+hr_tr_13,TABLE_RENAME,Job history start date for employee 1.,SELECT j.start_date FROM job_history j JOIN staff e ON j.employee_id=e.employee_id WHERE e.employee_id=1,False,,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,0,,openai_compat,SELECT start_date FROM job_history WHERE employee_id = 1,ast,valid,1,0,0,0.7627,0.747,0.6713,0.0015,0.0024,0.63019,openai_compat
+hr_tr_14,TABLE_RENAME,Employees hired after 2007-06-20.,SELECT employee_id FROM staff WHERE hire_date > '2007-06-20' ORDER BY employee_id,False,,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,"SELECT employee_id, first_name, last_name, hire_date 
+FROM staff 
+WHERE hire_date > '2007-06-20'",0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,1,no such table: employees,openai_compat,SELECT * FROM employees WHERE hire_date > '2007-06-20',ast,execution_error,0,0,0,0.808,1.0525,1.0138,0.7288,0.9305,0.641718,openai_compat
+hr_tr_15,TABLE_RENAME,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,0,,openai_compat,SELECT region_name FROM regions,ast,valid,1,0,0,0.7689,0.965,0.6452,0.0013,0.0023,0.491925,openai_compat
+hr_tr_16,TABLE_RENAME,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,openai_compat,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,1.002,0.9028,0.8205,0.0015,0.0027,0.740247,openai_compat

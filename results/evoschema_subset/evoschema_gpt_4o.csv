@@ -1,0 +1,3128 @@
+id,perturbation,db_id,train_idx,question,pre_ok,baseline_sql,baseline_ok,latency_baseline_s,baseline_tokens_in,baseline_tokens_out,refreshed_schema_sql,refreshed_schema_ok,latency_refreshed_schema_s,refreshed_tokens_in,refreshed_tokens_out,error_feedback_sql,error_feedback_ok,error_feedback_retry,latency_error_feedback_s,error_feedback_tokens_in,error_feedback_tokens_out,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_mcp_s,mcp_tokens_in,mcp_tokens_out,backend
+evo_cm_00026,COLUMN_MERGE,california_schools,26,State the names and full communication address of high schools in Monterey which has more than 800 free or reduced price meals for ages 15-17?,0,"SELECT s.School, s.Street, s.City, s.Zip, s.State, s.Phone
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Monterey'
+  AND f.FRPM Count (Ages 5-17) > 800
+  AND f.Low Grade <= '9'
+  AND f.High Grade >= '12'",0,2.4288,565,90,"SELECT s.School, s.MailStreet, s.MailCity, s.MailZip, s.MailState, s.Phone, s.Website
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Monterey'
+  AND f.School Type = 'High School'
+  AND f.FRPM Count (Ages 5-17) > 800",0,1.3165,556,90,"SELECT s.School, s.Street, s.City, s.Zip, s.State, s.Phone
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Monterey'
+  AND f.[FRPM Count (Ages 5-17)] > 800
+  AND f.[Low Grade] <= '9'
+  AND f.[High Grade] >= '12'",0,1,1.6725,685,95,"SELECT s.School, s.Address, s.Phone
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Monterey'
+  AND f.FRPM Count (Ages 5-17) > 800
+  AND f.Low Grade <= '9'
+  AND f.High Grade >= '12'",parse_error,execution_error,0,10.9805,758,80,openai_compat
+evo_cm_00037,COLUMN_MERGE,california_schools,37,"What is the complete address of the school with the lowest excellence rate? Indicate the Street, City, Zip and State.",0,"SELECT s.Street, s.City, s.Zip, s.State
+FROM schools s
+JOIN satscores ss ON s.CDSCode = ss.cds
+WHERE ss.NumGE1500 = (SELECT MIN(NumGE1500) FROM satscores)
+LIMIT 1",0,1.6046,560,60,"SELECT s.StreetAbr AS Street, s.MailCity AS City, s.MailZip AS Zip, s.MailState AS State
+FROM schools s
+JOIN satscores ss ON s.CDSCode = ss.cds
+WHERE ss.NumGE1500 = (SELECT MIN(ss2.NumGE1500) FROM satscores ss2)",0,1.3664,551,71,"SELECT s.Street, s.City, s.Zip, s.State
+FROM schools s
+JOIN satscores ss ON s.CDSCode = ss.cds
+WHERE ss.NumGE1500 = (SELECT MIN(NumGE1500) FROM satscores)
+LIMIT 1",0,1,1.5734,651,60,"SELECT s.Address FROM schools AS s 
+JOIN satscores AS ss ON s.CDSCode = ss.cds 
+WHERE ss.NumGE1500 = (SELECT MIN(NumGE1500) FROM satscores) 
+LIMIT 1",ast,valid,0,2.4532,722,52,openai_compat
+evo_cm_00087,COLUMN_MERGE,california_schools,87,"What are the valid e-mail addresses of the administrator of the school located in the San Bernardino county, City of San Bernardino City Unified that opened between 1/1/2009 to 12/31/2010 whose school types are public Intermediate/Middle Schools and Unified Schools?",0,"SELECT DISTINCT AdmEmail1, AdmEmail2, AdmEmail3
+FROM schools
+WHERE County = 'San Bernardino'
+  AND District = 'San Bernardino City Unified'
+  AND OpenDate BETWEEN '2009-01-01' AND '2010-12-31'
+  AND StatusType = 'Active'
+  AND (GSoffered LIKE '%Intermediate/Middle%' OR GSoffered LIKE '%Unified%')
+  AND (AdmEmail1 IS NOT NULL OR AdmEmail2 IS NOT NULL OR AdmEmail3 IS NOT NULL)",0,1.7941,592,113,"SELECT DISTINCT AdmEmail
+FROM schools
+WHERE County = 'San Bernardino'
+  AND District = 'San Bernardino City Unified'
+  AND OpenDate BETWEEN '2009-01-01' AND '2010-12-31'
+  AND (GSoffered LIKE '%Intermediate/Middle%' OR GSoffered LIKE '%Unified%')
+  AND StatusType = 'Active'
+  AND AdmEmail IS NOT NULL",0,1.6481,586,88,"SELECT DISTINCT AdmEmail1, AdmEmail2, AdmEmail3
+FROM schools
+WHERE County = 'San Bernardino'
+  AND District = 'San Bernardino City Unified'
+  AND OpenDate BETWEEN '2009-01-01' AND '2010-12-31'
+  AND StatusType = 'Active'
+  AND (GSoffered LIKE '%Intermediate/Middle%' OR GSoffered LIKE '%Unified%')
+  AND (AdmEmail1 IS NOT NULL OR AdmEmail2 IS NOT NULL OR AdmEmail3 IS NOT NULL)",0,1,2.6429,736,113,"SELECT DISTINCT AdmEmail, AdmEmail3 
+FROM schools 
+WHERE County = 'San Bernardino' 
+  AND District = 'San Bernardino City Unified' 
+  AND OpenDate BETWEEN '2009-01-01' AND '2010-12-31' 
+  AND StatusType = 'Active' 
+  AND (GSoffered LIKE '%Intermediate/Middle%' OR GSoffered LIKE '%Unified%') 
+  AND (AdmEmail IS NOT NULL OR AdmEmail3 IS NOT NULL)",ast,silent_failure_suspected,0,2.4367,769,105,openai_compat
+evo_cm_01312,COLUMN_MERGE,student_club,1312,What's Angela Sanders's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1.2946,269,41,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.full_name = 'Angela Sanders'",1,0.8955,265,33,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1,1.5095,341,41,SELECT major.major_name FROM member JOIN major ON member.link_to_major = major.major_id WHERE member.full_name = 'Angela Sanders',ast,silent_failure_suspected,1,1.0587,380,30,openai_compat
+evo_cm_01314,COLUMN_MERGE,student_club,1314,Please list the full names of the students in the Student_Club that come from the Art and Design Department.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1.0779,285,45,"SELECT m.full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,0.9542,281,35,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE major.department = 'Art and Design'",0,1,1.3526,361,43,"SELECT m.full_name AS full_name 
+FROM member AS m 
+JOIN major AS ma ON m.link_to_major = ma.major_id 
+WHERE ma.department = 'Art and Design'",ast,silent_failure_suspected,0,1.5209,402,40,openai_compat
+evo_cm_01320,COLUMN_MERGE,student_club,1320,Please list the event names of all the events attended by Maya Mclean.,1,"SELECT e.event_name
+FROM event e
+JOIN attendance a ON e.event_id = a.link_to_event
+JOIN member m ON a.link_to_member = m.member_id
+WHERE m.first_name = 'Maya' AND m.last_name = 'Mclean'",0,1.065,278,57,"SELECT e.event_name
+FROM event e
+JOIN attendance a ON e.event_id = a.link_to_event
+JOIN member m ON a.link_to_member = m.member_id
+WHERE m.full_name = 'Maya Mclean'",1,0.9131,274,50,"SELECT e.event_name
+FROM event e
+JOIN attendance a ON e.event_id = a.link_to_event
+JOIN member m ON a.link_to_member = m.member_id
+WHERE m.first_name = 'Maya' AND m.last_name = 'Mclean'",0,1,1.6248,366,57,"SELECT e.event_name 
+FROM event AS e 
+JOIN attendance AS a ON e.event_id = a.link_to_event 
+JOIN member AS m ON a.link_to_member = m.member_id 
+WHERE m.full_name = 'Maya Mclean'",ast,silent_failure_suspected,1,1.3866,407,53,openai_compat
+evo_cm_01321,COLUMN_MERGE,student_club,1321,How many events of the Student_Club did Sacha Harrison attend in 2019?,0,"SELECT COUNT(*) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+JOIN member ON attendance.link_to_member = member.member_id 
+WHERE member.first_name = 'Sacha' 
+AND member.last_name = 'Harrison' 
+AND event.event_date LIKE '2019%' 
+AND event.type = 'Student_Club'",0,1.096,281,74,"SELECT COUNT(*) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+JOIN member ON attendance.link_to_member = member.member_id 
+WHERE member.full_name = 'Sacha Harrison' 
+AND event.event_date LIKE '2019%' 
+AND event.type = 'Student_Club'",0,1.0842,277,65,"SELECT COUNT(*) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+JOIN member ON attendance.link_to_member = member.member_id 
+WHERE member.first_name || ' ' || member.last_name = 'Sacha Harrison' 
+AND event.event_date LIKE '2019%' 
+AND event.type = 'Student_Club'",0,1,1.7628,386,72,"SELECT COUNT(*) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+JOIN member ON attendance.link_to_member = member.member_id 
+WHERE member.full_name = 'Sacha Harrison' 
+AND event.event_date LIKE '2019%' 
+AND event.type = 'Student_Club'",ast,silent_failure_suspected,0,1.4228,421,65,openai_compat
+evo_cm_01327,COLUMN_MERGE,student_club,1327,"List the full name of all the members of the Student_Club who attended the ""Laugh Out Loud"" event.",0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN attendance a ON m.member_id = a.link_to_member
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = 'Laugh Out Loud'",0,1.057,286,59,"SELECT m.full_name
+FROM member m
+JOIN attendance a ON m.member_id = a.link_to_member
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = 'Laugh Out Loud'",1,1.1198,282,49,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN attendance ON member.member_id = attendance.link_to_member
+JOIN event ON attendance.link_to_event = event.event_id
+WHERE event.event_name = 'Laugh Out Loud'",0,1,1.1874,376,56,SELECT m.full_name AS full_name FROM member AS m JOIN attendance AS a ON m.member_id = a.link_to_member JOIN event AS e ON a.link_to_event = e.event_id WHERE e.event_name = 'Laugh Out Loud',ast,valid,1,1.3466,417,51,openai_compat
+evo_cm_01329,COLUMN_MERGE,student_club,1329,What county did Sherri Ramsey grew up?,1,"SELECT z.county
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Sherri' AND m.last_name = 'Ramsey'",0,0.9376,272,43,"SELECT z.county
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.full_name = 'Sherri Ramsey'",1,1.2652,268,35,"SELECT z.county
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Sherri' AND m.last_name = 'Ramsey'",0,1,1.2368,346,43,SELECT z.county FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE m.full_name = 'Sherri Ramsey',ast,silent_failure_suspected,1,1.1105,387,34,openai_compat
+evo_cm_01330,COLUMN_MERGE,student_club,1330,What college offers the major that Tyler Hewitt took?,1,"SELECT major.college
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Tyler' AND member.last_name = 'Hewitt'",0,1.1194,274,43,"SELECT major.college
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.full_name = 'Tyler Hewitt'",1,1.0478,270,35,"SELECT major.college
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Tyler' AND member.last_name = 'Hewitt'",0,1,1.1396,348,43,SELECT major.college FROM member JOIN major ON member.link_to_major = major.major_id WHERE member.full_name = 'Tyler Hewitt',ast,valid,1,1.2543,387,32,openai_compat
+evo_cm_01334,COLUMN_MERGE,student_club,1334,List the full name of the Student_Club members that grew up in Illinois state.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.state = 'Illinois'",0,1.1644,280,42,"SELECT m.full_name
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.state = 'Illinois'",1,1.026,276,32,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN zip_code ON member.zip = zip_code.zip_code
+WHERE zip_code.state = 'Illinois'",0,1,1.3114,353,42,SELECT m.full_name AS full_name FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE z.state = 'Illinois',ast,silent_failure_suspected,1,0.8805,394,34,openai_compat
+evo_cm_01339,COLUMN_MERGE,student_club,1339,Calculate the total average cost that Elijah Allen spent in the events on September and October.,0,"SELECT AVG(e.cost) AS average_cost
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+JOIN event ev ON e.link_to_budget = ev.event_id
+WHERE m.first_name = 'Elijah' AND m.last_name = 'Allen'
+AND strftime('%Y-%m', ev.event_date) IN ('2023-09', '2023-10')",0,1.2304,280,85,"SELECT AVG(e.cost) AS average_cost
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+JOIN event ev ON e.link_to_budget = ev.event_id
+WHERE m.full_name = 'Elijah Allen'
+AND strftime('%Y-%m', ev.event_date) IN ('2023-09', '2023-10')",0,1.072,276,78,"SELECT AVG(e.cost) AS average_cost
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+JOIN budget b ON e.link_to_budget = b.budget_id
+JOIN event ev ON b.link_to_event = ev.event_id
+WHERE m.first_name = 'Elijah' AND m.last_name = 'Allen'
+AND strftime('%Y-%m', ev.event_date) IN ('2023-09', '2023-10')",0,1,2.1579,396,99,"SELECT AVG(e.cost) AS average_cost 
+FROM expense AS e 
+JOIN member AS m ON e.link_to_member = m.member_id 
+JOIN event AS ev ON e.link_to_budget = ev.event_id 
+WHERE m.full_name = 'Elijah Allen' 
+AND STRFTIME('%Y-%m', ev.event_date) IN ('2023-09', '2023-10')",ast,valid,0,2.1165,438,83,openai_compat
+evo_cm_01346,COLUMN_MERGE,student_club,1346,"Tell the phone number of ""Carlo Jacobs"".",1,SELECT phone FROM member WHERE first_name = 'Carlo' AND last_name = 'Jacobs',0,0.7955,273,24,SELECT phone FROM member WHERE full_name = 'Carlo Jacobs',1,0.8777,269,17,SELECT phone FROM member WHERE first_name = 'Carlo' AND last_name = 'Jacobs',0,1,1.046,327,24,SELECT phone FROM member WHERE full_name = 'Carlo Jacobs',ast,silent_failure_suspected,1,0.8178,370,17,openai_compat
+evo_cm_01351,COLUMN_MERGE,student_club,1351,What was Brent Thomason's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Brent' AND member.last_name = 'Thomason'",0,1.0111,271,43,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.full_name = 'Brent Thomason'",1,0.9278,267,35,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Brent' AND member.last_name = 'Thomason'",0,1,1.5139,345,43,SELECT major.major_name FROM member JOIN major ON member.link_to_major = major.major_id WHERE member.full_name = 'Brent Thomason',ast,silent_failure_suspected,1,1.6124,384,32,openai_compat
+evo_cm_01353,COLUMN_MERGE,student_club,1353,What's Christof Nielson's zip code type?,1,"SELECT z.type 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Christof' AND m.last_name = 'Nielson'",0,1.2323,274,43,"SELECT z.type 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.full_name = 'Christof Nielson'",1,1.1276,270,36,"SELECT z.type 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Christof' AND m.last_name = 'Nielson'",0,1,1.2068,348,43,SELECT z.type FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE m.full_name = 'Christof Nielson',ast,silent_failure_suspected,1,2.692,389,35,openai_compat
+evo_cm_01355,COLUMN_MERGE,student_club,1355,"Where is the hometown state for ""Sacha Harrison""?",1,"SELECT z.state 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Sacha' AND m.last_name = 'Harrison'",0,0.8473,274,42,"SELECT z.state 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.full_name = 'Sacha Harrison'",1,1.1706,270,34,"SELECT z.state 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Sacha' AND m.last_name = 'Harrison'",0,1,1.4725,347,42,SELECT z.state FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE m.full_name = 'Sacha Harrison',ast,silent_failure_suspected,1,0.997,388,33,openai_compat
+evo_cm_01357,COLUMN_MERGE,student_club,1357,State the date Connor Hilton paid his/her dues.,1,"SELECT i.date_received 
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE m.first_name = 'Connor' AND m.last_name = 'Hilton' AND i.source = 'Dues'",0,1.0799,273,51,"SELECT date_received 
+FROM income 
+JOIN member ON income.link_to_member = member.member_id 
+WHERE member.full_name = 'Connor Hilton' AND income.source = 'Dues'",1,0.8995,269,40,"SELECT i.date_received 
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE m.first_name = 'Connor' AND m.last_name = 'Hilton' AND i.source = 'Dues'",0,1,1.3203,355,51,"SELECT i.date_received 
+FROM income AS i 
+JOIN member AS m ON i.link_to_member = m.member_id 
+WHERE m.full_name = 'Connor Hilton' 
+AND i.source = 'Dues'",ast,silent_failure_suspected,1,1.3473,396,46,openai_compat
+evo_cm_01358,COLUMN_MERGE,student_club,1358,Who was the first one paid his/her dues? Tell the full name.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN income i ON m.member_id = i.link_to_member
+ORDER BY i.date_received ASC
+LIMIT 1",0,0.9963,278,47,"SELECT m.full_name
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+ORDER BY i.date_received ASC
+LIMIT 1",1,0.9193,274,37,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN income ON member.member_id = income.link_to_member
+ORDER BY income.date_received ASC
+LIMIT 1",0,1,1.5486,356,45,SELECT m.full_name AS full_name FROM member AS m JOIN income AS i ON m.member_id = i.link_to_member ORDER BY i.date_received ASC LIMIT 1,ast,silent_failure_suspected,1,1.5386,396,38,openai_compat
+evo_cm_01364,COLUMN_MERGE,student_club,1364,Where is Amy Firth's hometown?,0,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Amy' AND m.last_name = 'Firth'",0,0.8761,271,41,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.full_name = 'Amy Firth'",0,0.9698,267,34,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Amy' AND m.last_name = 'Firth'",0,1,1.2073,343,41,SELECT z.city FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE m.full_name = 'Amy Firth',ast,silent_failure_suspected,0,0.8752,384,33,openai_compat
+evo_cm_01372,COLUMN_MERGE,student_club,1372,"When did the member, Casey Mason, received the income?",1,"SELECT i.date_received
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE m.first_name = 'Casey' AND m.last_name = 'Mason'",0,1.0953,275,44,"SELECT i.date_received 
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE m.full_name = 'Casey Mason'",1,1.0062,271,36,"SELECT i.date_received
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE m.first_name = 'Casey' AND m.last_name = 'Mason'",0,1,1.2103,350,44,"SELECT i.date_received 
+FROM income AS i 
+JOIN member AS m ON i.link_to_member = m.member_id 
+WHERE m.full_name = 'Casey Mason'",ast,silent_failure_suspected,1,1.4089,391,38,openai_compat
+evo_cm_01375,COLUMN_MERGE,student_club,1375,"List all the members of the ""School of Applied Sciences, Technology and Education"" department.",1,"SELECT member.first_name, member.last_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE major.department = 'School of Applied Sciences, Technology and Education'",0,0.9403,281,42,"SELECT m.full_name 
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'School of Applied Sciences, Technology and Education'",1,1.2174,277,40,"SELECT first_name, last_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE major.department = 'School of Applied Sciences, Technology and Education'",0,1,1.3511,354,40,"SELECT member.full_name FROM member JOIN major ON member.link_to_major = major.major_id WHERE major.department = 'School of Applied Sciences, Technology and Education'",ast,valid,1,1.7328,393,35,openai_compat
+evo_cm_01382,COLUMN_MERGE,student_club,1382,"Among the students majored in interior design, who have attended the Community Theater event?",1,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+JOIN attendance a ON m.member_id = a.link_to_member
+JOIN event e ON a.link_to_event = e.event_id
+WHERE ma.major_name = 'Interior Design' AND e.event_name = 'Community Theater'",0,1.2319,280,74,"SELECT m.full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+JOIN attendance a ON m.member_id = a.link_to_member
+JOIN event e ON a.link_to_event = e.event_id
+WHERE ma.major_name = 'Interior Design' AND e.event_name = 'Community Theater'",1,1.1824,276,70,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+JOIN attendance a ON m.member_id = a.link_to_member
+JOIN event e ON a.link_to_event = e.event_id
+WHERE ma.major_name = 'Interior Design' AND e.event_name = 'Community Theater'",0,1,1.6226,385,74,SELECT m.full_name FROM member AS m JOIN major AS ma ON m.link_to_major = ma.major_id JOIN attendance AS a ON m.member_id = a.link_to_member JOIN event AS e ON a.link_to_event = e.event_id WHERE ma.major_name = 'Interior Design' AND e.event_name = 'Community Theater',ast,silent_failure_suspected,1,1.1778,426,69,openai_compat
+evo_cm_01383,COLUMN_MERGE,student_club,1383,"State the name of students from Georgetown, South Carolina.",1,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.city = 'Georgetown' AND z.state = 'South Carolina'",0,1.2128,274,45,"SELECT m.full_name 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.city = 'Georgetown' AND z.state = 'South Carolina'",1,0.9726,270,41,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.city = 'Georgetown' AND z.state = 'SC'",0,1,1.5073,350,44,SELECT m.full_name FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE z.city = 'Georgetown' AND z.state = 'South Carolina',ast,silent_failure_suspected,1,1.392,391,40,openai_compat
+evo_cm_01387,COLUMN_MERGE,student_club,1387,Which student has been entrusted to manage the budget for the Yearly Kickoff?,0,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN budget b ON m.member_id = b.link_to_event
+JOIN event e ON b.link_to_event = e.event_id
+WHERE e.event_name = 'Yearly Kickoff'",0,1.216,279,54,"SELECT m.full_name
+FROM member m
+JOIN budget b ON m.member_id = b.link_to_event
+JOIN event e ON b.link_to_event = e.event_id
+WHERE e.event_name = 'Yearly Kickoff'",0,1.2081,275,50,"SELECT m.first_name, m.last_name
+FROM member m
+JOIN budget b ON m.member_id = b.link_to_event
+JOIN event e ON b.link_to_event = e.event_id
+WHERE e.event_name = 'Yearly Kickoff'",0,1,1.2905,364,54,"SELECT m.full_name FROM member AS m 
+JOIN budget AS b ON m.member_id = b.link_to_event 
+JOIN event AS e ON b.link_to_event = e.event_id 
+WHERE e.event_name = 'Yearly Kickoff'",ast,silent_failure_suspected,0,1.1785,405,52,openai_compat
+evo_cm_01388,COLUMN_MERGE,student_club,1388,Which students manage to generate the highest income. State his/her full name along with the income source.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name, i.source
+FROM member m
+JOIN income i ON m.member_id = i.link_to_member
+GROUP BY m.member_id
+ORDER BY SUM(i.amount) DESC
+LIMIT 1",0,1.0447,283,57,"SELECT m.full_name, i.source, SUM(i.amount) AS total_income
+FROM member m
+JOIN income i ON m.member_id = i.link_to_member
+GROUP BY m.member_id, i.source
+ORDER BY total_income DESC
+LIMIT 1",0,1.1707,279,56,"SELECT mb.first_name || ' ' || mb.last_name AS full_name, i.source
+FROM member mb
+JOIN income i ON mb.member_id = i.link_to_member
+GROUP BY mb.member_id
+ORDER BY SUM(i.amount) DESC
+LIMIT 1",0,1,1.5964,371,57,"SELECT m.full_name, i.source 
+FROM member AS m 
+JOIN income AS i ON m.member_id = i.link_to_member 
+GROUP BY m.member_id, m.full_name, i.source 
+ORDER BY SUM(i.amount) DESC 
+LIMIT 1",ast,valid,1,1.4785,410,56,openai_compat
+evo_cm_01393,COLUMN_MERGE,student_club,1393,Provide the full name and email address of the Student_Club's Secretary.,0,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM member
+WHERE position = 'Secretary'",0,1.0134,278,28,"SELECT s.full_name, s.email
+FROM Student_Club sc
+JOIN Student s ON sc.secretary_id = s.student_id",0,1.1229,76,31,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM member
+WHERE position = 'Secretary'",0,1,1.0778,335,28,"SELECT full_name, email FROM club_members WHERE role = 'Secretary'",ast,execution_error,0,0.993,236,18,openai_compat
+evo_cm_01393,COLUMN_MERGE,student_club,1393,Provide the full name and email address of the Student_Club's Secretary.,0,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM member
+WHERE position = 'Secretary'",0,1.0134,278,28,"SELECT s.full_name, s.email
+FROM Student_Club sc
+JOIN Student s ON sc.secretary_id = s.student_id",0,1.1229,76,31,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM member
+WHERE position = 'Secretary'",0,1,1.0778,335,28,"SELECT full_name, email FROM club_members WHERE role = 'Secretary'",ast,execution_error,0,0.993,236,18,openai_compat
+evo_cm_01396,COLUMN_MERGE,student_club,1396,Provide the number of events attended by Luisa Guidi. What is her major?,0,"SELECT COUNT(DISTINCT a.link_to_event) AS number_of_events, m.major_name
+FROM attendance AS att
+JOIN member AS mem ON att.link_to_member = mem.member_id
+JOIN major AS m ON mem.link_to_major = m.major_id
+WHERE mem.first_name = 'Luisa' AND mem.last_name = 'Guidi'",0,1.3071,280,74,"SELECT COUNT(DISTINCT a.link_to_event) AS number_of_events, m.major_name
+FROM attendance att
+JOIN member mem ON att.link_to_member = mem.member_id
+JOIN major m ON mem.link_to_major = m.major_id
+WHERE mem.full_name = 'Luisa Guidi'",0,1.2095,276,64,"SELECT COUNT(DISTINCT att.link_to_event) AS number_of_events, maj.major_name
+FROM attendance AS att
+JOIN member AS mem ON att.link_to_member = mem.member_id
+JOIN major AS maj ON mem.link_to_major = maj.major_id
+WHERE mem.first_name = 'Luisa' AND mem.last_name = 'Guidi'",0,1,1.4743,386,74,"SELECT COUNT(DISTINCT att.link_to_event) AS number_of_events, m.major_name 
+FROM attendance AS att 
+JOIN member AS mem ON att.link_to_member = mem.member_id 
+JOIN major AS m ON mem.link_to_major = m.major_id 
+WHERE mem.full_name = 'Luisa Guidi'",ast,silent_failure_suspected,1,1.0913,423,67,openai_compat
+evo_cm_01399,COLUMN_MERGE,student_club,1399,Did Maya Mclean attend the 'Women's Soccer' event?,0,"SELECT COUNT(*) > 0
+FROM attendance
+JOIN member ON attendance.link_to_member = member.member_id
+JOIN event ON attendance.link_to_event = event.event_id
+WHERE member.first_name = 'Maya' AND member.last_name = 'Mclean' AND event.event_name = ""Women's Soccer""",0,3.515,275,65,"SELECT COUNT(*) > 0
+FROM attendance
+JOIN member ON attendance.link_to_member = member.member_id
+JOIN event ON attendance.link_to_event = event.event_id
+WHERE member.full_name = 'Maya Mclean' AND event.event_name = ""Women's Soccer""",0,1.011,271,58,"SELECT COUNT(*) > 0
+FROM attendance
+JOIN member ON attendance.link_to_member = member.member_id
+JOIN event ON attendance.link_to_event = event.event_id
+WHERE member.first_name = 'Maya' AND member.last_name = 'Mclean' AND event.event_name = 'Women''s Soccer'",0,1,1.8997,371,67,"SELECT COUNT(*) > 0 FROM attendance JOIN member ON attendance.link_to_member = member.member_id JOIN event ON attendance.link_to_event = event.event_id WHERE member.full_name = 'Maya Mclean' AND event.event_name = ""Women's Soccer""",ast,silent_failure_suspected,0,1.2069,409,54,openai_compat
+evo_cm_01410,COLUMN_MERGE,student_club,1410,"List out the full name and total cost that member id ""rec4BLdZHS2Blfp4v"" incurred?",0,"SELECT m.first_name || ' ' || m.last_name AS full_name, SUM(e.cost) AS total_cost
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+WHERE m.member_id = 'rec4BLdZHS2Blfp4v'
+GROUP BY m.first_name, m.last_name",0,1.777,289,72,"SELECT m.full_name, SUM(e.cost) AS total_cost
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+WHERE m.member_id = 'rec4BLdZHS2Blfp4v'
+GROUP BY m.full_name",1,1.0095,285,58,"SELECT member.first_name || ' ' || member.last_name AS full_name, SUM(expense.cost) AS total_cost
+FROM member
+JOIN expense ON member.member_id = expense.link_to_member
+WHERE member.member_id = 'rec4BLdZHS2Blfp4v'
+GROUP BY member.first_name, member.last_name",0,1,1.6517,392,71,"SELECT m.full_name AS full_name, SUM(e.cost) AS total_cost 
+FROM member AS m 
+JOIN expense AS e ON m.member_id = e.link_to_member 
+WHERE m.member_id = 'rec4BLdZHS2Blfp4v' 
+GROUP BY m.full_name",ast,valid,1,1.6122,433,64,openai_compat
+evo_cm_01411,COLUMN_MERGE,student_club,1411,State what kind of expenses that Sacha Harrison incurred?,1,"SELECT e.expense_description
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+WHERE m.first_name = 'Sacha' AND m.last_name = 'Harrison'",0,1.1584,274,45,"SELECT e.expense_description
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+WHERE m.full_name = 'Sacha Harrison'",1,0.8916,270,37,"SELECT e.expense_description
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+WHERE m.first_name = 'Sacha' AND m.last_name = 'Harrison'",0,1,1.259,350,45,"SELECT e.expense_description 
+FROM expense AS e 
+JOIN member AS m ON e.link_to_member = m.member_id 
+WHERE m.full_name = 'Sacha Harrison'",ast,silent_failure_suspected,1,0.9868,391,39,openai_compat
+evo_cm_01414,COLUMN_MERGE,student_club,1414,State the name of major that Phillip Cullen has joined.,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Phillip' AND member.last_name = 'Cullen'",0,0.9628,274,42,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.full_name = 'Phillip Cullen'",1,1.0407,270,34,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Phillip' AND member.last_name = 'Cullen'",0,1,1.1516,347,42,SELECT major.major_name FROM member JOIN major ON member.link_to_major = major.major_id WHERE member.full_name = 'Phillip Cullen',ast,valid,1,1.3991,386,31,openai_compat
+evo_cm_01445,COLUMN_MERGE,student_club,1445,Find the full name of members whose t-shirt size is extra large.,0,"SELECT first_name || ' ' || last_name AS full_name
+FROM member
+WHERE t_shirt_size = 'extra large'",0,1.0145,277,30,SELECT full_name FROM member WHERE t_shirt_size = 'extra large',0,1.4866,273,19,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+WHERE member.t_shirt_size = 'extra large'",0,1,1.2363,337,33,SELECT full_name FROM member WHERE t_shirt_size = 'extra large',ast,silent_failure_suspected,0,1.2658,378,19,openai_compat
+evo_cm_01449,COLUMN_MERGE,student_club,1449,What is the name and major of members who had to spend more than a hundred dollars on an expense?,0,"SELECT m.first_name, m.last_name, ma.major_name
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE e.cost > 100",0,1.2993,284,54,"SELECT m.full_name, ma.major_name
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE e.cost > 100",0,1.0527,280,50,"SELECT m.first_name, m.last_name, ma.major_name
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE e.cost > 100",0,1,1.3079,369,54,"SELECT m.full_name, ma.major_name 
+FROM member AS m 
+JOIN expense AS e ON m.member_id = e.link_to_member 
+JOIN major AS ma ON m.link_to_major = ma.major_id 
+WHERE e.cost > 100",ast,valid,0,1.3552,410,53,openai_compat
+evo_cm_01456,COLUMN_MERGE,student_club,1456,List the full name of the top five members who spend the most money in the descending order of spending.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+GROUP BY m.member_id
+ORDER BY SUM(e.cost) DESC
+LIMIT 5",0,1.0291,284,54,"SELECT m.full_name
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+GROUP BY m.member_id
+ORDER BY SUM(e.cost) DESC
+LIMIT 5",0,1.1719,280,44,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN expense ON member.member_id = expense.link_to_member
+GROUP BY member.member_id
+ORDER BY SUM(expense.cost) DESC
+LIMIT 5",0,1,1.974,369,53,"SELECT m.full_name AS full_name 
+FROM member AS m 
+JOIN expense AS e ON m.member_id = e.link_to_member 
+GROUP BY m.member_id, m.full_name 
+ORDER BY SUM(e.cost) DESC 
+LIMIT 5",ast,silent_failure_suspected,0,1.3984,408,53,openai_compat
+evo_cm_01457,COLUMN_MERGE,student_club,1457,Give the full name and contact number of members who had to spend more than average on each expense.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name, m.phone
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+WHERE e.cost > (SELECT AVG(cost) FROM expense)",0,1.0683,283,51,"SELECT m.full_name, m.phone
+FROM member m
+JOIN expense e ON m.member_id = e.link_to_member
+GROUP BY e.expense_id
+HAVING e.cost > (SELECT AVG(cost) FROM expense)",0,1.2151,279,49,"SELECT mb.first_name || ' ' || mb.last_name AS full_name, mb.phone
+FROM member mb
+JOIN expense e ON mb.member_id = e.link_to_member
+WHERE e.cost > (SELECT AVG(cost) FROM expense)",0,1,1.1533,365,51,"SELECT m.full_name, m.phone 
+FROM member AS m 
+JOIN expense AS e ON m.member_id = e.link_to_member 
+WHERE e.cost > (SELECT AVG(cost) FROM expense)",ast,valid,0,1.2789,406,43,openai_compat
+evo_cm_01459,COLUMN_MERGE,student_club,1459,What is the major of Garrett Gerke and which department does it belong to?,1,"SELECT major.major_name, major.department
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Garrett' AND member.last_name = 'Gerke'",0,1.0972,279,45,"SELECT major.major_name, major.department
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.full_name = 'Garrett Gerke'",1,0.9085,275,38,"SELECT major.major_name, major.department
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Garrett' AND member.last_name = 'Gerke'",0,1,1.2241,355,45,"SELECT major.major_name, major.department FROM member JOIN major ON member.link_to_major = major.major_id WHERE member.full_name = 'Garrett Gerke'",ast,silent_failure_suspected,1,1.1033,394,35,openai_compat
+evo_cm_01460,COLUMN_MERGE,student_club,1460,"Write the full name of the member who spent money for water, veggie tray and supplies and include the cost of it.",0,"SELECT m.first_name || ' ' || m.last_name AS full_name, e.cost
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+WHERE e.expense_description IN ('water', 'veggie tray', 'supplies')",0,1.5271,287,57,"SELECT m.full_name, e.cost
+FROM expense e
+JOIN member m ON e.link_to_member = m.member_id
+WHERE e.expense_description IN ('water', 'veggie tray', 'supplies')",0,0.9024,283,47,"SELECT mb.first_name || ' ' || mb.last_name AS full_name, e.cost
+FROM expense e
+JOIN member mb ON e.link_to_member = mb.member_id
+WHERE e.expense_description IN ('water', 'veggie tray', 'supplies')",0,1,1.7377,375,57,"SELECT m.full_name AS full_name, e.cost 
+FROM expense AS e 
+JOIN member AS m ON e.link_to_member = m.member_id 
+WHERE e.expense_description IN ('water', 'veggie tray', 'supplies')",ast,silent_failure_suspected,0,1.4586,416,52,openai_compat
+evo_cm_01464,COLUMN_MERGE,student_club,1464,Write the full names of students who received funds on the date of 9/9/2019 and include the amount received.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name, i.amount
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE i.date_received = '9/9/2019'",0,1.0588,289,52,"SELECT s.full_name, f.amount
+FROM students s
+JOIN funds f ON s.student_id = f.student_id
+WHERE f.date_received = '2019-09-09'",0,1.1888,87,41,"SELECT m.first_name || ' ' || m.last_name AS full_name, i.amount
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE i.date_received = '9/9/2019'",0,1,1.1558,370,52,"SELECT s.first_name || ' ' || s.last_name AS full_name, f.amount 
+FROM funds_received AS f 
+JOIN student AS s ON f.student_id = s.id 
+WHERE f.date_received = '2019-09-09'",ast,execution_error,0,1.6022,272,53,openai_compat
+evo_cm_01464,COLUMN_MERGE,student_club,1464,Write the full names of students who received funds on the date of 9/9/2019 and include the amount received.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name, i.amount
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE i.date_received = '9/9/2019'",0,1.0588,289,52,"SELECT s.full_name, f.amount
+FROM students s
+JOIN funds f ON s.student_id = f.student_id
+WHERE f.date_received = '2019-09-09'",0,1.1888,87,41,"SELECT m.first_name || ' ' || m.last_name AS full_name, i.amount
+FROM income i
+JOIN member m ON i.link_to_member = m.member_id
+WHERE i.date_received = '9/9/2019'",0,1,1.1558,370,52,"SELECT s.first_name || ' ' || s.last_name AS full_name, f.amount 
+FROM funds_received AS f 
+JOIN student AS s ON f.student_id = s.id 
+WHERE f.date_received = '2019-09-09'",ast,execution_error,0,1.6022,272,53,openai_compat
+evo_cm_01466,COLUMN_MERGE,student_club,1466,Write the full name of the club member with the position of 'Secretary' and list which college the club member belongs to.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name, ma.college
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE m.position = 'Secretary'",0,1.2626,288,47,"SELECT m.full_name, ma.college
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE m.position = 'Secretary'",1,1.0796,284,37,"SELECT member.first_name || ' ' || member.last_name AS full_name, major.college
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.position = 'Secretary'",0,1,1.1413,366,45,"SELECT m.full_name, ma.college FROM member AS m JOIN major AS ma ON m.link_to_major = ma.major_id WHERE m.position = 'Secretary'",ast,valid,1,1.1633,407,36,openai_compat
+evo_cm_01468,COLUMN_MERGE,student_club,1468,Where is the hometown of Garrett Gerke?,1,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Garrett' AND m.last_name = 'Gerke'",0,1.1086,272,42,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.full_name = 'Garrett Gerke'",1,1.0804,268,35,"SELECT z.city 
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE m.first_name = 'Garrett' AND m.last_name = 'Gerke'",0,1,1.204,345,42,SELECT z.city FROM member AS m JOIN zip_code AS z ON m.zip = z.zip_code WHERE m.full_name = 'Garrett Gerke',ast,silent_failure_suspected,1,1.3025,386,34,openai_compat
+evo_cm_01469,COLUMN_MERGE,student_club,1469,"Which student has the hometown of Lincolnton, North Carolina with the zip code of 28092? List their full name and position.",0,"SELECT m.first_name || ' ' || m.last_name AS full_name, m.position
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.city = 'Lincolnton' AND z.state = 'North Carolina' AND z.zip_code = 28092",0,1.0748,291,64,"SELECT m.full_name, m.position
+FROM member m
+JOIN zip_code z ON m.zip = z.zip_code
+WHERE z.city = 'Lincolnton' AND z.state = 'North Carolina' AND z.zip_code = 28092",1,0.95,287,54,"SELECT member.first_name || ' ' || member.last_name AS full_name, member.position
+FROM member
+JOIN zip_code ON member.zip = zip_code.zip_code
+WHERE zip_code.city = 'Lincolnton' AND zip_code.state = 'North Carolina' AND zip_code.zip_code = 28092",0,1,1.7877,386,66,"SELECT m.full_name, m.position 
+FROM member AS m 
+JOIN zip_code AS z ON m.zip = z.zip_code 
+WHERE z.city = 'Lincolnton' AND z.state = 'North Carolina' AND z.zip_code = 28092",ast,valid,1,1.3634,427,56,openai_compat
+evo_cr_00000,COLUMN_RENAME,california_schools,0,What is the highest eligible free rate for K-12 students in the schools in Alameda County?,1,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") AS Highest_Eligible_Free_Rate
+FROM frpm
+WHERE ""County Name"" = 'Alameda'",1,1.0914,554,38,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM frpm 
+WHERE ""County Name"" = 'Alameda'",1,1.442,542,31,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") AS Highest_Eligible_Free_Rate
+FROM frpm
+WHERE ""County Name"" = 'Alameda'",1,0,0.0064,0,0,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") AS Highest_Eligible_Free_Rate FROM frpm WHERE ""County Name"" = 'Alameda'",ast,valid,1,0.0504,0,0,openai_compat
+evo_cr_00001,COLUMN_RENAME,california_schools,1,Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.,0,"SELECT School Name, ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE School Type = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1.0863,554,53,"SELECT ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,0.9298,542,52,"SELECT ""School Name"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1,1.6686,637,56,"SELECT ""School Name"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",parse_error,silent_failure_suspected,0,1.2902,788,56,openai_compat
+evo_cr_00003,COLUMN_RENAME,california_schools,3,What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?,1,"SELECT s.MailStreet
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,1.0255,559,46,"SELECT s.MailingStreet
+FROM frpm f
+JOIN schools s ON f.SchoolCode = s.SchoolCode
+ORDER BY f.FRPM Count (K-12) DESC
+LIMIT 1",0,1.3947,601,46,"SELECT s.MailStreet
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,1,1.55,636,46,"SELECT s.MailingStreet 
+FROM frpm AS f 
+JOIN schools AS s ON f.SchoolCode = s.SchoolCode 
+ORDER BY f.""FRPM Count (K-12)"" DESC 
+LIMIT 1",ast,valid,1,1.4321,3136,49,openai_compat
+evo_cr_00340,COLUMN_RENAME,card_games,340,Which are the cards that have incredibly powerful foils.,0,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,2.1073,595,38,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 
+AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1.3505,595,39,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,0,0.0792,0,0,SELECT name FROM cards WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%'),ast,silent_failure_suspected,0,1.4435,686,36,openai_compat
+evo_cr_00341,COLUMN_RENAME,card_games,341,What are the borderless cards available without powerful foils?,0,"SELECT name 
+FROM cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,1.8012,596,27,"SELECT name 
+FROM cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,1.2074,595,27,"SELECT name 
+FROM cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,0,0.0593,0,0,SELECT name FROM cards WHERE borderColor = 'borderless' AND hasFoil = 0,ast,valid,0,0.0798,0,0,openai_compat
+evo_cr_00342,COLUMN_RENAME,card_games,342,List the card names with value that cost more converted mana for the face.,0,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,1.7223,599,20,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,1.1031,598,20,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,0,0.0599,0,0,SELECT name FROM cards WHERE faceConvertedManaCost > convertedManaCost,ast,valid,0,0.0735,0,0,openai_compat
+evo_cr_00343,COLUMN_RENAME,card_games,343,Name all cards with 2015 frame style ranking below 100 on EDHRec.,0,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,2.1801,602,27,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1.1602,605,27,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,0,0.0618,0,0,SELECT name FROM cards WHERE frameVersion = '2015' AND edhrecRank < 100,ast,valid,0,0.086,0,0,openai_compat
+evo_cr_00531,COLUMN_RENAME,codebase_community,531,"Which user has a higher reputation, Harlan or Jarrod Dixon?",0,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1.4481,398,36,"SELECT DisplayName, (UpVotes - DownVotes) AS Reputation
+FROM users
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon')
+ORDER BY Reputation DESC
+LIMIT 1",0,1.4351,398,43,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1,1.6863,463,36,"SELECT DisplayName, Trustworthiness FROM users WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') ORDER BY Trustworthiness DESC LIMIT 1",ast,silent_failure_suspected,0,0.9484,516,34,openai_compat
+evo_cr_00532,COLUMN_RENAME,codebase_community,532,Please list the display names of all the users whose accounts were created in the year 2011.,1,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",1,1.2072,404,23,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",1,1.3197,405,23,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",1,0,0.025,0,0,"SELECT DisplayName FROM users WHERE STRFTIME('%Y', CreationDate) = '2011'",ast,valid,1,0.0475,0,0,openai_compat
+evo_cr_00533,COLUMN_RENAME,codebase_community,533,How many users last accessed the website after 2014/9/1?,0,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1.2916,400,22,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1.274,399,22,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,0,0.0166,0,0,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',ast,valid,0,0.0418,0,0,openai_compat
+evo_cr_00534,COLUMN_RENAME,codebase_community,534,What is the display name of the user who has the most number of views?,1,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1.5168,400,20,"SELECT DisplayName 
+FROM users 
+ORDER BY ProfileViews DESC 
+LIMIT 1",1,1.294,400,21,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1,1.4705,449,20,SELECT DisplayName FROM users ORDER BY ProfileViews DESC LIMIT 1,ast,valid,1,0.0385,0,0,openai_compat
+evo_cr_01470,COLUMN_RENAME,debit_card_specializing,1470,How many gas stations in CZE has Premium gas?,0,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1.2864,175,67,"SELECT COUNT(DISTINCT g.StationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.StationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description = 'Premium'",0,1.8739,174,65,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1,1.3764,276,67,"SELECT COUNT(DISTINCT g.StationID) 
+FROM gasstations AS g 
+JOIN transactions_1k AS t ON g.StationID = t.GasStationID 
+JOIN products AS p ON t.ProductID = p.ProductID 
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",ast,silent_failure_suspected,0,1.302,383,68,openai_compat
+evo_cr_01471,COLUMN_RENAME,debit_card_specializing,1471,What is the ratio of customers who pay in EUR against customers who pay in CZK?,1,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'CZK') AS eur_to_czk_ratio",0,1.182,182,56,"SELECT 
+    (SELECT COUNT(DISTINCT ClientID) FROM customers WHERE MonetaryUnit = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT ClientID) FROM customers WHERE MonetaryUnit = 'CZK') AS ratio",1,1.215,184,54,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'CZK') AS eur_to_czk_ratio
+FROM customers
+LIMIT 1",0,1,7.5953,268,63,SELECT (SELECT COUNT(DISTINCT ClientID) FROM customers WHERE MonetaryUnit = 'EUR') * 1.0 / (SELECT COUNT(DISTINCT ClientID) FROM customers WHERE MonetaryUnit = 'CZK') AS eur_to_czk_ratio,ast,valid,1,1.2651,374,55,openai_compat
+evo_cr_01472,COLUMN_RENAME,debit_card_specializing,1472,"In 2012, who had the least consumption in LAM?",1,"SELECT y.CustomerID
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,3.1475,178,61,"SELECT c.ClientID
+FROM customers c
+JOIN yearmonth ym ON c.ClientID = ym.ClientID
+WHERE c.Segment = 'LAM' AND ym.Date LIKE '2012%'
+GROUP BY c.ClientID
+ORDER BY SUM(ym.UsageAmount) ASC
+LIMIT 1",1,1.4116,180,63,"SELECT y.CustomerID
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,1,1.4048,270,61,"SELECT y.ClientID 
+FROM yearmonth AS y 
+JOIN customers AS c ON y.ClientID = c.ClientID 
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM' 
+GROUP BY y.ClientID 
+ORDER BY SUM(y.UsageAmount) ASC 
+LIMIT 1",ast,silent_failure_suspected,1,1.2759,382,65,openai_compat
+evo_cr_01473,COLUMN_RENAME,debit_card_specializing,1473,What was the average monthly consumption of customers in SME for the year 2013?,0,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%'",0,1.4843,181,50,"SELECT AVG(ym.UsageAmount) AS AverageMonthlyConsumption
+FROM yearmonth ym
+JOIN customers c ON ym.ClientID = c.ClientID
+WHERE c.MarketSegment = 'SME' AND ym.Date LIKE '2013-%'",0,1.2421,184,53,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%'",0,1,1.538,262,51,"SELECT AVG(y.UsageAmount) AS AverageMonthlyConsumption 
+FROM yearmonth AS y 
+JOIN customers AS c ON y.ClientID = c.ClientID 
+WHERE c.MarketSegment = 'SME' AND y.Date LIKE '2013-%'",ast,valid,0,1.3152,428,54,openai_compat
+evo_cr_01020,COLUMN_RENAME,european_football_2,1020,Which player has the highest overall rating? Indicate the player's api id.,1,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1.2733,1095,24,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY total_rating DESC 
+LIMIT 1",1,1.3425,1094,24,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1,1.2222,1149,24,SELECT player_api_id FROM Player_Attributes ORDER BY total_rating DESC LIMIT 1,ast,valid,1,1.3992,1355,21,openai_compat
+evo_cr_01021,COLUMN_RENAME,european_football_2,1021,What is the height of the tallest player? Indicate his name.,0,"SELECT p.player_name, p.height
+FROM Player p
+WHERE p.height = (SELECT MAX(height) FROM Player)",0,1.2101,1094,28,"SELECT player_name, player_height 
+FROM Player 
+WHERE player_height = (SELECT MAX(player_height) FROM Player)",0,1.034,1092,27,"SELECT p.player_name, p.height
+FROM Player p
+WHERE p.height = (SELECT MAX(height) FROM Player WHERE height IS NOT NULL)",0,1,1.2283,1152,33,"SELECT p.player_name, p.player_height FROM Player AS p WHERE p.player_height = (SELECT MAX(player_height) FROM Player)",ast,valid,0,1.0489,1231,30,openai_compat
+evo_cr_01022,COLUMN_RENAME,european_football_2,1022,What is the preferred foot when attacking of the player with the lowest potential?,0,"SELECT preferred_foot 
+FROM Player_Attributes 
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,2.0637,1095,28,"SELECT dominant_foot 
+FROM Player_Attributes 
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,1.1464,1094,28,"SELECT preferred_foot 
+FROM Player_Attributes 
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)
+LIMIT 1",0,1,1.4425,1154,32,SELECT dominant_foot FROM Player_Attributes WHERE potential = (SELECT MIN(potential) FROM Player_Attributes),ast,valid,0,0.0877,0,0,openai_compat
+evo_cr_01023,COLUMN_RENAME,european_football_2,1023,"Among the players with an overall rating between 60 to 65, how many players whose going to be in all of your attack moves instead of defensing?",0,"SELECT COUNT(DISTINCT player_api_id) 
+FROM Player_Attributes 
+WHERE overall_rating BETWEEN 60 AND 65 
+AND attacking_work_rate = 'high' 
+AND defensive_work_rate = 'low'",0,2.0967,1112,46,"SELECT COUNT(DISTINCT pa.player_api_id) 
+FROM Player_Attributes pa
+WHERE pa.overall_rating BETWEEN 60 AND 65 
+AND pa.attacking_work_rate = 'high' 
+AND pa.defensive_work_rate = 'low'",0,1.4119,1113,54,"SELECT COUNT(DISTINCT player_api_id) 
+FROM Player_Attributes 
+WHERE overall_rating BETWEEN 60 AND 65 
+AND attacking_work_rate = 'high' 
+AND defensive_work_rate = 'low'",0,0,0.0447,0,0,SELECT COUNT(DISTINCT player_api_id) FROM Player_Attributes WHERE overall_rating BETWEEN 60 AND 65 AND attacking_work_rate = 'high' AND defensive_work_rate = 'low',ast,valid,0,0.0801,0,0,openai_compat
+evo_cr_00089,COLUMN_RENAME,financial,89,How many accounts who choose issuance after transaction are staying in East Bohemia region?,0,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN client c ON d.client_id = c.client_id
+JOIN district dis ON c.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,2.0471,302,76,"SELECT COUNT(DISTINCT a.customer_id) 
+FROM account a
+JOIN district d ON a.region_id = d.region_id
+JOIN disp dp ON a.customer_id = dp.account_id
+JOIN card c ON dp.disp_id = c.disp_id
+WHERE c.issued > a.date AND d.A2 = 'East Bohemia'",0,1.158,304,74,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN client c ON d.client_id = c.client_id
+JOIN district dis ON a.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1,1.9192,409,76,"SELECT COUNT(DISTINCT a.customer_id) 
+FROM account AS a 
+JOIN disp AS d ON a.customer_id = d.client_id 
+JOIN client AS c ON d.client_id = c.client_id 
+JOIN district AS dis ON a.region_id = dis.region_id 
+WHERE a.transaction_type = 'issuance after transaction' 
+AND dis.A2 = 'East Bohemia'",ast,silent_failure_suspected,0,10.798,1078,81,openai_compat
+evo_cr_00090,COLUMN_RENAME,financial,90,How many accounts who have region in Prague are eligible for loans?,0,"SELECT COUNT(DISTINCT account.account_id) 
+FROM account
+JOIN district ON account.district_id = district.district_id
+WHERE district.A2 = 'Prague'
+AND account.account_id NOT IN (
+    SELECT account_id 
+    FROM loan 
+    WHERE status IN ('A', 'B', 'C')
+)",0,3.2921,298,69,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+WHERE d.A2 = 'Prague'
+AND NOT EXISTS (
+    SELECT 1
+    FROM loan l
+    WHERE l.account_id = a.account_id
+)",0,1.7502,303,65,"SELECT COUNT(DISTINCT account.account_id) 
+FROM account
+JOIN district ON account.district_id = district.district_id
+WHERE district.A3 = 'Prague'
+AND account.account_id NOT IN (
+    SELECT account_id 
+    FROM loan 
+    WHERE status IN ('A', 'B', 'C')
+)",0,1,5.9719,398,69,"SELECT COUNT(DISTINCT account.account_id) 
+FROM account 
+JOIN district ON account.district_id = district.district_id 
+WHERE district.customer_name = 'Prague' 
+AND NOT account.account_id IN (
+    SELECT account_id 
+    FROM loan 
+    WHERE loan_status IN ('A', 'B', 'C')
+)",ast,silent_failure_suspected,0,1.6437,610,71,openai_compat
+evo_cr_00091,COLUMN_RENAME,financial,91,"The average unemployment ratio of 1995 and 1996, which one has higher percentage?",1,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN A9 END) > AVG(CASE WHEN A5 LIKE '1996%' THEN A9 END) 
+        THEN '1995' 
+        ELSE '1996' 
+    END AS year_with_higher_unemployment
+FROM district
+WHERE A5 LIKE '1995%' OR A5 LIKE '1996%'",1,2.7694,304,89,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN CAST(SUBSTR(A5, 6) AS REAL) END) > AVG(CASE WHEN A5 LIKE '1996%' THEN CAST(SUBSTR(A5, 6) AS REAL) END) 
+        THEN '1995' 
+        ELSE '1996' 
+    END AS year_with_higher_unemployment
+FROM district
+WHERE A5 LIKE '1995%' OR A5 LIKE '1996%'",1,2.6451,304,111,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN A9 END) > AVG(CASE WHEN A5 LIKE '1996%' THEN A9 END) 
+        THEN '1995' 
+        ELSE '1996' 
+    END AS year_with_higher_unemployment
+FROM district
+WHERE A5 LIKE '1995%' OR A5 LIKE '1996%'",1,0,0.0008,0,0,SELECT CASE WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN A9 END) > AVG(CASE WHEN A5 LIKE '1996%' THEN A9 END) THEN '1995' ELSE '1996' END AS year_with_higher_unemployment FROM district WHERE A5 LIKE '1995%' OR A5 LIKE '1996%',ast,valid,1,0.0799,0,0,openai_compat
+evo_cr_00092,COLUMN_RENAME,financial,92,List out the no. of districts that have female average salary is more than 6000 but less than 10000?,0,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,2.64,310,112,"SELECT COUNT(DISTINCT d.region_id) 
+FROM district d
+JOIN client c ON d.region_id = c.region_id
+JOIN disp dp ON c.customer_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'female'
+GROUP BY d.region_id
+HAVING AVG(t.amount) > 6000 AND AVG(t.amount) < 10000",0,1.5689,312,99,"SELECT COUNT(DISTINCT district.district_id)
+FROM district
+JOIN client ON district.district_id = client.district_id
+JOIN disp ON client.client_id = disp.client_id
+JOIN account ON disp.account_id = account.account_id
+JOIN trans ON account.account_id = trans.account_id
+WHERE client.gender = 'F'
+GROUP BY district.district_id
+HAVING AVG(CASE WHEN trans.type = 'credit' THEN trans.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1,1.3865,454,106,"SELECT COUNT(DISTINCT d.region_id) 
+FROM district AS d 
+JOIN client AS c ON d.region_id = c.region_id 
+JOIN disp AS dp ON c.customer_id = dp.client_id 
+JOIN account AS a ON dp.account_id = a.account_id 
+JOIN trans AS t ON a.account_id = t.account_id 
+WHERE c.gender = 'F' 
+GROUP BY d.region_id 
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",ast,silent_failure_suspected,0,2.5997,841,114,openai_compat
+evo_cr_00846,COLUMN_RENAME,formula_1,846,Please list the reference names of the drivers who are eliminated in the first period in race number 20.,0,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1.293,458,46,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.id = d.id
+WHERE q.eventRaceId = 20 AND q.qualifyingTime2 IS NULL",0,2.2015,461,40,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+JOIN races r ON q.raceId = r.raceId
+WHERE r.round = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1,1.6624,536,58,"SELECT d.driverRef 
+FROM qualifying AS q 
+JOIN drivers AS d ON q.id = d.id 
+JOIN races AS r ON q.eventRaceId = r.raceId 
+WHERE r.raceId = 20 AND q.qualifyingTime2 IS NULL AND q.qualifyingTime3 IS NULL",ast,valid,0,1.3613,904,65,openai_compat
+evo_cr_00847,COLUMN_RENAME,formula_1,847,What is the surname of the driver with the best lap time in race number 19 in the second qualifying period?,0,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 19 AND q.q2 IS NOT NULL
+ORDER BY q.q2 ASC
+LIMIT 1",0,1.3469,460,52,"SELECT d.last_name
+FROM qualifying q
+JOIN drivers d ON q.id = d.id
+WHERE q.eventRaceId = 19
+ORDER BY q.qualifyingTime2 ASC
+LIMIT 1",1,1.411,471,45,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+JOIN races r ON q.raceId = r.raceId
+WHERE r.round = 19 AND q.q2 IS NOT NULL
+ORDER BY q.q2 ASC
+LIMIT 1",0,1,1.1732,543,64,"SELECT d.last_name 
+FROM qualifying AS q 
+JOIN drivers AS d ON q.licenseNumber = d.licenseNumber 
+WHERE q.eventRaceId = 19 AND q.qualifyingTime2 IS NOT NULL 
+ORDER BY q.qualifyingTime2 ASC 
+LIMIT 1",ast,valid,0,1.1634,1198,60,openai_compat
+evo_cr_01312,COLUMN_RENAME,student_club,1312,What's Angela Sanders's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1.5734,269,41,"SELECT major.program_name
+FROM member
+JOIN major ON member.major_link = major.program_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",1,1.0999,268,40,"SELECT major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1,1.3394,341,40,"SELECT major.program_name 
+FROM member 
+JOIN major ON member.major_link = major.program_id 
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",ast,silent_failure_suspected,1,1.2812,572,40,openai_compat
+evo_cr_01313,COLUMN_RENAME,student_club,1313,How many students in the Student_Club are from the College of Engineering?,1,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'College of Engineering'",0,1.4456,278,33,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.program_id 
+WHERE major.school = 'College of Engineering'",1,1.1769,276,32,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'Engineering'",0,1,1.1003,342,31,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.program_id 
+WHERE major.school = 'College of Engineering'",ast,valid,1,1.0999,573,32,openai_compat
+evo_cr_01314,COLUMN_RENAME,student_club,1314,Please list the full names of the students in the Student_Club that come from the Art and Design Department.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1.0265,285,45,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.program_id
+WHERE ma.department = 'Art and Design'",0,0.9883,285,45,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1,1.2666,361,45,"SELECT m.first_name || ' ' || m.last_name AS full_name 
+FROM member AS m 
+JOIN major AS ma ON m.link_to_major = ma.program_id 
+WHERE ma.department = 'Art and Design'",ast,silent_failure_suspected,0,1.3256,464,47,openai_compat
+evo_cr_01315,COLUMN_RENAME,student_club,1315,"How many students of the Student_Club have attended the event ""Women's Soccer""?",1,"SELECT COUNT(DISTINCT a.link_to_member) 
+FROM attendance a
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = ""Women's Soccer""",0,0.9393,279,41,"SELECT COUNT(DISTINCT attendance.member_profile_link) 
+FROM attendance 
+JOIN event ON attendance.event_website = event.event_id 
+WHERE event.event_name = ""Women's Soccer""",1,1.2545,280,39,"SELECT COUNT(DISTINCT a.link_to_member) 
+FROM attendance a
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = ""Women's Soccer""",0,1,1.631,352,41,"SELECT COUNT(DISTINCT a.member_profile_link) 
+FROM attendance AS a 
+JOIN event AS e ON a.event_website = e.event_id 
+WHERE e.event_name = ""Women's Soccer""",ast,valid,1,1.0507,460,43,openai_compat
+evo_cr_00717,COLUMN_RENAME,superhero,717,Please list all the superpowers of 3-D Man.,1,"SELECT sp.power_name
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.hero_id
+JOIN superpower AS sp ON hp.power_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",0,1.4151,221,51,"SELECT sp.energy_type
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.character_id
+JOIN superpower AS sp ON hp.ability_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",1,1.2638,219,52,"SELECT superpower.power_name
+FROM superhero
+JOIN hero_power ON superhero.id = hero_power.hero_id
+JOIN superpower ON hero_power.power_id = superpower.id
+WHERE superhero.superhero_name = '3-D Man'",0,1,1.0941,303,49,"SELECT sp.energy_type 
+FROM superhero AS sh 
+JOIN hero_power AS hp ON sh.id = hp.character_id 
+JOIN superpower AS sp ON hp.ability_id = sp.id 
+WHERE sh.superhero_name = '3-D Man'",ast,valid,1,1.7205,494,52,openai_compat
+evo_cr_00718,COLUMN_RENAME,superhero,718,"How many superheroes have the super power of ""Super Strength""?",1,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1.2363,221,40,"SELECT COUNT(DISTINCT s.id) 
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.character_id
+JOIN superpower sp ON hp.ability_id = sp.identifier
+WHERE sp.energy_type = 'Super Strength'",1,1.3164,221,51,"SELECT COUNT(DISTINCT hero_power.hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1,1.1833,291,42,"SELECT COUNT(DISTINCT character_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.ability_id = superpower.identifier 
+WHERE superpower.energy_type = 'Super Strength'",ast,valid,1,1.0992,427,41,openai_compat
+evo_cr_00719,COLUMN_RENAME,superhero,719,"Among the superheroes with the super power of ""Super Strength"", how many of them have a height of over 200cm?",1,"SELECT COUNT(*)
+FROM superhero
+JOIN hero_power ON superhero.id = hero_power.hero_id
+JOIN superpower ON hero_power.power_id = superpower.id
+WHERE superpower.power_name = 'Super Strength' AND superhero.height_cm > 200",0,1.3208,234,54,"SELECT COUNT(*)
+FROM superhero
+JOIN hero_power ON superhero.identifier = hero_power.character_id
+JOIN superpower ON hero_power.power_id = superpower.identifier
+WHERE superpower.power_name = 'Super Strength' AND superhero.height_cm > 200",1,1.1353,228,54,"SELECT COUNT(*)
+FROM superhero
+JOIN hero_power ON superhero.rowid = hero_power.hero_id
+JOIN superpower ON hero_power.power_id = superpower.id
+WHERE superpower.power_name = 'Super Strength' AND superhero.height_cm > 200",0,1,1.6688,318,55,"SELECT COUNT(*) 
+FROM superhero 
+JOIN hero_power ON superhero.identifier = hero_power.character_id 
+JOIN superpower ON hero_power.power_id = superpower.identifier 
+WHERE superpower.power_name = 'Super Strength' 
+AND superhero.height_cm > 200",ast,valid,1,2.2893,653,55,openai_compat
+evo_cr_00720,COLUMN_RENAME,superhero,720,Please list the full names of all the superheroes with over 15 super powers.,0,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.power_id) > 15",0,1.2603,225,42,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.character_id
+GROUP BY s.id
+HAVING COUNT(hp.ability_id) > 15",0,0.9807,222,43,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.hero_id) > 15",0,1,1.2469,298,42,"SELECT s.full_name 
+FROM superhero AS s 
+JOIN hero_power AS hp ON s.id = hp.character_id 
+GROUP BY s.id 
+HAVING COUNT(hp.ability_id) > 15",ast,valid,0,1.3467,533,45,openai_compat
+evo_cr_01149,COLUMN_RENAME,thrombosis_prediction,1149,Are there more in-patient or outpatient who were male? What is the deviation in percentage?,0,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1.5211,329,100,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        Gender = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1.7145,332,100,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1,1.908,458,100,"WITH PatientCounts AS (
+    SELECT Admission, COUNT(*) AS Count 
+    FROM Patient 
+    WHERE Gender = 'Male' 
+    GROUP BY Admission
+), 
+TotalCount AS (
+    SELECT SUM(Count) AS Total 
+    FROM PatientCounts
+) 
+SELECT Admission, Count, (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage 
+FROM PatientCounts",ast,silent_failure_suspected,0,2.3608,585,84,openai_compat
+evo_cr_01150,COLUMN_RENAME,thrombosis_prediction,1150,What is the percentage of female patient were born after 1930?,0,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE SEX = 'female')) AS percentage
+FROM Patient
+WHERE SEX = 'female' AND Birthday > '1930-12-31'",0,1.0812,324,49,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE Gender = 'Female')) AS percentage
+FROM Patient
+WHERE Gender = 'Female' AND Birthday > '1930-12-31'",0,1.0831,324,49,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE SEX = 'Female')) AS percentage
+FROM Patient
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1,1.1952,402,49,SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE Gender = 'female')) AS percentage FROM Patient WHERE Gender = 'female' AND Birthday > '1930-12-31',ast,valid,0,0.0771,0,0,openai_compat
+evo_cr_01152,COLUMN_RENAME,thrombosis_prediction,1152,What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?,0,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM Patient
+WHERE Diagnosis = 'SLE'",0,2.308,331,72,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM 
+    Patient
+WHERE 
+    Diagnosis = 'SLE'",0,1.691,333,76,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM Patient
+WHERE Diagnosis = 'SLE'",0,0,0.0019,0,0,SELECT (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 / (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio FROM Patient WHERE Diagnosis = 'SLE',ast,valid,0,0.0803,0,0,openai_compat
+evo_cr_00195,COLUMN_RENAME,toxicology,195,What is the most common bond type?,1,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",1,1.4052,123,26,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",1,1.5509,123,26,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",1,0,0.0091,0,0,SELECT bond_type FROM bond GROUP BY bond_type ORDER BY COUNT(*) DESC LIMIT 1,ast,valid,1,0.0598,0,0,openai_compat
+evo_cr_00196,COLUMN_RENAME,toxicology,196,"In the non-carcinogenic molecules, how many contain chlorine atoms?",0,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1.2533,130,50,"SELECT COUNT(DISTINCT m.compound_id) 
+FROM molecule m
+JOIN atom a ON m.compound_id = a.compound_id
+WHERE m.classification = 'non-carcinogenic' AND a.chemical_element = 'chlorine'",0,1.5465,131,55,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1,1.4543,212,50,"SELECT COUNT(DISTINCT m.compound_id) 
+FROM molecule AS m 
+JOIN atom AS a ON m.compound_id = a.compound_id 
+WHERE m.classification <> 'carcinogenic' 
+AND a.chemical_element = 'chlorine'",ast,silent_failure_suspected,0,1.3723,372,56,openai_compat
+evo_cr_00197,COLUMN_RENAME,toxicology,197,Calculate the average number of oxygen atoms in single-bonded molecules.,0,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.441,129,90,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.compound_id
+    JOIN bond b ON m.molecule_id = b.compound_id
+    WHERE a.element = 'O' AND b.connection_type = 'single'
+    GROUP BY m.molecule_id
+)",0,3.8655,128,88,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN connected c ON a.atom_id = c.atom_id
+    JOIN bond b ON c.bond_id = b.bond_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1,2.0589,250,103,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.id) AS oxygen_count 
+    FROM molecule AS m 
+    JOIN atom AS a ON m.molecule_id = a.compound_id 
+    JOIN bond AS b ON m.molecule_id = b.compound_id 
+    WHERE a.element = 'O' AND b.connection_type = 'single' 
+    GROUP BY m.molecule_id
+)",ast,valid,0,1.8437,399,92,openai_compat
+evo_cr_00198,COLUMN_RENAME,toxicology,198,On average how many carcinogenic molecules are single bonded?,0,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.3076,126,84,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.compound_id, COUNT(b.connection_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.compound_id = b.compound_id
+    WHERE m.label = 'carcinogenic' AND b.link_type = 'single'
+    GROUP BY m.compound_id
+)",0,1.3457,126,79,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT b.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY b.molecule_id
+)",0,1,1.5795,242,84,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.compound_id, COUNT(DISTINCT b.connection_id) AS single_bond_count 
+    FROM molecule AS m 
+    JOIN bond AS b ON m.compound_id = b.compound_id 
+    WHERE m.label = 'carcinogenic' AND b.link_type = 'single' 
+    GROUP BY m.compound_id
+)",ast,valid,0,1.3011,501,85,openai_compat
+evo_tm_00002,TABLE_MERGE,california_schools,2,Please list the zip code of all the charter schools in Fresno County Office of Education.,0,"SELECT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.County Name = 'Fresno County Office of Education'
+AND f.""Charter School (Y/N)"" = 1",0,1.3875,552,67,"SELECT DISTINCT mt.Zip 
+FROM merged_table mt
+WHERE mt.County Name = 'Fresno' 
+  AND mt.Charter School (Y/N) = 1",0,1.7081,545,40,"SELECT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.""County Name"" = 'Fresno County Office of Education'
+AND f.""Charter School (Y/N)"" = 1",0,1,2.0073,649,68,"SELECT m.Zip 
+FROM merged_table m
+WHERE m.County = 'Fresno' 
+AND m.""County Name"" LIKE '%Fresno County Office of Education%'
+AND m.""Charter School (Y/N)"" = 1",parse_error,silent_failure_suspected,0,2.37,1529,108,openai_compat
+evo_tm_00003,TABLE_MERGE,california_schools,3,What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?,1,"SELECT s.MailStreet 
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,1.1028,559,46,"SELECT MailStreet 
+FROM merged_table 
+ORDER BY `FRPM Count (K-12)` DESC 
+LIMIT 1",1,1.4197,552,29,"SELECT s.MailStreet 
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,1,1.7043,635,46,"SELECT MailStreet FROM merged_table ORDER BY ""FRPM Count (K-12)"" DESC LIMIT 1",ast,silent_failure_suspected,1,1.2254,727,26,openai_compat
+evo_tm_00004,TABLE_MERGE,california_schools,4,Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.,0,"SELECT Phone 
+FROM schools 
+WHERE Charter = 1 
+  AND FundingType = 'Direct' 
+  AND OpenDate > '2000-01-01'",0,0.93,558,38,"SELECT Phone 
+FROM merged_table 
+WHERE Charter = 1 
+AND Charter Funding Type = 'Direct' 
+AND OpenDate > 20000101",0,0.9169,551,35,"SELECT Phone 
+FROM schools 
+WHERE Charter = 1 
+  AND FundingType = 'Direct' 
+  AND OpenDate > '2000-01-01'",0,1,1.2858,625,38,SELECT Phone FROM merged_table WHERE Charter = 1 AND FundingType = 'Direct' AND OpenDate > '2000-01-01',ast,silent_failure_suspected,0,0.9663,714,33,openai_compat
+evo_tm_00005,TABLE_MERGE,california_schools,5,How many schools with an average score in Math greater than 400 in the SAT test are exclusively virtual?,0,"SELECT COUNT(*)
+FROM satscores s
+JOIN schools sc ON s.cds = sc.CDSCode
+WHERE s.AvgScrMath > 400 AND sc.Virtual = 'Yes'",0,1.0981,556,42,"SELECT COUNT(*)
+FROM merged_table
+WHERE AvgScrMath > 400 AND Virtual = 'Yes'",0,0.9103,553,25,"SELECT COUNT(*)
+FROM satscores s
+JOIN schools sc ON s.cds = sc.CDSCode
+WHERE s.AvgScrMath > 400 AND sc.Virtual = '1'",0,1,1.689,628,42,"SELECT COUNT(*) 
+FROM merged_table 
+WHERE AvgScrMath > 400 AND Virtual = 'Yes'",ast,silent_failure_suspected,0,0.9882,665,25,openai_compat
+evo_tm_00344,TABLE_MERGE,card_games,344,List all the mythic rarity print cards banned in gladiator format.,0,"SELECT c.name 
+FROM cards c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.rarity = 'Mythic' AND l.format = 'Gladiator' AND l.status = 'Banned'",0,1.4353,589,50,"SELECT name 
+FROM cards_legalities 
+WHERE rarity = 'mythic' 
+AND format = 'gladiator' 
+AND status = 'banned'",0,1.5443,582,38,"SELECT c.name 
+FROM ""cards"" c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.rarity = 'Mythic' AND l.format = 'Gladiator' AND l.status = 'Banned'",0,1,1.8299,668,52,"SELECT name 
+FROM cards_legalities 
+WHERE rarity = 'Mythic' 
+AND format LIKE '%Gladiator%' 
+AND status LIKE '%Banned%'",ast,silent_failure_suspected,0,2.8795,1571,72,openai_compat
+evo_tm_00345,TABLE_MERGE,card_games,345,"For artifact type of cards that do not have multiple faces on the same card, state its legalities status for vintage play format.",0,"SELECT c.name, l.status
+FROM cards c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.types LIKE '%Artifact%'
+  AND c.layout NOT IN ('transform', 'modal_dfc', 'meld', 'adventure', 'split', 'flip')
+  AND l.format = 'Vintage'",0,2.2894,601,68,"SELECT cl.name, cl.status
+FROM cards_legalities cl
+WHERE cl.types LIKE '%Artifact%'
+  AND cl.layout != 'transform'
+  AND cl.format = 'Vintage'",0,1.6004,606,41,"SELECT c.name, l.status
+FROM cards c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.types LIKE '%Artifact%'
+  AND c.layout NOT IN ('transform', 'modal_dfc', 'meld', 'adventure', 'split', 'flip')
+  AND l.format = 'Vintage'",0,1,1.8523,698,68,"SELECT cl.name, cl.status 
+FROM cards_legalities AS cl 
+WHERE cl.types LIKE '%Artifact%' 
+AND NOT cl.layout IN ('transform', 'modal_dfc', 'meld', 'adventure', 'split', 'flip') 
+AND cl.format = 'Vintage'",ast,valid,0,1.5928,743,61,openai_compat
+evo_tm_00346,TABLE_MERGE,card_games,346,List all the card id and artist with unknown power which are legal for commander play format.,0,"SELECT c.id, c.artist
+FROM cards c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.power IS NULL AND l.format = 'Commander' AND l.status = 'Legal'",0,1.3992,593,45,"SELECT id, artist 
+FROM cards_legalities 
+WHERE power IS NULL AND format = 'commander' AND status = 'legal'",0,1.7286,586,32,"SELECT c.id, c.artist
+FROM cards c
+JOIN legalities l ON c.uuid = l.uuid
+WHERE c.power IS NULL AND l.format = 'Commander' AND l.status = 'Legal'",0,1,2.0331,667,45,"SELECT id, artist 
+FROM cards_legalities 
+WHERE power IS NULL 
+AND format LIKE '%Commander%' 
+AND status LIKE '%Legal%'",ast,valid,0,2.8374,1569,62,openai_compat
+evo_tm_00537,TABLE_MERGE,codebase_community,537,How many posts does the user csgillespie own?,1,SELECT COUNT(*) FROM posts WHERE OwnerUserId = (SELECT Id FROM users WHERE DisplayName = 'csgillespie'),0,1.1671,396,29,"SELECT COUNT(*) 
+FROM merged_table 
+WHERE OwnerDisplayName = 'csgillespie'",0,1.413,386,23,SELECT COUNT(*) FROM posts WHERE OwnerUserId = (SELECT Id FROM users WHERE DisplayName = 'csgillespie'),0,1,1.4486,454,29,"SELECT COUNT(*) 
+FROM merged_table 
+WHERE OwnerUserId = (SELECT Id FROM merged_table WHERE DisplayName = 'csgillespie')",ast,silent_failure_suspected,1,1.5282,484,33,openai_compat
+evo_tm_00538,TABLE_MERGE,codebase_community,538,Please list the titles of the posts owned by the user csgillespie?,1,"SELECT p.Title 
+FROM posts p
+JOIN users u ON p.OwnerUserId = u.Id
+WHERE u.DisplayName = 'csgillespie'",0,1.4516,400,35,"SELECT Title 
+FROM posts_users 
+WHERE OwnerDisplayName = 'csgillespie'",0,1.1619,388,22,"SELECT p.Title 
+FROM posts p
+JOIN users u ON p.OwnerUserId = u.Id
+WHERE u.DisplayName = 'csgillespie'",0,1,1.4782,464,35,SELECT Title FROM posts_users WHERE DisplayName = 'csgillespie',ast,valid,1,1.1906,547,19,openai_compat
+evo_tm_00539,TABLE_MERGE,codebase_community,539,"Who is the owner of the post ""Eliciting priors from experts""?",0,"SELECT OwnerDisplayName 
+FROM posts 
+WHERE Title = 'Eliciting priors from experts'",0,1.201,400,24,"SELECT OwnerDisplayName 
+FROM merged_table 
+WHERE Title = 'Eliciting priors from experts'",0,1.3309,390,25,"SELECT OwnerDisplayName 
+FROM posts 
+WHERE Title = 'Eliciting priors from experts'",0,1,3.8558,453,24,SELECT OwnerDisplayName FROM merged_table WHERE Title = 'Eliciting priors from experts',ast,silent_failure_suspected,0,1.22,481,23,openai_compat
+evo_tm_00540,TABLE_MERGE,codebase_community,540,What is the title of the post that is owned by csgillespie and has the highest popularity?,1,"SELECT Title
+FROM posts
+WHERE OwnerUserId = (SELECT Id FROM users WHERE DisplayName = 'csgillespie')
+ORDER BY (Score + ViewCount) DESC
+LIMIT 1",0,1.7215,405,44,"SELECT Title 
+FROM merged_table 
+WHERE OwnerDisplayName = 'csgillespie' 
+ORDER BY (ViewCount_posts + CommentCount + FavoriteCount) DESC 
+LIMIT 1",0,1.2869,395,42,"SELECT Title
+FROM posts
+WHERE OwnerUserId = (SELECT Id FROM users WHERE DisplayName = 'csgillespie')
+ORDER BY (Score + ViewCount) DESC
+LIMIT 1",0,1,1.4678,478,44,"SELECT Title 
+FROM merged_table 
+WHERE OwnerUserId = (SELECT Id FROM merged_table WHERE DisplayName = 'csgillespie') 
+ORDER BY (Score + ViewCount_posts) DESC 
+LIMIT 1",ast,silent_failure_suspected,1,1.2658,505,48,openai_compat
+evo_tm_01472,TABLE_MERGE,debit_card_specializing,1472,"In 2012, who had the least consumption in LAM?",1,"SELECT y.CustomerID
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,1.2739,169,61,"SELECT CustomerID
+FROM customers_yearmonth
+WHERE Segment = 'LAM' AND Date LIKE '2012%'
+GROUP BY CustomerID
+ORDER BY SUM(Consumption) ASC
+LIMIT 1",1,1.1352,163,43,"SELECT y.CustomerID
+FROM transactions_1k t
+JOIN customers c ON t.CustomerID = c.CustomerID
+JOIN yearmonth y ON t.CustomerID = y.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,1,1.3749,260,76,"SELECT CustomerID 
+FROM customers_yearmonth 
+WHERE Date LIKE '2012%' AND Segment = 'LAM' 
+GROUP BY CustomerID 
+ORDER BY SUM(Consumption) ASC 
+LIMIT 1",ast,silent_failure_suspected,1,1.2133,354,44,openai_compat
+evo_tm_01473,TABLE_MERGE,debit_card_specializing,1473,What was the average monthly consumption of customers in SME for the year 2013?,0,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%'",0,1.9637,172,50,"SELECT AVG(cy.Consumption) AS AverageMonthlyConsumption
+FROM customers_yearmonth cy
+WHERE cy.Segment = 'SME' AND strftime('%Y', cy.Date) = '2013'",0,1.6875,166,45,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND strftime('%Y', y.Date) = '2013'",0,1,1.2814,252,55,"SELECT AVG(cy.Consumption) AS AverageMonthlyConsumption 
+FROM customers_yearmonth AS cy 
+WHERE cy.Segment = 'SME' AND cy.Date LIKE '2013-%'",ast,valid,0,1.2297,348,41,openai_compat
+evo_tm_01474,TABLE_MERGE,debit_card_specializing,1474,"Which customers, paying in CZK, consumed the most gas in 2011?",1,"SELECT c.CustomerID
+FROM customers c
+JOIN yearmonth ym ON c.CustomerID = ym.CustomerID
+WHERE c.Currency = 'CZK' AND ym.Date LIKE '2011%'
+GROUP BY c.CustomerID
+ORDER BY SUM(ym.Consumption) DESC
+LIMIT 1",0,1.1152,172,62,"SELECT c.CustomerID
+FROM customers_yearmonth c
+JOIN transactions_1k t ON c.CustomerID = t.CustomerID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE c.Currency = 'CZK' 
+  AND strftime('%Y', t.Date) = '2011'
+  AND p.Description LIKE '%gas%'
+GROUP BY c.CustomerID
+ORDER BY SUM(t.Amount) DESC
+LIMIT 1",0,1.8046,166,92,"SELECT c.CustomerID
+FROM customers c
+JOIN yearmonth ym ON c.CustomerID = ym.CustomerID
+WHERE c.Currency = 'CZK' AND ym.Date LIKE '2011%'
+GROUP BY c.CustomerID
+ORDER BY SUM(ym.Consumption) DESC
+LIMIT 1",0,1,1.3244,263,62,"SELECT CustomerID 
+FROM customers_yearmonth 
+WHERE Currency = 'CZK' AND Date LIKE '2011%' 
+GROUP BY CustomerID 
+ORDER BY SUM(Consumption) DESC 
+LIMIT 1",ast,silent_failure_suspected,1,1.2303,358,45,openai_compat
+evo_tm_01475,TABLE_MERGE,debit_card_specializing,1475,"How many customers in KAM had a consumption of less than 30,000 for the year 2012?",0,"SELECT COUNT(DISTINCT y.CustomerID) 
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'KAM' 
+  AND y.Consumption < 30000 
+  AND y.Date LIKE '2012%'",0,1.1462,178,60,"SELECT COUNT(DISTINCT CustomerID) 
+FROM customers_yearmonth 
+WHERE Segment = 'KAM' 
+  AND Consumption < 30000 
+  AND Date LIKE '2012%'",0,1.2174,172,43,"SELECT COUNT(DISTINCT y.CustomerID) 
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'KAM' 
+  AND y.Consumption < 30000 
+  AND y.Date LIKE '2012%'",0,1,1.4051,269,60,"SELECT COUNT(DISTINCT CustomerID) 
+FROM customers_yearmonth 
+WHERE Segment = 'KAM' AND Consumption < 30000 AND Date LIKE '2012%'",ast,valid,0,1.3539,361,38,openai_compat
+evo_tm_01026,TABLE_MERGE,european_football_2,1026,Which home team had lost the fewest matches in the 2016 season?,0,"SELECT T.team_long_name
+FROM Team T
+JOIN Match M ON T.team_api_id = M.home_team_api_id
+WHERE M.season = '2016'
+GROUP BY T.team_long_name
+ORDER BY SUM(CASE WHEN M.home_team_goal < M.away_team_goal THEN 1 ELSE 0 END) ASC
+LIMIT 1",0,1.4487,1087,75,"SELECT team_long_name
+FROM MatchTeam
+WHERE season = '2016' AND home_team_goal < away_team_goal
+GROUP BY home_team_api_id
+ORDER BY COUNT(*) ASC
+LIMIT 1",0,1.2099,950,46,"SELECT T.team_long_name
+FROM Team AS T
+JOIN Match AS M ON T.team_api_id = M.home_team_api_id
+WHERE M.season = '2016'
+GROUP BY T.team_long_name
+ORDER BY SUM(CASE WHEN M.home_team_goal < M.away_team_goal THEN 1 ELSE 0 END) ASC
+LIMIT 1",0,1,1.4919,1191,77,"SELECT team_long_name 
+FROM MatchTeam 
+WHERE season = '2016' 
+GROUP BY team_long_name 
+ORDER BY SUM(CASE WHEN home_team_goal < away_team_goal THEN 1 ELSE 0 END) ASC 
+LIMIT 1",ast,silent_failure_suspected,0,1.62,1091,54,openai_compat
+evo_tm_01027,TABLE_MERGE,european_football_2,1027,Indicate the full names of the top 10 players with the highest number of penalties.,0,"SELECT p.player_name
+FROM Player p
+JOIN Player_Attributes pa ON p.player_api_id = pa.player_api_id
+GROUP BY p.player_name
+ORDER BY SUM(pa.penalties) DESC
+LIMIT 10",0,1.2871,1089,48,"SELECT p.player_name
+FROM player_info p
+GROUP BY p.player_api_id
+ORDER BY SUM(p.penalties) DESC
+LIMIT 10",0,1.0502,1070,34,"SELECT p.player_name
+FROM Player p
+JOIN Player_Attributes pa ON p.player_api_id = pa.player_api_id
+GROUP BY p.player_name
+ORDER BY SUM(pa.penalties) DESC
+LIMIT 10",0,1,1.2479,1166,48,"SELECT player_name 
+FROM player_info 
+GROUP BY player_name 
+ORDER BY SUM(penalties) DESC 
+LIMIT 10",ast,silent_failure_suspected,0,1.131,1246,30,openai_compat
+evo_tm_01028,TABLE_MERGE,european_football_2,1028,"In Scotland Premier League, which away team won the most during the 2010 season?",0,"SELECT T.team_long_name, COUNT(*) AS wins
+FROM Match M
+JOIN League L ON M.league_id = L.id
+JOIN Country C ON M.country_id = C.id
+JOIN Team T ON M.away_team_api_id = T.team_api_id
+WHERE C.name = 'Scotland' AND L.name = 'Premier League' AND M.season = '2010/2011' AND M.away_team_goal > M.home_team_goal
+GROUP BY T.team_long_name
+ORDER BY wins DESC
+LIMIT 1",0,2.3332,1089,114,"SELECT mt.away_team_api_id, COUNT(*) AS wins
+FROM match_team mt
+JOIN League l ON mt.league_id = l.id
+JOIN Country c ON l.country_id = c.id
+WHERE c.name = 'Scotland' AND l.name = 'Premier League' AND mt.season = '2010' AND mt.away_team_goal > mt.home_team_goal
+GROUP BY mt.away_team_api_id
+ORDER BY wins DESC
+LIMIT 1",0,1.5244,952,100,"SELECT T.team_long_name, COUNT(*) AS wins
+FROM 'Match' M
+JOIN League L ON M.league_id = L.id
+JOIN Country C ON M.country_id = C.id
+JOIN Team T ON M.away_team_api_id = T.team_api_id
+WHERE C.name = 'Scotland' AND L.name = 'Premier League' AND M.season = '2010/2011' AND M.away_team_goal > M.home_team_goal
+GROUP BY T.team_long_name
+ORDER BY wins DESC
+LIMIT 1",0,1,1.9866,1232,116,"SELECT T.team_long_name, COUNT(*) AS wins 
+FROM match_team AS M 
+JOIN League AS L ON M.league_id = L.id 
+JOIN Country AS C ON M.country_id = C.id 
+WHERE C.name = 'Scotland' 
+AND L.name = 'Premier League' 
+AND M.season = '2010/2011' 
+AND M.away_team_goal > M.home_team_goal 
+GROUP BY M.away_team_api_id, T.team_long_name 
+ORDER BY wins DESC 
+LIMIT 1",ast,execution_error,0,1.5546,1131,112,openai_compat
+evo_tm_00089,TABLE_MERGE,financial,89,How many accounts who choose issuance after transaction are staying in East Bohemia region?,0,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN card c ON d.disp_id = c.disp_id
+JOIN district dis ON a.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1.7499,302,78,"SELECT COUNT(DISTINCT da.account_id)
+FROM district_account da
+JOIN disp d ON da.account_id = d.account_id
+JOIN card c ON d.disp_id = c.disp_id
+JOIN client cl ON d.client_id = cl.client_id
+WHERE da.frequency = 'issuance after transaction' 
+AND cl.district_id IN (
+    SELECT district_id 
+    FROM district_account 
+    WHERE A2 = 'East Bohemia'
+)",0,1.9701,296,96,"SELECT COUNT(DISTINCT a.account_id)
+FROM ""account"" a
+JOIN disp d ON a.account_id = d.account_id
+JOIN card c ON d.disp_id = c.disp_id
+JOIN district dis ON a.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1,1.3343,409,80,"SELECT COUNT(DISTINCT da.account_id) 
+FROM district_account AS da 
+JOIN disp AS d ON da.account_id = d.account_id 
+JOIN card AS c ON d.disp_id = c.disp_id 
+WHERE da.frequency = 'issuance after transaction' 
+AND da.A2 = 'East Bohemia'",ast,silent_failure_suspected,0,1.268,501,70,openai_compat
+evo_tm_00092,TABLE_MERGE,financial,92,List out the no. of districts that have female average salary is more than 6000 but less than 10000?,0,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1.9647,310,112,"SELECT COUNT(DISTINCT cd.district_id) 
+FROM client_district cd
+WHERE cd.gender = 'F' 
+GROUP BY cd.district_id
+HAVING AVG(cd.A4) > 6000 AND AVG(cd.A4) < 10000",0,1.3041,305,58,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1,1.9117,451,112,"SELECT COUNT(DISTINCT cd.district_id) 
+FROM client_district AS cd 
+JOIN disp AS dp ON cd.client_id = dp.client_id 
+JOIN account AS a ON dp.account_id = a.account_id 
+JOIN trans AS t ON a.account_id = t.account_id 
+WHERE cd.gender LIKE 'F%' 
+GROUP BY cd.district_id 
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",ast,silent_failure_suspected,0,4.769,1141,210,openai_compat
+evo_tm_00093,TABLE_MERGE,financial,93,How many male customers who are living in North Bohemia have average salary greater than 8000?,0,"SELECT COUNT(DISTINCT client.client_id)
+FROM client
+JOIN district ON client.district_id = district.district_id
+JOIN disp ON client.client_id = disp.client_id
+JOIN account ON disp.account_id = account.account_id
+JOIN trans ON account.account_id = trans.account_id
+WHERE client.gender = 'male'
+AND district.A2 = 'North Bohemia'
+GROUP BY client.client_id
+HAVING AVG(trans.amount) > 8000",0,2.7116,306,97,"SELECT COUNT(DISTINCT cd.client_id)
+FROM client_district cd
+JOIN disp d ON cd.client_id = d.client_id
+JOIN account a ON d.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE cd.gender = 'male'
+  AND cd.A2 = 'North Bohemia'
+GROUP BY cd.client_id
+HAVING AVG(t.amount) > 8000",0,1.9416,301,91,"SELECT COUNT(DISTINCT client.client_id)
+FROM client
+JOIN district ON client.district_id = district.district_id
+JOIN disp ON client.client_id = disp.client_id
+JOIN account ON disp.account_id = account.account_id
+JOIN trans ON account.account_id = trans.account_id
+WHERE client.gender = 'male'
+AND district.A2 = 'North Bohemia'
+GROUP BY client.client_id
+HAVING AVG(trans.amount) > 8000",0,1,1.8156,432,97,"SELECT COUNT(DISTINCT client_district.client_id) 
+FROM client_district 
+JOIN disp ON client_district.client_id = disp.client_id 
+JOIN account ON disp.account_id = account.account_id 
+JOIN trans ON account.account_id = trans.account_id 
+WHERE client_district.gender = 'male' 
+AND client_district.A2 = 'North Bohemia' 
+GROUP BY client_district.client_id 
+HAVING AVG(trans.amount) > 8000",ast,silent_failure_suspected,0,1.8727,522,99,openai_compat
+evo_tm_00846,TABLE_MERGE,formula_1,846,Please list the reference names of the drivers who are eliminated in the first period in race number 20.,0,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1.2317,458,46,"SELECT DISTINCT dq.driverRef
+FROM drivers_qualifying dq
+WHERE dq.raceId = 20 AND dq.q1 IS NOT NULL AND dq.q2 IS NULL",0,1.3031,459,39,"SELECT d.driverRef
+FROM results r
+JOIN drivers d ON r.driverId = d.driverId
+WHERE r.raceId = 20 AND r.position IS NULL",0,1,0.9197,533,39,"SELECT dq.driverRef 
+FROM drivers_qualifying AS dq 
+WHERE dq.raceId = 20 AND dq.q2 IS NULL AND dq.q3 IS NULL",ast,valid,0,0.9195,576,38,openai_compat
+evo_tm_00847,TABLE_MERGE,formula_1,847,What is the surname of the driver with the best lap time in race number 19 in the second qualifying period?,0,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 19 AND q.q2 IS NOT NULL
+ORDER BY CAST(REPLACE(q.q2, ':', '') AS INTEGER)
+LIMIT 1",0,2.1056,460,60,"SELECT dq.surname
+FROM drivers_qualifying dq
+JOIN races r ON dq.raceId = r.raceId
+WHERE r.round = 19 AND dq.q2 IS NOT NULL
+ORDER BY CAST(REPLACE(dq.q2, ':', '') AS INTEGER)
+LIMIT 1",0,2.0474,461,64,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+JOIN races r ON q.raceId = r.raceId
+WHERE r.round = 19 AND q.q2 IS NOT NULL
+ORDER BY CAST(REPLACE(q.q2, ':', '') AS INTEGER)
+LIMIT 1",0,1,1.3236,549,72,"SELECT dq.surname 
+FROM drivers_qualifying AS dq 
+WHERE dq.raceId = 19 AND dq.q2 IS NOT NULL 
+ORDER BY CAST(REPLACE(dq.q2, ':', '') AS INTEGER) 
+LIMIT 1",ast,valid,0,1.2845,591,54,openai_compat
+evo_tm_01312,TABLE_MERGE,student_club,1312,What's Angela Sanders's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,0.9903,269,41,"SELECT major_name 
+FROM member_major 
+WHERE first_name = 'Angela' AND last_name = 'Sanders'",1,0.7945,267,27,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1,1.3924,339,41,SELECT major_name FROM member_major WHERE first_name = 'Angela' AND last_name = 'Sanders',ast,silent_failure_suspected,1,1.0107,374,25,openai_compat
+evo_tm_01313,TABLE_MERGE,student_club,1313,How many students in the Student_Club are from the College of Engineering?,1,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'College of Engineering'",0,1.0906,278,33,"SELECT COUNT(DISTINCT member_id) 
+FROM member_major 
+WHERE college = 'College of Engineering'",1,1.2471,276,25,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'Engineering'",0,1,1.5708,340,31,"SELECT COUNT(*) 
+FROM member_major 
+WHERE college = 'College of Engineering'",ast,valid,1,1.1181,375,20,openai_compat
+evo_tm_01314,TABLE_MERGE,student_club,1314,Please list the full names of the students in the Student_Club that come from the Art and Design Department.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1.0477,285,45,"SELECT first_name || ' ' || last_name AS full_name
+FROM member_major
+WHERE department = 'Art and Design'",0,1.0157,283,29,"SELECT member.first_name || ' ' || member.last_name AS full_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE major.department = 'Art and Design'",0,1,1.1779,359,43,"SELECT mm.first_name || ' ' || mm.last_name AS full_name 
+FROM member_major AS mm 
+WHERE mm.department = 'Art and Design'",ast,silent_failure_suspected,0,1.2164,396,34,openai_compat
+evo_tm_01315,TABLE_MERGE,student_club,1315,"How many students of the Student_Club have attended the event ""Women's Soccer""?",1,"SELECT COUNT(DISTINCT a.link_to_member) 
+FROM attendance a
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = ""Women's Soccer""",0,1.2266,279,41,"SELECT COUNT(DISTINCT link_to_member) 
+FROM event_attendance 
+WHERE event_name = ""Women's Soccer""",1,1.2199,278,27,"SELECT COUNT(DISTINCT a.link_to_member) 
+FROM attendance a
+JOIN event e ON a.link_to_event = e.event_id
+WHERE e.event_name = ""Women's Soccer""",0,1,1.1295,349,41,"SELECT COUNT(DISTINCT ea.link_to_member) 
+FROM event_attendance AS ea 
+WHERE ea.event_name = ""Women's Soccer""",ast,valid,1,3.3591,388,31,openai_compat
+evo_tm_00718,TABLE_MERGE,superhero,718,"How many superheroes have the super power of ""Super Strength""?",1,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1.6533,221,40,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_superpower 
+WHERE power_name = 'Super Strength'",1,1.0104,218,26,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1,1.4144,291,40,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_superpower 
+WHERE power_name = 'Super Strength'",ast,valid,1,0.9608,327,26,openai_compat
+evo_tm_01153,TABLE_MERGE,thrombosis_prediction,1153,What is the disease patient '30609' diagnosed with. List all the date of laboratory tests done for this patient.,1,"SELECT p.Diagnosis, l.Date 
+FROM Patient p 
+JOIN Laboratory l ON p.ID = l.ID 
+WHERE p.ID = 30609",0,1.0418,334,35,"SELECT Diagnosis, Date 
+FROM Patient_Laboratory 
+WHERE ID = 30609",1,1.1107,331,22,"SELECT e.Diagnosis, l.Date 
+FROM Examination e 
+JOIN Laboratory l ON e.ID = l.ID 
+WHERE e.ID = 30609",0,1,1.0486,398,35,"SELECT Diagnosis, Date FROM Patient_Laboratory WHERE ID = 30609",ast,valid,1,1.2706,499,20,openai_compat
+evo_tm_01154,TABLE_MERGE,thrombosis_prediction,1154,State the sex and birthday of patient ID '163109'. When was the examination taken and what symptom does the patient had.,1,"SELECT p.SEX, p.Birthday, e.""Examination Date"", e.Symptoms
+FROM Patient p
+JOIN Examination e ON p.ID = e.ID
+WHERE p.ID = 163109",0,1.2399,335,46,"SELECT SEX, Birthday, Examination Date, Symptoms 
+FROM Patient_Examination 
+WHERE ID = 163109",0,1.0377,337,27,"SELECT p.SEX, p.Birthday, e.""Examination Date"", e.Symptoms
+FROM Patient p
+JOIN Examination e ON p.ID = e.ID
+WHERE p.ID = 163109",0,1,1.38,410,46,"SELECT p.SEX, p.Birthday, p.""Examination Date"", p.Symptoms 
+FROM Patient_Examination AS p 
+WHERE p.ID = 163109",ast,valid,1,1.4429,454,40,openai_compat
+evo_tm_01155,TABLE_MERGE,thrombosis_prediction,1155,"List the patient ID, sex and birthday of patient with LDH beyond normal range.",0,"SELECT p.ID, p.SEX, p.Birthday
+FROM Patient p
+JOIN Laboratory l ON p.ID = l.ID
+WHERE l.LDH > 250 OR l.LDH < 140",0,1.1237,327,45,"SELECT ID, SEX, Birthday 
+FROM Patient_Laboratory 
+WHERE LDH > 250 OR LDH < 140",0,1.181,324,30,"SELECT p.ID, p.SEX, p.Birthday
+FROM Patient p
+JOIN Laboratory l ON p.ID = l.ID
+WHERE l.LDH > 250 OR l.LDH < 140",0,1,1.5315,401,45,"SELECT ID, SEX, Birthday FROM Patient_Laboratory WHERE LDH > 250 OR LDH < 140",ast,valid,0,1.2334,502,28,openai_compat
+evo_tm_01156,TABLE_MERGE,thrombosis_prediction,1156,State the ID and age of patient with positive degree of coagulation.,0,"SELECT P.ID, 
+       (strftime('%Y', 'now') - strftime('%Y', P.Birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', P.Birthday)) AS Age
+FROM Patient P
+JOIN Examination E ON P.ID = E.ID
+WHERE E.KCT = 'positive' OR E.RVVT = 'positive' OR E.LAC = 'positive'",0,1.4937,324,93,"SELECT pe.ID, (strftime('%Y', 'now') - strftime('%Y', pe.Birthday)) AS Age
+FROM patient_examination pe
+WHERE pe.KCT = 'positive' OR pe.RVVT = 'positive' OR pe.LAC = 'positive'",0,1.2089,323,60,"SELECT P.ID, 
+       (strftime('%Y', 'now') - strftime('%Y', P.Birthday)) - (strftime('%m-%d', 'now') < strftime('%m-%d', P.Birthday)) AS Age
+FROM Patient P
+JOIN Examination E ON P.ID = E.ID
+WHERE E.KCT = 'positive' OR E.RVVT = 'positive' OR E.LAC = 'positive'",0,1,1.9788,446,93,"SELECT PE.ID, 
+       (STRFTIME('%Y', 'now') - STRFTIME('%Y', PE.Birthday)) - 
+       (STRFTIME('%m-%d', 'now') < STRFTIME('%m-%d', PE.Birthday)) AS Age 
+FROM patient_examination AS PE 
+WHERE PE.KCT = 'positive' OR PE.RVVT = 'positive' OR PE.LAC = 'positive'",ast,silent_failure_suspected,0,1.5671,490,94,openai_compat
+evo_tm_00196,TABLE_MERGE,toxicology,196,"In the non-carcinogenic molecules, how many contain chlorine atoms?",0,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1.5171,130,50,"SELECT COUNT(DISTINCT ma.molecule_id) 
+FROM molecule_atom ma
+WHERE ma.element = 'Cl' 
+AND ma.molecule_id NOT IN (
+    SELECT DISTINCT ma2.molecule_id 
+    FROM molecule_atom ma2
+    JOIN connected c ON ma2.atom_id = c.atom_id OR ma2.atom_id = c.atom_id2
+    JOIN bond b ON c.bond_id = b.bond_id
+    WHERE b.bond_type = 'carcinogenic'
+)",0,1.6269,124,104,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1,1.521,209,50,"SELECT COUNT(DISTINCT ma.molecule_id) 
+FROM molecule_atom AS ma 
+WHERE ma.label <> 'carcinogenic' AND ma.element = 'chlorine'",ast,silent_failure_suspected,0,1.1523,303,38,openai_compat
+evo_tm_00197,TABLE_MERGE,toxicology,197,Calculate the average number of oxygen atoms in single-bonded molecules.,0,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.767,129,90,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT ab.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom_bond ab ON m.molecule_id = ab.molecule_id_bond
+    WHERE ab.bond_type = 'single' AND ab.element = 'O'
+    GROUP BY m.molecule_id
+)",0,1.8105,131,82,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    JOIN connected c ON b.bond_id = c.bond_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1,2.1671,248,105,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT ab.molecule_id_atom, COUNT(ab.atom_id) AS oxygen_count 
+    FROM molecule AS m 
+    JOIN atom_bond AS ab ON m.molecule_id = ab.molecule_id_atom 
+    WHERE ab.element = 'O' AND ab.bond_type = 'single' 
+    GROUP BY ab.molecule_id_atom
+)",ast,valid,0,2.1226,282,83,openai_compat
+evo_tm_00198,TABLE_MERGE,toxicology,198,On average how many carcinogenic molecules are single bonded?,0,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.6344,126,84,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT molecule_id, COUNT(DISTINCT bond_id) AS single_bond_count
+    FROM bond
+    WHERE bond_type = 'single'
+    GROUP BY molecule_id
+) AS single_bond_counts
+WHERE molecule_id IN (
+    SELECT DISTINCT molecule_id
+    FROM molecule_atom
+    WHERE label = 'carcinogenic'
+)",0,1.3205,120,83,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+) AS subquery",0,1,1.8485,239,88,"SELECT AVG(single_bond_count) FROM (
+    SELECT ma.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count 
+    FROM molecule_atom AS ma 
+    JOIN bond AS b ON ma.molecule_id = b.molecule_id 
+    WHERE ma.label = 'carcinogenic' AND b.bond_type = 'single' 
+    GROUP BY ma.molecule_id
+)",ast,silent_failure_suspected,0,2.0223,326,87,openai_compat
+evo_tm_00199,TABLE_MERGE,toxicology,199,"In the molecule containing sodium atoms, how many are non-carcinogenic?",0,"SELECT COUNT(*) 
+FROM molecule 
+WHERE molecule_id IN (
+    SELECT DISTINCT a.molecule_id 
+    FROM atom a 
+    WHERE a.element = 'Sodium'
+) AND label != 'carcinogenic'",0,1.3969,131,47,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule_atom m
+WHERE m.element = 'Na' AND m.molecule_id NOT IN (
+    SELECT DISTINCT m2.molecule_id
+    FROM molecule_atom m2
+    WHERE m2.label = 'carcinogenic'
+)",0,1.6456,125,63,"SELECT COUNT(*) 
+FROM molecule 
+WHERE molecule_id IN (
+    SELECT DISTINCT a.molecule_id 
+    FROM atom a 
+    WHERE a.element = 'Sodium'
+) AND label != 'carcinogenic'",0,1,1.1837,207,47,"SELECT COUNT(*) 
+FROM molecule_atom 
+WHERE element = 'Sodium' 
+AND label <> 'carcinogenic'",ast,silent_failure_suspected,0,1.3093,295,28,openai_compat
+evo_tr_00000,TABLE_RENAME,california_schools,0,What is the highest eligible free rate for K-12 students in the schools in Alameda County?,1,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM frpm 
+WHERE ""County Name"" = 'Alameda'",0,0.9171,554,31,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM FreeReducedPriceMeals 
+WHERE ""County Name"" = 'Alameda'",1,1.579,556,33,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM ""frpm"" 
+WHERE ""County Name"" = 'Alameda'",0,1,1.3385,615,33,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") FROM FreeReducedPriceMeals WHERE ""County Name"" = 'Alameda'",ast,silent_failure_suspected,1,1.0723,640,31,openai_compat
+evo_tr_00001,TABLE_RENAME,california_schools,1,Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.,0,"SELECT ""School Name"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1.1087,554,56,"SELECT ""Percent (%) Eligible Free (Ages 5-17)""
+FROM FreeReducedPriceMeals
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1.2268,556,54,"SELECT ""School"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM schools
+JOIN frpm ON schools.CDSCode = frpm.CDSCode
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1,1.7733,640,69,"SELECT ""School Name"", ""Percent (%) Eligible Free (Ages 5-17)"" 
+FROM FreeReducedPriceMeals 
+WHERE ""School Type"" = 'Continuation' 
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC 
+LIMIT 3",ast,silent_failure_suspected,0,1.2271,665,60,openai_compat
+evo_tr_00002,TABLE_RENAME,california_schools,2,Please list the zip code of all the charter schools in Fresno County Office of Education.,0,"SELECT DISTINCT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.County Name = 'Fresno County Office of Education'
+AND s.Charter = 1",0,1.2617,552,62,"SELECT ei.Zip 
+FROM EducationalInstitutions ei
+JOIN FreeReducedPriceMeals frpm ON ei.CDSCode = frpm.CDSCode
+WHERE ei.County = 'Fresno' 
+  AND ei.District = 'Fresno County Office of Education' 
+  AND ei.Charter = 1",1,1.527,556,69,"SELECT DISTINCT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.[County Name] = 'Fresno County Office of Education'
+AND s.Charter = 1",0,1,1.8972,644,63,"SELECT DISTINCT ei.Zip 
+FROM EducationalInstitutions ei
+JOIN FreeReducedPriceMeals frpm ON ei.CDSCode = frpm.CDSCode
+WHERE ei.County = 'Fresno' 
+AND frpm.County Name = 'Fresno County Office of Education'
+AND ei.Charter = 1",parse_error,execution_error,0,1.3583,693,69,openai_compat
+evo_tr_00003,TABLE_RENAME,california_schools,3,What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?,1,"SELECT s.MailStreet 
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,0.9815,559,46,"SELECT ei.MailStreet
+FROM EducationalInstitutions ei
+JOIN frpm f ON ei.CDSCode = f.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",1,1.0914,561,48,"SELECT s.MailStreet 
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.[FRPM Count (K-12)] DESC
+LIMIT 1",0,1,1.3662,634,46,"SELECT s.MailStreet FROM frpm AS f JOIN EducationalInstitutions AS s ON f.CDSCode = s.CDSCode ORDER BY f.""FRPM Count (K-12)"" DESC LIMIT 1",ast,valid,1,0.0507,0,0,openai_compat
+evo_tr_00340,TABLE_RENAME,card_games,340,Which are the cards that have incredibly powerful foils.,0,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1.4025,586,38,"SELECT name 
+FROM card_details 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1.5482,587,39,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1,1.3075,653,38,SELECT name FROM card_details WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%'),ast,silent_failure_suspected,0,1.3024,674,37,openai_compat
+evo_tr_00341,TABLE_RENAME,card_games,341,What are the borderless cards available without powerful foils?,0,"SELECT name 
+FROM cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,1.1112,587,27,"SELECT name 
+FROM playing_cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,1.0432,588,28,"SELECT name 
+FROM cards 
+WHERE borderColor = 'borderless' 
+AND hasFoil = 0",0,1,1.4111,643,27,SELECT name FROM playing_cards WHERE borderColor = 'borderless' AND hasFoil = 0,ast,valid,0,0.085,0,0,openai_compat
+evo_tr_00342,TABLE_RENAME,card_games,342,List the card names with value that cost more converted mana for the face.,0,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,0.9934,590,20,"SELECT name 
+FROM card_details 
+WHERE faceConvertedManaCost > convertedManaCost",0,1.1123,591,21,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,1,1.1932,639,20,SELECT name FROM card_details WHERE faceConvertedManaCost > convertedManaCost,ast,valid,0,0.0842,0,0,openai_compat
+evo_tr_00343,TABLE_RENAME,card_games,343,Name all cards with 2015 frame style ranking below 100 on EDHRec.,0,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1.2826,593,27,"SELECT name 
+FROM card_details 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1.0326,594,28,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1,1.4419,649,27,SELECT name FROM card_details WHERE frameVersion = '2015' AND edhrecRank < 100,ast,valid,0,0.0851,0,0,openai_compat
+evo_tr_00531,TABLE_RENAME,codebase_community,531,"Which user has a higher reputation, Harlan or Jarrod Dixon?",0,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1.1226,398,36,"SELECT DisplayName, Reputation 
+FROM user_information 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1.1743,399,37,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1,1.4149,463,36,"SELECT DisplayName, Reputation 
+FROM user_information 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",ast,silent_failure_suspected,0,1.306,482,37,openai_compat
+evo_tr_00532,TABLE_RENAME,codebase_community,532,Please list the display names of all the users whose accounts were created in the year 2011.,1,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",0,1.1425,404,23,"SELECT DisplayName FROM user_information WHERE strftime('%Y', CreationDate) = '2011'",1,1.1027,405,24,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",0,1,1.0897,456,23,"SELECT DisplayName FROM user_information WHERE STRFTIME('%Y', CreationDate) = '2011'",ast,valid,1,0.0445,0,0,openai_compat
+evo_tr_00533,TABLE_RENAME,codebase_community,533,How many users last accessed the website after 2014/9/1?,0,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1.0583,400,22,SELECT COUNT(*) FROM user_information WHERE LastAccessDate > '2014-09-01',0,0.9143,401,23,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1,1.1794,451,22,SELECT COUNT(*) FROM user_information WHERE LastAccessDate > '2014-09-01',ast,valid,0,0.0357,0,0,openai_compat
+evo_tr_00534,TABLE_RENAME,codebase_community,534,What is the display name of the user who has the most number of views?,1,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1.0591,400,20,"SELECT DisplayName 
+FROM user_information 
+ORDER BY Views DESC 
+LIMIT 1",1,1.0243,401,21,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1,1.1186,449,20,SELECT DisplayName FROM user_information ORDER BY Views DESC LIMIT 1,ast,valid,1,0.0353,0,0,openai_compat
+evo_tr_01470,TABLE_RENAME,debit_card_specializing,1470,How many gas stations in CZE has Premium gas?,0,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1.2836,166,67,"SELECT COUNT(DISTINCT f.GasStationID) 
+FROM fuelstations f
+JOIN transactions_1k t ON f.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE f.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1.158,166,67,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1,1.2341,264,67,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM fuelstations AS g 
+JOIN transactions_1k AS t ON g.GasStationID = t.GasStationID 
+JOIN products AS p ON t.ProductID = p.ProductID 
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",ast,silent_failure_suspected,0,2.7324,284,70,openai_compat
+evo_tr_01471,TABLE_RENAME,debit_card_specializing,1471,What is the ratio of customers who pay in EUR against customers who pay in CZK?,1,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'CZK') AS ratio",0,1.2062,173,52,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM clients WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM clients WHERE Currency = 'CZK') AS ratio",1,1.459,173,52,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM transactions_1k WHERE CustomerID IN (SELECT CustomerID FROM customers WHERE Currency = 'EUR')) * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM transactions_1k WHERE CustomerID IN (SELECT CustomerID FROM customers WHERE Currency = 'CZK')) AS ratio",0,1,1.5024,254,78,SELECT (SELECT COUNT(DISTINCT CustomerID) FROM clients WHERE Currency = 'EUR') * 1.0 / (SELECT COUNT(DISTINCT CustomerID) FROM clients WHERE Currency = 'CZK') AS ratio,ast,silent_failure_suspected,1,1.3953,271,49,openai_compat
+evo_tr_01472,TABLE_RENAME,debit_card_specializing,1472,"In 2012, who had the least consumption in LAM?",1,"SELECT y.CustomerID
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,1.4509,169,61,"SELECT c.CustomerID
+FROM customers c
+JOIN monthly_consumption mc ON c.CustomerID = mc.CustomerID
+WHERE c.Segment = 'LAM' AND strftime('%Y', mc.Date) = '2012'
+GROUP BY c.CustomerID
+ORDER BY SUM(mc.Consumption) ASC
+LIMIT 1",0,1.4568,170,68,"SELECT y.CustomerID
+FROM transactions_1k t
+JOIN customers c ON t.CustomerID = c.CustomerID
+JOIN yearmonth y ON t.CustomerID = y.CustomerID
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM'
+GROUP BY y.CustomerID
+ORDER BY SUM(y.Consumption) ASC
+LIMIT 1",0,1,1.343,260,76,"SELECT y.CustomerID 
+FROM monthly_consumption AS y 
+JOIN customers AS c ON y.CustomerID = c.CustomerID 
+WHERE y.Date LIKE '2012%' AND c.Segment = 'LAM' 
+GROUP BY y.CustomerID 
+ORDER BY SUM(y.Consumption) ASC 
+LIMIT 1",ast,silent_failure_suspected,1,1.5343,281,65,openai_compat
+evo_tr_01473,TABLE_RENAME,debit_card_specializing,1473,What was the average monthly consumption of customers in SME for the year 2013?,0,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%'",0,1.4488,172,50,"SELECT AVG(mc.Consumption) AS AverageMonthlyConsumption
+FROM monthly_consumption mc
+JOIN clients c ON mc.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND strftime('%Y', mc.Date) = '2013'",0,1.2779,173,56,"SELECT AVG(y.Consumption) AS AverageMonthlyConsumption
+FROM yearmonth y
+JOIN customers c ON y.CustomerID = c.CustomerID
+WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%'",0,1,1.43,252,50,SELECT AVG(y.Consumption) AS AverageMonthlyConsumption FROM monthly_consumption AS y JOIN clients AS c ON y.CustomerID = c.CustomerID WHERE c.Segment = 'SME' AND y.Date LIKE '2013-%',ast,valid,0,0.0759,0,0,openai_compat
+evo_tr_01020,TABLE_RENAME,european_football_2,1020,Which player has the highest overall rating? Indicate the player's api id.,1,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1.2765,1086,24,"SELECT player_api_id 
+FROM player_stats 
+ORDER BY overall_rating DESC 
+LIMIT 1",1,1.3082,1085,23,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1,1.2501,1141,24,SELECT player_api_id FROM player_stats ORDER BY overall_rating DESC LIMIT 1,ast,valid,1,0.0627,0,0,openai_compat
+evo_tr_01021,TABLE_RENAME,european_football_2,1021,What is the height of the tallest player? Indicate his name.,0,"SELECT player_name, height 
+FROM Player 
+WHERE height = (SELECT MAX(height) FROM Player)",0,1.1162,1085,24,"SELECT player_name, height 
+FROM athlete 
+ORDER BY height DESC 
+LIMIT 1",0,0.9973,1085,22,"SELECT player_name, height 
+FROM Player 
+WHERE height = (SELECT MAX(height) FROM Player)",0,1,1.5107,1138,24,"SELECT player_name, height FROM athlete WHERE height = (SELECT MAX(height) FROM athlete)",ast,valid,0,0.0294,0,0,openai_compat
+evo_tr_01022,TABLE_RENAME,european_football_2,1022,What is the preferred foot when attacking of the player with the lowest potential?,0,"SELECT preferred_foot
+FROM Player_Attributes
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,1.2159,1086,28,"SELECT preferred_foot
+FROM player_stats
+WHERE potential = (SELECT MIN(potential) FROM player_stats)",0,1.0292,1085,26,"SELECT preferred_foot
+FROM Player_Attributes
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,1,1.1897,1145,28,SELECT preferred_foot FROM player_stats WHERE potential = (SELECT MIN(potential) FROM player_stats),ast,valid,0,0.0853,0,0,openai_compat
+evo_tr_01023,TABLE_RENAME,european_football_2,1023,"Among the players with an overall rating between 60 to 65, how many players whose going to be in all of your attack moves instead of defensing?",0,"SELECT COUNT(DISTINCT p.id) 
+FROM Player p
+JOIN Player_Attributes pa ON p.player_api_id = pa.player_api_id
+WHERE pa.overall_rating BETWEEN 60 AND 65
+AND pa.attacking_work_rate = 'high'
+AND pa.defensive_work_rate = 'low'",0,1.3837,1103,65,"SELECT COUNT(DISTINCT ps.player_api_id) 
+FROM player_stats ps
+WHERE ps.overall_rating BETWEEN 60 AND 65
+AND ps.attacking_work_rate = 'high'
+AND ps.defensive_work_rate = 'low'",0,1.2168,1102,52,"SELECT COUNT(DISTINCT p.id) 
+FROM Player p
+JOIN Player_Attributes pa ON p.player_fifa_api_id = pa.player_fifa_api_id
+WHERE pa.overall_rating BETWEEN 60 AND 65
+AND pa.attacking_work_rate = 'high'
+AND pa.defensive_work_rate = 'low'",0,1,2.6315,1199,69,SELECT COUNT(DISTINCT p.id) FROM Player AS p JOIN player_stats AS pa ON p.player_api_id = pa.player_api_id WHERE pa.overall_rating BETWEEN 60 AND 65 AND pa.attacking_work_rate = 'high' AND pa.defensive_work_rate = 'low',ast,valid,0,0.102,0,0,openai_compat
+evo_tr_00089,TABLE_RENAME,financial,89,How many accounts who choose issuance after transaction are staying in East Bohemia region?,0,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN card c ON d.disp_id = c.disp_id
+JOIN district dis ON a.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1.6726,302,78,"SELECT COUNT(DISTINCT ca.account_id)
+FROM customer_account ca
+JOIN disp d ON ca.account_id = d.account_id
+JOIN client c ON d.client_id = c.client_id
+JOIN region r ON c.district_id = r.district_id
+WHERE ca.frequency = 'issuance after transaction' AND r.A2 = 'East Bohemia'",0,4.5885,303,77,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN card c ON d.disp_id = c.disp_id
+JOIN district dis ON a.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia region'",0,1,1.3528,409,79,"SELECT COUNT(DISTINCT a.account_id) 
+FROM customer_account AS a 
+JOIN disp AS d ON a.account_id = d.account_id 
+JOIN card AS c ON d.disp_id = c.disp_id 
+JOIN region AS r ON a.district_id = r.district_id 
+WHERE a.frequency = 'issuance after transaction' 
+AND r.A2 = 'East Bohemia'",ast,silent_failure_suspected,0,2.1803,452,85,openai_compat
+evo_tr_00090,TABLE_RENAME,financial,90,How many accounts who have region in Prague are eligible for loans?,0,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+WHERE d.A2 = 'Prague'
+AND a.account_id NOT IN (SELECT account_id FROM loan WHERE status = 'B' OR status = 'D')",0,1.6496,298,65,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+LEFT JOIN financial_assistance fa ON a.account_id = fa.account_id
+WHERE d.A2 = 'Prague' AND fa.loan_id IS NULL",0,1.8357,300,63,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+WHERE d.A2 = 'Prague'
+AND a.account_id NOT IN (SELECT account_id FROM loan WHERE status = 'B' OR status = 'D')",0,1,1.1486,392,65,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account AS a 
+JOIN district AS d ON a.district_id = d.district_id 
+WHERE d.A2 = 'Prague' 
+AND NOT a.account_id IN (
+    SELECT account_id 
+    FROM financial_assistance 
+    WHERE status = 'B' OR status = 'D'
+)",ast,silent_failure_suspected,0,1.2282,417,76,openai_compat
+evo_tr_00091,TABLE_RENAME,financial,91,"The average unemployment ratio of 1995 and 1996, which one has higher percentage?",1,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN A9 END) > AVG(CASE WHEN A5 LIKE '1996%' THEN A9 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM district",0,1.5946,304,68,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 = '1995' THEN A9 END) > AVG(CASE WHEN A5 = '1996' THEN A9 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM region
+WHERE A5 IN ('1995', '1996')",1,1.5033,304,80,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 = '1995' THEN A9 END) > AVG(CASE WHEN A5 = '1996' THEN A9 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM ""district""",0,1,1.443,401,69,SELECT CASE WHEN AVG(CASE WHEN A5 LIKE '1995%' THEN A9 END) > AVG(CASE WHEN A5 LIKE '1996%' THEN A9 END) THEN '1995' ELSE '1996' END AS year_with_higher_unemployment FROM region,ast,valid,1,0.0467,0,0,openai_compat
+evo_tr_00092,TABLE_RENAME,financial,92,List out the no. of districts that have female average salary is more than 6000 but less than 10000?,0,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1.5381,310,112,"SELECT COUNT(DISTINCT r.district_id) 
+FROM region r
+JOIN customer c ON r.district_id = c.district_id
+WHERE c.gender = 'F' AND r.A4 > 6000 AND r.A4 < 10000",0,1.4526,310,57,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1,1.7971,451,112,"SELECT COUNT(DISTINCT r.district_id) 
+FROM region AS r 
+JOIN customer AS c ON r.district_id = c.district_id 
+JOIN disp AS dp ON c.client_id = dp.client_id 
+JOIN account AS a ON dp.account_id = a.account_id 
+JOIN trans AS t ON a.account_id = t.account_id 
+WHERE c.gender = 'F' 
+GROUP BY r.district_id 
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",ast,silent_failure_suspected,0,2.7553,489,118,openai_compat
+evo_tr_00846,TABLE_RENAME,formula_1,846,Please list the reference names of the drivers who are eliminated in the first period in race number 20.,0,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1.2113,458,46,"SELECT rd.driverRef
+FROM race_qualification rq
+JOIN race_drivers rd ON rq.driverId = rd.driverId
+WHERE rq.raceId = 20 AND rq.q2 IS NULL",0,1.369,462,44,"SELECT d.driverRef
+FROM results r
+JOIN drivers d ON r.driverId = d.driverId
+WHERE r.raceId = 20 AND r.position IS NULL",0,1,1.8496,533,40,SELECT d.driverRef FROM race_qualification AS q JOIN race_drivers AS d ON q.driverId = d.driverId WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL,ast,valid,0,0.048,0,0,openai_compat
+evo_tr_00847,TABLE_RENAME,formula_1,847,What is the surname of the driver with the best lap time in race number 19 in the second qualifying period?,1,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 19
+ORDER BY q.q2 ASC
+LIMIT 1",0,1.4127,460,45,"SELECT d.surname
+FROM race_qualification rq
+JOIN drivers d ON rq.driverId = d.driverId
+WHERE rq.raceId = 19 AND rq.q2 IS NOT NULL
+ORDER BY CAST(SUBSTR(rq.q2, 1, 2) AS INTEGER) * 60000 + CAST(SUBSTR(rq.q2, 4, 2) AS INTEGER) * 1000 + CAST(SUBSTR(rq.q2, 7) AS INTEGER)
+LIMIT 1",0,2.8896,462,110,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+JOIN races r ON q.raceId = r.raceId
+WHERE r.round = 19 AND q.q2 IS NOT NULL
+ORDER BY q.q2 ASC
+LIMIT 1",0,1,1.1261,534,64,SELECT d.surname FROM race_qualification AS q JOIN drivers AS d ON q.driverId = d.driverId WHERE q.raceId = 19 ORDER BY q.q2 ASC LIMIT 1,ast,valid,1,0.0519,0,0,openai_compat
+evo_tr_00848,TABLE_RENAME,formula_1,848,Please list the year during which the race is held on circuits in Shanghai.,1,"SELECT DISTINCT r.year
+FROM races r
+JOIN circuits c ON r.circuitId = c.circuitId
+WHERE c.location = 'Shanghai'",0,1.1821,452,34,"SELECT DISTINCT re.year
+FROM race_events re
+JOIN circuits c ON re.circuitId = c.circuitId
+WHERE c.location = 'Shanghai'",1,1.3686,453,35,"SELECT DISTINCT r.year
+FROM races r
+JOIN circuits c ON r.circuitId = c.circuitId
+WHERE c.location = 'Shanghai'",0,1,4.3173,515,34,SELECT DISTINCT r.year FROM race_events AS r JOIN circuits AS c ON r.circuitId = c.circuitId WHERE c.location = 'Shanghai',ast,valid,1,0.0487,0,0,openai_compat
+evo_tr_00849,TABLE_RENAME,formula_1,849,Where can the introduction of the races held on Circuit de Barcelona-Catalunya be found?,0,SELECT url FROM races WHERE circuitId = (SELECT circuitId FROM circuits WHERE name = 'Circuit de Barcelona-Catalunya'),0,1.4421,455,29,"SELECT re.url
+FROM race_events re
+JOIN race_tracks rt ON re.circuitId = rt.circuitId
+WHERE rt.name = 'Circuit de Barcelona-Catalunya'",0,1.3215,457,40,SELECT url FROM races WHERE circuitId = (SELECT circuitId FROM circuits WHERE name = 'Circuit de Barcelona-Catalunya'),0,1,0.8907,513,29,SELECT url FROM race_events WHERE circuitId = (SELECT circuitId FROM race_tracks WHERE name = 'Circuit de Barcelona-Catalunya'),ast,silent_failure_suspected,0,1.3537,561,31,openai_compat
+evo_tr_01312,TABLE_RENAME,student_club,1312,What's Angela Sanders's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,0.9575,269,41,"SELECT f.major_name
+FROM member m
+JOIN field_of_study f ON m.link_to_major = f.major_id
+WHERE m.first_name = 'Angela' AND m.last_name = 'Sanders'",1,0.9993,272,46,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1,2.0756,339,41,"SELECT field_of_study.major_name 
+FROM member 
+JOIN field_of_study ON member.link_to_major = field_of_study.major_id 
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",ast,silent_failure_suspected,1,1.3704,365,50,openai_compat
+evo_tr_01313,TABLE_RENAME,student_club,1313,How many students in the Student_Club are from the College of Engineering?,1,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'College of Engineering'",0,0.993,278,33,"SELECT COUNT(*) 
+FROM member 
+JOIN subject ON member.link_to_major = subject.major_id 
+WHERE subject.college = 'College of Engineering'",1,0.9533,278,33,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'Engineering'",0,1,1.0603,340,31,"SELECT COUNT(*) 
+FROM member 
+JOIN subject ON member.link_to_major = subject.major_id 
+WHERE subject.college = 'College of Engineering'",ast,valid,1,0.9853,357,33,openai_compat
+evo_tr_01314,TABLE_RENAME,student_club,1314,Please list the full names of the students in the Student_Club that come from the Art and Design Department.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1.4079,285,45,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN subject s ON m.link_to_major = s.major_id
+WHERE s.department = 'Art and Design'",0,1.1321,285,45,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1,1.2348,359,45,"SELECT m.first_name || ' ' || m.last_name AS full_name 
+FROM member AS m 
+JOIN subject AS s ON m.link_to_major = s.major_id 
+WHERE s.department = 'Art and Design'",ast,silent_failure_suspected,0,1.3175,378,47,openai_compat
+evo_tr_01315,TABLE_RENAME,student_club,1315,"How many students of the Student_Club have attended the event ""Women's Soccer""?",1,"SELECT COUNT(DISTINCT attendance.link_to_member) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+WHERE event.event_name = ""Women's Soccer""",0,1.0732,279,39,"SELECT COUNT(DISTINCT p.link_to_member) 
+FROM participation p
+JOIN activity a ON p.link_to_event = a.event_id
+WHERE a.event_name = ""Women's Soccer""",1,1.3177,279,41,"SELECT COUNT(DISTINCT attendance.link_to_member) 
+FROM attendance 
+JOIN event ON attendance.link_to_event = event.event_id 
+WHERE event.event_name = ""Women's Soccer""",0,1,1.5918,347,39,"SELECT COUNT(DISTINCT participation.link_to_member) 
+FROM participation 
+JOIN activity ON participation.link_to_event = activity.event_id 
+WHERE activity.event_name = ""Women's Soccer""",ast,valid,1,1.2772,385,39,openai_compat
+evo_tr_00717,TABLE_RENAME,superhero,717,Please list all the superpowers of 3-D Man.,1,"SELECT sp.power_name
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.hero_id
+JOIN superpower AS sp ON hp.power_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",0,1.593,221,51,"SELECT sp.power_name
+FROM character c
+JOIN hero_power hp ON c.id = hp.hero_id
+JOIN superpower sp ON hp.power_id = sp.id
+WHERE c.superhero_name = '3-D Man'",1,0.9886,221,48,"SELECT sp.power_name
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.hero_id
+JOIN superpower AS sp ON hp.power_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",0,1,1.3565,301,51,SELECT sp.power_name FROM character AS ch JOIN hero_power AS hp ON ch.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE ch.superhero_name = '3-D Man',ast,silent_failure_suspected,1,1.1706,318,47,openai_compat
+evo_tr_00718,TABLE_RENAME,superhero,718,"How many superheroes have the super power of ""Super Strength""?",1,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1.0496,221,40,"SELECT COUNT(DISTINCT h.id) 
+FROM superhero h
+JOIN hero_ability ha ON h.id = ha.hero_id
+JOIN ability_catalog ac ON ha.power_id = ac.id
+WHERE ac.power_name = 'Super Strength'",1,1.1762,222,51,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_power 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength'",0,1,1.1068,291,40,"SELECT COUNT(DISTINCT hero_id) 
+FROM hero_ability 
+JOIN ability_catalog ON hero_ability.power_id = ability_catalog.id 
+WHERE ability_catalog.power_name = 'Super Strength'",ast,valid,1,1.2923,334,42,openai_compat
+evo_tr_00719,TABLE_RENAME,superhero,719,"Among the superheroes with the super power of ""Super Strength"", how many of them have a height of over 200cm?",1,"SELECT COUNT(*) 
+FROM superhero 
+JOIN hero_power ON superhero.id = hero_power.hero_id 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength' AND superhero.height_cm > 200",0,1.39,234,54,"SELECT COUNT(DISTINCT c.id) 
+FROM character c
+JOIN character_power cp ON c.id = cp.hero_id
+JOIN superpower sp ON cp.power_id = sp.id
+WHERE sp.power_name = 'Super Strength' AND c.height_cm > 200",1,1.1706,234,58,"SELECT COUNT(*) 
+FROM superhero 
+JOIN hero_power ON superhero.id = hero_power.hero_id 
+JOIN superpower ON hero_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength' AND superhero.height_cm > 200",0,1,1.0332,317,54,"SELECT COUNT(*) 
+FROM character 
+JOIN character_power ON character.id = character_power.hero_id 
+JOIN superpower ON character_power.power_id = superpower.id 
+WHERE superpower.power_name = 'Super Strength' 
+AND character.height_cm > 200",ast,valid,1,1.0788,356,55,openai_compat
+evo_tr_00720,TABLE_RENAME,superhero,720,Please list the full names of all the superheroes with over 15 super powers.,0,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.power_id) > 15",0,2.3461,225,42,"SELECT a.full_name
+FROM avenger a
+JOIN super_ability sa ON a.id = sa.hero_id
+GROUP BY a.id
+HAVING COUNT(sa.power_id) > 15",0,1.1655,227,43,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.power_id) > 15",0,1,1.5774,296,42,SELECT s.full_name FROM avenger AS s JOIN super_ability AS hp ON s.id = hp.hero_id GROUP BY s.id HAVING COUNT(hp.power_id) > 15,ast,valid,0,0.0514,0,0,openai_compat
+evo_tr_01149,TABLE_RENAME,thrombosis_prediction,1149,Are there more in-patient or outpatient who were male? What is the deviation in percentage?,0,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1.503,329,100,"WITH PatientCounts AS (
+    SELECT 
+        SEX,
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        medical_record
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        SEX, Admission
+),
+TotalMale AS (
+    SELECT 
+        SUM(Count) AS TotalCount
+    FROM 
+        PatientCounts
+),
+InPatientCount AS (
+    SELECT 
+        Count AS InPatient
+    FROM 
+        PatientCounts
+    WHERE 
+        Admission = 'In-patient'
+),
+OutPatientCount AS (
+    SELECT 
+        Count AS OutPatient
+    FROM 
+        PatientCounts
+    WHERE 
+        Admission = 'Outpatient'
+)
+SELECT 
+    CASE 
+        WHEN InPatient > OutPatient THEN 'In-patient'
+        ELSE 'Outpatient'
+    END AS MorePatients,
+    ABS(InPatient - OutPatient) * 100.0 / TotalCount AS DeviationPercentage
+FROM 
+    InPatientCount, OutPatientCount, TotalMale",0,1.9768,330,204,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1,1.8097,458,100,"WITH PatientCounts AS (
+    SELECT Admission, COUNT(*) AS Count 
+    FROM medical_record 
+    WHERE SEX = 'Male' 
+    GROUP BY Admission
+), 
+TotalCount AS (
+    SELECT SUM(Count) AS Total 
+    FROM PatientCounts
+) 
+SELECT Admission, Count, (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage 
+FROM PatientCounts",ast,silent_failure_suspected,0,1.3803,450,86,openai_compat
+evo_tr_01150,TABLE_RENAME,thrombosis_prediction,1150,What is the percentage of female patient were born after 1930?,0,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE SEX = 'Female')) AS percentage
+FROM Patient
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1.2721,324,49,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM medical_record)) AS percentage
+FROM medical_record
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1.0285,325,46,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient WHERE SEX = 'Female')) AS percentage
+FROM Patient
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1,1.2406,402,49,SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM medical_record WHERE SEX = 'Female')) AS percentage FROM medical_record WHERE SEX = 'Female' AND Birthday > '1930-12-31',ast,valid,0,0.0381,0,0,openai_compat
+evo_tr_01151,TABLE_RENAME,thrombosis_prediction,1151,"For patient born between Year 1930 to 1940, how many percent of them were inpatient?",0,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS inpatient_percentage
+FROM Patient
+WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",0,1.2072,331,55,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS inpatient_percentage
+FROM medical_record
+WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",0,1.1626,332,56,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS inpatient_percentage
+FROM Patient
+WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",0,1,1.6079,415,55,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS inpatient_percentage 
+FROM medical_record 
+WHERE STRFTIME('%Y', Birthday) BETWEEN '1930' AND '1940'",ast,silent_failure_suspected,0,1.7372,437,57,openai_compat
+evo_tr_01152,TABLE_RENAME,thrombosis_prediction,1152,What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?,0,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM Patient
+WHERE Diagnosis = 'SLE'",0,2.5345,331,72,"SELECT 
+    (SELECT COUNT(*) FROM medical_record WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM medical_record WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS outpatient_to_inpatient_ratio
+FROM 
+    medical_record
+WHERE 
+    Diagnosis = 'SLE'",0,1.7116,332,78,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio",0,1,1.3624,432,63,SELECT (SELECT COUNT(*) FROM medical_record WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 / (SELECT COUNT(*) FROM medical_record WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio,ast,silent_failure_suspected,0,1.5609,452,61,openai_compat
+evo_tr_00195,TABLE_RENAME,toxicology,195,What is the most common bond type?,1,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",0,1.0045,123,26,"SELECT bond_type
+FROM chemical_bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",1,0.9207,125,28,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",0,1,0.982,178,26,SELECT bond_type FROM chemical_bond GROUP BY bond_type ORDER BY COUNT(*) DESC LIMIT 1,ast,valid,1,0.0792,0,0,openai_compat
+evo_tr_00196,TABLE_RENAME,toxicology,196,"In the non-carcinogenic molecules, how many contain chlorine atoms?",0,"SELECT COUNT(DISTINCT m.molecule_id)
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1.4555,130,49,"SELECT COUNT(DISTINCT e.molecule_id) 
+FROM element e
+JOIN molecule m ON e.molecule_id = m.molecule_id
+WHERE e.element = 'Chlorine' AND m.label != 'carcinogenic'",0,1.4005,130,51,"SELECT COUNT(DISTINCT m.molecule_id)
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'Cl'",0,1,1.1432,208,48,SELECT COUNT(DISTINCT m.molecule_id) FROM molecule AS m JOIN element AS e ON m.molecule_id = e.molecule_id WHERE m.label <> 'carcinogenic' AND e.element = 'chlorine',ast,silent_failure_suspected,0,1.4028,228,49,openai_compat
+evo_tr_00197,TABLE_RENAME,toxicology,197,Calculate the average number of oxygen atoms in single-bonded molecules.,0,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.4467,129,90,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(e.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN chemical_element e ON m.molecule_id = e.molecule_id
+    JOIN chemical_bond b ON m.molecule_id = b.molecule_id
+    WHERE e.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.9519,132,93,"SELECT AVG(oxygen_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count
+    FROM molecule m
+    JOIN atom a ON m.molecule_id = a.molecule_id
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    JOIN connected c ON b.bond_id = c.bond_id
+    WHERE a.element = 'O' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1,2.1772,248,105,"SELECT AVG(oxygen_count) FROM (SELECT m.molecule_id, COUNT(a.atom_id) AS oxygen_count FROM molecule AS m JOIN chemical_element AS a ON m.molecule_id = a.molecule_id JOIN chemical_bond AS b ON m.molecule_id = b.molecule_id WHERE a.element = 'O' AND b.bond_type = 'single' GROUP BY m.molecule_id)",ast,valid,0,0.0568,0,0,openai_compat
+evo_tr_00198,TABLE_RENAME,toxicology,198,On average how many carcinogenic molecules are single bonded?,0,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+)",0,1.3465,126,84,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT cc.molecule_id, COUNT(cb.bond_id) AS single_bond_count
+    FROM chemical_compound cc
+    JOIN chemical_bond cb ON cc.molecule_id = cb.molecule_id
+    WHERE cc.label = 'carcinogenic' AND cb.bond_type = 'single'
+    GROUP BY cc.molecule_id
+)",0,1.2341,131,85,"SELECT AVG(single_bond_count) 
+FROM (
+    SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count
+    FROM molecule m
+    JOIN bond b ON m.molecule_id = b.molecule_id
+    WHERE m.label = 'carcinogenic' AND b.bond_type = 'single'
+    GROUP BY m.molecule_id
+) AS subquery",0,1,1.6679,239,88,"SELECT AVG(single_bond_count) FROM (SELECT m.molecule_id, COUNT(DISTINCT b.bond_id) AS single_bond_count FROM chemical_compound AS m JOIN chemical_bond AS b ON m.molecule_id = b.molecule_id WHERE m.label = 'carcinogenic' AND b.bond_type = 'single' GROUP BY m.molecule_id)",ast,silent_failure_suspected,0,1.3308,306,80,openai_compat
+evo_ts_00000,TABLE_SPLIT,california_schools,0,What is the highest eligible free rate for K-12 students in the schools in Alameda County?,1,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM frpm 
+WHERE ""County Name"" = 'Alameda'",0,0.8976,554,31,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") AS MaxEligibleFreeRate
+FROM MealData
+JOIN SchoolInfo ON MealData.CDSCode = SchoolInfo.CDSCode
+WHERE SchoolInfo.County Name = 'Alameda'",0,4.1765,570,53,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM frpm 
+WHERE ""County Name"" = 'Alameda County'",0,1,1.2689,615,32,"SELECT MAX(""Percent (%) Eligible Free (K-12)"") 
+FROM MealData 
+JOIN SchoolInfo ON MealData.CDSCode = SchoolInfo.CDSCode 
+WHERE ""County Name"" = 'Alameda'",ast,silent_failure_suspected,1,0.9602,745,47,openai_compat
+evo_ts_00001,TABLE_SPLIT,california_schools,1,Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.,0,"SELECT ""School Name"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM frpm
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1.2781,554,56,"SELECT mi.`Percent (%) Eligible Free (Ages 5-17)`
+FROM MealInfo mi
+JOIN SchoolInfo si ON mi.CDSCode = si.CDSCode
+WHERE si.`School Type` = 'Continuation'
+ORDER BY mi.`Percent (%) Eligible Free (Ages 5-17)` ASC
+LIMIT 3",0,1.5282,566,71,"SELECT ""School"", ""Percent (%) Eligible Free (Ages 5-17)""
+FROM schools
+JOIN frpm ON schools.CDSCode = frpm.CDSCode
+WHERE ""School Type"" = 'Continuation'
+ORDER BY ""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",0,1,2.4241,640,69,"SELECT si.""School Name"", mi.""Percent (%) Eligible Free (Ages 5-17)""
+FROM SchoolInfo si
+JOIN MealInfo mi ON si.CDSCode = mi.CDSCode
+WHERE si.""School Type"" = 'Continuation'
+ORDER BY mi.""Percent (%) Eligible Free (Ages 5-17)"" ASC
+LIMIT 3",ast,silent_failure_suspected,0,1.7667,705,76,openai_compat
+evo_ts_00002,TABLE_SPLIT,california_schools,2,Please list the zip code of all the charter schools in Fresno County Office of Education.,0,"SELECT DISTINCT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.County Name = 'Fresno County Office of Education'
+AND f.""Charter School (Y/N)"" = 1",0,1.8069,552,68,"SELECT DISTINCT sl.Zip
+FROM SchoolInfo si
+JOIN SchoolLocation sl ON si.CDSCode = sl.CDSCode
+WHERE si.Charter = 1 AND si.County = 'Fresno' AND si.District = 'Fresno County Office of Education'",0,1.1668,569,60,"SELECT DISTINCT s.Zip 
+FROM schools s
+JOIN frpm f ON s.CDSCode = f.CDSCode
+WHERE s.County = 'Fresno' 
+AND f.""County Name"" = 'Fresno County Office of Education'
+AND f.""Charter School (Y/N)"" = 1",0,1,1.5527,650,69,"SELECT DISTINCT sl.Zip 
+FROM SchoolLocation sl
+JOIN SchoolInfo si ON sl.CDSCode = si.CDSCode
+JOIN frpm f ON si.CDSCode = f.CDSCode
+WHERE si.County = 'Fresno' 
+AND f.""County Name"" LIKE '%Fresno County Office of Education%'
+AND f.""Charter School (Y/N)"" = 1",parse_error,silent_failure_suspected,0,3.1418,1633,170,openai_compat
+evo_ts_00003,TABLE_SPLIT,california_schools,3,What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?,0,"SELECT s.MailStreet
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.FRPM Count (K-12) DESC
+LIMIT 1",0,3.6549,559,45,"SELECT sc.MailStreet 
+FROM frpm f
+JOIN SchoolContact sc ON f.CDSCode = sc.CDSCode
+WHERE f.`FRPM Count (K-12)` = (
+    SELECT MAX(`FRPM Count (K-12)`) 
+    FROM frpm
+)",1,1.2714,576,62,"SELECT s.MailStreet
+FROM frpm f
+JOIN schools s ON f.CDSCode = s.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",0,1,1.8161,634,46,"SELECT sc.MailStreet
+FROM frpm f
+JOIN SchoolContact sc ON f.CDSCode = sc.CDSCode
+ORDER BY f.`FRPM Count (K-12)` DESC
+LIMIT 1",parse_error,valid,1,1.666,764,47,openai_compat
+evo_ts_00340,TABLE_SPLIT,card_games,340,Which are the cards that have incredibly powerful foils.,0,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1.2227,586,38,"SELECT cd.name 
+FROM cardDetails cd
+JOIN cardAttributes ca ON cd.id = ca.id
+WHERE ca.hasFoil = 1 AND cd.rarity = 'Mythic Rare' AND cd.power = '10'",0,1.2904,601,50,"SELECT name 
+FROM cards 
+WHERE hasFoil = 1 AND (text LIKE '%incredibly powerful%' OR flavorText LIKE '%incredibly powerful%')",0,1,1.5119,653,38,"SELECT cd.name 
+FROM cardAttributes ca
+JOIN cardDetails cd ON ca.id = cd.id
+WHERE ca.hasFoil = 1 
+AND (cd.text LIKE '%incredibly powerful%' OR cd.flavorText LIKE '%incredibly powerful%')",ast,silent_failure_suspected,0,1.5675,776,57,openai_compat
+evo_ts_00342,TABLE_SPLIT,card_games,342,List the card names with value that cost more converted mana for the face.,0,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,1.1758,590,20,"SELECT ci.name
+FROM CardIdentifiers ci
+JOIN CardDetails cd ON ci.id = cd.id
+WHERE cd.faceConvertedManaCost > cd.convertedManaCost",0,1.0418,605,37,"SELECT name 
+FROM cards 
+WHERE faceConvertedManaCost > convertedManaCost",0,1,1.1514,639,20,"SELECT ci.name 
+FROM CardDetails cd
+JOIN CardIdentifiers ci ON cd.id = ci.id
+WHERE cd.faceConvertedManaCost > cd.convertedManaCost",ast,valid,0,1.2829,762,37,openai_compat
+evo_ts_00343,TABLE_SPLIT,card_games,343,Name all cards with 2015 frame style ranking below 100 on EDHRec.,0,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1.1967,593,27,"SELECT ci.name 
+FROM cardDetails cd
+JOIN cardIdentifiers ci ON cd.id = ci.id
+WHERE cd.frameVersion = '2015' AND cd.edhrecRank < 100",0,1.3003,608,43,"SELECT name 
+FROM cards 
+WHERE frameVersion = '2015' AND edhrecRank < 100",0,1,1.1889,649,27,"SELECT ci.name 
+FROM cardDetails cd
+JOIN cardIdentifiers ci ON cd.id = ci.id
+WHERE cd.frameVersion = '2015' AND cd.edhrecRank < 100",ast,valid,0,1.7147,772,43,openai_compat
+evo_ts_00531,TABLE_SPLIT,codebase_community,531,"Which user has a higher reputation, Harlan or Jarrod Dixon?",0,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1.4186,398,36,"SELECT DisplayName, Reputation 
+FROM UserDetails 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1.2952,411,37,"SELECT DisplayName, Reputation 
+FROM users 
+WHERE DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY Reputation DESC 
+LIMIT 1",0,1,1.3257,463,36,"SELECT UserDetails.DisplayName, UserDetails.Reputation 
+FROM UserDetails 
+WHERE UserDetails.DisplayName IN ('Harlan', 'Jarrod Dixon') 
+ORDER BY UserDetails.Reputation DESC 
+LIMIT 1",ast,silent_failure_suspected,0,1.2522,582,47,openai_compat
+evo_ts_00532,TABLE_SPLIT,codebase_community,532,Please list the display names of all the users whose accounts were created in the year 2011.,1,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",0,1.3114,404,23,"SELECT DisplayName FROM UserBasicInfo WHERE strftime('%Y', datetime(CreationDate, 'unixepoch')) = '2011'",0,1.0408,418,32,"SELECT DisplayName FROM users WHERE strftime('%Y', CreationDate) = '2011'",0,1,1.1891,456,23,"SELECT UserBasicInfo.DisplayName 
+FROM UserBasicInfo 
+WHERE STRFTIME('%Y', UserBasicInfo.CreationDate) = '2011'",ast,valid,1,1.3966,583,36,openai_compat
+evo_ts_00533,TABLE_SPLIT,codebase_community,533,How many users last accessed the website after 2014/9/1?,0,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1.1501,400,22,"SELECT COUNT(*) 
+FROM UserActivity 
+WHERE LastAccessDate > strftime('%s', '2014-09-01')",0,1.5411,413,30,SELECT COUNT(*) FROM users WHERE LastAccessDate > '2014-09-01',0,1,1.3552,451,22,"SELECT COUNT(*) 
+FROM UserActivity 
+WHERE LastAccessDate > '2014-09-01'",ast,silent_failure_suspected,0,1.1307,574,25,openai_compat
+evo_ts_00534,TABLE_SPLIT,codebase_community,534,What is the display name of the user who has the most number of views?,1,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1.179,400,20,"SELECT u.DisplayName
+FROM UserBasicInfo u
+JOIN UserActivity a ON u.Id = a.AccountId
+ORDER BY a.Views DESC
+LIMIT 1",0,1.1139,414,37,"SELECT DisplayName 
+FROM users 
+ORDER BY Views DESC 
+LIMIT 1",0,1,1.5475,449,20,"SELECT UserBasicInfo.DisplayName 
+FROM UserActivity 
+JOIN UserBasicInfo ON UserActivity.Id = UserBasicInfo.Id 
+ORDER BY UserActivity.Views DESC 
+LIMIT 1",ast,valid,1,1.1677,572,40,openai_compat
+evo_ts_01470,TABLE_SPLIT,debit_card_specializing,1470,How many gas stations in CZE has Premium gas?,0,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1.3067,166,67,"SELECT COUNT(DISTINCT sd.GasStationID) 
+FROM StationDetails sd
+JOIN StationLocation sl ON sd.GasStationID = sl.GasStationID
+JOIN StationSegment ss ON sd.GasStationID = ss.GasStationID
+WHERE sl.Country = 'CZE' AND ss.Segment = 'Premium'",1,1.3516,184,71,"SELECT COUNT(DISTINCT g.GasStationID) 
+FROM gasstations g
+JOIN transactions_1k t ON g.GasStationID = t.GasStationID
+JOIN products p ON t.ProductID = p.ProductID
+WHERE g.Country = 'CZE' AND p.Description LIKE '%Premium%'",0,1,1.4106,264,67,"SELECT COUNT(DISTINCT sl.GasStationID) 
+FROM StationLocation AS sl 
+JOIN transactions_1k AS t ON sl.GasStationID = t.GasStationID 
+JOIN products AS p ON t.ProductID = p.ProductID 
+WHERE sl.Country = 'CZE' AND p.Description LIKE '%Premium%'",ast,silent_failure_suspected,0,1.4078,399,70,openai_compat
+evo_ts_01471,TABLE_SPLIT,debit_card_specializing,1471,What is the ratio of customers who pay in EUR against customers who pay in CZK?,1,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM customers WHERE Currency = 'CZK') AS ratio",0,1.2516,173,52,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM CustomerCurrency WHERE Currency = 'EUR') * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM CustomerCurrency WHERE Currency = 'CZK') AS Ratio
+FROM 
+    CustomerCurrency
+LIMIT 1",1,1.3539,182,64,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM transactions_1k WHERE CustomerID IN (SELECT CustomerID FROM customers WHERE Currency = 'EUR')) * 1.0 /
+    (SELECT COUNT(DISTINCT CustomerID) FROM transactions_1k WHERE CustomerID IN (SELECT CustomerID FROM customers WHERE Currency = 'CZK')) AS ratio",0,1,1.3734,254,78,"SELECT 
+    (SELECT COUNT(DISTINCT CustomerID) FROM CustomerCurrency WHERE Currency = 'EUR') * 1.0 / 
+    (SELECT COUNT(DISTINCT CustomerID) FROM CustomerCurrency WHERE Currency = 'CZK') AS ratio",ast,valid,1,1.182,366,55,openai_compat
+evo_ts_01020,TABLE_SPLIT,european_football_2,1020,Which player has the highest overall rating? Indicate the player's api id.,1,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1.2622,1086,24,"SELECT player_api_id 
+FROM Player_Basic_Info 
+ORDER BY overall_rating DESC 
+LIMIT 1",1,1.0711,1106,25,"SELECT player_api_id 
+FROM Player_Attributes 
+ORDER BY overall_rating DESC 
+LIMIT 1",0,1,1.1649,1141,24,"SELECT player_api_id 
+FROM Player_Basic_Info 
+ORDER BY overall_rating DESC 
+LIMIT 1",ast,valid,1,1.0256,1286,25,openai_compat
+evo_ts_01021,TABLE_SPLIT,european_football_2,1021,What is the height of the tallest player? Indicate his name.,0,"SELECT player_name, height 
+FROM Player 
+WHERE height = (SELECT MAX(height) FROM Player)",0,1.318,1085,24,"SELECT pi.player_name, pp.height
+FROM PlayerPhysical pp
+JOIN PlayerInfo pi ON pp.id = pi.id
+ORDER BY pp.height DESC
+LIMIT 1",0,1.0222,1100,38,"SELECT player_name, height 
+FROM Player 
+WHERE height = (SELECT MAX(height) FROM Player)",0,1,1.1762,1138,24,"SELECT pi.player_name, pp.height 
+FROM PlayerInfo pi
+JOIN PlayerPhysical pp ON pi.id = pp.id
+WHERE pp.height = (SELECT MAX(height) FROM PlayerPhysical)",ast,valid,0,1.2267,1261,41,openai_compat
+evo_ts_01022,TABLE_SPLIT,european_football_2,1022,What is the preferred foot when attacking of the player with the lowest potential?,0,"SELECT preferred_foot
+FROM Player_Attributes
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,1.4275,1086,28,"SELECT preferred_foot 
+FROM Player_Basic_Info 
+WHERE potential = (SELECT MIN(potential) FROM Player_Basic_Info)",0,1.0614,1103,30,"SELECT preferred_foot
+FROM Player_Attributes
+WHERE potential = (SELECT MIN(potential) FROM Player_Attributes)",0,1,1.2895,1145,28,"SELECT preferred_foot 
+FROM Player_Basic_Info 
+WHERE potential = (SELECT MIN(potential) FROM Player_Basic_Info)",ast,valid,0,1.9176,1224,30,openai_compat
+evo_ts_01023,TABLE_SPLIT,european_football_2,1023,"Among the players with an overall rating between 60 to 65, how many players whose going to be in all of your attack moves instead of defensing?",0,"SELECT COUNT(DISTINCT pa.player_api_id) 
+FROM Player_Attributes pa
+WHERE pa.overall_rating BETWEEN 60 AND 65 
+AND pa.attacking_work_rate = 'high' 
+AND pa.defensive_work_rate = 'low'",0,1.2706,1103,54,"SELECT COUNT(DISTINCT p.id) 
+FROM Player p
+JOIN Player_Basic_Attributes pba ON p.player_api_id = pba.player_api_id
+WHERE pba.overall_rating BETWEEN 60 AND 65
+AND pba.attacking_work_rate = 'high'
+AND pba.defensive_work_rate = 'low'",0,1.4137,1125,72,"SELECT COUNT(DISTINCT pa.player_api_id) 
+FROM Player_Attributes pa
+WHERE pa.overall_rating BETWEEN 60 AND 65 
+AND pa.attacking_work_rate = 'high' 
+AND pa.defensive_work_rate = 'low'",0,1,1.388,1188,54,"SELECT COUNT(DISTINCT pba.player_api_id)
+FROM Player_Basic_Attributes AS pba
+WHERE pba.overall_rating BETWEEN 60 AND 65
+  AND pba.attacking_work_rate = 'high'
+  AND pba.defensive_work_rate = 'low'",ast,valid,0,2.0121,1339,62,openai_compat
+evo_ts_00089,TABLE_SPLIT,financial,89,How many accounts who choose issuance after transaction are staying in East Bohemia region?,0,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN disp d ON a.account_id = d.account_id
+JOIN client c ON d.client_id = c.client_id
+JOIN district dis ON c.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1.7495,302,76,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account_info a
+JOIN account_district ad ON a.account_id = ad.account_id
+JOIN district d ON ad.district_id = d.district_id
+WHERE a.frequency = 'issuance after transaction' AND d.A2 = 'East Bohemia'",0,1.3388,320,68,"SELECT COUNT(DISTINCT a.account_id)
+FROM ""account"" a
+JOIN disp d ON a.account_id = d.account_id
+JOIN client c ON d.client_id = c.client_id
+JOIN district dis ON c.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",0,1,1.3451,407,78,"SELECT COUNT(DISTINCT a.account_id)
+FROM account_info AS a
+JOIN account_district AS ad ON a.account_id = ad.account_id
+JOIN disp AS d ON a.account_id = d.account_id
+JOIN client AS c ON d.client_id = c.client_id
+JOIN district AS dis ON ad.district_id = dis.district_id
+WHERE a.frequency = 'issuance after transaction' AND dis.A2 = 'East Bohemia'",ast,silent_failure_suspected,0,2.5574,540,96,openai_compat
+evo_ts_00090,TABLE_SPLIT,financial,90,How many accounts who have region in Prague are eligible for loans?,0,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+WHERE d.A2 = 'Prague'
+AND a.account_id NOT IN (
+    SELECT account_id
+    FROM loan
+    WHERE status IN ('A', 'B', 'C')
+)",0,2.428,298,70,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+JOIN disp dp ON a.account_id = dp.account_id
+JOIN client c ON dp.client_id = c.client_id
+LEFT JOIN AccountLoan al ON a.account_id = al.account_id
+WHERE d.A2 = 'Prague' AND al.loan_id IS NULL",0,1.2262,315,85,"SELECT COUNT(DISTINCT a.account_id)
+FROM account a
+JOIN district d ON a.district_id = d.district_id
+WHERE d.A2 = 'Prague'
+AND a.account_id NOT IN (
+    SELECT account_id
+    FROM loan
+    WHERE status IN ('A', 'B', 'C', 'D')
+)",0,1,1.5318,397,73,"SELECT COUNT(DISTINCT a.account_id) 
+FROM account AS a 
+JOIN district AS d ON a.district_id = d.district_id 
+WHERE d.A2 = 'Prague' 
+AND NOT a.account_id IN (
+    SELECT account_id 
+    FROM AccountLoan 
+    JOIN LoanDetails ON AccountLoan.loan_id = LoanDetails.loan_id 
+    WHERE LoanDetails.status LIKE '%A%' 
+    OR LoanDetails.status LIKE '%B%' 
+    OR LoanDetails.status LIKE '%C%'
+)",ast,silent_failure_suspected,0,3.1953,1126,198,openai_compat
+evo_ts_00091,TABLE_SPLIT,financial,91,"The average unemployment ratio of 1995 and 1996, which one has higher percentage?",1,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 = '1995' THEN A9 END) > AVG(CASE WHEN A5 = '1996' THEN A9 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM district
+WHERE A5 IN ('1995', '1996')",0,1.5152,304,80,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A15 = 1995 THEN A14 END) > AVG(CASE WHEN A15 = 1996 THEN A14 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM 
+    district_avg
+WHERE 
+    A15 IN (1995, 1996)",1,1.6819,321,83,"SELECT 
+    CASE 
+        WHEN AVG(CASE WHEN A5 = '1995' THEN A9 END) > AVG(CASE WHEN A5 = '1996' THEN A9 END) THEN '1995'
+        ELSE '1996'
+    END AS year_with_higher_unemployment
+FROM ""district""
+WHERE A5 IN ('1995', '1996')",0,1,1.2967,413,81,"SELECT CASE 
+    WHEN AVG(CASE WHEN district_info.A5 = '1995' THEN district_numbers.A9 END) > AVG(CASE WHEN district_info.A5 = '1996' THEN district_numbers.A9 END) 
+    THEN '1995' 
+    ELSE '1996' 
+END AS year_with_higher_unemployment 
+FROM district_info 
+JOIN district_numbers ON district_info.district_id = district_numbers.district_id 
+WHERE district_info.A5 IN ('1995', '1996')",ast,valid,1,1.5375,535,108,openai_compat
+evo_ts_00092,TABLE_SPLIT,financial,92,List out the no. of districts that have female average salary is more than 6000 but less than 10000?,0,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,2.0101,310,112,"SELECT COUNT(DISTINCT d.district_id)
+FROM district_extra de
+JOIN district_info di ON de.district_id = di.district_id
+JOIN client c ON c.district_id = di.district_id
+WHERE c.gender = 'F' AND de.A12 > 6000 AND de.A12 < 10000",0,1.752,327,72,"SELECT COUNT(DISTINCT d.district_id)
+FROM district d
+JOIN client c ON d.district_id = c.district_id
+JOIN disp dp ON c.client_id = dp.client_id
+JOIN account a ON dp.account_id = a.account_id
+JOIN trans t ON a.account_id = t.account_id
+WHERE c.gender = 'F' 
+GROUP BY d.district_id
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) BETWEEN 6000 AND 10000",0,1,1.5659,451,112,"SELECT COUNT(DISTINCT di.district_id) 
+FROM district_info AS di 
+JOIN client AS c ON di.district_id = c.district_id 
+JOIN disp AS dp ON c.client_id = dp.client_id 
+JOIN account AS a ON dp.account_id = a.account_id 
+JOIN trans AS t ON a.account_id = t.account_id 
+WHERE c.gender = 'F' 
+GROUP BY di.district_id 
+HAVING AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) > 6000 
+   AND AVG(CASE WHEN t.type = 'credit' THEN t.amount ELSE 0 END) < 10000",ast,silent_failure_suspected,0,5.7529,1223,259,openai_compat
+evo_ts_00846,TABLE_SPLIT,formula_1,846,Please list the reference names of the drivers who are eliminated in the first period in race number 20.,0,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1.5027,458,46,"SELECT di.driverRef
+FROM qualifying q
+JOIN DriverInfo di ON q.driverId = di.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1.4899,475,47,"SELECT d.driverRef
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",0,1,2.1645,533,46,"SELECT di.driverRef 
+FROM qualifying AS q 
+JOIN DriverInfo AS di ON q.driverId = di.driverId 
+WHERE q.raceId = 20 AND q.q2 IS NULL AND q.q3 IS NULL",ast,valid,0,1.5712,662,49,openai_compat
+evo_ts_00847,TABLE_SPLIT,formula_1,847,What is the surname of the driver with the best lap time in race number 19 in the second qualifying period?,1,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+WHERE q.raceId = 19
+ORDER BY q.q2 ASC
+LIMIT 1",0,2.1922,460,45,"SELECT d.surname
+FROM QualifyingDetails qd
+JOIN drivers d ON qd.qualifyId = d.driverId
+WHERE qd.raceId = 19 AND qd.q2 IS NOT NULL
+ORDER BY CAST(qd.q2 AS TIME) ASC
+LIMIT 1",0,1.3375,480,64,"SELECT d.surname
+FROM qualifying q
+JOIN drivers d ON q.driverId = d.driverId
+JOIN races r ON q.raceId = r.raceId
+WHERE r.round = 19 AND q.q2 IS NOT NULL
+ORDER BY q.q2 ASC
+LIMIT 1",0,1,1.1996,534,64,"SELECT d.surname 
+FROM DriverQualifying AS dq 
+JOIN QualifyingDetails AS qd ON dq.qualifyId = qd.qualifyId 
+JOIN drivers AS d ON dq.driverId = d.driverId 
+WHERE qd.raceId = 19 
+ORDER BY qd.q2 ASC 
+LIMIT 1",ast,valid,1,1.3685,672,70,openai_compat
+evo_ts_00848,TABLE_SPLIT,formula_1,848,Please list the year during which the race is held on circuits in Shanghai.,1,"SELECT DISTINCT r.year
+FROM races r
+JOIN circuits c ON r.circuitId = c.circuitId
+WHERE c.location = 'Shanghai'",0,0.9403,452,34,"SELECT DISTINCT r.year
+FROM races r
+JOIN CircuitDetails cd ON r.circuitId = cd.circuitId
+JOIN CircuitLocation cl ON cd.circuitId = cl.circuitId
+WHERE cl.location = 'Shanghai'",1,1.3256,461,50,"SELECT DISTINCT r.year
+FROM races r
+JOIN circuits c ON r.circuitId = c.circuitId
+WHERE c.location = 'Shanghai'",0,1,1.0513,515,34,"SELECT DISTINCT r.year 
+FROM races AS r 
+JOIN CircuitLocation AS cl ON r.circuitId = cl.circuitId 
+WHERE cl.location = 'Shanghai'",ast,valid,1,2.0105,631,37,openai_compat
+evo_ts_00849,TABLE_SPLIT,formula_1,849,Where can the introduction of the races held on Circuit de Barcelona-Catalunya be found?,0,"SELECT url 
+FROM races 
+JOIN circuits ON races.circuitId = circuits.circuitId 
+WHERE circuits.name = 'Circuit de Barcelona-Catalunya'",0,1.0929,455,35,"SELECT url 
+FROM CircuitDetails 
+WHERE name = 'Circuit de Barcelona-Catalunya'",1,1.0754,464,22,"SELECT url 
+FROM races 
+JOIN circuits ON races.circuitId = circuits.circuitId 
+WHERE circuits.name = 'Circuit de Barcelona-Catalunya'",0,1,1.0188,519,35,"SELECT url 
+FROM races 
+JOIN CircuitDetails ON races.circuitId = CircuitDetails.circuitId 
+WHERE CircuitDetails.name = 'Circuit de Barcelona-Catalunya'",ast,execution_error,0,0.9717,633,38,openai_compat
+evo_ts_01312,TABLE_SPLIT,student_club,1312,What's Angela Sanders's major?,1,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1.0308,269,41,"SELECT md.major_name
+FROM member m
+JOIN MajorDetails md ON m.link_to_major = md.major_id
+WHERE m.first_name = 'Angela' AND m.last_name = 'Sanders'",1,0.8831,279,44,"SELECT major.major_name
+FROM member
+JOIN major ON member.link_to_major = major.major_id
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",0,1,1.7285,339,41,"SELECT MajorDetails.major_name 
+FROM member 
+JOIN MajorDetails ON member.link_to_major = MajorDetails.major_id 
+WHERE member.first_name = 'Angela' AND member.last_name = 'Sanders'",ast,silent_failure_suspected,1,1.2817,454,44,openai_compat
+evo_ts_01313,TABLE_SPLIT,student_club,1313,How many students in the Student_Club are from the College of Engineering?,1,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'College of Engineering'",0,1.0391,278,33,"SELECT COUNT(*) 
+FROM member 
+JOIN MajorAffiliation ON member.link_to_major = MajorAffiliation.major_id 
+WHERE MajorAffiliation.college = 'College of Engineering'",1,1.0945,288,39,"SELECT COUNT(*) 
+FROM member 
+JOIN major ON member.link_to_major = major.major_id 
+WHERE major.college = 'Engineering'",0,1,1.1431,340,31,"SELECT COUNT(*) 
+FROM member 
+JOIN MajorAffiliation ON member.link_to_major = MajorAffiliation.major_id 
+WHERE MajorAffiliation.college = 'College of Engineering'",ast,valid,1,1.0297,455,39,openai_compat
+evo_ts_01314,TABLE_SPLIT,student_club,1314,Please list the full names of the students in the Student_Club that come from the Art and Design Department.,0,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,0.9967,285,45,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN MajorAffiliation ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1.4305,295,47,"SELECT m.first_name || ' ' || m.last_name AS full_name
+FROM member m
+JOIN major ma ON m.link_to_major = ma.major_id
+WHERE ma.department = 'Art and Design'",0,1,1.3946,359,45,"SELECT m.first_name || ' ' || m.last_name AS full_name 
+FROM member AS m 
+JOIN MajorAffiliation AS ma ON m.link_to_major = ma.major_id 
+WHERE ma.department = 'Art and Design'",ast,silent_failure_suspected,0,1.3476,476,49,openai_compat
+evo_ts_00717,TABLE_SPLIT,superhero,717,Please list all the superpowers of 3-D Man.,1,"SELECT sp.power_name
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.hero_id
+JOIN superpower AS sp ON hp.power_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",0,1.1656,221,51,"SELECT pd.power_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+JOIN PowerDetails pd ON hp.power_id = pd.id
+WHERE s.superhero_name = '3-D Man'",1,1.3144,228,48,"SELECT sp.power_name
+FROM superhero AS sh
+JOIN hero_power AS hp ON sh.id = hp.hero_id
+JOIN superpower AS sp ON hp.power_id = sp.id
+WHERE sh.superhero_name = '3-D Man'",0,1,1.5605,302,51,"SELECT pd.power_name 
+FROM superhero AS sh 
+JOIN hero_power AS hp ON sh.id = hp.hero_id 
+JOIN PowerDetails AS pd ON hp.power_id = pd.id 
+WHERE sh.superhero_name = '3-D Man'",ast,silent_failure_suspected,1,1.8001,346,51,openai_compat
+evo_ts_00720,TABLE_SPLIT,superhero,720,Please list the full names of all the superheroes with over 15 super powers.,0,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.power_id) > 15",0,1.247,225,42,"SELECT hd.full_name
+FROM Hero_Details hd
+JOIN hero_power hp ON hd.id = hp.hero_id
+GROUP BY hd.id
+HAVING COUNT(hp.power_id) > 15",0,1.1054,245,44,"SELECT s.full_name
+FROM superhero s
+JOIN hero_power hp ON s.id = hp.hero_id
+GROUP BY s.id
+HAVING COUNT(hp.power_id) > 15",0,1,1.0949,296,42,"SELECT hd.full_name 
+FROM Hero_Details AS hd 
+JOIN hero_power AS hp ON hd.id = hp.hero_id 
+GROUP BY hd.id 
+HAVING COUNT(hp.power_id) > 15",ast,valid,0,1.1834,435,46,openai_compat
+evo_ts_01149,TABLE_SPLIT,thrombosis_prediction,1149,Are there more in-patient or outpatient who were male? What is the deviation in percentage?,0,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1.7582,329,100,"WITH InPatientCount AS (
+    SELECT COUNT(DISTINCT pa.ID) AS Count
+    FROM PatientAdmission pa
+    JOIN PatientInfo pi ON pa.ID = pi.ID
+    WHERE pa.Admission = 'inpatient' AND pi.SEX = 'male'
+),
+OutPatientCount AS (
+    SELECT COUNT(DISTINCT pa.ID) AS Count
+    FROM PatientAdmission pa
+    JOIN PatientInfo pi ON pa.ID = pi.ID
+    WHERE pa.Admission = 'outpatient' AND pi.SEX = 'male'
+)
+SELECT 
+    CASE 
+        WHEN InPatientCount.Count > OutPatientCount.Count THEN 'In-patient'
+        ELSE 'Out-patient'
+    END AS MorePatients,
+    ABS(InPatientCount.Count - OutPatientCount.Count) * 100.0 / 
+    (InPatientCount.Count + OutPatientCount.Count) AS DeviationPercentage
+FROM InPatientCount, OutPatientCount",0,2.1732,344,193,"WITH PatientCounts AS (
+    SELECT 
+        Admission,
+        COUNT(*) AS Count
+    FROM 
+        Patient
+    WHERE 
+        SEX = 'Male'
+    GROUP BY 
+        Admission
+),
+TotalCount AS (
+    SELECT 
+        SUM(Count) AS Total
+    FROM 
+        PatientCounts
+)
+SELECT 
+    Admission,
+    Count,
+    (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage
+FROM 
+    PatientCounts",0,1,1.3312,458,100,"WITH PatientCounts AS (
+    SELECT pa.Admission, COUNT(*) AS Count
+    FROM PatientAdmission pa
+    JOIN PatientInfo pi ON pa.ID = pi.ID
+    WHERE pi.SEX LIKE 'Male%'
+    GROUP BY pa.Admission
+), 
+TotalCount AS (
+    SELECT SUM(Count) AS Total FROM PatientCounts
+) 
+SELECT Admission, Count, (Count * 100.0 / (SELECT Total FROM TotalCount)) AS Percentage 
+FROM PatientCounts",ast,silent_failure_suspected,0,3.54,1192,203,openai_compat
+evo_ts_01150,TABLE_SPLIT,thrombosis_prediction,1150,What is the percentage of female patient were born after 1930?,0,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient)) AS percentage
+FROM Patient
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1.4719,324,44,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM PatientInfo WHERE Birthday > 1930)) AS FemalePercentage
+FROM PatientInfo
+WHERE SEX = 'Female' AND Birthday > 1930",0,1.6426,339,49,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM Patient)) AS percentage
+FROM Patient
+WHERE SEX = 'Female' AND Birthday > '1930-12-31'",0,1,1.1673,397,44,"SELECT (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM PatientInfo)) AS percentage 
+FROM PatientInfo 
+WHERE SEX = 'Female' AND Birthday > 19301231",ast,silent_failure_suspected,0,2.6308,1100,89,openai_compat
+evo_ts_01151,TABLE_SPLIT,thrombosis_prediction,1151,"For patient born between Year 1930 to 1940, how many percent of them were inpatient?",0,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS Inpatient_Percentage
+FROM Patient
+WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",0,1.5489,331,57,"SELECT (COUNT(DISTINCT pa.ID) * 100.0 / COUNT(DISTINCT pi.ID)) AS Inpatient_Percentage
+FROM PatientInfo pi
+JOIN PatientAdmission pa ON pi.ID = pa.ID
+WHERE pi.Birthday BETWEEN 19300000 AND 19400000
+AND pa.Admission = 'inpatient'",0,1.5708,346,72,"SELECT (COUNT(CASE WHEN Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS Inpatient_Percentage
+FROM Patient
+WHERE strftime('%Y', Birthday) BETWEEN '1930' AND '1940'",0,1,1.3343,417,57,"SELECT 
+    (COUNT(CASE WHEN pa.Admission = 'inpatient' THEN 1 END) * 100.0 / COUNT(*)) AS Inpatient_Percentage 
+FROM 
+    PatientInfo pi
+JOIN 
+    PatientAdmission pa ON pi.ID = pa.ID
+WHERE 
+    STRFTIME('%Y', pi.Birthday) LIKE '193%'",ast,silent_failure_suspected,0,2.7856,1165,160,openai_compat
+evo_ts_01152,TABLE_SPLIT,thrombosis_prediction,1152,What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?,0,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM 
+    Patient
+WHERE 
+    Diagnosis = 'SLE'",0,1.3915,331,76,"SELECT 
+    (SELECT COUNT(*) FROM PatientAdmission pa
+     JOIN PatientDiagnosis pd ON pa.ID = pd.ID
+     WHERE pd.Diagnosis = 'SLE' AND pa.Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM PatientAdmission pa
+     JOIN PatientDiagnosis pd ON pa.ID = pd.ID
+     WHERE pd.Diagnosis = 'SLE' AND pa.Admission = 'inpatient') AS OutpatientToInpatientRatio",0,1.5739,346,104,"SELECT 
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'outpatient') * 1.0 /
+    (SELECT COUNT(*) FROM Patient WHERE Diagnosis = 'SLE' AND Admission = 'inpatient') AS OutpatientToInpatientRatio",0,1,1.0679,436,63,"SELECT 
+    (SELECT COUNT(*) 
+     FROM PatientDiagnosis pd
+     JOIN PatientAdmission pa ON pd.ID = pa.ID
+     WHERE pd.Diagnosis = 'SLE' AND pa.Admission = 'outpatient') * 1.0 / 
+    (SELECT COUNT(*) 
+     FROM PatientDiagnosis pd
+     JOIN PatientAdmission pa ON pd.ID = pa.ID
+     WHERE pd.Diagnosis = 'SLE' AND pa.Admission = 'inpatient') AS OutpatientToInpatientRatio
+FROM PatientDiagnosis
+WHERE Diagnosis = 'SLE'",ast,valid,0,1.6946,552,120,openai_compat
+evo_ts_00195,TABLE_SPLIT,toxicology,195,What is the most common bond type?,1,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",0,1.0859,123,26,"SELECT bond_type
+FROM BondDetails
+JOIN BondMolecule ON BondDetails.bond_id = BondMolecule.bond_id
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",1,0.9564,133,45,"SELECT bond_type
+FROM bond
+GROUP BY bond_type
+ORDER BY COUNT(*) DESC
+LIMIT 1",0,1,1.6375,178,26,SELECT bond_type FROM BondDetails GROUP BY bond_type ORDER BY COUNT(*) DESC LIMIT 1,ast,valid,1,1.1383,292,23,openai_compat
+evo_ts_00196,TABLE_SPLIT,toxicology,196,"In the non-carcinogenic molecules, how many contain chlorine atoms?",0,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1.1563,130,50,"SELECT COUNT(DISTINCT a.molecule_id) 
+FROM atom a
+JOIN MoleculeInfo m ON a.molecule_id = m.molecule_id
+WHERE a.element = 'Chlorine' AND m.label != 'carcinogenic'",0,1.3279,132,53,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM molecule m
+JOIN atom a ON m.molecule_id = a.molecule_id
+WHERE m.label != 'carcinogenic' AND a.element = 'chlorine'",0,1,1.4442,209,50,"SELECT COUNT(DISTINCT m.molecule_id) 
+FROM MoleculeInfo AS m 
+JOIN atom AS a ON m.molecule_id = a.molecule_id 
+WHERE m.label <> 'carcinogenic' AND a.element = 'chlorine'",ast,silent_failure_suspected,0,1.4406,235,54,openai_compat

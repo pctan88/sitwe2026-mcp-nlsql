@@ -1,0 +1,124 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tm_01,TABLE_MERGE,List department names with cities.,"SELECT department_name, city FROM department_location ORDER BY department_id",False,,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT department_name, city FROM department_location",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,openai_compat,"SELECT d.department_name, d.city FROM department_location AS d",ast,valid,1,1,0,1.2671,1.3557,0.639,1.3678,0.6828,0.811158,openai_compat
+hr_tm_02,TABLE_MERGE,Count departments per country.,"SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",False,,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+JOIN locations l ON c.country_id = l.country_id
+JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+JOIN locations l ON c.country_id = l.country_id
+JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_name",0,"SELECT c.country_name, COUNT(dl.department_id) AS department_count
+FROM department_location dl
+JOIN countries c ON dl.country_id = c.country_id
+GROUP BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+JOIN locations l ON c.country_id = l.country_id
+JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_name",0,1,no such table: locations,openai_compat,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count 
+FROM countries AS c 
+JOIN department_location AS dl ON c.country_id = dl.country_id 
+GROUP BY c.country_name",ast,valid,0,0,0,1.6987,1.7729,4.0663,1.4418,1.4628,12.10135,openai_compat
+hr_tm_03,TABLE_MERGE,Street address for department 10.,SELECT street_address FROM department_location WHERE department_id=10,False,,"SELECT l.street_address 
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE d.department_id = 10",1,"SELECT l.street_address
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE d.department_id = 10",0,SELECT street_address FROM department_location WHERE department_id = 10,1,"SELECT l.street_address
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE d.department_id = 10",0,1,no such table: departments,openai_compat,SELECT dl.street_address FROM department_location AS dl WHERE dl.department_id = 10,ast,valid,1,1,0,0.8987,1.2259,0.9291,0.9917,1.0078,1.244517,openai_compat
+hr_tm_04,TABLE_MERGE,Departments in City1.,SELECT department_name FROM department_location WHERE city='City1',False,,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT department_name 
+FROM departments 
+JOIN locations ON departments.location_id = locations.location_id 
+WHERE locations.city = 'City1'",0,"SELECT department_name 
+FROM department_location 
+WHERE city = 'City1'",1,"SELECT department_name 
+FROM departments 
+JOIN locations ON departments.location_id = locations.location_id 
+WHERE locations.city = 'City1'",0,1,no such table: departments,openai_compat,SELECT department_name FROM department_location WHERE city = 'City1',ast,valid,1,1,0,1.5534,1.3317,0.9116,0.9387,1.069,0.89763,openai_compat
+hr_tm_05,TABLE_MERGE,Department names with postal codes.,"SELECT department_name, postal_code FROM department_location ORDER BY department_id",False,,"SELECT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",1,"SELECT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT department_name, postal_code FROM department_location",1,"SELECT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,openai_compat,"SELECT department_name, postal_code FROM department_location",ast,valid,1,1,0,1.1999,0.9759,0.8867,0.7935,0.9911,0.915819,openai_compat
+hr_tm_06,TABLE_MERGE,Count departments in State1.,SELECT COUNT(*) FROM department_location WHERE state_province='State1',False,,"SELECT COUNT(*) 
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(*) 
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(*) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(*) 
+FROM departments
+JOIN locations ON departments.location_id = locations.location_id
+WHERE locations.state_province = 'State1'",0,1,no such table: departments,openai_compat,SELECT COUNT(*) FROM department_location AS dl WHERE dl.state_province = 'State1',ast,valid,1,1,0,1.104,1.1885,0.9158,2.0264,1.3213,1.041154,openai_compat
+hr_tm_07,TABLE_MERGE,List location IDs with department names.,"SELECT location_id, department_name FROM department_location ORDER BY location_id",False,,"SELECT locations.location_id, departments.department_name
+FROM locations
+JOIN departments ON locations.location_id = departments.location_id",1,"SELECT locations.location_id, departments.department_name
+FROM locations
+JOIN departments ON locations.location_id = departments.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT departments.location_id, departments.department_name
+FROM departments",0,1,no such table: locations,openai_compat,"SELECT department_location.location_id, department_location.department_name FROM department_location",ast,valid,1,1,0,1.1202,1.1296,0.8644,0.7379,0.7617,0.7395,openai_compat
+hr_tm_08,TABLE_MERGE,Departments in country C01.,SELECT department_name FROM department_location WHERE country_id='C01',False,,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT department_name 
+FROM department_location 
+WHERE country_id = 'C01'",1,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,openai_compat,"SELECT d.department_id, d.department_name 
+FROM department_location AS d 
+WHERE d.country_id = 'C01'",ast,silent_failure_suspected,0,0,0,1.1417,1.5165,0.9472,2.4539,1.2003,11.880619,openai_compat
+hr_tm_09,TABLE_MERGE,Count distinct cities with departments.,SELECT COUNT(DISTINCT city) FROM department_location,False,,SELECT COUNT(DISTINCT city) FROM locations WHERE location_id IN (SELECT DISTINCT location_id FROM departments),1,"SELECT COUNT(DISTINCT city) 
+FROM locations 
+JOIN departments ON locations.location_id = departments.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT city) 
+FROM locations 
+JOIN departments ON locations.location_id = departments.location_id",0,1,no such table: locations,openai_compat,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1,0,3.7524,3.7507,0.85,0.8522,0.8357,0.833308,openai_compat
+hr_tm_10,TABLE_MERGE,List department names with manager IDs.,"SELECT department_name, manager_id FROM department_location ORDER BY department_id",False,,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM department",0,1,no such table: departments,openai_compat,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1,0,1.0105,1.152,0.7896,0.6648,0.888,0.568472,openai_compat
+hr_tm_11,TABLE_MERGE,Employee departments by name.,"SELECT e.employee_id, dl.department_name FROM employees e JOIN department_location dl ON e.department_id=dl.department_id ORDER BY e.employee_id",False,,"SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id",0,"SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id",0,"SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+JOIN department_location d ON e.department_id = d.department_id",0,"SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+JOIN department d ON e.department_id = d.department_id",0,1,no such table: departments,openai_compat,"SELECT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id",ast,valid,0,0,0,1.7315,1.7106,2.1255,1.0178,1.4757,0.778327,openai_compat
+hr_tm_12,TABLE_MERGE,Job history cities.,"SELECT j.employee_id, dl.city FROM job_history j JOIN department_location dl ON j.department_id=dl.department_id ORDER BY j.employee_id",False,,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+JOIN departments d ON e.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,openai_compat,"SELECT DISTINCT dl.city 
+FROM job_history AS jh 
+JOIN department_location AS dl ON jh.department_id = dl.department_id",ast,valid,0,0,0,2.2145,1.4729,0.9686,0.9018,0.8948,1.129418,openai_compat
+hr_tm_13,TABLE_MERGE,List job titles.,SELECT job_title FROM jobs ORDER BY job_id,False,,SELECT job_title FROM jobs,1,SELECT job_title FROM jobs,1,SELECT job_title FROM jobs,1,SELECT job_title FROM jobs,1,0,,openai_compat,SELECT job_title FROM jobs,ast,valid,1,0,0,0.7439,0.6614,0.7353,0.0009,0.0016,0.359914,openai_compat
+hr_tm_14,TABLE_MERGE,Count regions.,SELECT COUNT(*) FROM regions,False,,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,openai_compat,SELECT COUNT(*) FROM regions,ast,valid,1,0,0,1.0087,0.7874,0.6686,0.001,0.0019,0.491731,openai_compat
+hr_tm_15,TABLE_MERGE,List all cities.,,True,unanswerable_after_TABLE_MERGE,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,openai_compat,SELECT DISTINCT city FROM department_location,ast,valid,,0,0,0.6773,0.8852,0.6723,0.7995,0.8994,0.638662,openai_compat
+hr_tm_16,TABLE_MERGE,Count locations.,,True,unanswerable_after_TABLE_MERGE,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(DISTINCT location_id) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,openai_compat,SELECT COUNT(*) FROM department_location,ast,valid,,0,0,0.9081,0.719,0.8107,0.9397,0.8249,0.465438,openai_compat

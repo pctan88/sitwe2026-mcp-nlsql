@@ -1,0 +1,56 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+cs_cr_01,COLUMN_RENAME,False,SELECT DISTINCT Song_Name FROM singer,0,1,SELECT DISTINCT song_title FROM singer,valid,1,SELECT DISTINCT song_title FROM singer,execution_error,1,SELECT DISTINCT song_title FROM singer,execution_error,1,SELECT DISTINCT song_title FROM singer,skipped
+cs_cr_02,COLUMN_RENAME,False,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,silent_failure_suspected,1,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,execution_error,1,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,execution_error,1,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,skipped
+cs_cr_03,COLUMN_RENAME,False,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,1,"SELECT singer.Name, singer.song_title FROM singer",valid,1,"SELECT singer.Name, singer.song_title
+FROM singer",execution_error,1,"SELECT singer.Name, singer.song_title
+FROM singer",execution_error,1,"SELECT singer.Name, singer.song_title FROM singer",skipped
+cs_cr_04,COLUMN_RENAME,False,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,0,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",valid,0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.song_title = 'Sun'",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.song_title = 'Sun'",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",skipped
+cs_cr_05,COLUMN_RENAME,False,SELECT AVG(Song_release_year) FROM singer,0,1,SELECT AVG(debut_year) FROM singer,valid,1,SELECT AVG(debut_year) FROM singer,execution_error,1,SELECT AVG(debut_year) FROM singer,execution_error,1,SELECT AVG(debut_year) FROM singer,skipped
+cs_cr_06,COLUMN_RENAME,False,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",valid,1,"SELECT Singer_ID, debut_year
+FROM singer
+ORDER BY Singer_ID",execution_error,1,"SELECT Singer_ID, debut_year
+FROM singer
+ORDER BY Singer_ID",execution_error,1,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",skipped
+cs_cr_07,COLUMN_RENAME,False,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",valid,0,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",execution_error,0,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",execution_error,0,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",skipped
+cs_cr_08,COLUMN_RENAME,False,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",valid,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year
+FROM singer s
+WHERE s.debut_year = 2014",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year
+FROM singer s
+WHERE s.debut_year = 2014",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",skipped
+cs_cr_09,COLUMN_RENAME,False,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,1,SELECT COUNT(DISTINCT song_title) FROM singer,silent_failure_suspected,1,SELECT COUNT(DISTINCT song_title) FROM singer,execution_error,1,SELECT COUNT(DISTINCT song_title) FROM singer,execution_error,1,SELECT COUNT(DISTINCT song_title) FROM singer,skipped
+cs_cr_10,COLUMN_RENAME,False,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',valid,1,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",execution_error,1,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",execution_error,1,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',skipped
+cs_cr_11,COLUMN_RENAME,False,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,1,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",valid,1,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s",execution_error,1,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s",execution_error,1,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",skipped
+cs_cr_12,COLUMN_RENAME,False,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,1,SELECT song_title FROM singer ORDER BY debut_year ASC,valid,1,SELECT song_title FROM singer ORDER BY debut_year ASC,execution_error,1,SELECT song_title FROM singer ORDER BY debut_year ASC,execution_error,1,SELECT song_title FROM singer ORDER BY debut_year ASC,skipped
+cs_cr_13,COLUMN_RENAME,False,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,valid,0,"SELECT DISTINCT s.Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",execution_error,1,"SELECT DISTINCT s.song_title
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",execution_error,1,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,skipped
+cs_cr_14,COLUMN_RENAME,False,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,1,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,silent_failure_suspected,1,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,execution_error,1,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,execution_error,1,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,skipped
+cs_cr_15,COLUMN_RENAME,False,SELECT * FROM stadium WHERE Capacity > 10000,0,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,skipped
+cs_cr_16,COLUMN_RENAME,False,SELECT COUNT(*) FROM concert,1,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,skipped

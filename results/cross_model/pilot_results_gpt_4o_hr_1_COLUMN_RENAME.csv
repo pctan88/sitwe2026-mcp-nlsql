@@ -1,0 +1,55 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_cr_01,COLUMN_RENAME,List employee first and last names.,"SELECT fname, last_name FROM employees ORDER BY employee_id",False,,"SELECT first_name, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,"SELECT fname, last_name FROM employees",1,"SELECT employees.first_name, employees.last_name FROM employees",0,1,no such column: first_name,openai_compat,"SELECT fname, last_name FROM employees",ast,valid,1,1,0,0.8795,0.7177,0.7091,0.7396,0.002,0.49914,openai_compat
+hr_cr_02,COLUMN_RENAME,Count employees.,SELECT COUNT(*) FROM employees,False,,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,0,,openai_compat,SELECT COUNT(*) FROM employees,ast,valid,1,0,0,0.8059,0.8911,0.9547,0.0012,0.0146,0.631534,openai_compat
+hr_cr_03,COLUMN_RENAME,Employees with salary over 7000.,SELECT employee_id FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id,False,,SELECT * FROM employees WHERE salary > 7000,0,SELECT * FROM employees WHERE salary > 7000,0,SELECT * FROM employees WHERE monthly_salary > 7000,0,SELECT * FROM employees WHERE salary > 7000.0,0,1,no such column: salary,openai_compat,SELECT * FROM employees WHERE monthly_salary > 7000,ast,valid,0,0,0,1.102,0.7816,0.9556,0.758,0.0021,0.578391,openai_compat
+hr_cr_04,COLUMN_RENAME,Average employee salary.,SELECT AVG(monthly_salary) FROM employees,False,,SELECT AVG(salary) AS average_salary FROM employees,1,SELECT AVG(salary) AS average_salary FROM employees,0,SELECT AVG(monthly_salary) AS average_salary FROM employees,1,SELECT AVG(salary) AS average_salary FROM employees,0,1,no such column: salary,openai_compat,SELECT AVG(monthly_salary) AS average_salary FROM employees,ast,valid,1,1,0,0.8661,1.0134,0.8261,0.8439,0.0024,0.666793,openai_compat
+hr_cr_05,COLUMN_RENAME,List employee emails.,SELECT email FROM employees ORDER BY employee_id,False,,SELECT email FROM employees,1,SELECT email FROM employees,1,SELECT email FROM employees,1,SELECT email FROM employees,1,0,,openai_compat,SELECT email FROM employees,ast,valid,1,0,0,0.7266,0.9202,0.6327,0.0012,0.0022,0.50599,openai_compat
+hr_cr_06,COLUMN_RENAME,List employee IDs with salaries.,"SELECT employee_id, monthly_salary FROM employees ORDER BY employee_id",False,,"SELECT employee_id, salary FROM employees",1,"SELECT employee_id, salary FROM employees",0,"SELECT employee_id, monthly_salary FROM employees",1,"SELECT employee_id, salary FROM employees",0,1,no such column: salary,openai_compat,"SELECT employee_id, monthly_salary FROM employees",ast,valid,1,1,0,0.8666,1.7172,2.1767,0.6416,0.0023,0.591158,openai_compat
+hr_cr_07,COLUMN_RENAME,Employees with first names starting with A.,SELECT employee_id FROM employees WHERE fname LIKE 'A%',False,,SELECT * FROM employees WHERE first_name LIKE 'A%',0,SELECT * FROM employees WHERE first_name LIKE 'A%',0,SELECT * FROM employees WHERE fname LIKE 'A%',0,SELECT * FROM employees WHERE first_name LIKE 'A%',0,1,no such column: first_name,openai_compat,SELECT * FROM employees WHERE fname LIKE 'A%',ast,valid,0,0,0,1.9404,0.833,4.142,0.729,0.0025,0.733787,openai_compat
+hr_cr_08,COLUMN_RENAME,Employees with commissions.,SELECT employee_id FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,SELECT * FROM employees WHERE commission_pct IS NOT NULL,0,"SELECT employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE commission_pct IS NOT NULL",0,1,no such column: first_name,openai_compat,"SELECT employee_id, fname, last_name, email, phone_number, hire_date, job_id, monthly_salary, commission_pct, manager_id, department_id FROM employees WHERE commission_pct IS NOT NULL",ast,silent_failure_suspected,0,0,0,1.0622,2.1591,0.812,0.8385,0.8103,12.832806,openai_compat
+hr_cr_09,COLUMN_RENAME,Job title for employee 1.,SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1,False,,"SELECT j.job_title 
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,0,,openai_compat,SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,ast,valid,1,0,0,1.0411,1.0502,1.1351,0.0011,0.0028,0.926186,openai_compat
+hr_cr_10,COLUMN_RENAME,Count employees per department.,"SELECT department_id, COUNT(*) FROM employees GROUP BY department_id ORDER BY department_id",False,,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name",0,0,,openai_compat,"SELECT d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN employees AS e ON d.department_id = e.department_id GROUP BY d.department_name",ast,valid,0,0,0,1.562,0.8243,0.9377,0.0016,0.0034,1.288343,openai_compat
+hr_cr_11,COLUMN_RENAME,Employees managed by 1.,SELECT employee_id FROM employees WHERE manager_id=1 ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,"SELECT employee_id, first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,"SELECT employee_id, fname, last_name 
+FROM employees 
+WHERE manager_id = 1",0,"SELECT employee_id, first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,1,no such column: first_name,openai_compat,"SELECT employee_id, fname, last_name FROM employees WHERE manager_id = 1",ast,silent_failure_suspected,0,0,0,0.8833,1.2582,1.14,0.8138,0.7997,0.60204,openai_compat
+hr_cr_12,COLUMN_RENAME,Employees hired after 2007-06-20.,SELECT employee_id FROM employees WHERE hire_date > '2007-06-20' ORDER BY employee_id,False,,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,0,,openai_compat,SELECT * FROM employees WHERE hire_date > '2007-06-20',ast,valid,0,0,0,0.8064,0.9245,0.8727,0.0016,0.0025,0.642055,openai_compat
+hr_cr_13,COLUMN_RENAME,List employees by salary descending.,"SELECT fname, monthly_salary FROM employees ORDER BY monthly_salary DESC",False,,"SELECT employee_id, first_name, last_name, salary FROM employees ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary FROM employees ORDER BY salary DESC",0,"SELECT employee_id, fname, last_name, monthly_salary FROM employees ORDER BY monthly_salary DESC",0,"SELECT employee_id, ""first name"", ""last name"", salary FROM employees ORDER BY salary DESC",0,1,no such column: first_name,openai_compat,"SELECT employee_id, fname, last_name, monthly_salary FROM employees ORDER BY monthly_salary DESC",ast,valid,0,0,0,0.8669,0.9653,0.9065,0.9464,0.0145,12.575496,openai_compat
+hr_cr_14,COLUMN_RENAME,Count employees with salary between 6000 and 8000.,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,False,,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,1,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,0,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,1,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,0,1,no such column: salary,openai_compat,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,ast,valid,1,1,0,0.695,1.2866,0.8161,0.6307,0.0027,0.815792,openai_compat
+hr_cr_15,COLUMN_RENAME,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,0,,openai_compat,SELECT region_name FROM regions,ast,valid,1,0,0,0.7558,0.7555,0.8408,0.0017,0.0024,0.653539,openai_compat
+hr_cr_16,COLUMN_RENAME,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,openai_compat,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,0.8009,1.0385,0.8675,0.0012,0.002,0.518717,openai_compat

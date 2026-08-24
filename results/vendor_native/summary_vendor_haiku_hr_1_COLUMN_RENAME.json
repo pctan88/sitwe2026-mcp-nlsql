@@ -1,0 +1,143 @@
+{
+  "database_id": "hr_1_COLUMN_RENAME",
+  "model": "haiku",
+  "model_id": "claude-haiku-4-5-20251001",
+  "backend": "anthropic",
+  "validate_mode": "embedding",
+  "strict_mode": true,
+  "max_turns": 8,
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "ex_stale_sanity": 0.3125,
+  "sanity_agreement_with_canonical": 1.0,
+  "ex_diff_in_prompt": 0.625,
+  "ex_vendor_native": 0.5625,
+  "canonical_ex_stale": 0.3125,
+  "canonical_ex_refreshed": 0.5625,
+  "canonical_ex_mcp": 0.5625,
+  "canonical_recovery_rate": 1.0,
+  "rr_diff_in_prompt": 1.25,
+  "rr_vendor_native": 1.0,
+  "wilson_ci": {
+    "stale_sanity": {
+      "successes": 5,
+      "total": 16,
+      "lower": 0.141644,
+      "upper": 0.555961
+    },
+    "diff_in_prompt": {
+      "successes": 10,
+      "total": 16,
+      "lower": 0.386406,
+      "upper": 0.81519
+    },
+    "vendor_native": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    }
+  },
+  "mcnemar": {
+    "vendor_vs_mcp": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "diff_vs_mcp": {
+      "b": 1,
+      "c": 0,
+      "statistic": 0.0,
+      "p_value": 1.0
+    },
+    "vendor_vs_diff": {
+      "b": 0,
+      "c": 1,
+      "statistic": 0.0,
+      "p_value": 1.0
+    }
+  },
+  "latency_stats": {
+    "sanity_s": {
+      "n": 16,
+      "mean": 1.217781,
+      "median": 1.0558,
+      "q1": 0.98265,
+      "q3": 1.27305,
+      "iqr": 0.2904,
+      "p95": 2.6218,
+      "min": 0.9531,
+      "max": 2.6218
+    },
+    "diff_in_prompt_s": {
+      "n": 16,
+      "mean": 1.201681,
+      "median": 1.10975,
+      "q1": 1.0497,
+      "q3": 1.23735,
+      "iqr": 0.18765,
+      "p95": 1.9254,
+      "min": 0.9264,
+      "max": 1.9254
+    },
+    "vendor_native_s": {
+      "n": 16,
+      "mean": 5.067694,
+      "median": 4.79035,
+      "q1": 4.13085,
+      "q3": 5.41125,
+      "iqr": 1.2804,
+      "p95": 9.1163,
+      "min": 3.6329,
+      "max": 9.1163
+    }
+  },
+  "cost": {
+    "prices_usd_per_mtok": {
+      "input": 1.0,
+      "output": 5.0
+    },
+    "sanity": {
+      "tokens_in": 4813,
+      "tokens_out": 376,
+      "usd": 0.006693,
+      "usd_per_query": 0.000418,
+      "mean_tokens_in": 300.8,
+      "mean_tokens_out": 23.5
+    },
+    "diff_in_prompt": {
+      "tokens_in": 6653,
+      "tokens_out": 444,
+      "usd": 0.008873,
+      "usd_per_query": 0.000555,
+      "mean_tokens_in": 415.8,
+      "mean_tokens_out": 27.8
+    },
+    "vendor_native": {
+      "tokens_in": 79115,
+      "tokens_out": 3857,
+      "usd": 0.0984,
+      "usd_per_query": 0.00615,
+      "mean_tokens_in": 4944.7,
+      "mean_tokens_out": 241.1
+    }
+  },
+  "tool_loop": {
+    "mean_tool_calls_per_query": 2.25,
+    "mean_api_calls_per_query": 3.25,
+    "pct_queries_using_tool": {
+      "get_schema_diff": 1.0,
+      "relink_sql": 0.0625,
+      "validate_sql": 1.0
+    },
+    "pct_queries_no_tools": 0.0,
+    "pct_queries_capped": 0.0
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0
+}

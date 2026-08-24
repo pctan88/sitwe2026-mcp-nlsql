@@ -1,0 +1,38 @@
+{
+  "database_id": "concert_singer_COLUMN_RENAME",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "816fc0c958aa741b",
+    "specs": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "singer",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ]
+  }
+}

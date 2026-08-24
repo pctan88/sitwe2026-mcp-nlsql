@@ -1,0 +1,27 @@
+{
+  "database_id": "concert_singer",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "pilot_queries.json",
+  "perturbation_manifest": {
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "artist",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "artist",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ]
+  }
+}

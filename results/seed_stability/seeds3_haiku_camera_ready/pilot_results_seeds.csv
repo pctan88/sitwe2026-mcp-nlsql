@@ -1,0 +1,355 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+Q01,TABLE_RENAME,False,0,SELECT COUNT(*) FROM singer,1,SELECT COUNT(*) FROM singer,0,SELECT COUNT(DISTINCT Singer_ID) FROM artist,1,SELECT COUNT(*) FROM singer,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist,ast,valid,1,2.7116,0.9365,0.7995,0.8304,0.0063,4.920291,anthropic
+Q01,TABLE_RENAME,False,1,SELECT COUNT(*) FROM singer,1,SELECT COUNT(*) FROM singer,0,SELECT COUNT(DISTINCT Singer_ID) FROM artist,1,SELECT COUNT(*) FROM singer,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist,ast,valid,1,0.8385,0.7993,1.4067,0.7998,0.0013,0.56425,anthropic
+Q01,TABLE_RENAME,False,2,SELECT COUNT(*) FROM singer,1,SELECT COUNT(*) FROM singer,0,SELECT COUNT(DISTINCT Singer_ID) FROM artist,1,SELECT COUNT(*) FROM singer,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist,ast,valid,1,0.7597,1.3572,1.6162,1.2243,0.0012,0.518084,anthropic
+Q02,TABLE_RENAME,False,0,"SELECT Name, Country FROM singer",1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM artist",1,"SELECT Name, Country FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, Country FROM artist",ast,valid,1,0.9118,1.0065,0.8434,0.922,0.0013,0.509209,anthropic
+Q02,TABLE_RENAME,False,1,"SELECT Name, Country FROM singer",1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM artist",1,"SELECT Name, Country FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, Country FROM artist",ast,valid,1,1.0371,0.891,0.8425,1.15,0.0012,0.493125,anthropic
+Q02,TABLE_RENAME,False,2,"SELECT Name, Country FROM singer",1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM artist",1,"SELECT Name, Country FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, Country FROM artist",ast,valid,1,1.0346,1.0833,1.1238,0.9906,0.0016,0.623333,anthropic
+Q03,TABLE_RENAME,False,0,SELECT Name FROM singer WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,SELECT DISTINCT Name FROM artist WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE Country = 'France',ast,valid,1,1.8074,1.1003,1.0742,0.9803,0.0025,0.885916,anthropic
+Q03,TABLE_RENAME,False,1,SELECT Name FROM singer WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,SELECT DISTINCT Name FROM artist WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE Country = 'France',ast,valid,1,1.0169,1.1525,1.0848,1.1239,0.0017,0.696625,anthropic
+Q03,TABLE_RENAME,False,2,SELECT Name FROM singer WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,SELECT DISTINCT Name FROM artist WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE Country = 'France',ast,valid,1,1.0462,1.3004,0.8684,0.7943,0.0023,1.034084,anthropic
+Q04,TABLE_RENAME,False,0,SELECT Name FROM singer ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,SELECT Name FROM artist ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC,ast,valid,1,0.9102,0.9462,1.5199,1.5377,0.0021,0.64925,anthropic
+Q04,TABLE_RENAME,False,1,SELECT Name FROM singer ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,SELECT Name FROM artist ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC,ast,valid,1,1.4776,1.0331,0.873,0.9149,0.0027,0.889541,anthropic
+Q04,TABLE_RENAME,False,2,SELECT Name FROM singer ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,SELECT Name FROM artist ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC,ast,valid,1,1.2252,0.9498,0.8932,1.0371,0.0024,0.935125,anthropic
+Q05,TABLE_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'M',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',ast,silent_failure_suspected,0,1.4171,1.538,2.1489,1.8297,1.8595,0.804917,anthropic
+Q05,TABLE_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',ast,valid,1,1.6523,1.7258,1.5344,1.135,0.0035,1.656125,anthropic
+Q05,TABLE_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'M',1,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'T' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y' OR Is_male = '1',ast,valid,1,1.2233,1.3266,1.2464,1.8243,0.0032,1.494,anthropic
+Q06,TABLE_RENAME,False,0,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,1,no such table: singer,anthropic,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",ast,valid,1,1.2236,0.9767,1.1751,2.4586,0.0021,0.975708,anthropic
+Q06,TABLE_RENAME,False,1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,1,no such table: singer,anthropic,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",ast,valid,1,1.0189,1.4349,1.2282,1.1491,0.0022,1.018458,anthropic
+Q06,TABLE_RENAME,False,2,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,1,no such table: singer,anthropic,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",ast,valid,1,1.5383,1.1908,0.9545,1.0392,0.0022,0.97775,anthropic
+Q07,TABLE_RENAME,False,0,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,1,no such table: singer,anthropic,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",ast,valid,1,0.9745,1.135,4.5688,0.9618,0.0024,0.884125,anthropic
+Q07,TABLE_RENAME,False,1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,1,no such table: singer,anthropic,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",ast,valid,1,1.228,1.2288,1.1579,0.9925,0.012,1.086083,anthropic
+Q07,TABLE_RENAME,False,2,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,1,no such table: singer,anthropic,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",ast,valid,1,1.1458,1.2996,1.6386,0.8774,0.0022,0.962375,anthropic
+Q08,TABLE_RENAME,False,0,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,ast,valid,1,1.4756,1.2279,1.1293,0.9168,0.0017,0.706708,anthropic
+Q08,TABLE_RENAME,False,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,ast,valid,1,1.0249,1.2301,1.1942,0.9563,0.0019,0.727917,anthropic
+Q08,TABLE_RENAME,False,2,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,1,no such table: singer,anthropic,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,ast,valid,1,0.9895,1.1586,1.1242,1.0784,0.0018,0.719333,anthropic
+Q09,TABLE_RENAME,False,0,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",1,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+LEFT JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",1,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,1,no such table: singer,anthropic,"SELECT DISTINCT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",ast,valid,1,1.4808,1.535,1.2312,1.1389,0.0061,3.937375,anthropic
+Q09,TABLE_RENAME,False,1,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",1,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+LEFT JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",1,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,1,no such table: singer,anthropic,"SELECT DISTINCT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",ast,valid,1,2.1234,1.9549,1.2272,1.1418,0.0036,1.393667,anthropic
+Q09,TABLE_RENAME,False,2,"SELECT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",1,"SELECT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+LEFT JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",1,"SELECT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,1,no such table: singer,anthropic,"SELECT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",ast,valid,1,1.2175,1.6327,1.5347,1.3692,0.0033,1.5075,anthropic
+Q10,TABLE_RENAME,False,0,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',ast,valid,1,1.0483,1.5728,1.5349,1.1193,0.0023,1.031708,anthropic
+Q10,TABLE_RENAME,False,1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',ast,valid,1,1.3356,1.2294,1.3619,1.0962,0.0032,1.536084,anthropic
+Q10,TABLE_RENAME,False,2,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',ast,valid,1,1.172,1.1564,1.5954,1.6022,0.0034,1.311083,anthropic
+Q11,NONE,False,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(sic.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,,anthropic,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",ast,valid,0,1.8384,1.2297,1.2285,0.0007,0.0039,1.532667,anthropic
+Q11,NONE,False,1,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(sic.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,,anthropic,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",ast,valid,0,1.5312,2.4574,1.5377,0.0007,0.0036,1.569792,anthropic
+Q11,NONE,False,2,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(sic.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,,anthropic,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",ast,valid,0,1.1472,1.0657,1.4687,0.0008,0.0034,1.659667,anthropic
+Q12,TABLE_RENAME,False,0,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT DISTINCT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),ast,silent_failure_suspected,1,1.2245,1.303,1.1081,1.2758,0.9566,0.815292,anthropic
+Q12,TABLE_RENAME,False,1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT DISTINCT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),ast,silent_failure_suspected,1,1.2084,1.1359,0.9985,0.9234,1.5362,1.013167,anthropic
+Q12,TABLE_RENAME,False,2,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT DISTINCT Singer_ID FROM singer_in_concert),1,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,1,no such table: singer,anthropic,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),ast,silent_failure_suspected,1,1.2256,1.2311,1.1701,1.2296,1.2859,0.805084,anthropic
+Q13,TABLE_AND_COLUMN_RENAME,False,0,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT a.Name, a.song_title
+FROM artist a",1,"SELECT Name, Song_Name
+FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, song_title FROM artist",ast,valid,1,2.148,1.1406,1.0122,1.1517,0.9976,0.597791,anthropic
+Q13,TABLE_AND_COLUMN_RENAME,False,1,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT a.Name, a.song_title
+FROM artist a",1,"SELECT Name, Song_Name
+FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, song_title FROM artist",ast,valid,1,1.6935,1.2487,0.9195,1.0374,0.7725,0.645875,anthropic
+Q13,TABLE_AND_COLUMN_RENAME,False,2,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT a.Name, a.song_title
+FROM artist a",1,"SELECT Name, Song_Name
+FROM singer",0,1,no such table: singer,anthropic,"SELECT Name, song_title FROM artist",ast,valid,1,1.5164,0.9859,0.8652,0.802,0.8206,0.692833,anthropic
+Q14,TABLE_AND_COLUMN_RENAME,False,0,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such table: singer,anthropic,SELECT song_title FROM artist ORDER BY debut_year ASC,ast,valid,1,0.8686,1.0713,0.841,0.9804,0.0018,0.734375,anthropic
+Q14,TABLE_AND_COLUMN_RENAME,False,1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such table: singer,anthropic,SELECT song_title FROM artist ORDER BY debut_year ASC,ast,valid,1,1.4092,1.2729,0.9966,1.0265,0.0015,0.573084,anthropic
+Q14,TABLE_AND_COLUMN_RENAME,False,2,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such table: singer,anthropic,SELECT song_title FROM artist ORDER BY debut_year ASC,ast,valid,1,1.4502,4.1392,1.0585,1.3223,0.0009,0.390125,anthropic
+Q15,TABLE_AND_COLUMN_RENAME,False,0,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,1,no such table: singer,anthropic,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),ast,valid,1,1.0413,1.6348,1.0822,4.4263,0.0019,0.820167,anthropic
+Q15,TABLE_AND_COLUMN_RENAME,False,1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,1,no such table: singer,anthropic,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),ast,valid,1,1.4847,1.1513,1.4322,0.8679,0.002,0.93075,anthropic
+Q15,TABLE_AND_COLUMN_RENAME,False,2,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,1,no such table: singer,anthropic,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),ast,valid,1,1.1289,4.6574,1.2499,2.6598,0.0019,0.839125,anthropic
+Q16,TABLE_AND_COLUMN_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,ast,silent_failure_suspected,1,0.8908,1.0447,0.8147,1.6227,2.4216,0.559291,anthropic
+Q16,TABLE_AND_COLUMN_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,ast,silent_failure_suspected,1,0.8663,0.8328,0.7957,1.5323,0.9474,0.864875,anthropic
+Q16,TABLE_AND_COLUMN_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such table: singer,anthropic,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,ast,silent_failure_suspected,1,0.9659,1.0353,0.8532,1.1411,1.0692,0.6985,anthropic
+Q17,TABLE_AND_COLUMN_RENAME,False,0,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,1,no such table: singer,anthropic,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",ast,valid,1,1.0308,1.0273,0.8681,1.6604,0.0019,0.692916,anthropic
+Q17,TABLE_AND_COLUMN_RENAME,False,1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,1,no such table: singer,anthropic,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",ast,valid,1,0.8623,1.1573,1.2339,1.2779,0.0021,0.651875,anthropic
+Q17,TABLE_AND_COLUMN_RENAME,False,2,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,1,no such table: singer,anthropic,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",ast,valid,1,1.145,0.8839,1.4733,1.0195,0.0015,0.634459,anthropic
+Q18,TABLE_AND_COLUMN_RENAME,False,0,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",1,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",0,"SELECT Country, AVG(debut_year) as average_debut_year
+FROM artist
+GROUP BY Country",1,"SELECT Country, AVG(Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY Country",0,1,no such table: singer,anthropic,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year FROM artist GROUP BY artist.Country",ast,valid,1,0.9774,1.7698,1.1037,1.7629,1.4884,0.387625,anthropic
+Q18,TABLE_AND_COLUMN_RENAME,False,1,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",1,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",0,"SELECT Country, AVG(debut_year) as average_song_release_year
+FROM artist
+GROUP BY Country",1,"SELECT Country, AVG(Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY Country",0,1,no such table: singer,anthropic,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year FROM artist GROUP BY artist.Country",ast,valid,1,1.0101,1.0509,1.1058,1.0874,1.1638,1.013917,anthropic
+Q18,TABLE_AND_COLUMN_RENAME,False,2,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",1,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",0,"SELECT Country, AVG(debut_year) as average_debut_year
+FROM artist
+GROUP BY Country",1,"SELECT Country, AVG(Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY Country",0,1,no such table: singer,anthropic,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year FROM artist GROUP BY artist.Country",ast,valid,1,0.9275,1.0476,1.1734,2.2489,0.9049,1.039125,anthropic
+Q19,TABLE_AND_COLUMN_RENAME,False,0,"SELECT DISTINCT s.Song_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.song_title FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',ast,valid,1,1.3244,1.4406,1.1253,1.1384,0.0058,3.869041,anthropic
+Q19,TABLE_AND_COLUMN_RENAME,False,1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.song_title FROM artist AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID INNER JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',ast,valid,1,1.132,1.5594,2.1045,1.0851,0.0059,3.783875,anthropic
+Q19,TABLE_AND_COLUMN_RENAME,False,2,"SELECT DISTINCT s.Song_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,1,no such table: singer,anthropic,SELECT DISTINCT s.song_title FROM artist AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID INNER JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',ast,valid,1,3.2621,1.3142,1.0927,1.6175,0.0084,5.958542,anthropic
+Q20,NONE,False,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,0,,anthropic,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,ast,valid,0,1.5491,1.0389,1.2056,0.0005,0.0015,0.672125,anthropic
+Q20,NONE,False,1,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,0,,anthropic,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,ast,valid,0,1.0855,1.0004,1.5868,0.0011,0.0018,0.820375,anthropic
+Q20,NONE,False,2,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,0,,anthropic,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,ast,valid,0,1.1457,1.116,1.1085,0.0008,0.0017,0.650916,anthropic

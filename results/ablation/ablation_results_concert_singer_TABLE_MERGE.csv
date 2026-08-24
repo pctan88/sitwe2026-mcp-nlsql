@@ -1,0 +1,120 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+cs_tm_01,TABLE_MERGE,False,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+ORDER BY c.concert_Name, sic.Singer_ID",0,1,"SELECT cp.concert_Name, cp.Singer_ID FROM concert_performance AS cp ORDER BY cp.concert_Name, cp.Singer_ID",execution_error,1,"SELECT c.concert_Name, c.Singer_ID
+FROM concert_performance c
+ORDER BY c.concert_Name, c.Singer_ID",execution_error,1,"SELECT cp.concert_Name, cp.Singer_ID
+FROM concert_performance cp
+ORDER BY cp.concert_Name, cp.Singer_ID",execution_error,0,"SELECT c.concert_Name, sic.Singer_ID FROM concert AS c JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID ORDER BY c.concert_Name, sic.Singer_ID",skipped
+cs_tm_02,TABLE_MERGE,False,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,"SELECT cp.Concert_ID, cp.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert_performance AS cp LEFT JOIN singer AS s ON cp.Singer_ID = s.Singer_ID GROUP BY cp.Concert_ID, cp.concert_Name ORDER BY cp.Concert_ID",execution_error,0,"SELECT 
+    cp.Concert_ID,
+    cp.concert_Name,
+    COUNT(DISTINCT cp.Singer_ID) as singer_count
+FROM concert_performance cp
+LEFT JOIN singer s ON cp.Singer_ID = s.Singer_ID
+GROUP BY cp.Concert_ID, cp.concert_Name
+ORDER BY cp.Concert_ID",execution_error,0,"SELECT 
+    cp.Concert_ID,
+    cp.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert_performance cp
+LEFT JOIN singer s ON cp.Singer_ID = s.Singer_ID
+GROUP BY cp.Concert_ID, cp.concert_Name
+ORDER BY cp.Concert_ID",execution_error,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID LEFT JOIN singer AS s ON sic.Singer_ID = s.Singer_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",skipped
+cs_tm_03,TABLE_MERGE,False,"SELECT c.Concert_ID, c.concert_Name, c.Year, sic.Singer_ID
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015
+ORDER BY c.Concert_ID, sic.Singer_ID",0,0,"SELECT Concert_ID, concert_Name, Year, Singer_ID FROM concert_performance WHERE Year = 2015 ORDER BY Concert_ID, Singer_ID",execution_error,0,"SELECT cp.Concert_ID, cp.concert_Name, cp.Year, cp.Singer_ID
+FROM concert_performance cp
+WHERE cp.Year = 2015
+ORDER BY cp.Concert_ID, cp.Singer_ID",execution_error,0,"SELECT Concert_ID, concert_Name, Year, Singer_ID
+FROM concert_performance
+WHERE Year = 2015
+ORDER BY Concert_ID, Singer_ID",execution_error,0,"SELECT c.Concert_ID, c.concert_Name, c.Year, sic.Singer_ID FROM concert AS c LEFT JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID WHERE c.Year = 2015 ORDER BY c.Concert_ID, sic.Singer_ID",skipped
+cs_tm_04,TABLE_MERGE,False,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Theme
+ORDER BY c.Theme",0,1,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) AS singer_count FROM concert_performance AS cp LEFT JOIN singer AS s ON cp.Singer_ID = s.Singer_ID GROUP BY cp.Theme ORDER BY cp.Theme",execution_error,1,"SELECT c.Theme, COUNT(DISTINCT c.Singer_ID) as singer_count
+FROM concert_performance c
+GROUP BY c.Theme
+ORDER BY c.Theme",execution_error,1,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) as singer_count
+FROM concert_performance cp
+LEFT JOIN singer s ON cp.Singer_ID = s.Singer_ID
+GROUP BY cp.Theme
+ORDER BY cp.Theme",execution_error,0,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID LEFT JOIN singer AS s ON sic.Singer_ID = s.Singer_ID GROUP BY c.Theme ORDER BY c.Theme",skipped
+cs_tm_05,TABLE_MERGE,False,SELECT DISTINCT concert_Name FROM concert,0,1,SELECT DISTINCT concert_Name FROM concert_performance,execution_error,1,SELECT DISTINCT concert_Name FROM concert_performance,execution_error,1,SELECT DISTINCT concert_Name FROM concert_performance,execution_error,0,SELECT DISTINCT concert_Name FROM concert,skipped
+cs_tm_06,TABLE_MERGE,False,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",0,1,SELECT DISTINCT s.Name FROM singer AS s JOIN concert_performance AS cp ON s.Singer_ID = cp.Singer_ID WHERE cp.Concert_ID = 2,execution_error,1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID
+WHERE cp.Concert_ID = 2",execution_error,1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID
+WHERE cp.Concert_ID = 2",execution_error,0,SELECT DISTINCT s.Name FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 2,skipped
+cs_tm_07,TABLE_MERGE,False,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,1,SELECT DISTINCT Theme FROM concert_performance WHERE Singer_ID = 3,execution_error,1,"SELECT DISTINCT Theme
+FROM concert_performance
+WHERE Singer_ID = 3",execution_error,1,"SELECT DISTINCT Theme
+FROM concert_performance
+WHERE Singer_ID = 3",execution_error,0,SELECT DISTINCT c.Theme FROM concert AS c JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID WHERE sic.Singer_ID = 3,skipped
+cs_tm_08,TABLE_MERGE,False,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,1,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,execution_error,1,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,execution_error,1,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,execution_error,0,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,skipped
+cs_tm_09,TABLE_MERGE,False,"SELECT c.concert_Name, s.Name
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",0,1,"SELECT cp.concert_Name, s.Name FROM concert_performance AS cp JOIN singer AS s ON cp.Singer_ID = s.Singer_ID ORDER BY cp.concert_Name, s.Name",execution_error,1,"SELECT c.concert_Name, s.Name
+FROM concert_performance c
+JOIN singer s ON c.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",execution_error,1,"SELECT cp.concert_Name, s.Name
+FROM concert_performance cp
+JOIN singer s ON cp.Singer_ID = s.Singer_ID
+ORDER BY cp.concert_Name, s.Name",execution_error,0,"SELECT c.concert_Name, s.Name FROM concert AS c JOIN singer_in_concert AS sic ON c.Concert_ID = sic.Concert_ID JOIN singer AS s ON sic.Singer_ID = s.Singer_ID ORDER BY c.concert_Name, s.Name",skipped
+cs_tm_10,TABLE_MERGE,False,SELECT * FROM concert WHERE Stadium_ID = 2,0,0,SELECT * FROM concert_performance WHERE Stadium_ID = 2,execution_error,0,SELECT * FROM concert_performance WHERE Stadium_ID = 2,execution_error,0,SELECT * FROM concert_performance WHERE Stadium_ID = 2,execution_error,0,SELECT * FROM concert WHERE Stadium_ID = 2,skipped
+cs_tm_11,TABLE_MERGE,False,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",0,1,"SELECT Theme, COUNT(DISTINCT Singer_ID) AS singer_count FROM concert_performance WHERE Year = 2014 GROUP BY Theme",execution_error,1,"SELECT c.Theme, COUNT(DISTINCT c.Singer_ID) AS singer_count
+FROM concert_performance c
+WHERE c.Year = 2014
+GROUP BY c.Theme",execution_error,1,"SELECT Theme, COUNT(DISTINCT Singer_ID) AS singer_count
+FROM concert_performance
+WHERE Year = 2014
+GROUP BY Theme",execution_error,0,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID WHERE c.Year = 2014 GROUP BY c.Theme",skipped
+cs_tm_12,TABLE_MERGE,False,"SELECT DISTINCT s.Singer_ID
+FROM singer_in_concert s
+JOIN concert c ON s.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,1,SELECT DISTINCT Singer_ID FROM concert_performance WHERE concert_Name = 'Week 1',execution_error,1,"SELECT DISTINCT Singer_ID
+FROM concert_performance
+WHERE concert_Name = 'Week 1'",execution_error,1,"SELECT DISTINCT Singer_ID
+FROM concert_performance
+WHERE concert_Name = 'Week 1'",execution_error,0,SELECT DISTINCT s.Singer_ID FROM singer_in_concert AS s JOIN concert AS c ON s.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Week 1',skipped
+cs_tm_13,TABLE_MERGE,False,SELECT DISTINCT Location FROM stadium,1,1,SELECT DISTINCT Location FROM stadium,valid,1,SELECT DISTINCT Location FROM stadium,valid,1,SELECT DISTINCT Location FROM stadium,valid,1,SELECT DISTINCT Location FROM stadium,skipped
+cs_tm_14,TABLE_MERGE,False,SELECT COUNT(*) FROM stadium,1,1,SELECT COUNT(*) FROM stadium,valid,1,SELECT COUNT(*) FROM stadium,valid,1,SELECT COUNT(*) FROM stadium,valid,1,SELECT COUNT(*) FROM stadium,skipped
+cs_tm_15,TABLE_MERGE,True,SELECT DISTINCT Theme FROM concert,,,SELECT DISTINCT Theme FROM concert_performance,execution_error,,SELECT DISTINCT Theme FROM concert_performance,execution_error,,SELECT DISTINCT Theme FROM concert_performance,execution_error,,SELECT DISTINCT Theme FROM concert,skipped
+cs_tm_16,TABLE_MERGE,True,"SELECT Year, COUNT(*) as concert_count
+FROM concert
+GROUP BY Year
+ORDER BY Year",,,"SELECT Year, COUNT(DISTINCT Concert_ID) AS concert_count FROM concert_performance GROUP BY Year ORDER BY Year",execution_error,,"SELECT Year, COUNT(*) as concert_count
+FROM concert_performance
+GROUP BY Year
+ORDER BY Year",execution_error,,"SELECT Year, COUNT(DISTINCT Concert_ID) as concert_count
+FROM concert_performance
+GROUP BY Year
+ORDER BY Year",execution_error,,"SELECT Year, COUNT(*) AS concert_count FROM concert GROUP BY Year ORDER BY Year",skipped

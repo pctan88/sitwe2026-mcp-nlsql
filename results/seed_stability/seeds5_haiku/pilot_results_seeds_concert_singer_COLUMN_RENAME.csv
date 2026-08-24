@@ -1,0 +1,563 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_cr_01,COLUMN_RENAME,False,0,SELECT DISTINCT Song_Name FROM singer,1,SELECT DISTINCT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT DISTINCT Song_Name FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer,ast,valid,1,1.1644,1.6715,1.0248,0.8355,0.0694,0.711416,anthropic
+cs_cr_01,COLUMN_RENAME,False,1,SELECT DISTINCT Song_Name FROM singer,1,SELECT DISTINCT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT DISTINCT Song_Name FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer,ast,valid,1,1.5004,1.3628,1.2164,0.8913,0.0436,0.833667,anthropic
+cs_cr_01,COLUMN_RENAME,False,2,SELECT DISTINCT Song_Name FROM singer,1,SELECT DISTINCT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT DISTINCT Song_Name FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer,ast,valid,1,1.0209,1.108,0.8757,1.0046,0.0484,1.084,anthropic
+cs_cr_01,COLUMN_RENAME,False,3,SELECT DISTINCT Song_Name FROM singer,1,SELECT DISTINCT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT DISTINCT Song_Name FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer,ast,valid,1,1.4397,1.618,1.5048,0.9369,0.0265,0.50975,anthropic
+cs_cr_01,COLUMN_RENAME,False,4,SELECT DISTINCT Song_Name FROM singer,1,SELECT DISTINCT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT DISTINCT Song_Name FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer,ast,valid,1,0.9452,1.3651,0.8918,0.9003,0.0512,0.845208,anthropic
+cs_cr_02,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, if there's an execution error about this column not existing, perhaps the actual column name is different. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,0.915,1.0323,1.4078,2.0847,0.0446,1.020625,anthropic
+cs_cr_02,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, if there's an execution error about this column not existing, perhaps the actual column name is different. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,0.9779,1.0337,1.0452,2.0768,0.0473,1.120666,anthropic
+cs_cr_02,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, if there's an execution error about this column not existing, perhaps the actual column name is different. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,1.0283,0.9685,2.6567,2.1176,0.0369,0.946541,anthropic
+cs_cr_02,COLUMN_RENAME,False,3,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, if there's an execution error about this column not existing, perhaps the actual column name is different. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,0.9593,0.9553,0.8987,2.0631,0.0497,1.039625,anthropic
+cs_cr_02,COLUMN_RENAME,False,4,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with that exact capitalization.
+
+The query is actually correct as written. But if there's an execution error, perhaps the issue is something else. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,1.6827,0.9897,0.9792,2.5873,0.0518,1.326583,anthropic
+cs_cr_03,COLUMN_RENAME,False,0,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer
+
+Wait, let me check the schema again. The error says ""no such column: singer.Song_Name"" but looking at the schema, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column should exist. Let me verify the exact column name - it appears to be `Song_Name` in the schema provided. The query syntax is correct. However, if the error persists, the column might be named differently in the actual database.
+
+Based on the schema provided, the query should work as-is:
+
+SELECT Name, Song_Name
+FROM singer",0,1,no such column: singer.Song_Name,anthropic,"SELECT singer.Name, singer.song_title FROM singer",ast,valid,1,0.993,1.4202,0.9563,2.2373,0.0445,1.214042,anthropic
+cs_cr_03,COLUMN_RENAME,False,1,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer
+
+Wait, let me check the schema again. The error says ""no such column: singer.Song_Name"" but looking at the schema, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column should exist. Let me verify the exact column name - it appears to be `Song_Name` in the schema provided. The query syntax is correct. However, if the error persists, the column might be named differently in the actual database.
+
+Based on the schema provided, the query should work as-is:
+
+```sql
+SELECT Name, Song_Name
+FROM singer",0,1,no such column: singer.Song_Name,anthropic,"SELECT singer.Name, singer.song_title FROM singer",ast,valid,1,0.9341,1.0721,1.5159,2.324,0.0375,0.877583,anthropic
+cs_cr_03,COLUMN_RENAME,False,2,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer
+
+Wait, let me check the schema again. The error says ""no such column: singer.Song_Name"" but looking at the schema, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column should exist. Let me verify the exact column name - it appears to be `Song_Name` in the schema definition. The query syntax is correct. However, if the error persists, the column might be named differently in the actual database.
+
+Given the schema shows `Song_Name`, the original query should work. But since it's failing, let me provide the query as it should be:
+
+SELECT Name, Song_Name
+FROM singer",0,1,no such column: singer.Song_Name,anthropic,"SELECT singer.Name, singer.song_title FROM singer",ast,valid,1,0.9382,1.3293,0.9311,2.6073,0.0524,0.998833,anthropic
+cs_cr_03,COLUMN_RENAME,False,3,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer
+
+Wait, let me check the schema again. The error says ""no such column: singer.Song_Name"" but looking at the schema, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column should exist. Let me verify the exact column name - it appears to be `Song_Name` in the schema definition. The query syntax is correct. However, if the error persists, the column might be named differently in the actual database.
+
+Given the schema shows `Song_Name`, the original query should work. But since it's failing, let me provide the corrected version:
+
+SELECT Name, Song_Name
+FROM singer",0,1,no such column: singer.Song_Name,anthropic,"SELECT singer.Name, singer.song_title FROM singer",ast,valid,1,0.9791,0.93,1.6015,2.5473,0.0471,0.916917,anthropic
+cs_cr_03,COLUMN_RENAME,False,4,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer
+
+Wait, let me check the schema again. The error says ""no such column: singer.Song_Name"" but looking at the schema, the singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column should exist. Let me verify the exact column name - it appears to be `Song_Name` in the schema definition. The query looks correct as written.
+
+However, if the error persists, the column might actually be named differently. Based on the schema provided, the correct query should be:
+
+SELECT Name, Song_Name
+FROM singer",0,1,no such column: singer.Song_Name,anthropic,"SELECT singer.Name, singer.song_title FROM singer",ast,valid,1,0.9196,1.0791,0.9595,2.2466,0.0438,0.939583,anthropic
+cs_cr_04,COLUMN_RENAME,False,0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.song_title = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column Song_Name does exist in the singer table. Let me reconsider - perhaps the issue is with the database itself or the query needs adjustment. However, based on the schema provided, Song_Name should be valid.
+
+Let me provide the corrected query:
+
+SELECT DISTINCT Singer_ID, Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",ast,valid,0,1.0043,1.0232,1.0381,2.0263,0.0501,1.149042,anthropic
+cs_cr_04,COLUMN_RENAME,False,1,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.song_title = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column Song_Name does exist in the singer table. Let me verify the exact column name from the schema provided... it shows ""Song_Name TEXT"" in the singer table definition.
+
+The error says ""no such column: s.Song_Name"" which is strange. Let me look at the schema more carefully - it appears the schema is correct and Song_Name should exist. However, if this error is occurring, perhaps the actual database has a different column name. Based on the schema provided, the query should work, but since it's failing, let me try with the exact column as shown:
+
+SELECT DISTINCT Singer_ID, Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",ast,valid,0,1.6986,1.0943,1.3711,2.701,0.0476,1.157208,anthropic
+cs_cr_04,COLUMN_RENAME,False,2,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.song_title = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'
+
+Wait, let me check the schema again. The singer table has: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male.
+
+The column Song_Name does exist in the singer table. Let me reconsider - perhaps the issue is with the database itself or the query needs adjustment. However, based on the schema provided, Song_Name should be valid.
+
+Let me provide the corrected query:
+
+SELECT DISTINCT Singer_ID, Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",ast,valid,0,1.2817,1.0863,1.1711,1.9631,0.0503,1.24575,anthropic
+cs_cr_04,COLUMN_RENAME,False,3,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.song_title = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name FROM singer AS s WHERE s.song_title = 'Sun'",ast,valid,0,1.1862,1.2616,1.227,1.0096,0.0259,0.982292,anthropic
+cs_cr_04,COLUMN_RENAME,False,4,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name
+FROM singer s
+WHERE s.song_title = 'Sun'",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title FROM singer AS s WHERE s.song_title = 'Sun'",ast,silent_failure_suspected,0,3.3836,2.4464,1.0779,1.2025,1.3411,1.418333,anthropic
+cs_cr_05,COLUMN_RENAME,False,0,SELECT AVG(Song_release_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer WHERE Song_release_year IS NOT NULL,0,1,no such column: Song_release_year,anthropic,SELECT AVG(debut_year) FROM singer,ast,silent_failure_suspected,1,2.0449,1.0703,0.8703,0.9874,1.0897,1.308917,anthropic
+cs_cr_05,COLUMN_RENAME,False,1,SELECT AVG(Song_release_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer WHERE Song_release_year IS NOT NULL,0,1,no such column: Song_release_year,anthropic,SELECT AVG(debut_year) FROM singer,ast,silent_failure_suspected,1,0.9326,1.0799,1.2763,0.9684,1.3759,0.998084,anthropic
+cs_cr_05,COLUMN_RENAME,False,2,SELECT AVG(Song_release_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer WHERE Song_release_year IS NOT NULL,0,1,no such column: Song_release_year,anthropic,SELECT AVG(debut_year) FROM singer,ast,silent_failure_suspected,1,0.9471,1.0327,0.9656,1.073,1.0244,0.966916,anthropic
+cs_cr_05,COLUMN_RENAME,False,3,SELECT AVG(Song_release_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer WHERE Song_release_year IS NOT NULL,0,1,no such column: Song_release_year,anthropic,SELECT AVG(debut_year) FROM singer,ast,silent_failure_suspected,1,1.0975,1.3136,0.9382,1.5319,1.8096,0.937375,anthropic
+cs_cr_05,COLUMN_RENAME,False,4,SELECT AVG(Song_release_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) FROM singer WHERE Song_release_year IS NOT NULL,0,1,no such column: Song_release_year,anthropic,SELECT AVG(debut_year) FROM singer,ast,silent_failure_suspected,1,1.3299,1.0785,0.8828,1.4819,0.9954,0.87525,anthropic
+cs_cr_06,COLUMN_RENAME,False,0,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,no such column: Song_release_year,anthropic,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",ast,valid,1,1.6669,0.9151,1.0102,0.9921,0.0456,1.282542,anthropic
+cs_cr_06,COLUMN_RENAME,False,1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,no such column: Song_release_year,anthropic,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",ast,valid,1,0.9332,1.0894,1.0847,1.43,0.0471,1.237583,anthropic
+cs_cr_06,COLUMN_RENAME,False,2,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,no such column: Song_release_year,anthropic,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",ast,valid,1,1.0465,1.1899,1.0905,1.0122,0.0434,0.922291,anthropic
+cs_cr_06,COLUMN_RENAME,False,3,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,no such column: Song_release_year,anthropic,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",ast,valid,1,1.0173,1.0437,1.7996,1.3741,0.0477,1.558875,anthropic
+cs_cr_06,COLUMN_RENAME,False,4,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, Song_release_year AS debut_year
+FROM singer
+ORDER BY Singer_ID",0,1,no such column: Song_release_year,anthropic,"SELECT Singer_ID, debut_year AS debut_year FROM singer ORDER BY Singer_ID",ast,valid,1,1.0127,0.9751,1.1324,0.9392,0.0418,0.78625,anthropic
+cs_cr_07,COLUMN_RENAME,False,0,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,1,no such column: Song_Name,anthropic,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014 ORDER BY debut_year",ast,valid,0,1.0262,1.1297,1.127,1.134,0.0485,1.213708,anthropic
+cs_cr_07,COLUMN_RENAME,False,1,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,1,no such column: Song_Name,anthropic,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014 ORDER BY debut_year",ast,valid,0,1.7183,1.4452,0.9742,0.9751,0.0454,1.120416,anthropic
+cs_cr_07,COLUMN_RENAME,False,2,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT DISTINCT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such column: Song_Name,anthropic,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",ast,valid,0,1.0573,1.5432,1.4709,1.064,0.0477,1.138875,anthropic
+cs_cr_07,COLUMN_RENAME,False,3,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT DISTINCT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such column: Song_Name,anthropic,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014",ast,valid,0,1.0557,1.4441,1.3325,1.5811,0.0458,0.926917,anthropic
+cs_cr_07,COLUMN_RENAME,False,4,"SELECT Song_Name, Song_release_year FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name, Song_release_year
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014
+ORDER BY Song_release_year",0,1,no such column: Song_Name,anthropic,"SELECT song_title, debut_year FROM singer WHERE debut_year BETWEEN 2000 AND 2014 ORDER BY debut_year",ast,valid,0,1.0909,1.1128,1.0449,1.021,0.0446,1.158917,anthropic
+cs_cr_08,COLUMN_RENAME,False,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.debut_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",ast,valid,0,1.225,1.2276,2.4946,0.9158,0.0508,6.723375,anthropic
+cs_cr_08,COLUMN_RENAME,False,1,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.debut_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",ast,valid,0,1.1465,1.4284,1.2537,2.9051,0.053,1.350875,anthropic
+cs_cr_08,COLUMN_RENAME,False,2,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.debut_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",ast,valid,0,1.4878,1.4599,2.8459,0.9789,0.0482,1.411125,anthropic
+cs_cr_08,COLUMN_RENAME,False,3,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.debut_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",ast,valid,0,1.2364,1.1582,1.9882,0.9802,0.0517,1.230667,anthropic
+cs_cr_08,COLUMN_RENAME,False,4,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title
+FROM singer s
+WHERE s.debut_year = 2014",0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year = 2014",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.Singer_ID, s.Name, s.song_title, s.debut_year FROM singer AS s WHERE s.debut_year = 2014",ast,valid,0,1.2542,1.4568,1.8179,1.0596,0.0512,1.299834,anthropic
+cs_cr_09,COLUMN_RENAME,False,0,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,0.8941,0.9084,0.9853,0.9766,0.0511,1.448125,anthropic
+cs_cr_09,COLUMN_RENAME,False,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,0.9124,0.9497,1.8355,1.0733,0.0485,0.979709,anthropic
+cs_cr_09,COLUMN_RENAME,False,2,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,0.942,1.0419,0.8948,0.9164,0.0446,1.141084,anthropic
+cs_cr_09,COLUMN_RENAME,False,3,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer WHERE Song_Name IS NOT NULL,0,1,no such column: Song_Name,anthropic,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,3.1604,1.4064,1.0032,1.1459,0.0447,0.973417,anthropic
+cs_cr_09,COLUMN_RENAME,False,4,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_name) FROM singer,0,1,no such column: Song_Name,anthropic,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,1.0252,1.1259,0.9424,0.8825,0.042,0.692625,anthropic
+cs_cr_10,COLUMN_RENAME,False,0,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,0.9923,1.0891,1.0826,1.0407,1.098,1.03125,anthropic
+cs_cr_10,COLUMN_RENAME,False,1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,0.98,1.0109,1.9375,0.8496,1.2595,0.890416,anthropic
+cs_cr_10,COLUMN_RENAME,False,2,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,1.202,0.9399,1.0235,3.3632,1.0818,1.06425,anthropic
+cs_cr_10,COLUMN_RENAME,False,3,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,1.6293,1.4685,1.2267,1.0927,0.9818,1.343834,anthropic
+cs_cr_10,COLUMN_RENAME,False,4,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Country = 'France'",1,"SELECT DISTINCT Song_Name
+FROM singer
+WHERE Country = 'France'",0,1,no such column: Song_Name,anthropic,SELECT DISTINCT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,1.0534,1.1816,1.17,1.1172,0.9568,1.022,anthropic
+cs_cr_11,COLUMN_RENAME,False,0,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s
+WHERE s.song_title IS NOT NULL",1,"SELECT DISTINCT Song_Name, Country
+FROM singer",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",ast,valid,1,0.9694,1.014,1.0465,0.9465,0.0466,0.895417,anthropic
+cs_cr_11,COLUMN_RENAME,False,1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s
+WHERE s.song_title IS NOT NULL",1,"SELECT DISTINCT Song_Name, Country
+FROM singer",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",ast,valid,1,1.1518,1.0118,1.0334,1.0206,0.0322,0.908083,anthropic
+cs_cr_11,COLUMN_RENAME,False,2,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s
+WHERE s.song_title IS NOT NULL",1,"SELECT DISTINCT Song_Name, Country
+FROM singer",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",ast,valid,1,1.2103,1.664,1.174,1.0147,0.0461,0.8975,anthropic
+cs_cr_11,COLUMN_RENAME,False,3,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s
+WHERE s.song_title IS NOT NULL",1,"SELECT DISTINCT Song_Name, Country
+FROM singer",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",ast,valid,1,0.9942,1.2637,1.0168,2.2102,0.0499,1.111916,anthropic
+cs_cr_11,COLUMN_RENAME,False,4,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",1,"SELECT DISTINCT s.Song_Name, s.Country
+FROM singer s",0,"SELECT DISTINCT s.song_title, s.Country
+FROM singer s
+WHERE s.song_title IS NOT NULL",1,"SELECT DISTINCT Song_Name, Country
+FROM singer",0,1,no such column: s.Song_Name,anthropic,"SELECT DISTINCT s.song_title, s.Country FROM singer AS s",ast,valid,1,0.9909,0.9725,0.9705,0.9612,0.0479,1.002792,anthropic
+cs_cr_12,COLUMN_RENAME,False,0,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,SELECT song_title FROM singer ORDER BY debut_year,1,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,1,no such column: Song_Name,anthropic,SELECT song_title FROM singer ORDER BY debut_year ASC,ast,valid,1,0.9617,1.1892,0.9623,1.0685,0.0487,1.045875,anthropic
+cs_cr_12,COLUMN_RENAME,False,1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,SELECT song_title FROM singer ORDER BY debut_year,1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such column: Song_Name,anthropic,SELECT song_title FROM singer ORDER BY debut_year ASC,ast,valid,1,1.4609,1.7603,1.357,0.9003,0.0464,0.905583,anthropic
+cs_cr_12,COLUMN_RENAME,False,2,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,SELECT song_title FROM singer ORDER BY debut_year,1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,no such column: Song_Name,anthropic,SELECT song_title FROM singer ORDER BY debut_year ASC,ast,valid,1,1.3115,1.0412,1.2632,1.0652,0.0551,1.171916,anthropic
+cs_cr_12,COLUMN_RENAME,False,3,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,SELECT song_title FROM singer ORDER BY debut_year,1,"SELECT Song_Name FROM singer ORDER BY Song_release_year ASC
+
+Wait, let me reconsider. The error says ""no such column: Song_Name"" but looking at the schema, `Song_Name` is clearly defined in the `singer` table. Let me check the actual column name more carefully.
+
+Looking at the schema again: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column `Song_Name` does exist. However, the error suggests it doesn't. This might be a case sensitivity issue or the column might actually be named differently. Given the error, let me try with a different approach or check if there's a typo in the actual database.
+
+Since the schema shows `Song_Name` but the error says it doesn't exist, the most likely scenario is that the actual column name in the database is different. Common alternatives would be `song_name` (lowercase) or `SongName`. Let me try the most common convention:
+
+SELECT Song_Name FROM singer ORDER BY Song_release_year ASC
+
+Actually, if that's failing, it's likely a case-sensitivity issue in SQLite. Let me try:
+
+SELECT song_name FROM singer ORDER BY song_release_year ASC",0,1,no such column: Song_Name,anthropic,SELECT song_title FROM singer ORDER BY debut_year ASC,ast,valid,1,1.1738,1.2771,1.0044,3.2777,0.0472,1.0855,anthropic
+cs_cr_12,COLUMN_RENAME,False,4,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,SELECT song_title FROM singer ORDER BY debut_year,1,SELECT Song_Name FROM singer ORDER BY Song_release_year ASC,0,1,no such column: Song_Name,anthropic,SELECT song_title FROM singer ORDER BY debut_year ASC,ast,valid,1,1.7677,1.1472,0.9798,2.2306,0.0495,1.0915,anthropic
+cs_cr_13,COLUMN_RENAME,False,0,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_in_concert
+  WHERE Concert_ID = 1
+)",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,anthropic,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.0929,1.1459,1.1468,1.4243,0.0449,1.331375,anthropic
+cs_cr_13,COLUMN_RENAME,False,1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_in_concert
+  WHERE Concert_ID = 1
+)",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,anthropic,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.1979,1.0212,1.1587,1.0337,0.0454,1.278625,anthropic
+cs_cr_13,COLUMN_RENAME,False,2,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_in_concert
+  WHERE Concert_ID = 1
+)",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,anthropic,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.0258,1.0347,1.6098,1.0081,0.0473,1.654292,anthropic
+cs_cr_13,COLUMN_RENAME,False,3,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_in_concert
+  WHERE Concert_ID = 1
+)",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,anthropic,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.3026,1.1287,1.3664,1.2514,0.048,1.422917,anthropic
+cs_cr_13,COLUMN_RENAME,False,4,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT DISTINCT song_title
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID
+  FROM singer_in_concert
+  WHERE Concert_ID = 1
+)",1,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,anthropic,SELECT DISTINCT s.song_title FROM singer AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.1927,1.3423,1.0498,2.4707,0.0469,1.79025,anthropic
+cs_cr_14,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with that exact capitalization.
+
+The query is actually correct as written. But if there's an execution error, perhaps the issue is something else. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.2895,1.07,0.9474,2.6084,0.0472,0.971875,anthropic
+cs_cr_14,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with capital S and lowercase r.
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.0411,1.3811,0.9831,2.7017,0.0484,1.044542,anthropic
+cs_cr_14,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with that exact capitalization.
+
+The query is actually correct as written. But if there's an execution error, perhaps the issue is something else. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,0.9563,1.3186,0.8727,2.9892,0.0458,1.212333,anthropic
+cs_cr_14,COLUMN_RENAME,False,3,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has a column called `Song_release_year`. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with that exact capitalization.
+
+The query is correct as written:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.001,1.8846,0.9262,2.8554,0.0478,1.134833,anthropic
+cs_cr_14,COLUMN_RENAME,False,4,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,"SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005;
+
+Wait, let me reconsider. The error says ""no such column: Song_release_year"" but looking at the schema, the singer table has `Song_release_year` as a column. Let me check the exact column name in the schema again.
+
+Looking at the schema: `TABLE singer ( Singer_ID INTEGER, Name TEXT, Country TEXT, Song_Name TEXT, Song_release_year INTEGER, Age INTEGER, Is_male TEXT )`
+
+The column is `Song_release_year`. The query should work. However, since we're getting an error about the column not existing, let me verify the exact spelling. The schema shows `Song_release_year` with that exact capitalization.
+
+The query is actually correct as written. But if there's an execution error, perhaps the issue is something else. Let me provide the correct query:
+
+SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",0,1,no such column: Song_release_year,anthropic,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.1,1.1158,1.2192,2.8218,0.0453,1.093791,anthropic
+cs_cr_15,COLUMN_RENAME,False,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0.8757,0.8943,1.117,0.0009,0.0465,0.8815,anthropic
+cs_cr_15,COLUMN_RENAME,False,1,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0.9076,1.6353,1.4138,0.0006,0.0464,0.892541,anthropic
+cs_cr_15,COLUMN_RENAME,False,2,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,0.9537,0.9923,1.3874,0.0007,0.0451,0.952292,anthropic
+cs_cr_15,COLUMN_RENAME,False,3,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.8316,1.0972,0.922,0.0007,0.0498,1.185291,anthropic
+cs_cr_15,COLUMN_RENAME,False,4,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0,,anthropic,SELECT * FROM stadium WHERE Capacity > 10000,ast,valid,0,1.0204,0.9044,0.9689,0.0008,0.0453,0.94325,anthropic
+cs_cr_16,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,1.0885,0.8546,1.0647,0.0006,0.0456,0.77575,anthropic
+cs_cr_16,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,1.6076,1.015,0.8309,0.0009,0.0437,1.04225,anthropic
+cs_cr_16,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,1.1792,1.0443,0.9635,0.0008,0.0446,0.870042,anthropic
+cs_cr_16,COLUMN_RENAME,False,3,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,0.8768,0.905,0.8791,0.0008,0.0456,1.06475,anthropic
+cs_cr_16,COLUMN_RENAME,False,4,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,anthropic,SELECT COUNT(*) FROM concert,ast,valid,1,1.0023,1.1251,0.8533,0.0007,0.0412,1.051,anthropic

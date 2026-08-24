@@ -1,0 +1,60 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_cm_01,COLUMN_MERGE,List merged employee full names.,SELECT full_name FROM employees ORDER BY employee_id,False,,SELECT first_name || ' ' || last_name AS full_name FROM employees,1,SELECT first_name || ' ' || last_name AS full_name FROM employees,0,SELECT full_name FROM employees,1,SELECT employees.first_name || ' ' || employees.last_name AS full_name FROM employees,0,1,no such column: first_name,openai_compat,SELECT full_name FROM employees,ast,valid,1,1,0,0.7933,0.7976,1.0196,1.2258,10.9786,0.684286,openai_compat
+hr_cm_02,COLUMN_MERGE,Count employees with last names starting with S.,SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%',False,,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',1,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,"SELECT COUNT(*) 
+FROM employees 
+WHERE full_name LIKE '% S%'",1,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,1,no such column: last_name,openai_compat,SELECT COUNT(*) FROM employees WHERE full_name LIKE 'S%',ast,silent_failure_suspected,0,0,0,1.0828,5.0713,0.9708,0.8313,0.7132,0.872089,openai_compat
+hr_cm_03,COLUMN_MERGE,Full name for employee 1.,SELECT full_name FROM employees WHERE employee_id=1,False,,SELECT first_name || ' ' || last_name AS full_name FROM employees WHERE employee_id = 1,1,SELECT first_name || ' ' || last_name AS full_name FROM employees WHERE employee_id = 1,0,SELECT full_name FROM employees WHERE employee_id = 1,1,SELECT employees.first_name || ' ' || employees.last_name AS full_name FROM employees WHERE employee_id = 1,0,1,no such column: first_name,openai_compat,SELECT full_name FROM employees WHERE employee_id = 1,ast,valid,1,1,0,1.1806,1.1601,0.6885,0.98,0.8396,0.81698,openai_compat
+hr_cm_04,COLUMN_MERGE,Full names for employees with salary over 7000.,SELECT full_name FROM employees WHERE salary > 7000 ORDER BY employee_id,False,,"SELECT first_name || ' ' || last_name AS full_name
+FROM employees
+WHERE salary > 7000",1,"SELECT first_name || ' ' || last_name AS full_name
+FROM employees
+WHERE salary > 7000",0,SELECT full_name FROM employees WHERE salary > 7000,1,"SELECT employees.first_name || ' ' || employees.last_name AS full_name
+FROM employees
+WHERE employees.salary > 7000",0,1,no such column: first_name,openai_compat,SELECT full_name FROM employees WHERE salary > 7000,ast,valid,1,1,0,0.9218,0.9486,1.0203,1.0055,0.8281,0.83705,openai_compat
+hr_cm_05,COLUMN_MERGE,Full names with emails.,"SELECT full_name, email FROM employees ORDER BY employee_id",False,,"SELECT first_name || ' ' || last_name AS full_name, email FROM employees",1,"SELECT first_name || ' ' || last_name AS full_name, email FROM employees",0,"SELECT full_name, email FROM employees",1,"SELECT employees.first_name || ' ' || employees.last_name AS full_name, employees.email FROM employees",0,1,no such column: first_name,openai_compat,"SELECT full_name, email FROM employees",ast,valid,1,1,0,1.0002,0.9252,0.9029,0.7369,1.0201,0.808845,openai_compat
+hr_cm_06,COLUMN_MERGE,Full names with department IDs.,"SELECT full_name, department_id FROM employees ORDER BY employee_id",False,,"SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department_id
+FROM employees e",1,"SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department_id
+FROM employees e",0,"SELECT full_name, department_id FROM employees",1,"SELECT e.first_name || ' ' || e.last_name AS full_name, e.department_id
+FROM employees e",0,1,no such column: e.first_name,openai_compat,"SELECT e.full_name, e.department_id FROM employees AS e",ast,valid,1,1,0,0.9289,0.8869,0.7457,0.7217,0.6221,0.966437,openai_compat
+hr_cm_07,COLUMN_MERGE,Full names and job IDs for the first five employees.,"SELECT full_name, job_id FROM employees WHERE employee_id <= 5 ORDER BY employee_id",False,,"SELECT first_name || ' ' || last_name AS full_name, job_id 
+FROM employees 
+LIMIT 5",1,"SELECT first_name || ' ' || last_name AS full_name, job_id FROM employees LIMIT 5",0,"SELECT full_name, job_id FROM employees LIMIT 5",1,"SELECT employees.first_name || ' ' || employees.last_name AS full_name, employees.job_id FROM employees LIMIT 5",0,1,no such column: first_name,openai_compat,"SELECT full_name, job_id FROM employees LIMIT 5",ast,valid,1,1,0,0.8325,0.8109,1.0689,0.7073,0.9212,0.845981,openai_compat
+hr_cm_08,COLUMN_MERGE,Count employees with 'a' in their full name.,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%',False,,"SELECT COUNT(*) 
+FROM employees 
+WHERE first_name LIKE '%a%' OR last_name LIKE '%a%'",1,"SELECT COUNT(*) 
+FROM employees 
+WHERE first_name LIKE '%a%' OR last_name LIKE '%a%'",0,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%',1,"SELECT COUNT(*) 
+FROM employees 
+WHERE first_name LIKE '%a%' OR last_name LIKE '%a%'",0,1,no such column: first_name,openai_compat,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%',ast,valid,1,1,0,1.1477,1.0624,0.7765,1.4227,0.6596,0.992097,openai_compat
+hr_cm_09,COLUMN_MERGE,Full names for employees with commissions.,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT first_name || ' ' || last_name AS full_name
+FROM employees
+WHERE commission_pct IS NOT NULL",1,"SELECT first_name || ' ' || last_name AS full_name
+FROM employees
+WHERE commission_pct IS NOT NULL",0,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL,1,"SELECT employees.first_name || ' ' || employees.last_name AS full_name
+FROM employees
+WHERE employees.commission_pct IS NOT NULL",0,1,no such column: first_name,openai_compat,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL,ast,valid,1,1,0,1.9264,0.9565,0.9568,0.794,0.836,0.866745,openai_compat
+hr_cm_10,COLUMN_MERGE,Job history start date with full name for employee 1.,"SELECT j.start_date, e.full_name FROM job_history j JOIN employees e ON j.employee_id=e.employee_id WHERE e.employee_id=1",False,,"SELECT jh.start_date, e.first_name || ' ' || e.last_name AS full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE e.employee_id = 1",1,"SELECT jh.start_date, e.first_name || ' ' || e.last_name AS full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE e.employee_id = 1",0,"SELECT start_date, employees.full_name
+FROM job_history
+JOIN employees ON job_history.employee_id = employees.employee_id
+WHERE job_history.employee_id = 1",1,"SELECT jh.start_date, e.first_name || ' ' || e.last_name AS full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,1,no such column: e.first_name,openai_compat,"SELECT jh.start_date, e.full_name AS full_name FROM job_history AS jh JOIN employees AS e ON jh.employee_id = e.employee_id WHERE e.employee_id = 1",ast,valid,1,1,0,2.3287,2.0214,1.421,1.4784,1.0505,11.054597,openai_compat
+hr_cm_11,COLUMN_MERGE,Full names for employees managed by 1.,SELECT full_name FROM employees WHERE manager_id=1 ORDER BY employee_id,False,,"SELECT e.first_name || ' ' || e.last_name AS full_name
+FROM employees e
+WHERE e.manager_id = 1",1,"SELECT e.first_name || ' ' || e.last_name AS full_name
+FROM employees e
+WHERE e.manager_id = 1",0,SELECT full_name FROM employees WHERE manager_id = 1,1,"SELECT employees.first_name || ' ' || employees.last_name AS full_name
+FROM employees
+WHERE employees.manager_id = 1",0,1,no such column: e.first_name,openai_compat,SELECT e.full_name AS full_name FROM employees AS e WHERE e.manager_id = 1,ast,valid,1,1,0,8.8178,6.6224,0.8947,0.9543,0.9927,1.161845,openai_compat
+hr_cm_12,COLUMN_MERGE,Count employees with salary at least 6000.,SELECT COUNT(*) FROM employees WHERE salary >= 6000,False,,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,0,,openai_compat,SELECT COUNT(*) FROM employees WHERE salary >= 6000,ast,valid,1,0,0,0.6646,0.9569,0.9273,0.0011,0.0024,0.658678,openai_compat
+hr_cm_13,COLUMN_MERGE,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,0,,openai_compat,SELECT region_name FROM regions,ast,valid,1,0,0,0.647,0.6623,0.6356,0.002,0.0024,0.641188,openai_compat
+hr_cm_14,COLUMN_MERGE,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,openai_compat,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,0.6185,0.8343,0.6371,0.0012,0.0022,0.583636,openai_compat
+hr_cm_15,COLUMN_MERGE,List employee first names.,,True,unanswerable_after_COLUMN_MERGE,SELECT first_name FROM employees,,SELECT first_name FROM employees,,SELECT full_name FROM employees,,SELECT first_name FROM employees,,1,no such column: first_name,openai_compat,SELECT full_name FROM employees,ast,valid,,0,0,0.8251,0.9118,0.8239,0.9407,0.7034,0.561433,openai_compat
+hr_cm_16,COLUMN_MERGE,List employee last names.,,True,unanswerable_after_COLUMN_MERGE,SELECT last_name FROM employees,,SELECT last_name FROM employees,,SELECT last_name FROM employees,,SELECT last_name FROM employees,,1,no such column: last_name,openai_compat,SELECT full_name FROM employees,ast,valid,,0,0,0.9213,0.6713,0.8354,0.651,0.0012,0.425726,openai_compat

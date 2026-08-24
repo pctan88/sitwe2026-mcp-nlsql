@@ -1,0 +1,24 @@
+{
+  "database_id": "concert_singer_TABLE_SPLIT",
+  "model": "gpt-4o",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "cs_ts_01",
+    "cs_ts_02",
+    "cs_ts_03",
+    "cs_ts_04",
+    "cs_ts_05",
+    "cs_ts_06",
+    "cs_ts_07",
+    "cs_ts_08",
+    "cs_ts_09",
+    "cs_ts_10",
+    "cs_ts_11",
+    "cs_ts_12",
+    "cs_ts_13",
+    "cs_ts_14",
+    "cs_ts_15",
+    "cs_ts_16"
+  ]
+}

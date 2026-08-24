@@ -1,0 +1,1509 @@
+{
+  "generator_version": "1.0.0",
+  "n_cases": 150,
+  "n_valid": 50,
+  "n_silent": 100,
+  "labelling_rule": "silent_failure := executes without error on the post DB AND result set != gold_post result set; valid := gold_post SQL",
+  "cases": [
+    {
+      "id": "cs_tr_01__gold",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Name FROM artist ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tr_01"
+    },
+    {
+      "id": "cs_tr_02__gold",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM artist WHERE Country='France'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tr_02"
+    },
+    {
+      "id": "cs_tr_03__gold",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Song_Name FROM artist WHERE Singer_ID=1",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tr_03"
+    },
+    {
+      "id": "cs_tr_04__gold",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with age over 40.",
+      "sql": "SELECT Name FROM artist WHERE Age > 40 ORDER BY Name",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tr_04"
+    },
+    {
+      "id": "cs_tr_05__gold",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Count male singers.",
+      "sql": "SELECT COUNT(*) FROM artist WHERE Is_male='T'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tr_05"
+    },
+    {
+      "id": "cs_tr_02__drop_where",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM artist",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tr_02"
+    },
+    {
+      "id": "cs_tr_11__swap_agg_avg",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Average age of French singers.",
+      "sql": "SELECT MAX(Age) FROM artist WHERE Country = 'France'",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "cs_tr_11"
+    },
+    {
+      "id": "cs_tr_01__wrong_column",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Singer_ID FROM artist ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tr_01"
+    },
+    {
+      "id": "cs_tr_01__spurious_limit_one",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Name FROM artist ORDER BY Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_tr_01"
+    },
+    {
+      "id": "cs_tr_08__wrong_join_key",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Which singers performed in concert 1?",
+      "sql": "SELECT a.Name FROM artist AS a JOIN singer_in_concert AS sc ON a.Singer_ID = sc.Concert_ID WHERE sc.Concert_ID = 1 ORDER BY a.Name",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_tr_08"
+    },
+    {
+      "id": "cs_tr_03__drop_where",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Song_Name FROM artist",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tr_03"
+    },
+    {
+      "id": "cs_tr_03__wrong_column",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Singer_ID FROM artist WHERE Singer_ID = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tr_03"
+    },
+    {
+      "id": "cs_tr_09__wrong_join_key",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "Count concerts per singer.",
+      "sql": "SELECT a.Name, COUNT(*) AS concert_count FROM artist AS a JOIN singer_in_concert AS sc ON a.Singer_ID = sc.Concert_ID GROUP BY a.Name ORDER BY concert_count DESC, a.Name",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_tr_09"
+    },
+    {
+      "id": "cs_tr_04__drop_where",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with age over 40.",
+      "sql": "SELECT Name FROM artist ORDER BY Name",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tr_04"
+    },
+    {
+      "id": "cs_tr_04__wrong_column",
+      "database_id": "concert_singer_TABLE_RENAME",
+      "db": "concert_singer_TABLE_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with age over 40.",
+      "sql": "SELECT Singer_ID FROM artist WHERE Age > 40 ORDER BY Name",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tr_04"
+    },
+    {
+      "id": "cs_ts_01__gold",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Name FROM singer_info ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_ts_01"
+    },
+    {
+      "id": "cs_ts_02__gold",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM singer_info WHERE Country='France'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_ts_02"
+    },
+    {
+      "id": "cs_ts_03__gold",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Song_Name FROM singer_songs WHERE Singer_ID=1",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_ts_03"
+    },
+    {
+      "id": "cs_ts_04__gold",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List singer names and countries alphabetically.",
+      "sql": "SELECT Name, Country FROM singer_info ORDER BY Name",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_ts_04"
+    },
+    {
+      "id": "cs_ts_05__gold",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List singer names with age over 40.",
+      "sql": "SELECT Name FROM singer_info WHERE Age > 40 ORDER BY Name",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_ts_05"
+    },
+    {
+      "id": "cs_ts_02__drop_where",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM singer_info",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_ts_02"
+    },
+    {
+      "id": "cs_ts_11__swap_agg_avg",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Average age of French singers.",
+      "sql": "SELECT MAX(Age) FROM singer_info WHERE Country = 'France'",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "cs_ts_11"
+    },
+    {
+      "id": "cs_ts_01__wrong_column",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Singer_ID FROM singer_info ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_ts_01"
+    },
+    {
+      "id": "cs_ts_01__spurious_limit_one",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List all singer names.",
+      "sql": "SELECT Name FROM singer_info ORDER BY Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_ts_01"
+    },
+    {
+      "id": "cs_ts_07__wrong_join_key",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List singer names with their song titles.",
+      "sql": "SELECT i.Name, s.Song_Name FROM singer_info AS i JOIN singer_songs AS s ON i.Singer_ID = s.Song_Name ORDER BY i.Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_ts_07"
+    },
+    {
+      "id": "cs_ts_03__drop_where",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Song_Name FROM singer_songs",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_ts_03"
+    },
+    {
+      "id": "cs_ts_03__wrong_column",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Find the song name for Singer_ID 1.",
+      "sql": "SELECT Singer_ID FROM singer_songs WHERE Singer_ID = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_ts_03"
+    },
+    {
+      "id": "cs_ts_08__wrong_join_key",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "Which singer performs the song 'Sun'?",
+      "sql": "SELECT i.Name FROM singer_info AS i JOIN singer_songs AS s ON i.Singer_ID = s.Song_Name WHERE s.Song_Name = 'Sun'",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_ts_08"
+    },
+    {
+      "id": "cs_ts_05__drop_where",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List singer names with age over 40.",
+      "sql": "SELECT Name FROM singer_info ORDER BY Name",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_ts_05"
+    },
+    {
+      "id": "cs_ts_04__wrong_column",
+      "database_id": "concert_singer_TABLE_SPLIT",
+      "db": "concert_singer_TABLE_SPLIT/concert_singer_post.sqlite",
+      "question": "List singer names and countries alphabetically.",
+      "sql": "SELECT Singer_ID, Country FROM singer_info ORDER BY Name",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_ts_04"
+    },
+    {
+      "id": "cs_tm_01__gold",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "List concert names with singer IDs.",
+      "sql": "SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tm_01"
+    },
+    {
+      "id": "cs_tm_02__gold",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers per concert.",
+      "sql": "SELECT Concert_ID, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tm_02"
+    },
+    {
+      "id": "cs_tm_03__gold",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Concerts in 2015 with singer IDs.",
+      "sql": "SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year=2015 ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tm_03"
+    },
+    {
+      "id": "cs_tm_04__gold",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Themes with singer counts.",
+      "sql": "SELECT Theme, COUNT(*) FROM concert_performance GROUP BY Theme ORDER BY Theme",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tm_04"
+    },
+    {
+      "id": "cs_tm_05__gold",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Distinct concert names.",
+      "sql": "SELECT DISTINCT concert_Name FROM concert_performance ORDER BY concert_Name",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_tm_05"
+    },
+    {
+      "id": "cs_tm_03__drop_where",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Concerts in 2015 with singer IDs.",
+      "sql": "SELECT Concert_ID, Singer_ID FROM concert_performance ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tm_03"
+    },
+    {
+      "id": "cs_tm_01__wrong_column",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "List concert names with singer IDs.",
+      "sql": "SELECT Concert_ID, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tm_01"
+    },
+    {
+      "id": "cs_tm_01__spurious_limit_one",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "List concert names with singer IDs.",
+      "sql": "SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_tm_01"
+    },
+    {
+      "id": "cs_tm_06__wrong_join_key",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Singer names in concert 2.",
+      "sql": "SELECT s.Name FROM singer AS s JOIN concert_performance AS cp ON s.Singer_ID = cp.Concert_ID WHERE cp.Concert_ID = 2 ORDER BY s.Name",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_tm_06"
+    },
+    {
+      "id": "cs_tm_06__drop_where",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Singer names in concert 2.",
+      "sql": "SELECT s.Name FROM singer AS s JOIN concert_performance AS cp ON s.Singer_ID = cp.Singer_ID ORDER BY s.Name",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tm_06"
+    },
+    {
+      "id": "cs_tm_02__wrong_column",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers per concert.",
+      "sql": "SELECT concert_Name, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tm_02"
+    },
+    {
+      "id": "cs_tm_02__spurious_limit_one",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers per concert.",
+      "sql": "SELECT Concert_ID, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_tm_02"
+    },
+    {
+      "id": "cs_tm_09__wrong_join_key",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "List concert names with singer names.",
+      "sql": "SELECT cp.concert_Name, s.Name FROM concert_performance AS cp JOIN singer AS s ON s.Singer_ID = cp.Concert_ID ORDER BY cp.Concert_ID, s.Name",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_tm_09"
+    },
+    {
+      "id": "cs_tm_07__drop_where",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Themes for singer 3.",
+      "sql": "SELECT Theme FROM concert_performance ORDER BY Theme",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_tm_07"
+    },
+    {
+      "id": "cs_tm_03__wrong_column",
+      "database_id": "concert_singer_TABLE_MERGE",
+      "db": "concert_singer_TABLE_MERGE/concert_singer_post.sqlite",
+      "question": "Concerts in 2015 with singer IDs.",
+      "sql": "SELECT concert_Name, Singer_ID FROM concert_performance WHERE Year = 2015 ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_tm_03"
+    },
+    {
+      "id": "cs_cr_01__gold",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List song titles.",
+      "sql": "SELECT song_title FROM singer ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cr_01"
+    },
+    {
+      "id": "cs_cr_02__gold",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Count songs released after 2010.",
+      "sql": "SELECT COUNT(*) FROM singer WHERE debut_year > 2010",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cr_02"
+    },
+    {
+      "id": "cs_cr_03__gold",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with song titles.",
+      "sql": "SELECT Name, song_title FROM singer ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cr_03"
+    },
+    {
+      "id": "cs_cr_04__gold",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Singer for the song 'Sun'.",
+      "sql": "SELECT Name FROM singer WHERE song_title='Sun'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cr_04"
+    },
+    {
+      "id": "cs_cr_05__gold",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Average debut year.",
+      "sql": "SELECT AVG(debut_year) FROM singer",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cr_05"
+    },
+    {
+      "id": "cs_cr_02__drop_where",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Count songs released after 2010.",
+      "sql": "SELECT COUNT(*) FROM singer",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cr_02"
+    },
+    {
+      "id": "cs_cr_05__swap_agg_avg",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Average debut year.",
+      "sql": "SELECT MAX(debut_year) FROM singer",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "cs_cr_05"
+    },
+    {
+      "id": "cs_cr_01__wrong_column",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List song titles.",
+      "sql": "SELECT Singer_ID FROM singer ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cr_01"
+    },
+    {
+      "id": "cs_cr_01__spurious_limit_one",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List song titles.",
+      "sql": "SELECT song_title FROM singer ORDER BY Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_cr_01"
+    },
+    {
+      "id": "cs_cr_13__wrong_join_key",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Song titles for concert 1 singers.",
+      "sql": "SELECT s.song_title FROM singer AS s JOIN singer_in_concert AS sc ON s.Singer_ID = sc.Concert_ID WHERE sc.Concert_ID = 1 ORDER BY s.song_title",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_cr_13"
+    },
+    {
+      "id": "cs_cr_04__drop_where",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Singer for the song 'Sun'.",
+      "sql": "SELECT Name FROM singer",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cr_04"
+    },
+    {
+      "id": "cs_cr_03__wrong_column",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with song titles.",
+      "sql": "SELECT Singer_ID, song_title FROM singer ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cr_03"
+    },
+    {
+      "id": "cs_cr_07__drop_where",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Songs released between 2000 and 2014.",
+      "sql": "SELECT song_title FROM singer ORDER BY song_title",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cr_07"
+    },
+    {
+      "id": "cs_cr_04__wrong_column",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "Singer for the song 'Sun'.",
+      "sql": "SELECT Singer_ID FROM singer WHERE song_title = 'Sun'",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cr_04"
+    },
+    {
+      "id": "cs_cr_03__spurious_limit_one",
+      "database_id": "concert_singer_COLUMN_RENAME",
+      "db": "concert_singer_COLUMN_RENAME/concert_singer_post.sqlite",
+      "question": "List singer names with song titles.",
+      "sql": "SELECT Name, song_title FROM singer ORDER BY Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_cr_03"
+    },
+    {
+      "id": "cs_cm_01__gold",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "List singer names with countries merged.",
+      "sql": "SELECT Name_Country FROM singer ORDER BY Singer_ID",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cm_01"
+    },
+    {
+      "id": "cs_cm_02__gold",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '% - France'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cm_02"
+    },
+    {
+      "id": "cs_cm_03__gold",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged name for Singer_ID 1.",
+      "sql": "SELECT Name_Country FROM singer WHERE Singer_ID=1",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cm_03"
+    },
+    {
+      "id": "cs_cm_04__gold",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged names for singers over 40.",
+      "sql": "SELECT Name_Country FROM singer WHERE Age > 40 ORDER BY Name_Country",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cm_04"
+    },
+    {
+      "id": "cs_cm_05__gold",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged name for the song 'Sun'.",
+      "sql": "SELECT Name_Country FROM singer WHERE Song_Name='Sun'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "cs_cm_05"
+    },
+    {
+      "id": "cs_cm_02__drop_where",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT COUNT(*) FROM singer",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cm_02"
+    },
+    {
+      "id": "cs_cm_01__wrong_column",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "List singer names with countries merged.",
+      "sql": "SELECT Singer_ID FROM singer ORDER BY Singer_ID",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cm_01"
+    },
+    {
+      "id": "cs_cm_01__stale_merge_eq",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "List singer names with countries merged.",
+      "sql": "SELECT Name_Country FROM singer WHERE Name_Country = (SELECT SUBSTR(Name_Country, 1, 1) FROM singer LIMIT 1)",
+      "label": "silent_failure",
+      "mutation": "stale_merge_eq",
+      "source_query_id": "cs_cm_01"
+    },
+    {
+      "id": "cs_cm_01__spurious_limit_one",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "List singer names with countries merged.",
+      "sql": "SELECT Name_Country FROM singer ORDER BY Singer_ID LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "cs_cm_01"
+    },
+    {
+      "id": "cs_cm_10__wrong_join_key",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged names for concert 1 singers.",
+      "sql": "SELECT s.Name_Country FROM singer AS s JOIN singer_in_concert AS sc ON s.Singer_ID = sc.Concert_ID WHERE sc.Concert_ID = 1 ORDER BY s.Name_Country",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "cs_cm_10"
+    },
+    {
+      "id": "cs_cm_03__drop_where",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged name for Singer_ID 1.",
+      "sql": "SELECT Name_Country FROM singer",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cm_03"
+    },
+    {
+      "id": "cs_cm_03__wrong_column",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged name for Singer_ID 1.",
+      "sql": "SELECT Singer_ID FROM singer WHERE Singer_ID = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cm_03"
+    },
+    {
+      "id": "cs_cm_02__stale_merge_eq",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Count singers from France.",
+      "sql": "SELECT Name_Country FROM singer WHERE Name_Country = (SELECT SUBSTR(Name_Country, 1, 1) FROM singer LIMIT 1)",
+      "label": "silent_failure",
+      "mutation": "stale_merge_eq",
+      "source_query_id": "cs_cm_02"
+    },
+    {
+      "id": "cs_cm_04__drop_where",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged names for singers over 40.",
+      "sql": "SELECT Name_Country FROM singer ORDER BY Name_Country",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "cs_cm_04"
+    },
+    {
+      "id": "cs_cm_04__wrong_column",
+      "database_id": "concert_singer_COLUMN_MERGE",
+      "db": "concert_singer_COLUMN_MERGE/concert_singer_post.sqlite",
+      "question": "Merged names for singers over 40.",
+      "sql": "SELECT Singer_ID FROM singer WHERE Age > 40 ORDER BY Name_Country",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "cs_cm_04"
+    },
+    {
+      "id": "hr_tr_01__gold",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT first_name, last_name FROM staff ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tr_01"
+    },
+    {
+      "id": "hr_tr_02__gold",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Count employees.",
+      "sql": "SELECT COUNT(*) FROM staff",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tr_02"
+    },
+    {
+      "id": "hr_tr_03__gold",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM staff WHERE salary > 7000 ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tr_03"
+    },
+    {
+      "id": "hr_tr_04__gold",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(salary) FROM staff",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tr_04"
+    },
+    {
+      "id": "hr_tr_05__gold",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "List employee emails.",
+      "sql": "SELECT email FROM staff ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tr_05"
+    },
+    {
+      "id": "hr_tr_03__drop_where",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM staff ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tr_03"
+    },
+    {
+      "id": "hr_tr_04__swap_agg_avg",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT MAX(salary) FROM staff",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "hr_tr_04"
+    },
+    {
+      "id": "hr_tr_01__wrong_column",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT employee_id, last_name FROM staff ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tr_01"
+    },
+    {
+      "id": "hr_tr_01__spurious_limit_one",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT first_name, last_name FROM staff ORDER BY employee_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_tr_01"
+    },
+    {
+      "id": "hr_tr_11__wrong_join_key",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Job title for employee 1.",
+      "sql": "SELECT j.job_title FROM staff AS e JOIN jobs AS j ON e.job_id = j.job_title WHERE e.employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_tr_11"
+    },
+    {
+      "id": "hr_tr_06__drop_where",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Employees in department 10.",
+      "sql": "SELECT employee_id FROM staff",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tr_06"
+    },
+    {
+      "id": "hr_tr_03__wrong_column",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT first_name FROM staff WHERE salary > 7000 ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tr_03"
+    },
+    {
+      "id": "hr_tr_12__wrong_join_key",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Department name for employee 1.",
+      "sql": "SELECT d.department_name FROM staff AS e JOIN departments AS d ON e.department_id = d.department_name WHERE e.employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_tr_12"
+    },
+    {
+      "id": "hr_tr_09__drop_where",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Employees with commissions.",
+      "sql": "SELECT employee_id FROM staff ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tr_09"
+    },
+    {
+      "id": "hr_tr_04__wrong_column",
+      "database_id": "hr_1_TABLE_RENAME",
+      "db": "hr_1_TABLE_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(employee_id) FROM staff",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tr_04"
+    },
+    {
+      "id": "hr_ts_01__gold",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT first_name, last_name FROM employee_personal ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_ts_01"
+    },
+    {
+      "id": "hr_ts_02__gold",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Count employees.",
+      "sql": "SELECT COUNT(*) FROM employee_personal",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_ts_02"
+    },
+    {
+      "id": "hr_ts_03__gold",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employee_job WHERE salary > 7000 ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_ts_03"
+    },
+    {
+      "id": "hr_ts_04__gold",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(salary) FROM employee_job",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_ts_04"
+    },
+    {
+      "id": "hr_ts_05__gold",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "List employee emails.",
+      "sql": "SELECT email FROM employee_personal ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_ts_05"
+    },
+    {
+      "id": "hr_ts_03__drop_where",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employee_job ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_ts_03"
+    },
+    {
+      "id": "hr_ts_04__swap_agg_avg",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT MAX(salary) FROM employee_job",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "hr_ts_04"
+    },
+    {
+      "id": "hr_ts_01__wrong_column",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT employee_id, last_name FROM employee_personal ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_ts_01"
+    },
+    {
+      "id": "hr_ts_01__spurious_limit_one",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT first_name, last_name FROM employee_personal ORDER BY employee_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_ts_01"
+    },
+    {
+      "id": "hr_ts_06__wrong_join_key",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees in department 10.",
+      "sql": "SELECT p.employee_id, p.first_name FROM employee_personal AS p JOIN employee_job AS j ON p.employee_id = j.hire_date WHERE j.department_id = 10 ORDER BY p.employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_ts_06"
+    },
+    {
+      "id": "hr_ts_06__drop_where",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees in department 10.",
+      "sql": "SELECT p.employee_id, p.first_name FROM employee_personal AS p JOIN employee_job AS j ON p.employee_id = j.employee_id ORDER BY p.employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_ts_06"
+    },
+    {
+      "id": "hr_ts_03__wrong_column",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT hire_date FROM employee_job WHERE salary > 7000 ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_ts_03"
+    },
+    {
+      "id": "hr_ts_11__wrong_join_key",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Job title for employee 1.",
+      "sql": "SELECT j.job_title FROM employee_job AS e JOIN jobs AS j ON e.job_id = j.job_title WHERE e.employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_ts_11"
+    },
+    {
+      "id": "hr_ts_09__drop_where",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Employees with commissions.",
+      "sql": "SELECT employee_id FROM employee_job ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_ts_09"
+    },
+    {
+      "id": "hr_ts_04__wrong_column",
+      "database_id": "hr_1_TABLE_SPLIT",
+      "db": "hr_1_TABLE_SPLIT/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(employee_id) FROM employee_job",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_ts_04"
+    },
+    {
+      "id": "hr_tm_01__gold",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "List department names with cities.",
+      "sql": "SELECT department_name, city FROM department_location ORDER BY department_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tm_01"
+    },
+    {
+      "id": "hr_tm_02__gold",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Count departments per country.",
+      "sql": "SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tm_02"
+    },
+    {
+      "id": "hr_tm_03__gold",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Street address for department 10.",
+      "sql": "SELECT street_address FROM department_location WHERE department_id=10",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tm_03"
+    },
+    {
+      "id": "hr_tm_04__gold",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Departments in City1.",
+      "sql": "SELECT department_name FROM department_location WHERE city='City1'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tm_04"
+    },
+    {
+      "id": "hr_tm_05__gold",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Department names with postal codes.",
+      "sql": "SELECT department_name, postal_code FROM department_location ORDER BY department_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_tm_05"
+    },
+    {
+      "id": "hr_tm_03__drop_where",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Street address for department 10.",
+      "sql": "SELECT street_address FROM department_location",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tm_03"
+    },
+    {
+      "id": "hr_tm_01__wrong_column",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "List department names with cities.",
+      "sql": "SELECT department_id, city FROM department_location ORDER BY department_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tm_01"
+    },
+    {
+      "id": "hr_tm_01__spurious_limit_one",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "List department names with cities.",
+      "sql": "SELECT department_name, city FROM department_location ORDER BY department_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_tm_01"
+    },
+    {
+      "id": "hr_tm_11__wrong_join_key",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Employee departments by name.",
+      "sql": "SELECT e.employee_id, dl.department_name FROM employees AS e JOIN department_location AS dl ON e.department_id = dl.department_name ORDER BY e.employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_tm_11"
+    },
+    {
+      "id": "hr_tm_04__drop_where",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Departments in City1.",
+      "sql": "SELECT department_name FROM department_location",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tm_04"
+    },
+    {
+      "id": "hr_tm_02__wrong_column",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Count departments per country.",
+      "sql": "SELECT department_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tm_02"
+    },
+    {
+      "id": "hr_tm_02__spurious_limit_one",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Count departments per country.",
+      "sql": "SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_tm_02"
+    },
+    {
+      "id": "hr_tm_12__wrong_join_key",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Job history cities.",
+      "sql": "SELECT j.employee_id, dl.city FROM job_history AS j JOIN department_location AS dl ON j.department_id = dl.department_name ORDER BY j.employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_tm_12"
+    },
+    {
+      "id": "hr_tm_06__drop_where",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Count departments in State1.",
+      "sql": "SELECT COUNT(*) FROM department_location",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_tm_06"
+    },
+    {
+      "id": "hr_tm_03__wrong_column",
+      "database_id": "hr_1_TABLE_MERGE",
+      "db": "hr_1_TABLE_MERGE/hr_1_post.sqlite",
+      "question": "Street address for department 10.",
+      "sql": "SELECT department_id FROM department_location WHERE department_id = 10",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_tm_03"
+    },
+    {
+      "id": "hr_cr_01__gold",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT fname, last_name FROM employees ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cr_01"
+    },
+    {
+      "id": "hr_cr_02__gold",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Count employees.",
+      "sql": "SELECT COUNT(*) FROM employees",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cr_02"
+    },
+    {
+      "id": "hr_cr_03__gold",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cr_03"
+    },
+    {
+      "id": "hr_cr_04__gold",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(monthly_salary) FROM employees",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cr_04"
+    },
+    {
+      "id": "hr_cr_05__gold",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "List employee emails.",
+      "sql": "SELECT email FROM employees ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cr_05"
+    },
+    {
+      "id": "hr_cr_03__drop_where",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employees ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cr_03"
+    },
+    {
+      "id": "hr_cr_04__swap_agg_avg",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT MAX(monthly_salary) FROM employees",
+      "label": "silent_failure",
+      "mutation": "swap_agg_avg",
+      "source_query_id": "hr_cr_04"
+    },
+    {
+      "id": "hr_cr_01__wrong_column",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT employee_id, last_name FROM employees ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cr_01"
+    },
+    {
+      "id": "hr_cr_01__spurious_limit_one",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "List employee first and last names.",
+      "sql": "SELECT fname, last_name FROM employees ORDER BY employee_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_cr_01"
+    },
+    {
+      "id": "hr_cr_09__wrong_join_key",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Job title for employee 1.",
+      "sql": "SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_title WHERE e.employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_cr_09"
+    },
+    {
+      "id": "hr_cr_07__drop_where",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with first names starting with A.",
+      "sql": "SELECT employee_id FROM employees",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cr_07"
+    },
+    {
+      "id": "hr_cr_03__wrong_column",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT fname FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cr_03"
+    },
+    {
+      "id": "hr_cr_08__drop_where",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with commissions.",
+      "sql": "SELECT employee_id FROM employees ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cr_08"
+    },
+    {
+      "id": "hr_cr_04__wrong_column",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Average employee salary.",
+      "sql": "SELECT AVG(employee_id) FROM employees",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cr_04"
+    },
+    {
+      "id": "hr_cr_03__spurious_limit_one",
+      "database_id": "hr_1_COLUMN_RENAME",
+      "db": "hr_1_COLUMN_RENAME/hr_1_post.sqlite",
+      "question": "Employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_cr_03"
+    },
+    {
+      "id": "hr_cm_01__gold",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "List merged employee full names.",
+      "sql": "SELECT full_name FROM employees ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cm_01"
+    },
+    {
+      "id": "hr_cm_02__gold",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Count employees with last names starting with S.",
+      "sql": "SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%'",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cm_02"
+    },
+    {
+      "id": "hr_cm_03__gold",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full name for employee 1.",
+      "sql": "SELECT full_name FROM employees WHERE employee_id=1",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cm_03"
+    },
+    {
+      "id": "hr_cm_04__gold",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full names for employees with salary over 7000.",
+      "sql": "SELECT full_name FROM employees WHERE salary > 7000 ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cm_04"
+    },
+    {
+      "id": "hr_cm_05__gold",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full names with emails.",
+      "sql": "SELECT full_name, email FROM employees ORDER BY employee_id",
+      "label": "valid",
+      "mutation": "none",
+      "source_query_id": "hr_cm_05"
+    },
+    {
+      "id": "hr_cm_02__drop_where",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Count employees with last names starting with S.",
+      "sql": "SELECT COUNT(*) FROM employees",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cm_02"
+    },
+    {
+      "id": "hr_cm_01__wrong_column",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "List merged employee full names.",
+      "sql": "SELECT employee_id FROM employees ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cm_01"
+    },
+    {
+      "id": "hr_cm_01__stale_merge_eq",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "List merged employee full names.",
+      "sql": "SELECT full_name FROM employees WHERE full_name = (SELECT SUBSTR(full_name, 1, 1) FROM employees LIMIT 1)",
+      "label": "silent_failure",
+      "mutation": "stale_merge_eq",
+      "source_query_id": "hr_cm_01"
+    },
+    {
+      "id": "hr_cm_01__spurious_limit_one",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "List merged employee full names.",
+      "sql": "SELECT full_name FROM employees ORDER BY employee_id LIMIT 1",
+      "label": "silent_failure",
+      "mutation": "spurious_limit_one",
+      "source_query_id": "hr_cm_01"
+    },
+    {
+      "id": "hr_cm_10__wrong_join_key",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Job history start date with full name for employee 1.",
+      "sql": "SELECT j.start_date, e.full_name FROM job_history AS j JOIN employees AS e ON j.employee_id = e.email WHERE e.employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_join_key",
+      "source_query_id": "hr_cm_10"
+    },
+    {
+      "id": "hr_cm_03__drop_where",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full name for employee 1.",
+      "sql": "SELECT full_name FROM employees",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cm_03"
+    },
+    {
+      "id": "hr_cm_03__wrong_column",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full name for employee 1.",
+      "sql": "SELECT employee_id FROM employees WHERE employee_id = 1",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cm_03"
+    },
+    {
+      "id": "hr_cm_02__stale_merge_eq",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Count employees with last names starting with S.",
+      "sql": "SELECT full_name FROM employees WHERE full_name = (SELECT SUBSTR(full_name, 1, 1) FROM employees LIMIT 1)",
+      "label": "silent_failure",
+      "mutation": "stale_merge_eq",
+      "source_query_id": "hr_cm_02"
+    },
+    {
+      "id": "hr_cm_04__drop_where",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full names for employees with salary over 7000.",
+      "sql": "SELECT full_name FROM employees ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "drop_where",
+      "source_query_id": "hr_cm_04"
+    },
+    {
+      "id": "hr_cm_04__wrong_column",
+      "database_id": "hr_1_COLUMN_MERGE",
+      "db": "hr_1_COLUMN_MERGE/hr_1_post.sqlite",
+      "question": "Full names for employees with salary over 7000.",
+      "sql": "SELECT employee_id FROM employees WHERE salary > 7000 ORDER BY employee_id",
+      "label": "silent_failure",
+      "mutation": "wrong_column",
+      "source_query_id": "hr_cm_04"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+Q01,TABLE_RENAME,False,SELECT COUNT(*) FROM singer,0,1,SELECT COUNT(*) FROM artist,valid,1,SELECT COUNT(*) FROM artist,execution_error,1,SELECT COUNT(*) FROM artist,execution_error,1,SELECT COUNT(*) FROM artist,skipped
+Q02,TABLE_RENAME,False,"SELECT Name, Country FROM singer",0,1,"SELECT Name, Country FROM artist",valid,1,"SELECT Name, Country FROM artist",execution_error,1,"SELECT Name, Country FROM artist",execution_error,1,"SELECT Name, Country FROM artist",skipped
+Q03,TABLE_RENAME,False,SELECT Name FROM singer WHERE Country = 'France',0,1,SELECT Name FROM artist WHERE Country = 'France',valid,1,SELECT Name FROM artist WHERE Country = 'France',execution_error,1,SELECT Name FROM artist WHERE Country = 'France',execution_error,1,SELECT Name FROM artist WHERE Country = 'France',skipped
+Q04,TABLE_RENAME,False,SELECT Name FROM singer ORDER BY Age DESC,0,1,SELECT Name FROM artist ORDER BY Age DESC,valid,1,SELECT Name FROM artist ORDER BY Age DESC,execution_error,1,SELECT Name FROM artist ORDER BY Age DESC,execution_error,1,SELECT Name FROM artist ORDER BY Age DESC,skipped
+Q05,TABLE_RENAME,False,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',silent_failure_suspected,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',execution_error,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',execution_error,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',skipped
+Q06,TABLE_RENAME,False,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM singer",0,1,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",valid,1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",execution_error,1,"SELECT AVG(Age) as average_age, MIN(Age) as minimum_age, MAX(Age) as maximum_age FROM artist",execution_error,1,"SELECT AVG(Age) AS average_age, MIN(Age) AS minimum_age, MAX(Age) AS maximum_age FROM artist",skipped
+Q07,TABLE_RENAME,False,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,1,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",valid,1,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country
+ORDER BY Country",execution_error,1,"SELECT Country, COUNT(*) as number_of_singers
+FROM artist
+GROUP BY Country
+ORDER BY Country",execution_error,1,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",skipped
+Q08,TABLE_RENAME,False,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,1,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,valid,1,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,execution_error,1,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,execution_error,1,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,skipped
+Q09,TABLE_RENAME,False,"SELECT DISTINCT s.Name, c.concert_Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY s.Name, c.concert_Name",0,1,"SELECT DISTINCT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",valid,1,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",execution_error,1,"SELECT DISTINCT a.Name, c.concert_Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+ORDER BY a.Name, c.concert_Name",execution_error,1,"SELECT DISTINCT s.Name, c.concert_Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID ORDER BY s.Name, c.concert_Name",skipped
+Q10,TABLE_RENAME,False,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",0,1,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',valid,1,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",execution_error,1,"SELECT DISTINCT a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.Theme = 'Wide Awake'",execution_error,1,SELECT DISTINCT s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.Theme = 'Wide Awake',skipped
+Q11,NONE,False,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",valid,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",valid,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",valid,0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",skipped
+Q12,TABLE_RENAME,False,SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,1,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),silent_failure_suspected,1,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),execution_error,1,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),execution_error,1,SELECT Name FROM artist WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert),skipped
+Q13,TABLE_AND_COLUMN_RENAME,False,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,1,"SELECT Name, song_title FROM artist",execution_error,1,"SELECT Name, song_title
+FROM artist",execution_error,1,"SELECT artist.Name, artist.song_title
+FROM artist",execution_error,0,"SELECT singer.Name, singer.Song_Name FROM artist",skipped
+Q14,TABLE_AND_COLUMN_RENAME,False,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,1,SELECT song_title FROM artist ORDER BY debut_year ASC,valid,1,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",execution_error,1,"SELECT song_title
+FROM artist
+ORDER BY debut_year ASC",execution_error,1,SELECT song_title FROM artist ORDER BY debut_year ASC,skipped
+Q15,TABLE_AND_COLUMN_RENAME,False,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,1,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),valid,1,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),execution_error,1,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),execution_error,1,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),skipped
+Q16,TABLE_AND_COLUMN_RENAME,False,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,silent_failure_suspected,1,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,execution_error,1,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,execution_error,1,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,skipped
+Q17,TABLE_AND_COLUMN_RENAME,False,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,1,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",valid,1,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",execution_error,1,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",execution_error,1,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",skipped
+Q18,TABLE_AND_COLUMN_RENAME,False,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year
+FROM singer
+GROUP BY singer.Country",0,1,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year FROM artist GROUP BY artist.Country",execution_error,1,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year
+FROM artist
+GROUP BY artist.Country",execution_error,1,"SELECT artist.Country, AVG(artist.debut_year) AS average_song_release_year
+FROM artist
+GROUP BY artist.Country",execution_error,0,"SELECT singer.Country, AVG(singer.Song_release_year) AS average_song_release_year FROM artist GROUP BY singer.Country",skipped
+Q19,TABLE_AND_COLUMN_RENAME,False,"SELECT DISTINCT s.Song_Name
+FROM singer s
+INNER JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",0,1,SELECT DISTINCT s.song_title FROM artist AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID INNER JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',valid,1,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",execution_error,1,"SELECT DISTINCT a.song_title
+FROM artist a
+INNER JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+INNER JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Auditions'",execution_error,1,SELECT DISTINCT s.song_title FROM artist AS s INNER JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID INNER JOIN concert AS c ON sic.Concert_ID = c.Concert_ID WHERE c.concert_Name = 'Auditions',skipped
+Q20,NONE,False,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,0,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,valid,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,valid,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,valid,0,SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1,skipped

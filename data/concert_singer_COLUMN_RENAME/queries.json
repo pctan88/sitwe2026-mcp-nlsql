@@ -1,0 +1,163 @@
+[
+  {
+    "id": "cs_cr_01",
+    "question": "List song titles.",
+    "gold_pre": "SELECT Song_Name FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT song_title FROM singer ORDER BY Singer_ID",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_02",
+    "question": "Count songs released after 2010.",
+    "gold_pre": "SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010",
+    "gold_post": "SELECT COUNT(*) FROM singer WHERE debut_year > 2010",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_03",
+    "question": "List singer names with song titles.",
+    "gold_pre": "SELECT Name, Song_Name FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT Name, song_title FROM singer ORDER BY Singer_ID",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_04",
+    "question": "Singer for the song 'Sun'.",
+    "gold_pre": "SELECT Name FROM singer WHERE Song_Name='Sun'",
+    "gold_post": "SELECT Name FROM singer WHERE song_title='Sun'",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_05",
+    "question": "Average debut year.",
+    "gold_pre": "SELECT AVG(Song_release_year) FROM singer",
+    "gold_post": "SELECT AVG(debut_year) FROM singer",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_06",
+    "question": "List singer IDs and debut years.",
+    "gold_pre": "SELECT Singer_ID, Song_release_year FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT Singer_ID, debut_year FROM singer ORDER BY Singer_ID",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_07",
+    "question": "Songs released between 2000 and 2014.",
+    "gold_pre": "SELECT Song_Name FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014 ORDER BY Song_Name",
+    "gold_post": "SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014 ORDER BY song_title",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_08",
+    "question": "Singers with songs released in 2014.",
+    "gold_pre": "SELECT Name FROM singer WHERE Song_release_year=2014",
+    "gold_post": "SELECT Name FROM singer WHERE debut_year=2014",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_09",
+    "question": "Count distinct song titles.",
+    "gold_pre": "SELECT COUNT(DISTINCT Song_Name) FROM singer",
+    "gold_post": "SELECT COUNT(DISTINCT song_title) FROM singer",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_10",
+    "question": "Song titles by French singers.",
+    "gold_pre": "SELECT Song_Name FROM singer WHERE Country='France' ORDER BY Song_Name",
+    "gold_post": "SELECT song_title FROM singer WHERE Country='France' ORDER BY song_title",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_11",
+    "question": "List song titles and countries.",
+    "gold_pre": "SELECT Song_Name, Country FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT song_title, Country FROM singer ORDER BY Singer_ID",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_12",
+    "question": "Song titles ordered by debut year.",
+    "gold_pre": "SELECT Song_Name FROM singer ORDER BY Song_release_year DESC",
+    "gold_post": "SELECT song_title FROM singer ORDER BY debut_year DESC",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_13",
+    "question": "Song titles for concert 1 singers.",
+    "gold_pre": "SELECT s.Song_Name FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY s.Song_Name",
+    "gold_post": "SELECT s.song_title FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY s.song_title",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer",
+      "singer_in_concert"
+    ]
+  },
+  {
+    "id": "cs_cr_14",
+    "question": "Count songs released before 2005.",
+    "gold_pre": "SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005",
+    "gold_post": "SELECT COUNT(*) FROM singer WHERE debut_year < 2005",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_cr_15",
+    "question": "List stadiums with capacity over 10000.",
+    "gold_pre": "SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID",
+    "gold_post": "SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "stadium"
+    ]
+  },
+  {
+    "id": "cs_cr_16",
+    "question": "Count concerts.",
+    "gold_pre": "SELECT COUNT(*) FROM concert",
+    "gold_post": "SELECT COUNT(*) FROM concert",
+    "perturbation": "COLUMN_RENAME",
+    "touches": [
+      "concert"
+    ]
+  }
+]

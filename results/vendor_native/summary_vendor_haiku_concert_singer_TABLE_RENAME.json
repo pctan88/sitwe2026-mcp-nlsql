@@ -1,0 +1,143 @@
+{
+  "database_id": "concert_singer_TABLE_RENAME",
+  "model": "haiku",
+  "model_id": "claude-haiku-4-5-20251001",
+  "backend": "anthropic",
+  "validate_mode": "embedding",
+  "strict_mode": true,
+  "max_turns": 8,
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "ex_stale_sanity": 0.0625,
+  "sanity_agreement_with_canonical": 1.0,
+  "ex_diff_in_prompt": 0.625,
+  "ex_vendor_native": 0.6875,
+  "canonical_ex_stale": 0.0625,
+  "canonical_ex_refreshed": 0.75,
+  "canonical_ex_mcp": 0.5625,
+  "canonical_recovery_rate": 0.7273,
+  "rr_diff_in_prompt": 0.8182,
+  "rr_vendor_native": 0.9091,
+  "wilson_ci": {
+    "stale_sanity": {
+      "successes": 1,
+      "total": 16,
+      "lower": 0.011119,
+      "upper": 0.283293
+    },
+    "diff_in_prompt": {
+      "successes": 10,
+      "total": 16,
+      "lower": 0.386406,
+      "upper": 0.81519
+    },
+    "vendor_native": {
+      "successes": 11,
+      "total": 16,
+      "lower": 0.444039,
+      "upper": 0.858356
+    }
+  },
+  "mcnemar": {
+    "vendor_vs_mcp": {
+      "b": 3,
+      "c": 1,
+      "statistic": 0.25,
+      "p_value": 0.625
+    },
+    "diff_vs_mcp": {
+      "b": 1,
+      "c": 0,
+      "statistic": 0.0,
+      "p_value": 1.0
+    },
+    "vendor_vs_diff": {
+      "b": 2,
+      "c": 1,
+      "statistic": 0.0,
+      "p_value": 1.0
+    }
+  },
+  "latency_stats": {
+    "sanity_s": {
+      "n": 16,
+      "mean": 1.478075,
+      "median": 1.2728,
+      "q1": 1.15595,
+      "q3": 1.58135,
+      "iqr": 0.4254,
+      "p95": 3.2925,
+      "min": 0.8768,
+      "max": 3.2925
+    },
+    "diff_in_prompt_s": {
+      "n": 16,
+      "mean": 1.487969,
+      "median": 1.2699,
+      "q1": 1.08625,
+      "q3": 1.62895,
+      "iqr": 0.5427,
+      "p95": 3.8367,
+      "min": 0.9189,
+      "max": 3.8367
+    },
+    "vendor_native_s": {
+      "n": 16,
+      "mean": 5.511981,
+      "median": 4.1796,
+      "q1": 3.8634,
+      "q3": 5.57715,
+      "iqr": 1.71375,
+      "p95": 13.2992,
+      "min": 3.5299,
+      "max": 13.2992
+    }
+  },
+  "cost": {
+    "prices_usd_per_mtok": {
+      "input": 1.0,
+      "output": 5.0
+    },
+    "sanity": {
+      "tokens_in": 2875,
+      "tokens_out": 458,
+      "usd": 0.005165,
+      "usd_per_query": 0.000323,
+      "mean_tokens_in": 179.7,
+      "mean_tokens_out": 28.6
+    },
+    "diff_in_prompt": {
+      "tokens_in": 4075,
+      "tokens_out": 509,
+      "usd": 0.00662,
+      "usd_per_query": 0.000414,
+      "mean_tokens_in": 254.7,
+      "mean_tokens_out": 31.8
+    },
+    "vendor_native": {
+      "tokens_in": 72934,
+      "tokens_out": 3785,
+      "usd": 0.091859,
+      "usd_per_query": 0.005741,
+      "mean_tokens_in": 4558.4,
+      "mean_tokens_out": 236.6
+    }
+  },
+  "tool_loop": {
+    "mean_tool_calls_per_query": 2.562,
+    "mean_api_calls_per_query": 3.5,
+    "pct_queries_using_tool": {
+      "get_schema_diff": 1.0,
+      "relink_sql": 0.0,
+      "validate_sql": 1.0
+    },
+    "pct_queries_no_tools": 0.0,
+    "pct_queries_capped": 0.0625
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0
+}

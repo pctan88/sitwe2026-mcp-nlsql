@@ -1,0 +1,69 @@
+{
+  "_note": "Pooled over all 5 EvoSchema operators for gemini on concert_singer. Regenerated 2026-06-09 from per-operator summary_gemini_concert_singer_*.json files (the canonical N=76 strict-mode runs). Supersedes the archived N=20 rename-only pilot. RR=(EX_mcp-EX_stale)/(EX_refreshed-EX_stale).",
+  "model_short_name": "gemini",
+  "database_id": "concert_singer",
+  "strict_mode": true,
+  "n_queries": 76,
+  "n_queries_scored": 76,
+  "ex_pre": 0.8421,
+  "ex_post_baseline": 0.1579,
+  "ex_post_refreshed_schema": 0.8816,
+  "ex_post_error_feedback": 0.1579,
+  "ex_post_mcp": 0.8289,
+  "recovery_rate": 0.9273,
+  "_counts": {
+    "n_total": 76,
+    "pre_correct": 64,
+    "refreshed_correct": 67,
+    "stale_correct": 12,
+    "error_feedback_correct": 12,
+    "mcp_correct": 63
+  },
+  "per_operator": [
+    {
+      "operator": "TABLE_RENAME",
+      "n": 16,
+      "pre": 15,
+      "refreshed": 12,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 15
+    },
+    {
+      "operator": "TABLE_SPLIT",
+      "n": 16,
+      "pre": 16,
+      "refreshed": 16,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 16
+    },
+    {
+      "operator": "TABLE_MERGE",
+      "n": 14,
+      "pre": 11,
+      "refreshed": 12,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 11
+    },
+    {
+      "operator": "COLUMN_RENAME",
+      "n": 16,
+      "pre": 16,
+      "refreshed": 16,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 16
+    },
+    {
+      "operator": "COLUMN_MERGE",
+      "n": 14,
+      "pre": 6,
+      "refreshed": 11,
+      "stale": 4,
+      "error_feedback": 4,
+      "mcp": 5
+    }
+  ]
+}

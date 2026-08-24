@@ -1,0 +1,89 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+cs_ts_01,TABLE_SPLIT,List all singer names.,False,SELECT Name FROM singer,0,2.0019,177,8,0,1,SELECT DISTINCT Name FROM singer_info,1,0.9066,267,12,SELECT Name FROM singer_info,1,12.5917,3780,186,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name FROM singer_info""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_02,TABLE_SPLIT,Count singers from France.,False,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1.0726,177,16,0,1,"SELECT COUNT(DISTINCT si.Singer_ID)
+FROM singer_info si
+WHERE si.Country = 'France'",1,1.3499,267,30,SELECT COUNT(*) FROM singer_info WHERE Country = 'France',1,6.5505,5332,266,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Country = 'France'""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Country = 'France'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_03,TABLE_SPLIT,Find the song name for Singer_ID 1.,False,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,2.0651,183,17,0,1,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,1,1.0478,273,19,SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1,1,5.9,3813,206,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Song_Name FROM singer_songs WHERE Singer_ID = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_04,TABLE_SPLIT,List singer names and countries alphabetically.,False,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,1.1318,180,15,0,1,"SELECT Name, Country
+FROM singer_info
+ORDER BY Name, Country",1,1.2789,270,19,"SELECT Name, Country FROM singer_info ORDER BY Name, Country",1,5.9101,5345,264,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT Name, Country FROM singer ORDER BY Name, Country""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name, Country FROM singer_info ORDER BY Name, Country""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_05,TABLE_SPLIT,List singer names with age over 40.,False,SELECT Name FROM singer WHERE Age > 40,0,2.0537,181,13,0,1,"SELECT DISTINCT s.Name
+FROM singer_info s
+WHERE s.Age > 40",1,1.0784,271,24,SELECT Name FROM singer_info WHERE Age > 40,1,5.5581,3786,185,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name FROM singer_info WHERE Age > 40""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_06,TABLE_SPLIT,List song release years since 2010.,False,"SELECT DISTINCT Song_release_year
+FROM singer
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",0,1.0889,181,34,0,1,"SELECT DISTINCT Song_release_year
+FROM singer_songs
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",1,1.1666,271,41,SELECT DISTINCT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010 ORDER BY Song_release_year,1,4.0818,3802,220,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Song_release_year FROM singer_songs WHERE Song_release_year >= 2010 ORDER BY Song_release_year""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_07,TABLE_SPLIT,List singer names with their song titles.,False,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,1.0493,180,17,0,1,"SELECT si.Name, ss.Song_Name
+FROM singer_info si
+LEFT JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+ORDER BY si.Name, ss.Song_Name",1,1.543,270,51,"SELECT si.Name, ss.Song_Name FROM singer_info si JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID",1,4.2028,3827,247,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT si.Name, ss.Song_Name FROM singer_info si JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_08,TABLE_SPLIT,Which singer performs the song 'Sun'?,False,"SELECT DISTINCT s.Name
+FROM singer s
+WHERE s.Song_Name = 'Sun'",0,1.0176,182,25,0,1,"SELECT si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_Name = 'Sun'",1,1.1167,272,48,"Based on the schema structure, the correct query to find which singer performs the song 'Sun' is:
+
+```sql
+SELECT si.Name FROM singer_info si JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID WHERE ss.Song_Name = 'Sun'
+```
+
+SELECT si.Name FROM singer_info si JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID WHERE ss.Song_Name = 'Sun'",0,9.5087,9040,621,6,5,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT si.Name FROM singer_info si JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID WHERE ss.Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name FROM singer_info WHERE Singer_ID IN (SELECT Singer_ID FROM singer_songs WHERE Song_Name = 'Sun')""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT si.Name FROM singer_info si, singer_songs ss WHERE si.Singer_ID = ss.Singer_ID AND ss.Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT si.Name FROM singer_info si INNER JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID WHERE ss.Song_Name LIKE '%Sun%'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}]",anthropic
+cs_ts_09,TABLE_SPLIT,Count male singers.,False,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,1.2586,176,54,0,0,SELECT COUNT(*) FROM singer_info WHERE Is_male = 'true',0,1.0336,266,20,SELECT COUNT(*) FROM singer_info WHERE Is_male = 'T',1,12.4273,12802,664,8,8,1,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = 'true'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = 'M'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = 'Yes'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = '1'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male IS NOT NULL""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = 'T'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer_info WHERE Is_male = 'T'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_10,TABLE_SPLIT,Singers with songs released in 2014 or later.,False,"SELECT DISTINCT s.Singer_ID, s.Name, s.Country, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year >= 2014",0,1.6239,185,51,0,0,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year >= 2014",0,1.2319,275,57,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year >= 2014",0,5.1995,3845,264,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT si.Singer_ID, si.Name\nFROM singer_info si\nJOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID\nWHERE ss.Song_release_year >= 2014""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_11,TABLE_SPLIT,Average age of French singers.,False,SELECT AVG(Age) FROM singer WHERE Country = 'France',0,2.6832,178,18,0,1,"SELECT AVG(Age)
+FROM singer_info
+WHERE Country = 'France'",1,1.1806,268,22,SELECT AVG(Age) FROM singer_info WHERE Country = 'France',1,4.0516,3776,192,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT AVG(Age) FROM singer_info WHERE Country = 'France'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_12,TABLE_SPLIT,Which singers performed in concert 1?,False,"SELECT s.Singer_ID, s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1.223,180,51,0,0,"SELECT si.Name
+FROM singer_in_concert sic
+JOIN singer_info si ON sic.Singer_ID = si.Singer_ID
+WHERE sic.Concert_ID = 1",1,1.0662,270,47,"SELECT si.Singer_ID, si.Name
+FROM singer_info si
+JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,4.6577,3820,259,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT si.Singer_ID, si.Name\nFROM singer_info si\nJOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID\nWHERE sic.Concert_ID = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_13,TABLE_SPLIT,Count concerts per singer.,False,"SELECT s.Singer_ID, s.Name, COUNT(sc.Concert_ID) as concert_count
+FROM singer s
+LEFT JOIN singer_in_concert sc ON s.Singer_ID = sc.Singer_ID
+GROUP BY s.Singer_ID, s.Name
+ORDER BY s.Singer_ID",0,1.8199,177,72,0,0,"SELECT si.Singer_ID, si.Name, COUNT(sc.Concert_ID) as concert_count
+FROM singer_info si
+LEFT JOIN singer_in_concert sc ON si.Singer_ID = sc.Singer_ID
+GROUP BY si.Singer_ID, si.Name
+ORDER BY si.Singer_ID",0,1.5326,267,79,"SELECT 
+    si.Singer_ID,
+    si.Name,
+    COUNT(sic.Concert_ID) AS concert_count
+FROM singer_info si
+LEFT JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID
+GROUP BY si.Singer_ID, si.Name
+ORDER BY si.Singer_ID",0,5.0473,3939,420,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT \n    si.Singer_ID,\n    si.Name,\n    COUNT(sic.Concert_ID) AS concert_count\nFROM singer_info si\nLEFT JOIN singer_in_concert sic ON si.Singer_ID = sic.Singer_ID\nGROUP BY si.Singer_ID, si.Name\nORDER BY si.Singer_ID;""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_14,TABLE_SPLIT,Singers with songs released between 2000 and 2014.,False,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY s.Song_release_year",0,2.0941,187,63,0,0,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014",0,1.4139,277,63,"SELECT DISTINCT si.Singer_ID, si.Name
+FROM singer_info si
+JOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID
+WHERE ss.Song_release_year BETWEEN 2000 AND 2014",0,4.3424,3858,278,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT si.Singer_ID, si.Name\nFROM singer_info si\nJOIN singer_songs ss ON si.Singer_ID = ss.Singer_ID\nWHERE ss.Song_release_year BETWEEN 2000 AND 2014""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_15,TABLE_SPLIT,List stadiums with capacity over 10000.,False,SELECT * FROM stadium WHERE Capacity > 10000,0,0.9368,182,15,0,0,"SELECT Stadium_ID, Location, Name, Capacity, Highest, Lowest, Average
+FROM stadium
+WHERE Capacity > 10000",0,1.217,272,34,SELECT * FROM stadium WHERE Capacity > 10000,0,6.0263,3818,211,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT * FROM stadium WHERE Capacity > 10000""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_ts_16,TABLE_SPLIT,List concert themes.,False,SELECT DISTINCT Theme FROM concert,1,0.9492,176,10,1,1,SELECT DISTINCT Theme FROM concert,1,3.1495,266,10,SELECT Theme FROM concert,1,4.6988,3774,186,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Theme FROM concert""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

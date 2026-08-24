@@ -1,0 +1,71 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+cs_tr_01,TABLE_RENAME,False,SELECT Name FROM singer,0,1,SELECT Name FROM artist,valid,1,SELECT Name FROM artist,execution_error,1,SELECT Name FROM artist,execution_error,1,SELECT Name FROM artist,skipped
+cs_tr_02,TABLE_RENAME,False,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1,SELECT COUNT(*) FROM artist WHERE Country = 'France',valid,1,SELECT COUNT(*) FROM artist WHERE Country = 'France',execution_error,1,SELECT COUNT(*) FROM artist WHERE Country = 'France',execution_error,1,SELECT COUNT(*) FROM artist WHERE Country = 'France',skipped
+cs_tr_03,TABLE_RENAME,False,SELECT Song_Name FROM singer WHERE Singer_ID = 1,0,1,SELECT Song_Name FROM artist WHERE Singer_ID = 1,valid,1,SELECT Song_Name FROM artist WHERE Singer_ID = 1,execution_error,1,SELECT Song_Name FROM artist WHERE Singer_ID = 1,execution_error,1,SELECT Song_Name FROM artist WHERE Singer_ID = 1,skipped
+cs_tr_04,TABLE_RENAME,False,SELECT Name FROM singer WHERE Age > 40,0,1,SELECT Name FROM artist WHERE Age > 40,valid,1,SELECT Name FROM artist WHERE Age > 40,execution_error,1,SELECT Name FROM artist WHERE Age > 40,execution_error,1,SELECT Name FROM artist WHERE Age > 40,skipped
+cs_tr_05,TABLE_RENAME,False,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',silent_failure_suspected,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',execution_error,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',execution_error,0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',skipped
+cs_tr_06,TABLE_RENAME,False,"SELECT DISTINCT Song_release_year
+FROM singer
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",0,1,SELECT DISTINCT Song_release_year FROM artist WHERE Song_release_year >= 2010 ORDER BY Song_release_year,valid,1,"SELECT DISTINCT Song_release_year
+FROM artist
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",execution_error,1,"SELECT DISTINCT Song_release_year
+FROM artist
+WHERE Song_release_year >= 2010
+ORDER BY Song_release_year",execution_error,1,SELECT DISTINCT Song_release_year FROM artist WHERE Song_release_year >= 2010 ORDER BY Song_release_year,skipped
+cs_tr_07,TABLE_RENAME,False,"SELECT Name, Country FROM singer ORDER BY Name, Country",0,1,"SELECT Name, Country FROM artist ORDER BY Name, Country",valid,1,"SELECT Name, Country FROM artist ORDER BY Name, Country",execution_error,1,"SELECT Name, Country FROM artist ORDER BY Name, Country",execution_error,1,"SELECT Name, Country FROM artist ORDER BY Name, Country",skipped
+cs_tr_08,TABLE_RENAME,False,"SELECT s.Singer_ID, s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,0,"SELECT s.Singer_ID, s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",valid,0,"SELECT a.Singer_ID, a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",execution_error,0,"SELECT a.Singer_ID, a.Name
+FROM artist a
+JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",execution_error,0,"SELECT s.Singer_ID, s.Name FROM artist AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",skipped
+cs_tr_09,TABLE_RENAME,False,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) as concert_count
+FROM singer s
+LEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+GROUP BY s.Singer_ID, s.Name
+ORDER BY s.Singer_ID",0,0,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) AS concert_count FROM artist AS s LEFT JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID GROUP BY s.Singer_ID, s.Name ORDER BY s.Singer_ID",valid,0,"SELECT a.Singer_ID, a.Name, COUNT(sic.Concert_ID) as concert_count
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+GROUP BY a.Singer_ID, a.Name
+ORDER BY a.Singer_ID",execution_error,0,"SELECT a.Singer_ID, a.Name, COUNT(sic.Concert_ID) as concert_count
+FROM artist a
+LEFT JOIN singer_in_concert sic ON a.Singer_ID = sic.Singer_ID
+GROUP BY a.Singer_ID, a.Name
+ORDER BY a.Singer_ID",execution_error,0,"SELECT s.Singer_ID, s.Name, COUNT(sic.Concert_ID) AS concert_count FROM artist AS s LEFT JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID GROUP BY s.Singer_ID, s.Name ORDER BY s.Singer_ID",skipped
+cs_tr_10,TABLE_RENAME,False,"SELECT Song_Name
+FROM singer
+WHERE Country = 'France'",0,0,SELECT Song_Name FROM artist WHERE Country = 'France',valid,0,"SELECT Song_Name
+FROM artist
+WHERE Country = 'France'",execution_error,0,"SELECT Song_Name
+FROM artist
+WHERE Country = 'France'",execution_error,0,SELECT Song_Name FROM artist WHERE Country = 'France',skipped
+cs_tr_11,TABLE_RENAME,False,SELECT AVG(Age) FROM singer WHERE Country = 'France',0,1,SELECT AVG(Age) FROM artist WHERE Country = 'France',valid,1,SELECT AVG(Age) FROM artist WHERE Country = 'France',execution_error,1,SELECT AVG(Age) FROM artist WHERE Country = 'France',execution_error,1,SELECT AVG(Age) FROM artist WHERE Country = 'France',skipped
+cs_tr_12,TABLE_RENAME,False,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name
+FROM singer s
+WHERE s.Song_Name LIKE 'S%'
+ORDER BY s.Name",0,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name FROM artist AS s WHERE s.Song_Name LIKE 'S%' ORDER BY s.Name",valid,0,"SELECT DISTINCT a.Singer_ID, a.Name, a.Song_Name
+FROM artist a
+WHERE a.Song_Name LIKE 'S%'
+ORDER BY a.Name",execution_error,0,"SELECT DISTINCT a.Singer_ID, a.Name, a.Song_Name
+FROM artist a
+WHERE a.Song_Name LIKE 'S%'
+ORDER BY a.Name",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name FROM artist AS s WHERE s.Song_Name LIKE 'S%' ORDER BY s.Name",skipped
+cs_tr_13,TABLE_RENAME,False,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year
+FROM singer s
+WHERE s.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY s.Song_release_year",0,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year FROM artist AS s WHERE s.Song_release_year BETWEEN 2000 AND 2014 ORDER BY s.Song_release_year",valid,0,"SELECT DISTINCT a.Singer_ID, a.Name, a.Song_Name, a.Song_release_year
+FROM artist a
+WHERE a.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY a.Song_release_year",execution_error,0,"SELECT DISTINCT a.Singer_ID, a.Name, a.Song_Name, a.Song_release_year
+FROM artist a
+WHERE a.Song_release_year BETWEEN 2000 AND 2014
+ORDER BY a.Song_release_year",execution_error,0,"SELECT DISTINCT s.Singer_ID, s.Name, s.Song_Name, s.Song_release_year FROM artist AS s WHERE s.Song_release_year BETWEEN 2000 AND 2014 ORDER BY s.Song_release_year",skipped
+cs_tr_14,TABLE_RENAME,False,"SELECT Singer_ID, Song_Name FROM singer",0,1,"SELECT Singer_ID, Song_Name FROM artist",valid,1,"SELECT Singer_ID, Song_Name FROM artist",execution_error,1,"SELECT Singer_ID, Song_Name FROM artist",execution_error,1,"SELECT Singer_ID, Song_Name FROM artist",skipped
+cs_tr_15,TABLE_RENAME,False,SELECT * FROM stadium WHERE Capacity > 10000,0,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,skipped
+cs_tr_16,TABLE_RENAME,False,SELECT COUNT(*) FROM concert,1,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,skipped

@@ -1,0 +1,92 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_cr_01,COLUMN_RENAME,List employee first and last names.,"SELECT fname, last_name FROM employees ORDER BY employee_id",False,,"SELECT first_name, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,"SELECT fname, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,1,no such column: first_name,anthropic,"SELECT fname, last_name FROM employees",ast,valid,1,1,0,1.4075,0.7163,1.1266,1.3324,0.0321,0.736416,anthropic
+hr_cr_02,COLUMN_RENAME,Count employees.,SELECT COUNT(*) FROM employees,False,,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,1,0,,anthropic,SELECT COUNT(*) FROM employees,ast,valid,1,0,0,0.9918,2.5717,1.7283,0.0006,0.032,0.654791,anthropic
+hr_cr_03,COLUMN_RENAME,Employees with salary over 7000.,SELECT employee_id FROM employees WHERE monthly_salary > 7000 ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+WHERE monthly_salary > 7000
+ORDER BY monthly_salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,1,no such column: first_name,anthropic,"SELECT employee_id, fname, last_name, monthly_salary FROM employees WHERE monthly_salary > 7000 ORDER BY monthly_salary DESC",ast,valid,0,0,0,0.9908,1.1285,1.0219,1.0253,0.0313,0.956542,anthropic
+hr_cr_04,COLUMN_RENAME,Average employee salary.,SELECT AVG(monthly_salary) FROM employees,False,,SELECT AVG(salary) FROM employees,1,SELECT AVG(salary) FROM employees,0,SELECT AVG(monthly_salary) FROM employees,1,SELECT AVG(salary) FROM employees,0,1,no such column: salary,anthropic,SELECT AVG(monthly_salary) FROM employees,ast,valid,1,1,0,1.5052,0.8181,1.0252,1.6385,0.0333,0.638875,anthropic
+hr_cr_05,COLUMN_RENAME,List employee emails.,SELECT email FROM employees ORDER BY employee_id,False,,SELECT email FROM employees,1,SELECT email FROM employees,1,SELECT email FROM employees,1,SELECT email FROM employees,1,0,,anthropic,SELECT email FROM employees,ast,valid,1,0,0,1.1107,1.4143,0.7062,0.0012,0.0337,0.68925,anthropic
+hr_cr_06,COLUMN_RENAME,List employee IDs with salaries.,"SELECT employee_id, monthly_salary FROM employees ORDER BY employee_id",False,,"SELECT employee_id, salary FROM employees",1,"SELECT employee_id, salary FROM employees",0,"SELECT employee_id, monthly_salary FROM employees",1,"SELECT employee_id, salary FROM employees",0,1,no such column: salary,anthropic,"SELECT employee_id, monthly_salary FROM employees",ast,valid,1,1,0,1.8676,0.8737,1.0226,1.1093,0.032,0.62,anthropic
+hr_cr_07,COLUMN_RENAME,Employees with first names starting with A.,SELECT employee_id FROM employees WHERE fname LIKE 'A%',False,,SELECT * FROM employees WHERE first_name LIKE 'A%',0,SELECT * FROM employees WHERE first_name LIKE 'A%',0,"SELECT employee_id, fname, last_name, email, phone_number, hire_date, job_id, monthly_salary, commission_pct, manager_id, department_id
+FROM employees
+WHERE fname LIKE 'A%'
+ORDER BY fname",0,SELECT * FROM employees WHERE first_name LIKE 'A%',0,1,no such column: first_name,anthropic,SELECT * FROM employees WHERE fname LIKE 'A%',ast,valid,0,0,0,0.9075,1.5373,1.7613,0.838,0.0317,0.678125,anthropic
+hr_cr_08,COLUMN_RENAME,Employees with commissions.,SELECT employee_id FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, fname, last_name, email, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,1,no such column: first_name,anthropic,"SELECT employee_id, fname, last_name, commission_pct FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",ast,valid,0,0,0,1.4636,1.0241,1.1283,0.922,0.0595,1.059667,anthropic
+hr_cr_09,COLUMN_RENAME,Job title for employee 1.,SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1,False,,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,0,,anthropic,SELECT j.job_title FROM employees AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,ast,valid,1,0,0,1.4494,1.2533,1.0672,0.0006,0.0322,0.956666,anthropic
+hr_cr_10,COLUMN_RENAME,Count employees per department.,"SELECT department_id, COUNT(*) FROM employees GROUP BY department_id ORDER BY department_id",False,,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,0,,anthropic,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN employees AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",ast,valid,0,0,0,1.2576,1.1233,1.5372,0.0007,0.0351,3.727083,anthropic
+hr_cr_11,COLUMN_RENAME,Employees managed by 1.,SELECT employee_id FROM employees WHERE manager_id=1 ORDER BY employee_id,False,,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,0,,anthropic,SELECT * FROM employees WHERE manager_id = 1,ast,valid,0,0,0,0.779,1.6424,1.09,0.0006,0.0323,0.659,anthropic
+hr_cr_12,COLUMN_RENAME,Employees hired after 2007-06-20.,SELECT employee_id FROM employees WHERE hire_date > '2007-06-20' ORDER BY employee_id,False,,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,0,,anthropic,SELECT * FROM employees WHERE hire_date > '2007-06-20',ast,valid,0,0,0,1.2318,1.0647,0.8811,0.0007,0.0325,0.6775,anthropic
+hr_cr_13,COLUMN_RENAME,List employees by salary descending.,"SELECT fname, monthly_salary FROM employees ORDER BY monthly_salary DESC",False,,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+ORDER BY salary DESC",0,"SELECT employee_id, fname, last_name, monthly_salary
+FROM employees
+ORDER BY monthly_salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+ORDER BY salary DESC",0,1,no such column: first_name,anthropic,"SELECT employee_id, fname, last_name, monthly_salary FROM employees ORDER BY monthly_salary DESC",ast,valid,0,0,0,1.0617,0.8518,1.115,1.0351,0.0313,0.769334,anthropic
+hr_cr_14,COLUMN_RENAME,Count employees with salary between 6000 and 8000.,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,False,,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,1,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000 AND 8000,0,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,1,SELECT COUNT(*) FROM employees WHERE salary BETWEEN 6000.0 AND 8000.0,0,1,no such column: salary,anthropic,SELECT COUNT(*) FROM employees WHERE monthly_salary BETWEEN 6000 AND 8000,ast,valid,1,1,0,0.8897,0.9226,0.9107,0.8753,0.031,0.786209,anthropic
+hr_cr_15,COLUMN_RENAME,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT region_name FROM regions,1,0,,anthropic,SELECT region_name FROM regions,ast,valid,1,0,0,0.9468,0.9245,1.0243,0.0006,0.0318,0.530709,anthropic
+hr_cr_16,COLUMN_RENAME,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,anthropic,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,0.7873,1.3275,3.6893,0.001,0.0331,0.857625,anthropic

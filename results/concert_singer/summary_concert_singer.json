@@ -1,0 +1,69 @@
+{
+  "_note": "Pooled over all 5 EvoSchema operators for haiku on concert_singer. Regenerated 2026-06-09 from per-operator summary_concert_singer_*.json files (the canonical N=76 strict-mode runs). Supersedes the archived N=20 rename-only pilot. RR=(EX_mcp-EX_stale)/(EX_refreshed-EX_stale).",
+  "model_short_name": "haiku",
+  "database_id": "concert_singer",
+  "strict_mode": true,
+  "n_queries": 76,
+  "n_queries_scored": 76,
+  "ex_pre": 0.6184,
+  "ex_post_baseline": 0.1053,
+  "ex_post_refreshed_schema": 0.7105,
+  "ex_post_error_feedback": 0.1053,
+  "ex_post_mcp": 0.5921,
+  "recovery_rate": 0.8043,
+  "_counts": {
+    "n_total": 76,
+    "pre_correct": 47,
+    "refreshed_correct": 54,
+    "stale_correct": 8,
+    "error_feedback_correct": 8,
+    "mcp_correct": 45
+  },
+  "per_operator": [
+    {
+      "operator": "TABLE_RENAME",
+      "n": 16,
+      "pre": 9,
+      "refreshed": 12,
+      "stale": 1,
+      "error_feedback": 1,
+      "mcp": 9
+    },
+    {
+      "operator": "TABLE_SPLIT",
+      "n": 16,
+      "pre": 10,
+      "refreshed": 12,
+      "stale": 1,
+      "error_feedback": 1,
+      "mcp": 10
+    },
+    {
+      "operator": "TABLE_MERGE",
+      "n": 14,
+      "pre": 11,
+      "refreshed": 10,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 11
+    },
+    {
+      "operator": "COLUMN_RENAME",
+      "n": 16,
+      "pre": 12,
+      "refreshed": 13,
+      "stale": 1,
+      "error_feedback": 1,
+      "mcp": 12
+    },
+    {
+      "operator": "COLUMN_MERGE",
+      "n": 14,
+      "pre": 5,
+      "refreshed": 7,
+      "stale": 3,
+      "error_feedback": 3,
+      "mcp": 3
+    }
+  ]
+}

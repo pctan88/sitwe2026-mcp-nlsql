@@ -1,0 +1,349 @@
+{
+  "database_id": "concert_singer_COLUMN_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "COLUMN_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.3571,
+  "ex_post_baseline": 0.2143,
+  "ex_post_refreshed_schema": 0.5,
+  "ex_post_error_feedback": 0.2143,
+  "ex_post_mcp": 0.5,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.2857,
+  "mean_baseline_latency_s": 1.3231,
+  "mean_refreshed_schema_latency_s": 1.458,
+  "mean_error_feedback_latency_s": 1.2846,
+  "mean_mcp_latency_s": 0.5937,
+  "latencies": {
+    "pre_s": [
+      2.3968,
+      1.0886,
+      1.1776,
+      1.0204,
+      1.2704,
+      1.1889,
+      1.1949,
+      1.6616,
+      1.0726,
+      1.8539,
+      1.1759,
+      1.2702,
+      1.0117,
+      1.0366
+    ],
+    "baseline_s": [
+      0.8416,
+      0.8654,
+      1.0731,
+      1.1763,
+      1.0093,
+      1.0347,
+      1.8061,
+      1.4367,
+      1.5236,
+      1.3489,
+      1.6174,
+      1.0697,
+      1.3659,
+      2.3545
+    ],
+    "refreshed_schema_s": [
+      1.2545,
+      1.0475,
+      1.2775,
+      1.3111,
+      1.1962,
+      1.7303,
+      1.5125,
+      1.9439,
+      1.179,
+      1.4289,
+      1.536,
+      1.6191,
+      1.2268,
+      2.1493
+    ],
+    "error_feedback_s": [
+      0.8897,
+      6.1396,
+      2.7701,
+      1.515,
+      1.1216,
+      0.0007,
+      1.434,
+      1.4102,
+      1.2306,
+      1.4707,
+      0.0007,
+      0.0008,
+      0.0007,
+      0.0007
+    ],
+    "mcp_s": [
+      5.7545,
+      0.9447,
+      0.0345,
+      0.033,
+      0.0386,
+      0.0329,
+      0.0357,
+      0.0366,
+      1.2027,
+      0.0367,
+      0.0348,
+      0.0329,
+      0.0351,
+      0.0595
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 1.315721,
+      "median": 1.18325,
+      "q1": 1.0726,
+      "q3": 1.2704,
+      "iqr": 0.1978,
+      "p95": 2.3968,
+      "min": 1.0117,
+      "max": 2.3968
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.323086,
+      "median": 1.2626,
+      "q1": 1.0347,
+      "q3": 1.5236,
+      "iqr": 0.4889,
+      "p95": 2.3545,
+      "min": 0.8416,
+      "max": 2.3545
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 1.458043,
+      "median": 1.37,
+      "q1": 1.2268,
+      "q3": 1.6191,
+      "iqr": 0.3923,
+      "p95": 2.1493,
+      "min": 1.0475,
+      "max": 2.1493
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 1.28465,
+      "median": 1.1761,
+      "q1": 0.0007,
+      "q3": 1.4707,
+      "iqr": 1.47,
+      "p95": 6.1396,
+      "min": 0.0007,
+      "max": 6.1396
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 0.593729,
+      "median": 0.03615,
+      "q1": 0.0345,
+      "q3": 0.0595,
+      "iqr": 0.025,
+      "p95": 5.7545,
+      "min": 0.0329,
+      "max": 5.7545
+    }
+  },
+  "fingerprint_diff_ms": 0.0915,
+  "ast_relink_ms": [
+    0.587083,
+    0.744125,
+    0.8155,
+    0.933333,
+    0.906166,
+    1.088041,
+    0.852458,
+    4.698041,
+    1.024333,
+    4.342542,
+    1.124709,
+    0.849584,
+    0.746833,
+    0.82625
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.0915,
+      "median": 0.0915,
+      "q1": 0.0915,
+      "q3": 0.0915,
+      "iqr": 0.0,
+      "p95": 0.0915,
+      "min": 0.0915,
+      "max": 0.0915
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 1.395643,
+      "median": 0.879312,
+      "q1": 0.8155,
+      "q3": 1.088041,
+      "iqr": 0.272541,
+      "p95": 4.698041,
+      "min": 0.587083,
+      "max": 4.698041
+    }
+  },
+  "per_operator": {
+    "COLUMN_MERGE": {
+      "n": 14,
+      "baseline_correct": 3,
+      "refreshed_schema_correct": 7,
+      "error_feedback_correct": 3,
+      "mcp_correct": 7,
+      "recovered": 4,
+      "degraded": 0,
+      "baseline_ex": 0.2143,
+      "refreshed_schema_ex": 0.5,
+      "error_feedback_ex": 0.2143,
+      "mcp_ex": 0.5
+    }
+  },
+  "error_categories": {
+    "correct": 3,
+    "execution_error": 9,
+    "silent_failure": 0,
+    "wrong_result": 2,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 4,
+      "c": 0,
+      "statistic": 2.25,
+      "p_value": 0.125
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 4,
+      "c": 0,
+      "statistic": 2.25,
+      "p_value": 0.125
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 4,
+      "statistic": 2.25,
+      "p_value": 0.125
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 3,
+      "total": 14,
+      "lower": 0.075712,
+      "upper": 0.475897
+    },
+    "refreshed_schema": {
+      "successes": 7,
+      "total": 14,
+      "lower": 0.267989,
+      "upper": 0.732011
+    },
+    "error_feedback": {
+      "successes": 3,
+      "total": 14,
+      "lower": 0.075712,
+      "upper": 0.475897
+    },
+    "mcp": {
+      "successes": 7,
+      "total": 14,
+      "lower": 0.267989,
+      "upper": 0.732011
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 0.593729,
+      "lower": 0.03765,
+      "upper": 1.47575
+    }
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "singer",
+      "from": "Name",
+      "to": "Name_Country"
+    },
+    {
+      "op": "COLUMN_REMOVE",
+      "table": "singer",
+      "column": "Country"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "b66966337026a91b",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Name",
+          "Country"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Country",
+          "Name"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "reversible": false
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "7e71964bb5df4c6dcd5988b5d424f8d45c3aab3cf669ec9215622b34df626377",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "seed_stability_pre": null,
+  "seed_stability_baseline": null,
+  "seed_stability_mcp": null,
+  "seed_disagreements": []
+}

@@ -1,0 +1,83 @@
+{
+  "database_id": "concert_singer_COLUMN_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "configs": {
+    "A_full_mcp": {
+      "ex": 0.2143,
+      "n_correct": 3
+    },
+    "B_no_fingerprint": {
+      "ex": 0.5,
+      "n_correct": 7
+    },
+    "C_no_relink": {
+      "ex": 0.2143,
+      "n_correct": 3
+    },
+    "D_no_validate": {
+      "ex": 0.2143,
+      "n_correct": 3
+    }
+  },
+  "baseline": {
+    "ex": 0.2143,
+    "n_correct": 3
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "singer",
+      "from": "Country",
+      "to": "Name_Country"
+    },
+    {
+      "op": "COLUMN_REMOVE",
+      "table": "singer",
+      "column": "Name"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "b66966337026a91b",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Name",
+          "Country"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Country",
+          "Name"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "reversible": false
+      }
+    ]
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  }
+}

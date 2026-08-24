@@ -1,0 +1,1045 @@
+{
+  "haiku (5 seeds)": {
+    "per_config": {
+      "concert_singer_TABLE_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.8125,
+            "min": 0.8125,
+            "max": 0.8125,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_TABLE_SPLIT": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 0.9375,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.625,
+            "min": 0.625,
+            "max": 0.625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.7,
+            "min": 0.6875,
+            "max": 0.75,
+            "range": 0.0625
+          },
+          "error_feedback_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.625,
+            "min": 0.625,
+            "max": 0.625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_TABLE_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.7857,
+            "min": 0.7857,
+            "max": 0.7857,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.7143,
+            "min": 0.7143,
+            "max": 0.7143,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.7857,
+            "min": 0.7857,
+            "max": 0.7857,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_COLUMN_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.75,
+            "min": 0.75,
+            "max": 0.75,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.8125,
+            "min": 0.8125,
+            "max": 0.8125,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.0625,
+            "min": 0.0625,
+            "max": 0.0625,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.75,
+            "min": 0.75,
+            "max": 0.75,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_COLUMN_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.3571,
+            "min": 0.3571,
+            "max": 0.3571,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5,
+            "min": 0.5,
+            "max": 0.5,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5,
+            "min": 0.5,
+            "max": 0.5,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_SPLIT": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.6429,
+            "min": 0.6429,
+            "max": 0.6429,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.7143,
+            "min": 0.7143,
+            "max": 0.7143,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.6429,
+            "min": 0.6429,
+            "max": 0.6429,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_COLUMN_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.3125,
+            "min": 0.3125,
+            "max": 0.3125,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.3125,
+            "min": 0.3125,
+            "max": 0.3125,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_COLUMN_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 5,
+        "stability": {
+          "pre_ok": 0.9286,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5571,
+            "min": 0.5,
+            "max": 0.5714,
+            "range": 0.0714
+          },
+          "baseline_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.9286,
+            "min": 0.9286,
+            "max": 0.9286,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      }
+    },
+    "pooled_stability": {
+      "pre_ok": 0.9934,
+      "baseline_ok": 1.0,
+      "refreshed_schema_ok": 0.9934,
+      "error_feedback_ok": 1.0,
+      "mcp_ok": 1.0
+    },
+    "pooled_n": 152,
+    "disagreements": [
+      {
+        "config": "concert_singer_TABLE_SPLIT",
+        "id": "cs_ts_09",
+        "arms": [
+          "refreshed_schema_ok"
+        ],
+        "outcomes": {
+          "refreshed_schema_ok": [
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "config": "hr_1_COLUMN_MERGE",
+        "id": "hr_cm_05",
+        "arms": [
+          "pre_ok"
+        ],
+        "outcomes": {
+          "pre_ok": [
+            0,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    ]
+  },
+  "gpt-4o (3 seeds)": {
+    "per_config": {
+      "concert_singer_TABLE_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 0.9375,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 0.9375
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.8542,
+            "min": 0.8125,
+            "max": 0.875,
+            "range": 0.0625
+          },
+          "baseline_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.875,
+            "min": 0.875,
+            "max": 0.875,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.8542,
+            "min": 0.8125,
+            "max": 0.875,
+            "range": 0.0625
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_TABLE_SPLIT": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 0.9375,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 0.9375
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.9167,
+            "min": 0.875,
+            "max": 0.9375,
+            "range": 0.0625
+          },
+          "baseline_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.9375,
+            "min": 0.9375,
+            "max": 0.9375,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.9167,
+            "min": 0.875,
+            "max": 0.9375,
+            "range": 0.0625
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_TABLE_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.8571,
+            "min": 0.8571,
+            "max": 0.8571,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.8571,
+            "min": 0.8571,
+            "max": 0.8571,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.8571,
+            "min": 0.8571,
+            "max": 0.8571,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_COLUMN_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.125,
+            "min": 0.125,
+            "max": 0.125,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "concert_singer_COLUMN_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 0.8571
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.4286,
+            "min": 0.4286,
+            "max": 0.4286,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.2857,
+            "min": 0.2857,
+            "max": 0.2857,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.3571,
+            "min": 0.3571,
+            "max": 0.3571,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.2857,
+            "min": 0.2857,
+            "max": 0.2857,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.3571,
+            "min": 0.3571,
+            "max": 0.3571,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_SPLIT": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1875,
+            "min": 0.1875,
+            "max": 0.1875,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_TABLE_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 0.9286
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.6429,
+            "min": 0.6429,
+            "max": 0.6429,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.7857,
+            "min": 0.7857,
+            "max": 0.7857,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.1429,
+            "min": 0.1429,
+            "max": 0.1429,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.6667,
+            "min": 0.6429,
+            "max": 0.7143,
+            "range": 0.0714
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_COLUMN_RENAME": {
+        "n_queries": 16,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.3125,
+            "min": 0.3125,
+            "max": 0.3125,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.3125,
+            "min": 0.3125,
+            "max": 0.3125,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 0.5625,
+            "min": 0.5625,
+            "max": 0.5625,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      },
+      "hr_1_COLUMN_MERGE": {
+        "n_queries": 14,
+        "n_seeds": 3,
+        "stability": {
+          "pre_ok": 1.0,
+          "baseline_ok": 1.0,
+          "refreshed_schema_ok": 1.0,
+          "error_feedback_ok": 1.0,
+          "mcp_ok": 1.0
+        },
+        "ex_across_seeds": {
+          "pre_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          },
+          "baseline_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "refreshed_schema_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          },
+          "error_feedback_ok": {
+            "mean": 0.2143,
+            "min": 0.2143,
+            "max": 0.2143,
+            "range": 0.0
+          },
+          "mcp_ok": {
+            "mean": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "range": 0.0
+          }
+        },
+        "contaminated_queries": 0,
+        "strict_mode": true
+      }
+    },
+    "pooled_stability": {
+      "pre_ok": 0.9868,
+      "baseline_ok": 1.0,
+      "refreshed_schema_ok": 1.0,
+      "error_feedback_ok": 1.0,
+      "mcp_ok": 0.9671
+    },
+    "pooled_n": 152,
+    "disagreements": [
+      {
+        "config": "concert_singer_TABLE_RENAME",
+        "id": "cs_tr_09",
+        "arms": [
+          "pre_ok",
+          "mcp_ok"
+        ],
+        "outcomes": {
+          "pre_ok": [
+            0,
+            1,
+            1
+          ],
+          "mcp_ok": [
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "config": "concert_singer_TABLE_SPLIT",
+        "id": "cs_ts_13",
+        "arms": [
+          "pre_ok",
+          "mcp_ok"
+        ],
+        "outcomes": {
+          "pre_ok": [
+            0,
+            1,
+            1
+          ],
+          "mcp_ok": [
+            1,
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "config": "concert_singer_COLUMN_MERGE",
+        "id": "cs_cm_05",
+        "arms": [
+          "mcp_ok"
+        ],
+        "outcomes": {
+          "mcp_ok": [
+            0,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "config": "concert_singer_COLUMN_MERGE",
+        "id": "cs_cm_09",
+        "arms": [
+          "mcp_ok"
+        ],
+        "outcomes": {
+          "mcp_ok": [
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "config": "hr_1_TABLE_MERGE",
+        "id": "hr_tm_04",
+        "arms": [
+          "mcp_ok"
+        ],
+        "outcomes": {
+          "mcp_ok": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    ],
+    "note": "PARTIAL RUN: the OpenAI account's credit balance was exhausted mid-sweep (2026-08-08, error code credit_balance_exhausted); missing configs can be re-run with the same per-config commands after adding credits."
+  }
+}

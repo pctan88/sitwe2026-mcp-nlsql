@@ -1,0 +1,356 @@
+{
+  "database_id": "hr_1_TABLE_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "TABLE_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.6429,
+  "ex_post_baseline": 0.1429,
+  "ex_post_refreshed_schema": 0.7857,
+  "ex_post_error_feedback": 0.1429,
+  "ex_post_mcp": 0.7143,
+  "recovery_rate": 0.8889,
+  "silent_failure_detection_rate": 0.25,
+  "mean_baseline_latency_s": 1.4308,
+  "mean_refreshed_schema_latency_s": 1.1641,
+  "mean_error_feedback_latency_s": 1.0136,
+  "mean_mcp_latency_s": 0.8996,
+  "latencies": {
+    "pre_s": [
+      1.2671,
+      1.6987,
+      0.8987,
+      1.5534,
+      1.1999,
+      1.104,
+      1.1202,
+      1.1417,
+      3.7524,
+      1.0105,
+      1.7315,
+      2.2145,
+      0.7439,
+      1.0087
+    ],
+    "baseline_s": [
+      1.3557,
+      1.7729,
+      1.2259,
+      1.3317,
+      0.9759,
+      1.1885,
+      1.1296,
+      1.5165,
+      3.7507,
+      1.152,
+      1.7106,
+      1.4729,
+      0.6614,
+      0.7874
+    ],
+    "refreshed_schema_s": [
+      0.639,
+      4.0663,
+      0.9291,
+      0.9116,
+      0.8867,
+      0.9158,
+      0.8644,
+      0.9472,
+      0.85,
+      0.7896,
+      2.1255,
+      0.9686,
+      0.7353,
+      0.6686
+    ],
+    "error_feedback_s": [
+      1.3678,
+      1.4418,
+      0.9917,
+      0.9387,
+      0.7935,
+      2.0264,
+      0.7379,
+      2.4539,
+      0.8522,
+      0.6648,
+      1.0178,
+      0.9018,
+      0.0009,
+      0.001
+    ],
+    "mcp_s": [
+      0.6828,
+      1.4628,
+      1.0078,
+      1.069,
+      0.9911,
+      1.3213,
+      0.7617,
+      1.2003,
+      0.8357,
+      0.888,
+      1.4757,
+      0.8948,
+      0.0016,
+      0.0019
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 1.460371,
+      "median": 1.1708,
+      "q1": 1.0105,
+      "q3": 1.6987,
+      "iqr": 0.6882,
+      "p95": 3.7524,
+      "min": 0.7439,
+      "max": 3.7524
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.430836,
+      "median": 1.2788,
+      "q1": 1.1296,
+      "q3": 1.5165,
+      "iqr": 0.3869,
+      "p95": 3.7507,
+      "min": 0.6614,
+      "max": 3.7507
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 1.164121,
+      "median": 0.89915,
+      "q1": 0.7896,
+      "q3": 0.9472,
+      "iqr": 0.1576,
+      "p95": 4.0663,
+      "min": 0.639,
+      "max": 4.0663
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 1.013586,
+      "median": 0.92025,
+      "q1": 0.7379,
+      "q3": 1.3678,
+      "iqr": 0.6299,
+      "p95": 2.4539,
+      "min": 0.0009,
+      "max": 2.4539
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 0.899607,
+      "median": 0.94295,
+      "q1": 0.7617,
+      "q3": 1.2003,
+      "iqr": 0.4386,
+      "p95": 1.4757,
+      "min": 0.0016,
+      "max": 1.4757
+    }
+  },
+  "fingerprint_diff_ms": 0.253589,
+  "ast_relink_ms": [
+    0.811158,
+    12.10135,
+    1.244517,
+    0.89763,
+    0.915819,
+    1.041154,
+    0.7395,
+    11.880619,
+    0.833308,
+    0.568472,
+    0.778327,
+    1.129418,
+    0.359914,
+    0.491731
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.253589,
+      "median": 0.253589,
+      "q1": 0.253589,
+      "q3": 0.253589,
+      "iqr": 0.0,
+      "p95": 0.253589,
+      "min": 0.253589,
+      "max": 0.253589
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 2.41378,
+      "median": 0.865469,
+      "q1": 0.7395,
+      "q3": 1.129418,
+      "iqr": 0.389918,
+      "p95": 12.10135,
+      "min": 0.359914,
+      "max": 12.10135
+    }
+  },
+  "per_operator": {
+    "TABLE_MERGE": {
+      "n": 14,
+      "baseline_correct": 2,
+      "refreshed_schema_correct": 11,
+      "error_feedback_correct": 2,
+      "mcp_correct": 10,
+      "recovered": 8,
+      "degraded": 0,
+      "baseline_ex": 0.1429,
+      "refreshed_schema_ex": 0.7857,
+      "error_feedback_ex": 0.1429,
+      "mcp_ex": 0.7143
+    }
+  },
+  "error_categories": {
+    "correct": 2,
+    "execution_error": 12,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 8,
+      "c": 0,
+      "statistic": 6.125,
+      "p_value": 0.007812
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 9,
+      "c": 0,
+      "statistic": 7.111111,
+      "p_value": 0.003906
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 8,
+      "statistic": 6.125,
+      "p_value": 0.007812
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "refreshed_schema": {
+      "successes": 11,
+      "total": 14,
+      "lower": 0.524103,
+      "upper": 0.924288
+    },
+    "error_feedback": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "mcp": {
+      "successes": 10,
+      "total": 14,
+      "lower": 0.453505,
+      "upper": 0.882788
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 0.899607,
+      "lower": 0.657964,
+      "upper": 1.120621
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_MERGE",
+      "sources": [
+        "departments",
+        "locations"
+      ],
+      "target": "department_location",
+      "key": "location_id"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "e0f7613e785d021f",
+    "specs": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "departments",
+          "locations"
+        ],
+        "target": "department_location",
+        "join_key": "location_id"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "departments",
+          "locations"
+        ],
+        "target": "department_location",
+        "key": "location_id"
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "56ccabc5127314162be845ae0f7c3762d2e1a0d22a0a59d6871b24f70ffdc5f7",
+  "backend": "openai_compat",
+  "model": "gpt-4o",
+  "model_short_name": "gpt-4o",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 0.9286,
+  "seed_disagreements": [
+    {
+      "id": "hr_tm_04",
+      "pre_ok": [
+        0
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        0,
+        1
+      ]
+    }
+  ]
+}

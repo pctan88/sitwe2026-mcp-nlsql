@@ -1,0 +1,186 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_cr_01,COLUMN_RENAME,False,0,SELECT Song_Name FROM singer,1,SELECT Song_Name FROM singer,0,SELECT DISTINCT song_title FROM singer,1,SELECT Song_name FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer,ast,valid,1,1.1644,1.0374,1.0093,0.9318,0.0705,0.744125,openai_compat
+cs_cr_01,COLUMN_RENAME,False,1,SELECT Song_Name FROM singer,1,SELECT Song_Name FROM singer,0,SELECT song_title FROM singer,1,SELECT Song_name FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer,ast,valid,1,0.9752,0.8827,0.881,1.0743,0.0487,1.061625,openai_compat
+cs_cr_01,COLUMN_RENAME,False,2,SELECT Song_Name FROM singer,1,SELECT Song_Name FROM singer,0,SELECT DISTINCT song_title FROM singer,1,SELECT Song_name FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer,ast,valid,1,1.1629,0.8989,1.3267,0.8765,0.0495,0.795083,openai_compat
+cs_cr_02,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,1.0337,1.5373,1.0683,1.1869,0.054,1.159625,openai_compat
+cs_cr_02,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,1.0664,0.9252,0.9349,1.0599,0.0505,1.376958,openai_compat
+cs_cr_02,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year > 2010,ast,valid,1,2.4772,1.198,1.1031,1.029,0.0508,1.350667,openai_compat
+cs_cr_03,COLUMN_RENAME,False,0,"SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT Name, Song_Name FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT Name, Song_name FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT Name, song_title FROM singer",ast,valid,1,0.9204,1.0136,0.8992,1.114,0.0518,1.045,openai_compat
+cs_cr_03,COLUMN_RENAME,False,1,"SELECT singer.Name, singer.Song_Name FROM singer",1,"SELECT Name, Song_Name FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT Name, Song_Name FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT Name, song_title FROM singer",ast,valid,1,1.0348,0.8961,1.0227,0.9188,0.0454,1.126167,openai_compat
+cs_cr_03,COLUMN_RENAME,False,2,"SELECT Name, Song_Name FROM singer",1,"SELECT Name, Song_Name FROM singer",0,"SELECT Name, song_title FROM singer",1,"SELECT Name, Song_name FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT Name, song_title FROM singer",ast,valid,1,1.0705,0.9247,1.3494,1.0136,0.0495,0.978041,openai_compat
+cs_cr_04,COLUMN_RENAME,False,0,"SELECT Name 
+FROM singer 
+WHERE Song_Name = 'Sun'",1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,SELECT Name FROM singer WHERE song_title = 'Sun',1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,1,no such column: Song_Name,openai_compat,SELECT Name FROM singer WHERE song_title = 'Sun',ast,valid,1,0.9647,0.9592,1.1469,1.0734,0.0529,0.993416,openai_compat
+cs_cr_04,COLUMN_RENAME,False,1,SELECT Name FROM singer WHERE Song_Name = 'Sun',1,"SELECT Name 
+FROM singer 
+WHERE Song_Name = 'Sun'",0,SELECT Name FROM singer WHERE song_title = 'Sun',1,"SELECT Name 
+FROM singer 
+WHERE Song_Name = 'Sun'",0,1,no such column: Song_Name,openai_compat,SELECT Name FROM singer WHERE song_title = 'Sun',ast,valid,1,0.9899,0.9852,0.9401,1.1367,0.0478,0.955167,openai_compat
+cs_cr_04,COLUMN_RENAME,False,2,"SELECT Name 
+FROM singer 
+WHERE Song_Name = 'Sun'",1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,SELECT Name FROM singer WHERE song_title = 'Sun',1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,1,no such column: Song_Name,openai_compat,SELECT Name FROM singer WHERE song_title = 'Sun',ast,valid,1,0.9524,1.0849,0.994,1.2884,0.0498,1.181834,openai_compat
+cs_cr_05,COLUMN_RENAME,False,0,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,1,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,0,1,no such column: Song_release_year,openai_compat,SELECT AVG(debut_year) AS Average_Debut_Year FROM singer,ast,valid,1,1.1081,1.005,1.477,1.0933,0.0543,1.202959,openai_compat
+cs_cr_05,COLUMN_RENAME,False,1,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,1,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Year) AS Average_Debut_Year FROM (SELECT MIN(Year) AS Year FROM concert JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID JOIN singer ON singer_in_concert.Singer_ID = singer.Singer_ID GROUP BY singer.Singer_ID),0,1,no such column: Song_release_year,openai_compat,SELECT AVG(debut_year) AS Average_Debut_Year FROM singer,ast,valid,1,0.9611,0.9568,0.9211,1.4807,0.0488,0.903458,openai_compat
+cs_cr_05,COLUMN_RENAME,False,2,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,1,SELECT AVG(Song_release_year) AS Average_Debut_Year FROM singer,0,SELECT AVG(debut_year) FROM singer,1,SELECT AVG(Year) AS Average_Debut_Year FROM (SELECT MIN(Year) AS Year FROM concert JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID JOIN singer ON singer_in_concert.Singer_ID = singer.Singer_ID GROUP BY singer.Singer_ID),0,1,no such column: Song_release_year,openai_compat,SELECT AVG(debut_year) AS Average_Debut_Year FROM singer,ast,valid,1,1.0611,1.0224,1.014,1.8215,0.0283,0.66375,openai_compat
+cs_cr_06,COLUMN_RENAME,False,0,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",1,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, MIN(Year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",0,1,no such column: Song_release_year,openai_compat,"SELECT Singer_ID, MIN(debut_year) AS Debut_Year FROM singer GROUP BY Singer_ID",ast,valid,1,1.0598,0.9939,0.9074,1.0647,0.0529,1.528834,openai_compat
+cs_cr_06,COLUMN_RENAME,False,1,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",1,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, MIN(Year) AS Debut_Year
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+JOIN concert ON singer_in_concert.Concert_ID = concert.Concert_ID
+GROUP BY Singer_ID",0,1,no such column: Song_release_year,openai_compat,"SELECT Singer_ID, MIN(debut_year) AS Debut_Year FROM singer GROUP BY Singer_ID",ast,valid,1,1.0341,1.0147,0.8855,1.8222,0.0466,1.160833,openai_compat
+cs_cr_06,COLUMN_RENAME,False,2,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",1,"SELECT Singer_ID, MIN(Song_release_year) AS Debut_Year
+FROM singer
+GROUP BY Singer_ID",0,"SELECT Singer_ID, debut_year FROM singer",1,"SELECT Singer_ID, MIN(Year) AS Debut_Year
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+JOIN concert ON singer_in_concert.Concert_ID = concert.Concert_ID
+GROUP BY Singer_ID",0,1,no such column: Song_release_year,openai_compat,"SELECT Singer_ID, MIN(debut_year) AS Debut_Year FROM singer GROUP BY Singer_ID",ast,valid,1,1.3062,1.0135,1.1179,1.4825,0.0499,1.542709,openai_compat
+cs_cr_07,COLUMN_RENAME,False,0,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,ast,valid,1,1.02,1.1568,1.0525,1.4057,0.0567,1.250792,openai_compat
+cs_cr_07,COLUMN_RENAME,False,1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,ast,valid,1,0.9089,1.1253,1.1136,1.1438,0.0489,1.180791,openai_compat
+cs_cr_07,COLUMN_RENAME,False,2,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,1,"SELECT Song_Name 
+FROM singer 
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE debut_year BETWEEN 2000 AND 2014,ast,valid,1,1.3138,1.4901,1.2862,0.9674,0.0488,0.972958,openai_compat
+cs_cr_08,COLUMN_RENAME,False,0,SELECT Name FROM singer WHERE Song_release_year = 2014,1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,"SELECT Name 
+FROM singer 
+WHERE debut_year = 2014",1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,1,no such column: Song_release_year,openai_compat,SELECT Name FROM singer WHERE debut_year = 2014,ast,valid,1,0.8607,1.0068,0.9971,1.1607,0.0533,0.888667,openai_compat
+cs_cr_08,COLUMN_RENAME,False,1,SELECT Name FROM singer WHERE Song_release_year = 2014,1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,"SELECT Name 
+FROM singer 
+WHERE debut_year = 2014",1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,1,no such column: Song_release_year,openai_compat,SELECT Name FROM singer WHERE debut_year = 2014,ast,valid,1,0.9039,0.9676,0.9942,1.1323,0.049,1.276542,openai_compat
+cs_cr_08,COLUMN_RENAME,False,2,SELECT Name FROM singer WHERE Song_release_year = 2014,1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,"SELECT Name 
+FROM singer 
+WHERE debut_year = 2014",1,SELECT Name FROM singer WHERE Song_release_year = 2014,0,1,no such column: Song_release_year,openai_compat,SELECT Name FROM singer WHERE debut_year = 2014,ast,valid,1,0.9015,0.9663,1.012,0.9724,0.0499,1.178958,openai_compat
+cs_cr_09,COLUMN_RENAME,False,0,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,1.0535,0.8899,0.8576,1.1074,0.0521,1.172042,openai_compat
+cs_cr_09,COLUMN_RENAME,False,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,0.91,0.9811,0.9521,0.9544,0.0478,1.242917,openai_compat
+cs_cr_09,COLUMN_RENAME,False,2,SELECT COUNT(DISTINCT Song_Name) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,SELECT COUNT(DISTINCT song_title) FROM singer,1,SELECT COUNT(DISTINCT Song_Name) FROM singer,0,1,no such column: Song_Name,openai_compat,SELECT COUNT(DISTINCT song_title) FROM singer,ast,valid,1,1.0279,1.0016,0.9964,2.1694,0.0499,1.239667,openai_compat
+cs_cr_10,COLUMN_RENAME,False,0,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",0,"SELECT song_title 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'French'",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,1.1013,1.158,0.9926,1.1936,0.8962,0.968292,openai_compat
+cs_cr_10,COLUMN_RENAME,False,1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",0,"SELECT song_title 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'French'",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,1.0256,1.1322,1.0198,0.9585,1.1022,1.202917,openai_compat
+cs_cr_10,COLUMN_RENAME,False,2,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'France'",0,"SELECT song_title 
+FROM singer 
+WHERE Country = 'France'",1,"SELECT Song_Name 
+FROM singer 
+WHERE Country = 'French'",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer WHERE Country = 'France',ast,silent_failure_suspected,1,0.9443,1.1121,1.1005,0.9953,0.9285,1.272291,openai_compat
+cs_cr_11,COLUMN_RENAME,False,0,"SELECT Song_Name, Country FROM singer",1,"SELECT Song_Name, Country FROM singer",0,"SELECT song_title, Country FROM singer",1,"SELECT Song_Name, Country FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT song_title, Country FROM singer",ast,valid,1,0.9652,1.1174,1.1168,0.9939,0.0488,0.772125,openai_compat
+cs_cr_11,COLUMN_RENAME,False,1,"SELECT Song_Name, Country FROM singer",1,"SELECT Song_Name, Country FROM singer",0,"SELECT song_title, Country FROM singer",1,"SELECT Song_name, Country FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT song_title, Country FROM singer",ast,valid,1,0.9603,1.0639,0.9315,0.9361,0.0493,1.05925,openai_compat
+cs_cr_11,COLUMN_RENAME,False,2,"SELECT Song_Name, Country FROM singer",1,"SELECT Song_Name, Country FROM singer",0,"SELECT song_title, Country FROM singer",1,"SELECT Song_Name, Country FROM singer",0,1,no such column: Song_Name,openai_compat,"SELECT song_title, Country FROM singer",ast,valid,1,1.1506,0.9158,1.0305,0.9517,0.0486,1.045917,openai_compat
+cs_cr_12,COLUMN_RENAME,False,0,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,"SELECT song_title 
+FROM singer 
+ORDER BY debut_year",1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer ORDER BY debut_year,ast,valid,1,1.002,1.0618,1.148,0.9952,0.0491,1.207,openai_compat
+cs_cr_12,COLUMN_RENAME,False,1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,"SELECT song_title 
+FROM singer 
+ORDER BY debut_year",1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer ORDER BY debut_year,ast,valid,1,1.0808,0.9752,0.9492,0.9756,0.0491,1.173334,openai_compat
+cs_cr_12,COLUMN_RENAME,False,2,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,SELECT song_title FROM singer ORDER BY debut_year,1,"SELECT Song_Name 
+FROM singer 
+ORDER BY Song_release_year",0,1,no such column: Song_Name,openai_compat,SELECT song_title FROM singer ORDER BY debut_year,ast,valid,1,1.0557,1.1124,0.9259,1.4579,0.0544,1.201834,openai_compat
+cs_cr_13,COLUMN_RENAME,False,0,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT s.song_title 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,openai_compat,SELECT s.song_title FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.2176,1.2927,1.1369,1.3205,0.0506,1.414541,openai_compat
+cs_cr_13,COLUMN_RENAME,False,1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT s.song_title 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,openai_compat,SELECT s.song_title FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.0795,1.4298,1.3787,1.2093,0.0545,1.832334,openai_compat
+cs_cr_13,COLUMN_RENAME,False,2,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT s.song_title 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",1,"SELECT s.Song_Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1,no such column: s.Song_Name,openai_compat,SELECT s.song_title FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1,ast,valid,1,1.4116,1.3366,1.2659,1.142,0.0505,1.837042,openai_compat
+cs_cr_14,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.0628,0.9878,1.0088,1.3782,0.0502,1.370833,openai_compat
+cs_cr_14,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.0976,1.2986,0.9703,1.132,0.0472,0.975042,openai_compat
+cs_cr_14,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,1,SELECT COUNT(*) FROM singer WHERE Song_release_year < 2005,0,1,no such column: Song_release_year,openai_compat,SELECT COUNT(*) FROM singer WHERE debut_year < 2005,ast,valid,1,1.153,0.9624,1.0195,0.9912,0.0489,1.382459,openai_compat
+cs_cr_15,COLUMN_RENAME,False,0,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0.9096,1.0687,0.9858,0.0009,0.049,1.002292,openai_compat
+cs_cr_15,COLUMN_RENAME,False,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0.8701,1.1649,1.4578,0.0006,0.0542,0.896417,openai_compat
+cs_cr_15,COLUMN_RENAME,False,2,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0.9153,0.9272,0.9744,0.0006,0.0502,0.964334,openai_compat
+cs_cr_16,COLUMN_RENAME,False,0,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,1.0007,1.059,0.8711,0.001,0.0491,1.109291,openai_compat
+cs_cr_16,COLUMN_RENAME,False,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,0.8682,0.9175,1.0711,0.0006,0.0458,0.82575,openai_compat
+cs_cr_16,COLUMN_RENAME,False,2,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,1.2473,1.0788,0.8681,0.001,0.0513,1.165792,openai_compat

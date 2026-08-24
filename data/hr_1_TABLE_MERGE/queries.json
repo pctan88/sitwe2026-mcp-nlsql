@@ -1,0 +1,190 @@
+[
+  {
+    "id": "hr_tm_01",
+    "question": "List department names with cities.",
+    "gold_pre": "SELECT d.department_name, l.city FROM departments d JOIN locations l ON d.location_id=l.location_id ORDER BY d.department_id",
+    "gold_post": "SELECT department_name, city FROM department_location ORDER BY department_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_02",
+    "question": "Count departments per country.",
+    "gold_pre": "SELECT l.country_id, COUNT(*) FROM departments d JOIN locations l ON d.location_id=l.location_id GROUP BY l.country_id ORDER BY l.country_id",
+    "gold_post": "SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_03",
+    "question": "Street address for department 10.",
+    "gold_pre": "SELECT l.street_address FROM departments d JOIN locations l ON d.location_id=l.location_id WHERE d.department_id=10",
+    "gold_post": "SELECT street_address FROM department_location WHERE department_id=10",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_04",
+    "question": "Departments in City1.",
+    "gold_pre": "SELECT d.department_name FROM departments d JOIN locations l ON d.location_id=l.location_id WHERE l.city='City1'",
+    "gold_post": "SELECT department_name FROM department_location WHERE city='City1'",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_05",
+    "question": "Department names with postal codes.",
+    "gold_pre": "SELECT d.department_name, l.postal_code FROM departments d JOIN locations l ON d.location_id=l.location_id ORDER BY d.department_id",
+    "gold_post": "SELECT department_name, postal_code FROM department_location ORDER BY department_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_06",
+    "question": "Count departments in State1.",
+    "gold_pre": "SELECT COUNT(*) FROM departments d JOIN locations l ON d.location_id=l.location_id WHERE l.state_province='State1'",
+    "gold_post": "SELECT COUNT(*) FROM department_location WHERE state_province='State1'",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_07",
+    "question": "List location IDs with department names.",
+    "gold_pre": "SELECT l.location_id, d.department_name FROM departments d JOIN locations l ON d.location_id=l.location_id ORDER BY l.location_id",
+    "gold_post": "SELECT location_id, department_name FROM department_location ORDER BY location_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_08",
+    "question": "Departments in country C01.",
+    "gold_pre": "SELECT d.department_name FROM departments d JOIN locations l ON d.location_id=l.location_id WHERE l.country_id='C01'",
+    "gold_post": "SELECT department_name FROM department_location WHERE country_id='C01'",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_09",
+    "question": "Count distinct cities with departments.",
+    "gold_pre": "SELECT COUNT(DISTINCT l.city) FROM locations l JOIN departments d ON d.location_id=l.location_id",
+    "gold_post": "SELECT COUNT(DISTINCT city) FROM department_location",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_10",
+    "question": "List department names with manager IDs.",
+    "gold_pre": "SELECT department_name, manager_id FROM departments ORDER BY department_id",
+    "gold_post": "SELECT department_name, manager_id FROM department_location ORDER BY department_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "departments",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_11",
+    "question": "Employee departments by name.",
+    "gold_pre": "SELECT e.employee_id, d.department_name FROM employees e JOIN departments d ON e.department_id=d.department_id ORDER BY e.employee_id",
+    "gold_post": "SELECT e.employee_id, dl.department_name FROM employees e JOIN department_location dl ON e.department_id=dl.department_id ORDER BY e.employee_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "employees",
+      "departments",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_12",
+    "question": "Job history cities.",
+    "gold_pre": "SELECT j.employee_id, l.city FROM job_history j JOIN departments d ON j.department_id=d.department_id JOIN locations l ON d.location_id=l.location_id ORDER BY j.employee_id",
+    "gold_post": "SELECT j.employee_id, dl.city FROM job_history j JOIN department_location dl ON j.department_id=dl.department_id ORDER BY j.employee_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "job_history",
+      "departments",
+      "locations",
+      "department_location"
+    ]
+  },
+  {
+    "id": "hr_tm_13",
+    "question": "List job titles.",
+    "gold_pre": "SELECT job_title FROM jobs ORDER BY job_id",
+    "gold_post": "SELECT job_title FROM jobs ORDER BY job_id",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "jobs"
+    ]
+  },
+  {
+    "id": "hr_tm_14",
+    "question": "Count regions.",
+    "gold_pre": "SELECT COUNT(*) FROM regions",
+    "gold_post": "SELECT COUNT(*) FROM regions",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "regions"
+    ]
+  },
+  {
+    "id": "hr_tm_15",
+    "question": "List all cities.",
+    "gold_pre": "SELECT city FROM locations ORDER BY location_id",
+    "gold_post": null,
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "locations"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_TABLE_MERGE"
+  },
+  {
+    "id": "hr_tm_16",
+    "question": "Count locations.",
+    "gold_pre": "SELECT COUNT(*) FROM locations",
+    "gold_post": null,
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "locations"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_TABLE_MERGE"
+  }
+]

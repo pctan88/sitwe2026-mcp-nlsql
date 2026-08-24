@@ -1,0 +1,405 @@
+{
+  "database_id": "concert_singer",
+  "n_queries": 20,
+  "n_queries_scored": 20,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.85,
+  "ex_post_baseline": 0.0,
+  "ex_post_refreshed_schema": 0.9,
+  "ex_post_error_feedback": 0.0,
+  "ex_post_mcp": 0.9,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.3333,
+  "mean_baseline_latency_s": 1.2615,
+  "mean_refreshed_schema_latency_s": 3.5612,
+  "mean_error_feedback_latency_s": 1.0334,
+  "mean_mcp_latency_s": 0.659,
+  "latencies": {
+    "pre_s": [
+      1.3382,
+      0.9052,
+      0.9378,
+      1.925,
+      1.8944,
+      1.6451,
+      1.2997,
+      1.0027,
+      1.4421,
+      1.349,
+      1.1244,
+      1.0539,
+      0.9462,
+      1.0389,
+      1.3027,
+      1.4025,
+      0.951,
+      1.6833,
+      1.106,
+      1.0374
+    ],
+    "baseline_s": [
+      0.8487,
+      1.3149,
+      1.2379,
+      1.337,
+      1.7403,
+      1.3615,
+      1.1099,
+      1.3228,
+      1.2531,
+      1.4014,
+      1.132,
+      0.9255,
+      1.2059,
+      2.0575,
+      1.6872,
+      0.9173,
+      1.0713,
+      0.9795,
+      1.2834,
+      1.0436
+    ],
+    "refreshed_schema_s": [
+      0.7835,
+      1.5191,
+      2.3308,
+      1.3403,
+      43.858,
+      1.5881,
+      1.0558,
+      0.9755,
+      1.6427,
+      1.3882,
+      1.1518,
+      1.2566,
+      1.7892,
+      2.7651,
+      1.6329,
+      1.2911,
+      1.1239,
+      1.0715,
+      1.208,
+      1.4515
+    ],
+    "error_feedback_s": [
+      0.9317,
+      1.3348,
+      0.8001,
+      1.1255,
+      1.1525,
+      1.5572,
+      1.1835,
+      1.0518,
+      1.1083,
+      1.0157,
+      0.0006,
+      0.9012,
+      0.9378,
+      1.212,
+      1.0693,
+      1.14,
+      1.0333,
+      1.9942,
+      1.1181,
+      0.0011
+    ],
+    "mcp_s": [
+      8.8451,
+      0.0595,
+      0.0614,
+      0.0619,
+      0.0985,
+      0.1387,
+      0.0641,
+      0.0333,
+      0.0367,
+      0.0601,
+      0.0586,
+      1.4469,
+      0.9823,
+      0.0289,
+      0.0328,
+      0.059,
+      0.0334,
+      1.0085,
+      0.037,
+      0.0323
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 20,
+      "mean": 1.269275,
+      "median": 1.21205,
+      "q1": 1.02005,
+      "q3": 1.4223,
+      "iqr": 0.40225,
+      "p95": 1.8944,
+      "min": 0.9052,
+      "max": 1.925
+    },
+    "baseline_s": {
+      "n": 20,
+      "mean": 1.261535,
+      "median": 1.2455,
+      "q1": 1.05745,
+      "q3": 1.34925,
+      "iqr": 0.2918,
+      "p95": 1.7403,
+      "min": 0.8487,
+      "max": 2.0575
+    },
+    "refreshed_schema_s": {
+      "n": 20,
+      "mean": 3.56118,
+      "median": 1.36425,
+      "q1": 1.13785,
+      "q3": 1.6378,
+      "iqr": 0.49995,
+      "p95": 2.7651,
+      "min": 0.7835,
+      "max": 43.858
+    },
+    "error_feedback_s": {
+      "n": 20,
+      "mean": 1.033435,
+      "median": 1.0888,
+      "q1": 0.93475,
+      "q3": 1.168,
+      "iqr": 0.23325,
+      "p95": 1.5572,
+      "min": 0.0006,
+      "max": 1.9942
+    },
+    "mcp_s": {
+      "n": 20,
+      "mean": 0.65895,
+      "median": 0.0598,
+      "q1": 0.03505,
+      "q3": 0.1186,
+      "iqr": 0.08355,
+      "p95": 1.4469,
+      "min": 0.0289,
+      "max": 8.8451
+    }
+  },
+  "fingerprint_diff_ms": 0.067083,
+  "ast_relink_ms": [
+    9.9735,
+    1.117667,
+    0.767417,
+    0.783417,
+    2.66825,
+    1.064667,
+    1.075625,
+    0.883584,
+    2.012125,
+    1.364125,
+    1.380125,
+    1.139167,
+    0.761667,
+    0.376625,
+    1.054625,
+    1.093583,
+    0.793,
+    1.141209,
+    4.808875,
+    0.805
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.067083,
+      "median": 0.067083,
+      "q1": 0.067083,
+      "q3": 0.067083,
+      "iqr": 0.0,
+      "p95": 0.067083,
+      "min": 0.067083,
+      "max": 0.067083
+    },
+    "ast_relink_ms": {
+      "n": 20,
+      "mean": 1.753213,
+      "median": 1.084604,
+      "q1": 0.799,
+      "q3": 1.372125,
+      "iqr": 0.573125,
+      "p95": 4.808875,
+      "min": 0.376625,
+      "max": 9.9735
+    }
+  },
+  "per_operator": {
+    "TABLE_RENAME": {
+      "n": 11,
+      "baseline_correct": 0,
+      "refreshed_schema_correct": 11,
+      "error_feedback_correct": 0,
+      "mcp_correct": 11,
+      "recovered": 11,
+      "degraded": 0,
+      "baseline_ex": 0.0,
+      "refreshed_schema_ex": 1.0,
+      "error_feedback_ex": 0.0,
+      "mcp_ex": 1.0
+    },
+    "NONE": {
+      "n": 2,
+      "baseline_correct": 0,
+      "refreshed_schema_correct": 0,
+      "error_feedback_correct": 0,
+      "mcp_correct": 0,
+      "recovered": 0,
+      "degraded": 0,
+      "baseline_ex": 0.0,
+      "refreshed_schema_ex": 0.0,
+      "error_feedback_ex": 0.0,
+      "mcp_ex": 0.0
+    },
+    "TABLE_AND_COLUMN_RENAME": {
+      "n": 7,
+      "baseline_correct": 0,
+      "refreshed_schema_correct": 7,
+      "error_feedback_correct": 0,
+      "mcp_correct": 7,
+      "recovered": 7,
+      "degraded": 0,
+      "baseline_ex": 0.0,
+      "refreshed_schema_ex": 1.0,
+      "error_feedback_ex": 0.0,
+      "mcp_ex": 1.0
+    }
+  },
+  "error_categories": {
+    "correct": 0,
+    "execution_error": 18,
+    "silent_failure": 0,
+    "wrong_result": 2,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 18,
+      "c": 0,
+      "statistic": 16.055556,
+      "p_value": 8e-06
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 18,
+      "c": 0,
+      "statistic": 16.055556,
+      "p_value": 8e-06
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 18,
+      "statistic": 16.055556,
+      "p_value": 8e-06
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 0,
+      "total": 20,
+      "lower": 0.0,
+      "upper": 0.16113
+    },
+    "refreshed_schema": {
+      "successes": 18,
+      "total": 20,
+      "lower": 0.698962,
+      "upper": 0.972134
+    },
+    "error_feedback": {
+      "successes": 0,
+      "total": 20,
+      "lower": 0.0,
+      "upper": 0.16113
+    },
+    "mcp": {
+      "successes": 18,
+      "total": 20,
+      "lower": 0.698962,
+      "upper": 0.972134
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 20,
+      "estimate": 0.65895,
+      "lower": 0.106025,
+      "upper": 1.625965
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "singer",
+      "to": "artist"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "artist",
+      "from": "Song_Name",
+      "to": "song_title"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "artist",
+      "from": "Song_release_year",
+      "to": "debut_year"
+    }
+  ],
+  "perturbation_manifest": {
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "artist",
+        "from": "Song_Name",
+        "to": "song_title"
+      },
+      {
+        "op": "COLUMN_RENAME",
+        "table": "artist",
+        "from": "Song_release_year",
+        "to": "debut_year"
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "a3038e2117a9fe5edfa61e08b142426569b54b315a378c04a6e78c527612abac",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 1,
+  "seed_stability_pre": null,
+  "seed_stability_baseline": null,
+  "seed_stability_mcp": null,
+  "seed_disagreements": []
+}

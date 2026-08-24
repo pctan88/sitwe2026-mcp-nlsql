@@ -1,0 +1,157 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+cs_cm_01,COLUMN_MERGE,False,"SELECT Name, Country FROM singer",0,0,"SELECT Song_Name, Name_Country FROM singer",execution_error,1,SELECT Name_Country FROM singer,execution_error,0,"SELECT Song_Name, Name_Country FROM singer",execution_error,0,"SELECT Name, Name_Country FROM singer",skipped
+cs_cm_02,COLUMN_MERGE,False,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',silent_failure_suspected,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',execution_error,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',execution_error,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',skipped
+cs_cm_03,COLUMN_MERGE,False,SELECT Name FROM singer WHERE Singer_ID = 1,0,0,"The query is trying to select the `Name` column from the `singer` table, but according to the schema diff, the `Name` column has been removed from the `singer` table. Looking at the current schema, the `singer` table no longer has a `Name` column.
+
+Based on the available columns in the current `singer` table, there is no direct equivalent to the removed `Name` column. The query cannot be rewritten to return the same data because the `Name` column no longer exists and there's no clear replacement column in the singer table.
+
+However, if the intent was to get singer information, here's what can be done with available data:
+
+```sql
+SELECT Song_Name FROM singer WHERE Singer_ID = 1
+```
+
+If you need the actual singer's name, it may have been moved to another table or the query logic needs to be reconsidered based on the new schema structure.",execution_error,1,SELECT Name_Country FROM singer WHERE Singer_ID = 1,execution_error,0,"The query is trying to select the `Name` column from the `singer` table, but according to the schema diff, the `Name` column has been removed from the `singer` table. Looking at the current schema, the `singer` table no longer has a `Name` column.
+
+Based on the available columns in the current `singer` table, there is no direct equivalent to the removed `Name` column. The query cannot be rewritten to return the same data because the `Name` column no longer exists and there's no clear replacement column.
+
+However, if the intent was to get singer information, the closest available column would be `Song_Name`. Here's the rewritten query:
+
+```sql
+SELECT Song_Name FROM singer WHERE Singer_ID = 1
+```
+
+If you need the actual singer's name, that information is no longer available in the current schema.",execution_error,0,SELECT Name FROM singer WHERE Singer_ID = 1,skipped
+cs_cm_04,COLUMN_MERGE,False,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,0,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. 
+
+However, if the intent was to use `Song_Name` instead of `Name`, the rewritten query would be:
+
+```sql
+SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names FROM singer WHERE Age > 40
+```
+
+If a different column was intended, please clarify which column should be used for the concatenation.",execution_error,0,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",execution_error,0,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. 
+
+The original query attempted to concatenate the `Name` column for singers over 40 years old, but this column no longer exists. The only name-related column in the current `singer` table is `Song_Name` (the song name, not the singer's name).
+
+If the intent was to use `Song_Name` instead:
+
+```sql
+SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40
+```
+
+However, if you need the actual singer names, that information is not available in the current schema.",execution_error,0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names FROM singer WHERE Age > 40",skipped
+cs_cm_05,COLUMN_MERGE,False,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,0,"The original query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. 
+
+However, if the intent was to use `Name_Country` instead of `Name`, the rewritten query would be:
+
+```sql
+SELECT GROUP_CONCAT(Name_Country, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'
+```
+
+If a different column was intended, please clarify which column should be used.",execution_error,1,"SELECT GROUP_CONCAT(Name_Country, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",execution_error,0,"The original query is trying to select a `Name` column from the `singer` table, but according to the schema diff, the `Name` column has been removed. Looking at the current schema, there is no `Name` column in the `singer` table.
+
+Based on the available columns in the current `singer` table (Singer_ID, Song_Name, Song_release_year, Age, Is_male, Name_Country), and the fact that the query was trying to aggregate names, the most logical column to use would be `Name_Country` since that's the only column that was renamed from `Country`.
+
+However, if the intent was to get singer names, that information is no longer available in the `singer` table. Assuming the query should filter by Song_Name = 'Sun' and aggregate the Name_Country values:
+
+```sql
+SELECT GROUP_CONCAT(Name_Country, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",execution_error,0,"SELECT GROUP_CONCAT(Name, ' ') AS merged_name FROM singer WHERE Song_Name = 'Sun'",skipped
+cs_cm_06,COLUMN_MERGE,False,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,valid,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,valid,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,valid,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,skipped
+cs_cm_07,COLUMN_MERGE,False,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,0,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table and no longer exists in the current schema. The `singer` table now only contains: `Singer_ID`, `Song_Name`, `Song_release_year`, `Age`, `Is_male`, and `Name_Country`.
+
+If you meant to select `Name_Country` instead of `Name`, the rewritten query would be:
+
+```sql
+SELECT DISTINCT s.Name_Country, s.Song_Name FROM singer AS s ORDER BY s.Name_Country, s.Song_Name
+```
+
+However, without clarification on what should replace the missing `Name` column, an exact rewrite cannot be provided.",execution_error,1,"SELECT DISTINCT s.Name_Country, s.Song_Name
+FROM singer s
+ORDER BY s.Name_Country, s.Song_Name",execution_error,0,"SELECT DISTINCT s.Song_Name
+FROM singer s
+ORDER BY s.Song_Name",execution_error,0,"SELECT DISTINCT s.Name, s.Song_Name FROM singer AS s ORDER BY s.Name, s.Song_Name",skipped
+cs_cm_08,COLUMN_MERGE,False,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",0,0,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table in the current schema. The query selects `Name` which no longer exists.
+
+If you need to identify male singers, here's what can be done with the current schema:
+
+```sql
+SELECT Singer_ID FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'
+```
+
+However, if the intent was to get singer information from a different table or if `Song_Name` should be used instead of `Name`, please clarify the requirement.",execution_error,0,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",execution_error,0,"The query cannot be rewritten as requested because the `Name` column has been removed from the `singer` table in the current schema. The query selects `Name` which no longer exists.
+
+However, if the intent was to get singer information filtered by male singers, here's what can be done with available columns:
+
+```sql
+SELECT Singer_ID, Song_Name
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'
+```
+
+If you need the singer's name, it may be stored in a different table or column that isn't shown in the current schema.",execution_error,0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y'",skipped
+cs_cm_09,COLUMN_MERGE,False,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,0,"SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States'
+```
+
+The query is already correct. The schema diff shows that the `Country` column was renamed to `Name_Country`, and the stale SQL query already uses `Name_Country`, which matches the current schema. No changes are needed.",silent_failure_suspected,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',execution_error,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',execution_error,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',skipped
+cs_cm_10,COLUMN_MERGE,False,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1
+)",0,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names FROM singer WHERE Singer_ID IN (SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1)",execution_error,0,"SELECT GROUP_CONCAT(Name_Country, ', ') AS merged_names
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1
+)",execution_error,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names
+FROM singer
+WHERE Singer_ID IN (
+  SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1
+)",execution_error,0,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names FROM singer WHERE Singer_ID IN (SELECT Singer_ID FROM singer_in_concert WHERE Concert_ID = 1)",skipped
+cs_cm_11,COLUMN_MERGE,False,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",valid,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",valid,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",valid,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",skipped
+cs_cm_12,COLUMN_MERGE,False,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,valid,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,valid,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,valid,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,skipped
+cs_cm_13,COLUMN_MERGE,False,SELECT * FROM stadium WHERE Capacity > 10000,0,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,valid,0,SELECT * FROM stadium WHERE Capacity > 10000,skipped
+cs_cm_14,COLUMN_MERGE,False,SELECT COUNT(*) FROM concert,1,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,valid,1,SELECT COUNT(*) FROM concert,skipped
+cs_cm_15,COLUMN_MERGE,True,SELECT Name FROM singer,,,"The query `SELECT Name FROM singer` cannot be rewritten because the `Name` column has been removed from the `singer` table and there is no replacement column that contains singer names.
+
+Based on the current schema, the `singer` table only contains: `Singer_ID`, `Song_Name`, `Song_release_year`, `Age`, `Is_male`, and `Name_Country`.
+
+If you meant to select a different column, please clarify which column should be selected. If you need the singer's name, that information is not available in the current schema.",execution_error,,SELECT Name_Country FROM singer,execution_error,,"The query `SELECT Name FROM singer` cannot be rewritten because the `Name` column has been removed from the `singer` table and there is no replacement column that contains singer names.
+
+Based on the current schema, the `singer` table only contains: `Singer_ID`, `Song_Name`, `Song_release_year`, `Age`, `Is_male`, and `Name_Country`.
+
+If you meant to select the song name instead:
+```sql
+SELECT Song_Name FROM singer
+```
+
+If you meant to select the country:
+```sql
+SELECT Name_Country FROM singer
+```
+
+Otherwise, the original query cannot be fixed without additional information about where the singer name data was moved to.",execution_error,,SELECT Name FROM singer,skipped
+cs_cm_16,COLUMN_MERGE,True,SELECT DISTINCT Country FROM singer,,,SELECT DISTINCT Name_Country FROM singer,valid,,SELECT DISTINCT Name_Country FROM singer,execution_error,,SELECT DISTINCT Name_Country FROM singer,execution_error,,SELECT DISTINCT Name_Country FROM singer,skipped

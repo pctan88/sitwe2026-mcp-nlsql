@@ -1,0 +1,178 @@
+[
+  {
+    "id": "cs_tr_01",
+    "question": "List all singer names.",
+    "gold_pre": "SELECT Name FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT Name FROM artist ORDER BY Singer_ID",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_02",
+    "question": "Count singers from France.",
+    "gold_pre": "SELECT COUNT(*) FROM singer WHERE Country='France'",
+    "gold_post": "SELECT COUNT(*) FROM artist WHERE Country='France'",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_03",
+    "question": "Find the song name for Singer_ID 1.",
+    "gold_pre": "SELECT Song_Name FROM singer WHERE Singer_ID=1",
+    "gold_post": "SELECT Song_Name FROM artist WHERE Singer_ID=1",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_04",
+    "question": "List singer names with age over 40.",
+    "gold_pre": "SELECT Name FROM singer WHERE Age > 40 ORDER BY Name",
+    "gold_post": "SELECT Name FROM artist WHERE Age > 40 ORDER BY Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_05",
+    "question": "Count male singers.",
+    "gold_pre": "SELECT COUNT(*) FROM singer WHERE Is_male='T'",
+    "gold_post": "SELECT COUNT(*) FROM artist WHERE Is_male='T'",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_06",
+    "question": "List song release years since 2010.",
+    "gold_pre": "SELECT Song_release_year FROM singer WHERE Song_release_year >= 2010 ORDER BY Song_release_year",
+    "gold_post": "SELECT Song_release_year FROM artist WHERE Song_release_year >= 2010 ORDER BY Song_release_year",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_07",
+    "question": "List singer names and countries alphabetically.",
+    "gold_pre": "SELECT Name, Country FROM singer ORDER BY Name",
+    "gold_post": "SELECT Name, Country FROM artist ORDER BY Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_08",
+    "question": "Which singers performed in concert 1?",
+    "gold_pre": "SELECT s.Name FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY s.Name",
+    "gold_post": "SELECT a.Name FROM artist a JOIN singer_in_concert sc ON a.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=1 ORDER BY a.Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist",
+      "singer_in_concert"
+    ]
+  },
+  {
+    "id": "cs_tr_09",
+    "question": "Count concerts per singer.",
+    "gold_pre": "SELECT s.Name, COUNT(*) AS concert_count FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID GROUP BY s.Name ORDER BY concert_count DESC, s.Name",
+    "gold_post": "SELECT a.Name, COUNT(*) AS concert_count FROM artist a JOIN singer_in_concert sc ON a.Singer_ID=sc.Singer_ID GROUP BY a.Name ORDER BY concert_count DESC, a.Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist",
+      "singer_in_concert"
+    ]
+  },
+  {
+    "id": "cs_tr_10",
+    "question": "List songs by French singers.",
+    "gold_pre": "SELECT Name, Song_Name FROM singer WHERE Country='France' ORDER BY Name",
+    "gold_post": "SELECT Name, Song_Name FROM artist WHERE Country='France' ORDER BY Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_11",
+    "question": "Average age of French singers.",
+    "gold_pre": "SELECT AVG(Age) FROM singer WHERE Country='France'",
+    "gold_post": "SELECT AVG(Age) FROM artist WHERE Country='France'",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_12",
+    "question": "Singers with song titles starting with 'S'.",
+    "gold_pre": "SELECT Name FROM singer WHERE Song_Name LIKE 'S%' ORDER BY Name",
+    "gold_post": "SELECT Name FROM artist WHERE Song_Name LIKE 'S%' ORDER BY Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_13",
+    "question": "Singers with songs released between 2000 and 2014.",
+    "gold_pre": "SELECT Name FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014 ORDER BY Name",
+    "gold_post": "SELECT Name FROM artist WHERE Song_release_year BETWEEN 2000 AND 2014 ORDER BY Name",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_14",
+    "question": "List singer IDs and song names.",
+    "gold_pre": "SELECT Singer_ID, Song_Name FROM singer ORDER BY Singer_ID",
+    "gold_post": "SELECT Singer_ID, Song_Name FROM artist ORDER BY Singer_ID",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "singer",
+      "artist"
+    ]
+  },
+  {
+    "id": "cs_tr_15",
+    "question": "List stadiums with capacity over 10000.",
+    "gold_pre": "SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID",
+    "gold_post": "SELECT Name FROM stadium WHERE Capacity > 10000 ORDER BY Stadium_ID",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "stadium"
+    ]
+  },
+  {
+    "id": "cs_tr_16",
+    "question": "Count concerts.",
+    "gold_pre": "SELECT COUNT(*) FROM concert",
+    "gold_post": "SELECT COUNT(*) FROM concert",
+    "perturbation": "TABLE_RENAME",
+    "touches": [
+      "concert"
+    ]
+  }
+]

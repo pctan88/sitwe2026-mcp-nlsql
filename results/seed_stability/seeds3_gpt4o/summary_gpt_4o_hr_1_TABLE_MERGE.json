@@ -1,0 +1,356 @@
+{
+  "database_id": "hr_1_TABLE_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "TABLE_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.6429,
+  "ex_post_baseline": 0.1429,
+  "ex_post_refreshed_schema": 0.7857,
+  "ex_post_error_feedback": 0.1429,
+  "ex_post_mcp": 0.6429,
+  "recovery_rate": 0.7778,
+  "silent_failure_detection_rate": 0.0,
+  "mean_baseline_latency_s": 1.3118,
+  "mean_refreshed_schema_latency_s": 0.9524,
+  "mean_error_feedback_latency_s": 0.8679,
+  "mean_mcp_latency_s": 1.5465,
+  "latencies": {
+    "pre_s": [
+      1.1031,
+      1.3163,
+      1.102,
+      1.5228,
+      1.1099,
+      1.2735,
+      1.1027,
+      1.2874,
+      1.3327,
+      1.0549,
+      1.0778,
+      1.1764,
+      1.387,
+      1.3338
+    ],
+    "baseline_s": [
+      1.0219,
+      1.4279,
+      1.0673,
+      1.7294,
+      1.2302,
+      1.43,
+      1.1658,
+      1.1923,
+      1.3562,
+      0.9739,
+      1.146,
+      1.6126,
+      1.2311,
+      1.7805
+    ],
+    "refreshed_schema_s": [
+      0.7748,
+      1.0734,
+      1.1791,
+      1.0455,
+      1.1963,
+      0.8543,
+      0.7487,
+      0.848,
+      1.01,
+      0.8719,
+      0.918,
+      1.1072,
+      0.8914,
+      0.8144
+    ],
+    "error_feedback_s": [
+      0.9928,
+      1.1989,
+      1.0941,
+      0.876,
+      1.0096,
+      0.8739,
+      0.9359,
+      0.9998,
+      1.0321,
+      0.8598,
+      0.9867,
+      1.2886,
+      0.0015,
+      0.0015
+    ],
+    "mcp_s": [
+      9.898,
+      1.1281,
+      0.952,
+      1.0818,
+      1.1781,
+      0.9755,
+      0.8986,
+      1.0898,
+      1.3149,
+      0.8744,
+      1.1364,
+      0.991,
+      0.0555,
+      0.0765
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 1.227164,
+      "median": 1.22495,
+      "q1": 1.1027,
+      "q3": 1.3327,
+      "iqr": 0.23,
+      "p95": 1.5228,
+      "min": 1.0549,
+      "max": 1.5228
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.311793,
+      "median": 1.23065,
+      "q1": 1.146,
+      "q3": 1.43,
+      "iqr": 0.284,
+      "p95": 1.7805,
+      "min": 0.9739,
+      "max": 1.7805
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 0.952357,
+      "median": 0.9047,
+      "q1": 0.848,
+      "q3": 1.0734,
+      "iqr": 0.2254,
+      "p95": 1.1963,
+      "min": 0.7487,
+      "max": 1.1963
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 0.867943,
+      "median": 0.98975,
+      "q1": 0.8739,
+      "q3": 1.0321,
+      "iqr": 0.1582,
+      "p95": 1.2886,
+      "min": 0.0015,
+      "max": 1.2886
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 1.546471,
+      "median": 1.0364,
+      "q1": 0.8986,
+      "q3": 1.1364,
+      "iqr": 0.2378,
+      "p95": 9.898,
+      "min": 0.0555,
+      "max": 9.898
+    }
+  },
+  "fingerprint_diff_ms": 0.112,
+  "ast_relink_ms": [
+    14.177458,
+    6.995917,
+    5.172208,
+    1.753875,
+    1.568833,
+    1.251166,
+    1.125666,
+    2.001208,
+    1.872625,
+    1.020167,
+    1.219834,
+    7.601125,
+    0.690208,
+    0.860375
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.112,
+      "median": 0.112,
+      "q1": 0.112,
+      "q3": 0.112,
+      "iqr": 0.0,
+      "p95": 0.112,
+      "min": 0.112,
+      "max": 0.112
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 3.379333,
+      "median": 1.661354,
+      "q1": 1.125666,
+      "q3": 5.172208,
+      "iqr": 4.046542,
+      "p95": 14.177458,
+      "min": 0.690208,
+      "max": 14.177458
+    }
+  },
+  "per_operator": {
+    "TABLE_MERGE": {
+      "n": 14,
+      "baseline_correct": 2,
+      "refreshed_schema_correct": 11,
+      "error_feedback_correct": 2,
+      "mcp_correct": 9,
+      "recovered": 7,
+      "degraded": 0,
+      "baseline_ex": 0.1429,
+      "refreshed_schema_ex": 0.7857,
+      "error_feedback_ex": 0.1429,
+      "mcp_ex": 0.6429
+    }
+  },
+  "error_categories": {
+    "correct": 2,
+    "execution_error": 12,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 7,
+      "c": 0,
+      "statistic": 5.142857,
+      "p_value": 0.015625
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 9,
+      "c": 0,
+      "statistic": 7.111111,
+      "p_value": 0.003906
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 7,
+      "statistic": 5.142857,
+      "p_value": 0.015625
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "refreshed_schema": {
+      "successes": 11,
+      "total": 14,
+      "lower": 0.524103,
+      "upper": 0.924288
+    },
+    "error_feedback": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "mcp": {
+      "successes": 9,
+      "total": 14,
+      "lower": 0.38764,
+      "upper": 0.836555
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 1.546471,
+      "lower": 0.759021,
+      "upper": 2.9407
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_MERGE",
+      "sources": [
+        "departments",
+        "locations"
+      ],
+      "target": "department_location",
+      "key": "location_id"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "e0f7613e785d021f",
+    "specs": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "departments",
+          "locations"
+        ],
+        "target": "department_location",
+        "join_key": "location_id"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "departments",
+          "locations"
+        ],
+        "target": "department_location",
+        "key": "location_id"
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "56ccabc5127314162be845ae0f7c3762d2e1a0d22a0a59d6871b24f70ffdc5f7",
+  "backend": "openai_compat",
+  "model": "gpt-4o",
+  "model_short_name": "gpt-4o",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 0.9286,
+  "seed_disagreements": [
+    {
+      "id": "hr_tm_04",
+      "pre_ok": [
+        0
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        0,
+        1
+      ]
+    }
+  ]
+}

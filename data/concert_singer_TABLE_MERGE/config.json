@@ -1,0 +1,32 @@
+{
+  "database_id": "concert_singer_TABLE_MERGE",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "c312fcd890112380",
+    "specs": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "concert",
+          "singer_in_concert"
+        ],
+        "target": "concert_performance",
+        "join_key": "Concert_ID"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_MERGE",
+        "sources": [
+          "concert",
+          "singer_in_concert"
+        ],
+        "target": "concert_performance",
+        "key": "Concert_ID"
+      }
+    ]
+  }
+}

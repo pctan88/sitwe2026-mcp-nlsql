@@ -1,0 +1,151 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_ts_01,TABLE_SPLIT,List employee first and last names.,"SELECT first_name, last_name FROM employee_personal ORDER BY employee_id",False,,"SELECT first_name, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,"SELECT first_name, last_name FROM employee_personal",1,"SELECT first_name, last_name FROM employees",0,1,no such table: employees,anthropic,"SELECT first_name, last_name FROM employee_personal",ast,valid,1,1,0,0.8136,2.3705,1.0419,0.9731,0.9838,0.464708,anthropic
+hr_ts_02,TABLE_SPLIT,Count employees.,SELECT COUNT(*) FROM employee_personal,False,,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,0,SELECT COUNT(*) FROM employee_personal,1,SELECT COUNT(*) FROM employees,0,1,no such table: employees,anthropic,SELECT COUNT(DISTINCT employee_id) FROM employee_job,ast,valid,1,1,0,0.8533,2.2586,0.9476,0.8723,1.4307,0.605252,anthropic
+hr_ts_03,TABLE_SPLIT,Employees with salary over 7000.,SELECT employee_id FROM employee_job WHERE salary > 7000 ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.salary > 7000
+ORDER BY ej.salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,1,no such table: employees,anthropic,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.salary > 7000 ORDER BY ej.salary DESC",ast,silent_failure_suspected,0,0,0,0.8831,1.3665,2.4285,1.0597,1.0474,0.891429,anthropic
+hr_ts_04,TABLE_SPLIT,Average employee salary.,SELECT AVG(salary) FROM employee_job,False,,SELECT AVG(salary) FROM employees,1,SELECT AVG(salary) FROM employees,0,SELECT AVG(salary) FROM employee_job,1,SELECT AVG(salary) FROM employees,0,1,no such table: employees,anthropic,SELECT AVG(salary) FROM employee_job,ast,valid,1,1,0,1.2829,0.8783,0.943,0.8282,0.9036,0.51941,anthropic
+hr_ts_05,TABLE_SPLIT,List employee emails.,SELECT email FROM employee_personal ORDER BY employee_id,False,,SELECT email FROM employees,1,SELECT email FROM employees,0,SELECT email FROM employee_personal,1,SELECT email FROM employees,0,1,no such table: employees,anthropic,SELECT email FROM employee_personal,ast,valid,1,1,0,1.071,1.1422,0.972,2.1035,1.6782,0.499522,anthropic
+hr_ts_06,TABLE_SPLIT,Employees in department 10.,"SELECT p.employee_id, p.first_name FROM employee_personal p JOIN employee_job j ON p.employee_id=j.employee_id WHERE j.department_id=10 ORDER BY p.employee_id",False,,SELECT * FROM employees WHERE department_id = 10,0,SELECT * FROM employees WHERE department_id = 10,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.department_id
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.department_id = 10",0,SELECT * FROM employees WHERE department_id = 10,0,1,no such table: employees,anthropic,"SELECT 
+    ep.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_personal ep
+INNER JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.department_id = 10",ast,silent_failure_suspected,0,0,0,2.2613,0.9079,1.4218,1.1091,1.6959,0.553448,anthropic
+hr_ts_07,TABLE_SPLIT,List employee job IDs.,"SELECT employee_id, job_id FROM employee_job ORDER BY employee_id",False,,SELECT DISTINCT job_id FROM employees,0,SELECT DISTINCT job_id FROM employees,0,SELECT DISTINCT job_id FROM employee_job,0,SELECT DISTINCT job_id FROM employees,0,1,no such table: employees,anthropic,SELECT DISTINCT job_id FROM employee_job,ast,valid,0,0,0,0.9616,1.3307,1.0233,0.8617,0.9431,0.471016,anthropic
+hr_ts_08,TABLE_SPLIT,Count employees per department.,"SELECT department_id, COUNT(*) FROM employee_job GROUP BY department_id ORDER BY department_id",False,,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+    d.department_id,
+    d.department_name,
+    COUNT(e.employee_id) as employee_count
+FROM departments d
+LEFT JOIN employee_job e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,1,no such table: employees,anthropic,"SELECT d.department_id, d.department_name, COUNT(ej.employee_id) AS employee_count FROM departments AS d LEFT JOIN employee_job AS ej ON d.department_id = ej.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",ast,valid,0,0,0,1.3307,1.3707,1.1597,1.0398,1.2255,1.497635,anthropic
+hr_ts_09,TABLE_SPLIT,Employees with commissions.,SELECT employee_id FROM employee_job WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT DISTINCT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0
+ORDER BY ep.employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,1,no such table: employees,anthropic,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct 
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0 
+ORDER BY ep.employee_id",ast,silent_failure_suspected,0,0,0,1.1666,1.0346,1.4235,1.024,1.3429,1.068586,anthropic
+hr_ts_10,TABLE_SPLIT,Employees managed by 1.,SELECT employee_id FROM employee_job WHERE manager_id=1 ORDER BY employee_id,False,,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.job_id, ej.salary
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.manager_id = 1",0,SELECT * FROM employees WHERE manager_id = 1,0,1,no such table: employees,anthropic,"SELECT 
+  ep.employee_id,
+  ep.first_name,
+  ep.last_name,
+  ep.email,
+  ep.phone_number,
+  ej.hire_date,
+  ej.job_id,
+  ej.salary,
+  ej.commission_pct,
+  ej.manager_id,
+  ej.department_id
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.manager_id = 1",ast,silent_failure_suspected,0,0,0,0.8874,1.8662,1.5268,1.1177,1.7842,0.622122,anthropic
+hr_ts_11,TABLE_SPLIT,Job title for employee 1.,SELECT j.job_title FROM employee_job e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1,False,,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,"SELECT j.job_title
+FROM employee_job ej
+JOIN jobs j ON ej.job_id = j.job_id
+WHERE ej.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1,no such table: employees,anthropic,SELECT j.job_title FROM employee_job AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,ast,valid,1,1,0,0.9599,0.9876,1.0142,0.9131,0.9384,1.227515,anthropic
+hr_ts_12,TABLE_SPLIT,Department name for employee 1.,SELECT d.department_name FROM employee_job e JOIN departments d ON e.department_id=d.department_id WHERE e.employee_id=1,False,,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",1,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,"SELECT d.department_name
+FROM departments d
+JOIN employee_job ej ON d.department_id = ej.department_id
+WHERE ej.employee_id = 1",1,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,1,no such table: employees,anthropic,SELECT d.department_name FROM employee_job AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,ast,valid,1,1,0,1.16,2.1555,1.4312,1.1182,1.066,1.024868,anthropic
+hr_ts_13,TABLE_SPLIT,Job history start date for employee 1.,SELECT j.start_date FROM job_history j JOIN employee_job e ON j.employee_id=e.employee_id WHERE e.employee_id=1,False,,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,0,,anthropic,SELECT start_date FROM job_history WHERE employee_id = 1,ast,valid,1,0,0,1.0338,0.934,0.8635,0.0013,0.0023,0.60957,anthropic
+hr_ts_14,TABLE_SPLIT,Employees hired after 2007-06-20.,SELECT employee_id FROM employee_job WHERE hire_date > '2007-06-20' ORDER BY employee_id,False,,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,"SELECT DISTINCT ep.employee_id, ep.first_name, ep.last_name, ej.hire_date
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.hire_date > '2007-06-20'
+ORDER BY ej.hire_date",0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,1,no such table: employees,anthropic,"SELECT 
+    ej.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ep.email,
+    ep.phone_number,
+    ej.hire_date,
+    ej.job_id,
+    ej.salary,
+    ej.commission_pct,
+    ej.manager_id,
+    ej.department_id
+FROM employee_job ej
+JOIN employee_personal ep ON ej.employee_id = ep.employee_id
+WHERE ej.hire_date > '2007-06-20'",ast,silent_failure_suspected,0,0,0,0.9454,1.1578,1.2386,0.8662,2.8765,0.468106,anthropic
+hr_ts_15,TABLE_SPLIT,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT DISTINCT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,0,,anthropic,SELECT DISTINCT region_name FROM regions,ast,valid,1,0,0,0.9967,0.9524,0.9484,0.0015,0.0023,0.527292,anthropic
+hr_ts_16,TABLE_SPLIT,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,anthropic,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,0.8534,3.6143,4.7538,0.0013,0.0019,0.499499,anthropic

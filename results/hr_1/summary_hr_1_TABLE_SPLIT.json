@@ -1,0 +1,384 @@
+{
+  "database_id": "hr_1_TABLE_SPLIT",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.5625,
+  "ex_post_baseline": 0.1875,
+  "ex_post_refreshed_schema": 0.5625,
+  "ex_post_error_feedback": 0.1875,
+  "ex_post_mcp": 0.5625,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.7143,
+  "mean_baseline_latency_s": 1.5205,
+  "mean_refreshed_schema_latency_s": 1.4461,
+  "mean_error_feedback_latency_s": 0.8682,
+  "mean_mcp_latency_s": 1.1202,
+  "latencies": {
+    "pre_s": [
+      0.8136,
+      0.8533,
+      0.8831,
+      1.2829,
+      1.071,
+      2.2613,
+      0.9616,
+      1.3307,
+      1.1666,
+      0.8874,
+      0.9599,
+      1.16,
+      1.0338,
+      0.9454,
+      0.9967,
+      0.8534
+    ],
+    "baseline_s": [
+      2.3705,
+      2.2586,
+      1.3665,
+      0.8783,
+      1.1422,
+      0.9079,
+      1.3307,
+      1.3707,
+      1.0346,
+      1.8662,
+      0.9876,
+      2.1555,
+      0.934,
+      1.1578,
+      0.9524,
+      3.6143
+    ],
+    "refreshed_schema_s": [
+      1.0419,
+      0.9476,
+      2.4285,
+      0.943,
+      0.972,
+      1.4218,
+      1.0233,
+      1.1597,
+      1.4235,
+      1.5268,
+      1.0142,
+      1.4312,
+      0.8635,
+      1.2386,
+      0.9484,
+      4.7538
+    ],
+    "error_feedback_s": [
+      0.9731,
+      0.8723,
+      1.0597,
+      0.8282,
+      2.1035,
+      1.1091,
+      0.8617,
+      1.0398,
+      1.024,
+      1.1177,
+      0.9131,
+      1.1182,
+      0.0013,
+      0.8662,
+      0.0015,
+      0.0013
+    ],
+    "mcp_s": [
+      0.9838,
+      1.4307,
+      1.0474,
+      0.9036,
+      1.6782,
+      1.6959,
+      0.9431,
+      1.2255,
+      1.3429,
+      1.7842,
+      0.9384,
+      1.066,
+      0.0023,
+      2.8765,
+      0.0023,
+      0.0019
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 1.091294,
+      "median": 0.97915,
+      "q1": 0.88525,
+      "q3": 1.1633,
+      "iqr": 0.27805,
+      "p95": 2.2613,
+      "min": 0.8136,
+      "max": 2.2613
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 1.520487,
+      "median": 1.24425,
+      "q1": 0.97,
+      "q3": 2.01085,
+      "iqr": 1.04085,
+      "p95": 3.6143,
+      "min": 0.8783,
+      "max": 3.6143
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.446112,
+      "median": 1.1008,
+      "q1": 0.9602,
+      "q3": 1.42735,
+      "iqr": 0.46715,
+      "p95": 4.7538,
+      "min": 0.8635,
+      "max": 4.7538
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 0.868169,
+      "median": 0.9431,
+      "q1": 0.84495,
+      "q3": 1.0844,
+      "iqr": 0.23945,
+      "p95": 2.1035,
+      "min": 0.0013,
+      "max": 2.1035
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 1.120169,
+      "median": 1.0567,
+      "q1": 0.921,
+      "q3": 1.55445,
+      "iqr": 0.63345,
+      "p95": 2.8765,
+      "min": 0.0019,
+      "max": 2.8765
+    }
+  },
+  "fingerprint_diff_ms": 0.230005,
+  "ast_relink_ms": [
+    0.464708,
+    0.605252,
+    0.891429,
+    0.51941,
+    0.499522,
+    0.553448,
+    0.471016,
+    1.497635,
+    1.068586,
+    0.622122,
+    1.227515,
+    1.024868,
+    0.60957,
+    0.468106,
+    0.527292,
+    0.499499
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.230005,
+      "median": 0.230005,
+      "q1": 0.230005,
+      "q3": 0.230005,
+      "iqr": 0.0,
+      "p95": 0.230005,
+      "min": 0.230005,
+      "max": 0.230005
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 0.721874,
+      "median": 0.57935,
+      "q1": 0.499511,
+      "q3": 0.958148,
+      "iqr": 0.458638,
+      "p95": 1.497635,
+      "min": 0.464708,
+      "max": 1.497635
+    }
+  },
+  "per_operator": {
+    "TABLE_SPLIT": {
+      "n": 16,
+      "baseline_correct": 3,
+      "refreshed_schema_correct": 9,
+      "error_feedback_correct": 3,
+      "mcp_correct": 9,
+      "recovered": 6,
+      "degraded": 0,
+      "baseline_ex": 0.1875,
+      "refreshed_schema_ex": 0.5625,
+      "error_feedback_ex": 0.1875,
+      "mcp_ex": 0.5625
+    }
+  },
+  "error_categories": {
+    "correct": 3,
+    "execution_error": 13,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 6,
+      "c": 0,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 6,
+      "c": 0,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 6,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "refreshed_schema": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    },
+    "error_feedback": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "mcp": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 1.120169,
+      "lower": 0.784837,
+      "upper": 1.458044
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_SPLIT",
+      "source": "employees",
+      "targets": [
+        "employee_job",
+        "employee_personal"
+      ],
+      "key": "employee_id"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "208fce1eb1d25c34",
+    "specs": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_personal",
+          "employee_job"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "employees",
+        "targets": [
+          "employee_job",
+          "employee_personal"
+        ],
+        "key": "employee_id",
+        "partition": {
+          "employee_personal": [
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number"
+          ],
+          "employee_job": [
+            "hire_date",
+            "job_id",
+            "salary",
+            "commission_pct",
+            "manager_id",
+            "department_id"
+          ]
+        }
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "0334ac320961992a07fa2143367dd714ad1d78f479f8012a32eb68674bf664f7",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": []
+}

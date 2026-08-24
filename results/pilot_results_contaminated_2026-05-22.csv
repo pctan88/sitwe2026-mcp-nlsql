@@ -1,0 +1,68 @@
+id,perturbation,question,gold_post,pre_sql,pre_ok,baseline_sql,baseline_ok,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_mcp_s,backend
+Q01,TABLE_RENAME,How many singers do we have?,SELECT COUNT(*) FROM artist,SELECT COUNT(*) FROM singer,1,SELECT COUNT(*) FROM singer,0,SELECT COUNT(*) FROM artist,ast,valid,1,1,0,3.4809,1.5433,0.0153,anthropic
+Q02,TABLE_RENAME,What is the name and country of every singer?,"SELECT Name, Country FROM artist","SELECT Name, Country FROM singer",1,"SELECT Name, Country FROM singer",0,"SELECT Name, Country FROM artist",ast,valid,1,1,0,0.9822,1.0704,0.0032,anthropic
+Q03,TABLE_RENAME,List the names of singers from France.,SELECT Name FROM artist WHERE Country = 'France',SELECT Name FROM singer WHERE Country = 'France',1,SELECT Name FROM singer WHERE Country = 'France',0,SELECT Name FROM artist WHERE Country = 'France',ast,valid,1,1,0,1.0763,1.4018,0.003,anthropic
+Q04,TABLE_RENAME,What are the names of all singers ordered by age from oldest to youngest?,SELECT Name FROM artist ORDER BY Age DESC,SELECT Name FROM singer ORDER BY Age DESC,1,SELECT Name FROM singer ORDER BY Age DESC,0,SELECT Name FROM artist ORDER BY Age DESC,ast,valid,1,1,0,1.0081,1.0632,0.0025,anthropic
+Q05,TABLE_RENAME,How many male singers are there?,SELECT COUNT(*) FROM artist WHERE Is_male = 'T',SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,SELECT COUNT(*) FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',0,SELECT COUNT(*) FROM artist WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = 'Y',ast,valid,0,0,0,1.2418,1.2557,0.0035,anthropic
+Q06,TABLE_RENAME,"What is the average, minimum, and maximum age of all singers?","SELECT AVG(Age), MIN(Age), MAX(Age) FROM artist","SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer",1,"SELECT AVG(Age), MIN(Age), MAX(Age) FROM singer",0,"SELECT AVG(Age), MIN(Age), MAX(Age) FROM artist",ast,valid,1,1,0,9.5729,10.5682,0.0031,mock-after-OverloadedError
+Q07,TABLE_RENAME,List each country and the number of singers from that country.,"SELECT Country, COUNT(*) FROM artist GROUP BY Country","SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",1,"SELECT Country, COUNT(*) as number_of_singers
+FROM singer
+GROUP BY Country
+ORDER BY Country",0,"SELECT Country, COUNT(*) AS number_of_singers FROM artist GROUP BY Country ORDER BY Country",ast,valid,1,1,0,1.2761,1.0514,0.0031,anthropic
+Q08,TABLE_RENAME,Show the name of the oldest singer.,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,1,SELECT Name FROM singer ORDER BY Age DESC LIMIT 1,0,SELECT Name FROM artist ORDER BY Age DESC LIMIT 1,ast,valid,1,1,0,8.4464,8.7076,0.0025,mock-after-OverloadedError
+Q09,TABLE_RENAME,Show the names of all singers and the names of concerts they performed in.,"SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID","SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",0,"SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",0,"SELECT T2.concert_Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID
+```
+
+Wait, let me reconsider. The original query has issues with the join logic. Looking at the current schema:
+- `singer_in_concert` has `Concert_ID` and `Singer_ID`
+- `concert` has `Concert_ID` and `concert_Name`
+- There is no `Singer_ID` in the `concert` table
+
+The original query tried to join `concert` on `Singer_ID`, which doesn't exist in the current schema. The corrected query should be:
+
+```sql
+SELECT T2.concert_Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID
+```
+
+Actually, this still doesn't make logical sense. Let me provide the most reasonable fix based on the schema:
+
+```sql
+SELECT T2.Name, T3.concert_Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID",ast,execution_error,0,0,0,9.3053,8.6855,5.7298,mock-after-OverloadedError
+Q10,TABLE_RENAME,List the names of singers who performed in a concert with theme 'Wide Awake'.,SELECT T2.Name FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake',SELECT T2.Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake',0,SELECT T2.Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake',0,SELECT T2.Name FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.Theme = 'Wide Awake',ast,execution_error,0,0,0,8.7864,9.0455,8.6497,mock-after-OverloadedError
+Q11,NONE,Count how many singers performed in each concert.,"SELECT T2.concert_Name, COUNT(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Concert_ID = T2.Concert_ID GROUP BY T2.concert_Name","SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT c.Concert_ID, c.concert_Name, COUNT(s.Singer_ID) AS singer_count FROM concert AS c LEFT JOIN singer_in_concert AS s ON c.Concert_ID = s.Concert_ID GROUP BY c.Concert_ID, c.concert_Name ORDER BY c.Concert_ID",ast,valid,0,0,0,1.9489,2.1875,0.0086,anthropic
+Q12,TABLE_RENAME,Show the names of singers who did not perform in any concert.,SELECT Name FROM artist WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),SELECT Name FROM concert WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,SELECT Name FROM concert WHERE Singer_ID NOT IN (SELECT Singer_ID FROM singer_in_concert),0,"SELECT concert_Name FROM concert WHERE NOT Singer_ID IN (SELECT Singer_ID FROM singer_in_concert)
+```
+
+Wait, I need to reconsider. Looking at the current schema, the `concert` table doesn't have a `Singer_ID` column. The relationship between concerts and singers is through the `singer_in_concert` table.
+
+The original query logic was trying to find concerts where the Singer_ID is not in the singer_in_concert table, but this doesn't match the current schema structure.
+
+Based on the current schema, here's the corrected query:
+
+```sql
+SELECT concert_Name FROM concert WHERE Concert_ID NOT IN (SELECT Concert_ID FROM singer_in_concert)",ast,execution_error,0,0,0,9.7468,10.9219,4.2885,mock-after-OverloadedError
+Q13,TABLE_AND_COLUMN_RENAME,Show each singer's name and their song name.,"SELECT Name, song_title FROM artist","SELECT singer.Name, singer.Song_Name
+FROM singer",1,"SELECT singer.Name, singer.Song_Name
+FROM singer",0,"SELECT Name, song_title FROM artist",ast,valid,1,1,0,1.4572,2.602,1.4258,anthropic
+Q14,TABLE_AND_COLUMN_RENAME,List the song name of each singer ordered by release year ascending.,SELECT song_title FROM artist ORDER BY debut_year ASC,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",1,"SELECT Song_Name
+FROM singer
+ORDER BY Song_release_year ASC",0,SELECT song_title FROM artist ORDER BY debut_year ASC,ast,valid,1,1,0,2.7993,1.2512,0.0023,anthropic
+Q15,TABLE_AND_COLUMN_RENAME,What is the song name of the youngest singer?,SELECT song_title FROM artist ORDER BY Age ASC LIMIT 1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),1,SELECT Song_Name FROM singer WHERE Age = (SELECT MIN(Age) FROM singer),0,SELECT song_title FROM artist WHERE Age = (SELECT MIN(Age) FROM artist),ast,valid,1,1,0,1.1559,1.5181,0.0232,anthropic
+Q16,TABLE_AND_COLUMN_RENAME,Count songs released after 2010.,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,1,SELECT COUNT(*) FROM singer WHERE Song_release_year > 2010,0,SELECT COUNT(*) FROM artist WHERE debut_year > 2010,ast,silent_failure_suspected,1,1,0,8.216,9.7337,7.5737,mock-after-OverloadedError
+Q17,TABLE_AND_COLUMN_RENAME,Show the song name and release year of every French singer.,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'","SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",1,"SELECT Song_Name, Song_release_year FROM singer WHERE Country = 'France'",0,"SELECT song_title, debut_year FROM artist WHERE Country = 'France'",ast,valid,1,1,0,1.9748,12.2522,0.0029,anthropic
+Q18,TABLE_AND_COLUMN_RENAME,Show the average song release year per country.,"SELECT Country, AVG(debut_year) FROM artist GROUP BY Country",SELECT COUNT(*) FROM singer,0,SELECT COUNT(*) FROM singer,0,SELECT COUNT(*) FROM artist,ast,valid,0,0,0,11.946,11.8703,0.0025,mock-after-OverloadedError
+Q19,TABLE_AND_COLUMN_RENAME,Show the song name of every singer who performed in the 'Auditions' concert.,SELECT T2.song_title FROM singer_in_concert AS T1 JOIN artist AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions',SELECT T2.Concert_ID FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions',0,SELECT T2.Concert_ID FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions',0,SELECT T2.Concert_ID FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T1.Concert_ID = T3.Concert_ID WHERE T3.concert_Name = 'Auditions',ast,execution_error,0,0,0,12.2539,11.5335,8.7416,mock-after-OverloadedError
+Q20,NONE,Find the stadium with the largest capacity.,SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1,SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1,1,SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1,1,SELECT Name FROM stadium ORDER BY Capacity DESC LIMIT 1,ast,valid,1,0,0,11.8301,15.0794,0.0024,mock-after-OverloadedError

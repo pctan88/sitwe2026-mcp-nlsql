@@ -1,0 +1,69 @@
+{
+  "_note": "Pooled over all 5 EvoSchema operators for haiku on hr_1. Regenerated 2026-06-09 from per-operator summary_hr_1_*.json files (the canonical N=76 strict-mode runs). Supersedes the archived N=20 rename-only pilot. RR=(EX_mcp-EX_stale)/(EX_refreshed-EX_stale).",
+  "model_short_name": "haiku",
+  "database_id": "hr_1",
+  "strict_mode": true,
+  "n_queries": 76,
+  "n_queries_scored": 76,
+  "ex_pre": 0.5789,
+  "ex_post_baseline": 0.2105,
+  "ex_post_refreshed_schema": 0.6711,
+  "ex_post_error_feedback": 0.2105,
+  "ex_post_mcp": 0.6184,
+  "recovery_rate": 0.8857,
+  "_counts": {
+    "n_total": 76,
+    "pre_correct": 44,
+    "refreshed_correct": 51,
+    "stale_correct": 16,
+    "error_feedback_correct": 16,
+    "mcp_correct": 47
+  },
+  "per_operator": [
+    {
+      "operator": "TABLE_RENAME",
+      "n": 16,
+      "pre": 9,
+      "refreshed": 9,
+      "stale": 3,
+      "error_feedback": 3,
+      "mcp": 9
+    },
+    {
+      "operator": "TABLE_SPLIT",
+      "n": 16,
+      "pre": 9,
+      "refreshed": 9,
+      "stale": 3,
+      "error_feedback": 3,
+      "mcp": 9
+    },
+    {
+      "operator": "TABLE_MERGE",
+      "n": 14,
+      "pre": 9,
+      "refreshed": 10,
+      "stale": 2,
+      "error_feedback": 2,
+      "mcp": 9
+    },
+    {
+      "operator": "COLUMN_RENAME",
+      "n": 16,
+      "pre": 9,
+      "refreshed": 9,
+      "stale": 5,
+      "error_feedback": 5,
+      "mcp": 9
+    },
+    {
+      "operator": "COLUMN_MERGE",
+      "n": 14,
+      "pre": 8,
+      "refreshed": 14,
+      "stale": 3,
+      "error_feedback": 3,
+      "mcp": 11
+    }
+  ]
+}

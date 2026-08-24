@@ -1,0 +1,24 @@
+{
+  "database_id": "hr_1_COLUMN_MERGE",
+  "model": "haiku",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "hr_cm_01",
+    "hr_cm_02",
+    "hr_cm_03",
+    "hr_cm_04",
+    "hr_cm_05",
+    "hr_cm_06",
+    "hr_cm_07",
+    "hr_cm_08",
+    "hr_cm_09",
+    "hr_cm_10",
+    "hr_cm_11",
+    "hr_cm_12",
+    "hr_cm_13",
+    "hr_cm_14",
+    "hr_cm_15",
+    "hr_cm_16"
+  ]
+}

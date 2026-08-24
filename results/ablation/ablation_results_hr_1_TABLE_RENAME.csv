@@ -1,0 +1,74 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+hr_tr_01,TABLE_RENAME,False,"SELECT first_name, last_name FROM employees",0,1,"SELECT first_name, last_name FROM staff",valid,1,"SELECT first_name, last_name FROM staff",execution_error,1,"SELECT first_name, last_name FROM staff",execution_error,1,"SELECT first_name, last_name FROM staff",skipped
+hr_tr_02,TABLE_RENAME,False,SELECT COUNT(*) FROM employees,0,1,SELECT COUNT(*) FROM staff,valid,1,SELECT COUNT(*) FROM staff,execution_error,1,SELECT COUNT(*) FROM staff,execution_error,1,SELECT COUNT(*) FROM staff,skipped
+hr_tr_03,TABLE_RENAME,False,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,0,"SELECT employee_id, first_name, last_name, salary FROM staff WHERE salary > 7000 ORDER BY salary DESC",silent_failure_suspected,0,"SELECT employee_id, first_name, last_name, salary
+FROM staff
+WHERE salary > 7000
+ORDER BY salary DESC",execution_error,0,"SELECT employee_id, first_name, last_name, salary
+FROM staff
+WHERE salary > 7000
+ORDER BY salary DESC",execution_error,0,"SELECT employee_id, first_name, last_name, salary FROM staff WHERE salary > 7000 ORDER BY salary DESC",skipped
+hr_tr_04,TABLE_RENAME,False,SELECT AVG(salary) FROM employees,0,1,SELECT AVG(salary) FROM staff,valid,1,SELECT AVG(salary) FROM staff,execution_error,1,SELECT AVG(salary) FROM staff,execution_error,1,SELECT AVG(salary) FROM staff,skipped
+hr_tr_05,TABLE_RENAME,False,SELECT email FROM employees,0,1,SELECT email FROM staff,valid,1,SELECT email FROM staff,execution_error,1,SELECT email FROM staff,execution_error,1,SELECT email FROM staff,skipped
+hr_tr_06,TABLE_RENAME,False,SELECT * FROM employees WHERE department_id = 10,0,0,SELECT * FROM staff WHERE department_id = 10,valid,0,SELECT * FROM staff WHERE department_id = 10,execution_error,0,SELECT * FROM staff WHERE department_id = 10,execution_error,0,SELECT * FROM staff WHERE department_id = 10,skipped
+hr_tr_07,TABLE_RENAME,False,SELECT DISTINCT job_id FROM employees,0,0,SELECT DISTINCT job_id FROM staff,valid,0,SELECT DISTINCT job_id FROM staff,execution_error,0,SELECT DISTINCT job_id FROM staff,execution_error,0,SELECT DISTINCT job_id FROM staff,skipped
+hr_tr_08,TABLE_RENAME,False,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,0,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN staff AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",valid,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(s.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN staff s ON d.department_id = s.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",execution_error,0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(s.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN staff s ON d.department_id = s.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",execution_error,0,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN staff AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",skipped
+hr_tr_09,TABLE_RENAME,False,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,0,"SELECT employee_id, first_name, last_name, commission_pct FROM staff WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",silent_failure_suspected,0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM staff
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",execution_error,0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM staff
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",execution_error,0,"SELECT employee_id, first_name, last_name, commission_pct FROM staff WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",skipped
+hr_tr_10,TABLE_RENAME,False,SELECT * FROM employees WHERE manager_id = 1,0,0,SELECT * FROM staff WHERE manager_id = 1,silent_failure_suspected,0,SELECT * FROM staff WHERE manager_id = 1,execution_error,0,SELECT * FROM staff WHERE manager_id = 1,execution_error,0,SELECT * FROM staff WHERE manager_id = 1,skipped
+hr_tr_11,TABLE_RENAME,False,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1,SELECT j.job_title FROM staff AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,valid,1,"SELECT j.job_title
+FROM staff e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",execution_error,1,"SELECT j.job_title
+FROM staff e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",execution_error,1,SELECT j.job_title FROM staff AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,skipped
+hr_tr_12,TABLE_RENAME,False,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,1,SELECT d.department_name FROM staff AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,valid,1,"SELECT d.department_name
+FROM staff e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",execution_error,1,"SELECT d.department_name
+FROM staff e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",execution_error,1,SELECT d.department_name FROM staff AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,skipped
+hr_tr_13,TABLE_RENAME,False,SELECT start_date FROM job_history WHERE employee_id = 1,1,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,valid,1,SELECT start_date FROM job_history WHERE employee_id = 1,skipped
+hr_tr_14,TABLE_RENAME,False,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,0,SELECT * FROM staff WHERE hire_date > '2007-06-20',silent_failure_suspected,0,SELECT * FROM staff WHERE hire_date > '2007-06-20',execution_error,0,SELECT * FROM staff WHERE hire_date > '2007-06-20',execution_error,0,SELECT * FROM staff WHERE hire_date > '2007-06-20',skipped
+hr_tr_15,TABLE_RENAME,False,SELECT DISTINCT region_name FROM regions,1,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,skipped
+hr_tr_16,TABLE_RENAME,False,SELECT COUNT(*) FROM jobs,1,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,skipped

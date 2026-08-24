@@ -1,0 +1,147 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+cs_cm_01,COLUMN_MERGE,List singer names with countries merged.,False,"SELECT Name, Country FROM singer",0,1.0885,179,15,0,0,"I need to analyze the schema changes and the question carefully.
+
+Initial schema for `singer` table:
+- Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male
+
+After schema changes:
+1. COLUMN_RENAME: ""Country"" → ""Name_Country""
+2. COLUMN_REMOVE: ""Name"" column is removed
+
+So the current `singer` table has:
+- Singer_ID, Song_Name, Song_release_year, Age, Is_male, Name_Country
+
+The question asks to ""List singer names with countries merged."" However, the ""Name"" column has been removed from the singer table. The only column that might contain name information is ""Name_Country"" which was originally the ""Country"" column.
+
+Given the schema changes, it appears the data that was in separate ""Name"" and ""Country"" columns has been merged into ""Name_Country"". So I should select the Name_Country column from the singer table.
+
+```sql
+SELECT DISTINCT Name_Country FROM singer",0,2.4967,286,233,SELECT Name_Country FROM singer,1,4.2033,3809,207,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name_Country FROM singer""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_02,COLUMN_MERGE,Count singers from France.,False,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,0.9923,177,16,0,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,1.0071,284,23,"The query is syntactically correct but may be returning 0 results. However, the query structure is valid for counting singers from France using the current schema. Here is the correct SQL:
+
+SELECT COUNT(*) FROM singer WHERE Name_Country = 'France'",0,10.7905,7049,409,5,4,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Name_Country = 'France'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Name_Country FROM singer LIMIT 10""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) AS singer_count FROM singer WHERE Name_Country = 'France'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}]",anthropic
+cs_cm_03,COLUMN_MERGE,Merged name for Singer_ID 1.,False,SELECT Name FROM singer WHERE Singer_ID = 1,0,0.8382,182,20,0,0,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,1.0311,289,22,SELECT Name_Country FROM singer WHERE Singer_ID = 1,1,4.5624,3854,248,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name_Country FROM singer WHERE Singer_ID = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_04,COLUMN_MERGE,Merged names for singers over 40.,False,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Age > 40",0,0.9276,181,33,0,0,"SELECT s.Song_Name
+FROM singer s
+WHERE s.Age > 40",0,1.1587,288,26,"SELECT Singer_ID, Song_Name, Age, Name_Country FROM singer WHERE Age > 40",0,4.6483,3859,266,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Singer_ID, Song_Name, Age, Name_Country FROM singer WHERE Age > 40""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_05,COLUMN_MERGE,Merged name for the song 'Sun'.,False,"SELECT GROUP_CONCAT(Name, ' ') as merged_name
+FROM singer
+WHERE Song_Name = 'Sun'",0,1.2715,182,36,0,0,"SELECT Song_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,0.9427,289,25,SELECT GROUP_CONCAT(Name_Country) FROM singer WHERE Song_Name = 'Sun' GROUP BY Song_Name,1,15.1808,13767,858,8,8,1,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Name_Country FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(Name_Country) FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Song_Name || ' ' || Name_Country FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(Song_Name || ' ' || Name_Country) FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Name_Country FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(DISTINCT Name_Country, ',') FROM singer WHERE Song_Name = 'Sun'""}, ""result"": {""verdict"": ""execution_error"", ""reason"": ""DISTINCT aggregates must have exactly one argument""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(Name_Country) FROM singer WHERE Song_Name = 'Sun' GROUP BY Song_Name""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}]",anthropic
+cs_cm_06,COLUMN_MERGE,Count singers with songs released since 2010.,False,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,1.1388,182,25,1,1,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,1,1.0609,289,25,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year > 2010,1,4.2881,3832,235,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year > 2010""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_07,COLUMN_MERGE,List merged names and song titles.,False,"SELECT DISTINCT s.Name, s.Song_Name
+FROM singer s
+ORDER BY s.Name, s.Song_Name",0,1.0906,179,36,0,0,"SELECT singer.Name_Country, singer.Song_Name
+FROM singer
+```
+
+Wait, let me reconsider. The schema changes show that the ""Name"" column was removed from the singer table, and ""Country"" was renamed to ""Name_Country"". The question asks for ""merged names and song titles"" but there's no name column available anymore after the removal.
+
+Looking at the available tables and columns after the schema changes:
+- singer table has: Singer_ID, Name_Country (renamed from Country), Song_Name, Song_release_year, Age, Is_male
+- The Name column was removed
+
+Since ""merged names"" likely refers to combining information, and we have Name_Country and Song_Name available:
+
+```sql
+SELECT Name_Country, Song_Name
+FROM singer",0,2.6158,286,178,SELECT Song_Name || ' - ' || Name_Country AS merged_names_and_songs FROM singer,0,6.1591,3971,386,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT Song_Name || ' - ' || Name_Country AS merged_names_and_songs FROM singer""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_08,COLUMN_MERGE,Merged names for male singers.,False,"SELECT GROUP_CONCAT(Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,1.5147,179,71,0,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_names
+FROM singer
+WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = 'yes' OR Is_male = 'Yes' OR Is_male = '1'",0,2.458,286,73,"SELECT GROUP_CONCAT(Song_Name, ', ') as merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = '1'",0,5.6404,3896,335,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(Song_Name, ', ') as merged_names FROM singer WHERE Is_male = 'true' OR Is_male = 'True' OR Is_male = '1'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_09,COLUMN_MERGE,Count singers from the United States.,False,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,1.0673,179,17,0,0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,1.2313,286,24,"Perfect! The query is valid.
+
+SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '%United States%'",0,9.3664,8850,459,6,5,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Name_Country = 'USA'""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""empty_result_on_affirmative_question""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Name_Country FROM singer""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '%United States%'""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_10,COLUMN_MERGE,Merged names for concert 1 singers.,False,"SELECT GROUP_CONCAT(s.Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1.1888,182,62,0,0,"SELECT GROUP_CONCAT(s.Song_Name, ', ') AS merged_names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,1.1931,289,64,"SELECT GROUP_CONCAT(s.Song_Name, ', ') as merged_names
+FROM singer_in_concert sic
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+WHERE sic.Concert_ID = 1",0,5.6794,3884,313,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(s.Song_Name, ', ') as merged_names\nFROM singer_in_concert sic\nJOIN singer s ON sic.Singer_ID = s.Singer_ID\nWHERE sic.Concert_ID = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_11,COLUMN_MERGE,Merged names for songs released between 2000 and 2014.,False,"SELECT GROUP_CONCAT(Song_Name, ', ') AS merged_song_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1.1095,188,48,0,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,1.238,295,47,"SELECT GROUP_CONCAT(Song_Name, ' ') AS merged_names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,3.8495,3850,249,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT GROUP_CONCAT(Song_Name, ' ') AS merged_names\nFROM singer\nWHERE Song_release_year BETWEEN 2000 AND 2014""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_12,COLUMN_MERGE,Count singers aged 30 or above.,False,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,1.3009,181,15,1,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0.9236,288,15,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,3.9035,3820,217,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM singer WHERE Age >= 30""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_13,COLUMN_MERGE,List stadiums with capacity over 10000.,False,SELECT * FROM stadium WHERE Capacity > 10000,0,0.853,182,15,0,0,SELECT * FROM stadium WHERE Capacity > 10000,0,0.9402,289,15,SELECT * FROM stadium WHERE Capacity > 10000,0,4.3313,3776,171,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT * FROM stadium WHERE Capacity > 10000""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_14,COLUMN_MERGE,Count concerts.,False,SELECT COUNT(*) FROM concert,1,2.1115,175,10,1,1,SELECT COUNT(*) FROM concert,1,1.4096,282,10,SELECT COUNT(*) FROM concert,1,3.9379,3783,199,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM concert""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+cs_cm_15,COLUMN_MERGE,List all singer names.,True,SELECT Name FROM singer,,1.349,177,8,,,"I need to analyze the schema changes and determine what happened to the singer table.
+
+Initial schema for singer table:
+- Singer_ID INTEGER
+- Name TEXT
+- Country TEXT
+- Song_Name TEXT
+- Song_release_year INTEGER
+- Age INTEGER
+- Is_male TEXT
+
+After schema changes:
+1. COLUMN_RENAME: ""Country"" → ""Name_Country""
+2. COLUMN_REMOVE: ""Name"" column removed
+
+After these changes, the singer table no longer has a ""Name"" column. The ""Name_Country"" column appears to be a renamed ""Country"" column, which would contain country information, not singer names.
+
+Since the ""Name"" column has been removed from the singer table, there is no column available that contains singer names in the current schema. However, the question asks to ""List all singer names"" which is impossible with the current schema as the Name column no longer exists.
+
+Given this situation, I should return an empty result or indicate that the data is unavailable. The most appropriate SQL response would be:
+
+```sql
+SELECT NULL AS Name WHERE 0
+```
+
+However, if the intent is to show that this is impossible, the most honest answer is:
+
+```sql
+SELECT 'No singer names available' AS error
+```
+
+But the most technically correct response given the schema constraints is:
+
+```sql
+SELECT DISTINCT Singer_ID FROM singer
+```
+
+Since there's no Name column available, I'll return an empty selection that acknowledges the column doesn't exist:
+
+```sql
+SELECT NULL LIMIT 0
+```
+
+Actually, the most appropriate response is to simply try to select from what's available, which would be nothing for names:
+
+```sql
+SELECT DISTINCT Singer_ID FROM singer
+```
+
+But given the question explicitly asks for names and they don't exist, the truest answer is:
+
+```sql
+SELECT NULL WHERE FALSE
+```
+
+Let me reconsider - the question asks for singer names, but that column was deleted. The query should reflect this impossibility:
+
+```sql
+SELECT NULL LIMIT 0",,5.1085,284,451,"I see the schema has changed. The `Name` column has been removed from the `singer` table, and `Country` has been renamed to `Name_Country`. However, the question asks to ""List all singer names,"" but the `Name` column no longer exists in the current schema.
+
+Based on the current schema, there is no `Name` column available in the `singer` table. The available columns are: `Singer_ID`, `Song_Name`, `Song_release_year`, `Age`, `Is_male`, and `Name_Country`.
+
+Since the `Name` column has been removed from the database, I cannot fulfill the original request to list all singer names. The closest alternative would be to list `Song_Name` values, but that's not the same as singer names.
+
+Could you clarify:
+1. Should I list `Song_Name` instead of singer names?
+2. Or is there another way the singer names are now stored in the database?",,5.7154,2341,279,2,1,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}]",anthropic
+cs_cm_16,COLUMN_MERGE,List distinct singer countries.,True,SELECT DISTINCT Country FROM singer,,0.9563,177,10,,,SELECT DISTINCT Name_Country FROM singer,,1.1848,284,12,SELECT DISTINCT Name_Country FROM singer,,4.8398,5303,248,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 2}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT DISTINCT Country FROM singer""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT DISTINCT Name_Country FROM singer""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

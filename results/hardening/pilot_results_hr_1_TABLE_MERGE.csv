@@ -1,0 +1,144 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tm_01,TABLE_MERGE,List department names with cities.,"SELECT department_name, city FROM department_location ORDER BY department_id",False,,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,"SELECT DISTINCT department_name, city
+FROM department_location
+ORDER BY department_name, city",1,"SELECT d.department_name, l.city
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id",0,1,no such table: departments,anthropic,"SELECT department_name, city FROM department_location",ast,valid,1,1,0,1.691,1.7413,1.0197,0.9254,1.1572,0.887791,anthropic
+hr_tm_02,TABLE_MERGE,Count departments per country.,"SELECT country_id, COUNT(*) FROM department_location GROUP BY country_id ORDER BY country_id",False,,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,"SELECT country_id, COUNT(DISTINCT department_id) as department_count
+FROM department_location
+GROUP BY country_id
+ORDER BY country_id",1,"SELECT c.country_name, COUNT(DISTINCT d.department_id) AS department_count
+FROM countries c
+LEFT JOIN locations l ON c.country_id = l.country_id
+LEFT JOIN departments d ON l.location_id = d.location_id
+GROUP BY c.country_id, c.country_name
+ORDER BY c.country_name",0,1,no such table: locations,anthropic,"SELECT c.country_name, COUNT(DISTINCT dl.department_id) AS department_count 
+FROM countries AS c 
+LEFT JOIN department_location AS dl ON c.country_id = dl.country_id 
+GROUP BY c.country_id, c.country_name 
+ORDER BY c.country_name",ast,valid,0,0,0,1.1968,1.3354,1.0647,3.24,1.0497,1.437334,anthropic
+hr_tm_03,TABLE_MERGE,Street address for department 10.,SELECT street_address FROM department_location WHERE department_id=10,False,,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,SELECT street_address FROM department_location WHERE department_id = 10,1,SELECT street_address FROM locations WHERE location_id = (SELECT location_id FROM departments WHERE department_id = 10),0,1,no such table: locations,anthropic,SELECT street_address FROM department_location WHERE department_id = 10,ast,valid,1,1,0,1.1938,1.0257,1.395,0.9088,0.9026,0.926084,anthropic
+hr_tm_04,TABLE_MERGE,Departments in City1.,SELECT department_name FROM department_location WHERE city='City1',False,,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,"SELECT DISTINCT department_id, department_name
+FROM department_location
+WHERE city = 'City1'",0,"SELECT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.city = 'City1'",0,1,no such table: departments,anthropic,"SELECT dl.department_id, dl.department_name FROM department_location AS dl WHERE dl.city = 'City1'",ast,valid,0,0,0,1.7089,1.1305,1.5308,1.6399,1.0554,1.030875,anthropic
+hr_tm_05,TABLE_MERGE,Department names with postal codes.,"SELECT department_name, postal_code FROM department_location ORDER BY department_id",False,,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,"SELECT department_name, postal_code
+FROM department_location",1,"SELECT DISTINCT d.department_name, l.postal_code
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_name, postal_code FROM department_location ORDER BY department_name",ast,valid,1,1,0,1.0616,1.2292,0.8999,0.9397,0.991,0.967583,anthropic
+hr_tm_06,TABLE_MERGE,Count departments in State1.,SELECT COUNT(*) FROM department_location WHERE state_province='State1',False,,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,"SELECT COUNT(DISTINCT department_id) 
+FROM department_location 
+WHERE state_province = 'State1'",1,"SELECT COUNT(DISTINCT d.department_id)
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.state_province = 'State1'",0,1,no such table: departments,anthropic,SELECT COUNT(DISTINCT department_id) FROM department_location WHERE state_province = 'State1',ast,valid,1,1,0,0.9904,0.8592,1.0148,1.1973,0.9377,1.100958,anthropic
+hr_tm_07,TABLE_MERGE,List location IDs with department names.,"SELECT location_id, department_name FROM department_location ORDER BY location_id",False,,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,"SELECT location_id, department_name FROM department_location",1,"SELECT l.location_id, d.department_name
+FROM locations l
+LEFT JOIN departments d ON l.location_id = d.location_id
+ORDER BY l.location_id",0,1,no such table: locations,anthropic,"SELECT location_id, department_name FROM department_location ORDER BY location_id",ast,valid,1,1,0,1.5205,1.434,0.9212,0.9294,1.1503,1.06925,anthropic
+hr_tm_08,TABLE_MERGE,Departments in country C01.,SELECT department_name FROM department_location WHERE country_id='C01',False,,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM department_location d
+WHERE d.country_id = 'C01'
+ORDER BY d.department_id",0,"SELECT DISTINCT d.department_id, d.department_name
+FROM departments d
+JOIN locations l ON d.location_id = l.location_id
+WHERE l.country_id = 'C01'",0,1,no such table: departments,anthropic,"SELECT DISTINCT department_id, department_name FROM department_location WHERE country_id = 'C01'",ast,valid,0,0,0,1.0944,0.971,1.2974,1.3158,1.0577,0.926834,anthropic
+hr_tm_09,TABLE_MERGE,Count distinct cities with departments.,SELECT COUNT(DISTINCT city) FROM department_location,False,,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,SELECT COUNT(DISTINCT city) FROM department_location,1,"SELECT COUNT(DISTINCT l.city)
+FROM locations l
+INNER JOIN departments d ON l.location_id = d.location_id",0,1,no such table: locations,anthropic,SELECT COUNT(DISTINCT city) FROM department_location,ast,valid,1,1,0,0.9904,0.9214,1.0827,0.9646,1.2533,0.662209,anthropic
+hr_tm_10,TABLE_MERGE,List department names with manager IDs.,"SELECT department_name, manager_id FROM department_location ORDER BY department_id",False,,"SELECT department_name, manager_id FROM departments",1,"SELECT department_name, manager_id FROM departments",0,"SELECT department_name, manager_id FROM department_location",1,"SELECT department_name, manager_id FROM departments",0,1,no such table: departments,anthropic,"SELECT department_name, manager_id FROM department_location",ast,valid,1,1,0,5.915,1.0259,0.9553,0.8728,3.2248,0.500125,anthropic
+hr_tm_11,TABLE_MERGE,Employee departments by name.,"SELECT e.employee_id, dl.department_name FROM employees e JOIN department_location dl ON e.department_id=dl.department_id ORDER BY e.employee_id",False,,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,"SELECT DISTINCT d.department_name
+FROM department_location d
+ORDER BY d.department_name",0,"SELECT DISTINCT
+    e.first_name,
+    e.last_name,
+    d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+ORDER BY e.first_name, e.last_name, d.department_name",0,1,no such table: departments,anthropic,"SELECT DISTINCT e.first_name, e.last_name, dl.department_name 
+FROM employees AS e 
+JOIN department_location AS dl ON e.department_id = dl.department_id 
+ORDER BY e.first_name, e.last_name, dl.department_name",ast,valid,0,0,0,1.5002,1.3328,1.0193,1.0343,1.0543,1.309292,anthropic
+hr_tm_12,TABLE_MERGE,Job history cities.,"SELECT j.employee_id, dl.city FROM job_history j JOIN department_location dl ON j.department_id=dl.department_id ORDER BY j.employee_id",False,,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,"SELECT DISTINCT dl.city
+FROM job_history jh
+JOIN department_location dl ON jh.department_id = dl.department_id
+ORDER BY dl.city",0,"SELECT DISTINCT l.city
+FROM job_history jh
+JOIN departments d ON jh.department_id = d.department_id
+JOIN locations l ON d.location_id = l.location_id
+ORDER BY l.city",0,1,no such table: departments,anthropic,SELECT DISTINCT dl.city FROM job_history AS jh JOIN department_location AS dl ON jh.department_id = dl.department_id ORDER BY dl.city,ast,valid,0,0,0,1.1624,1.0256,0.9491,1.1796,1.7197,4.435667,anthropic
+hr_tm_13,TABLE_MERGE,List job titles.,SELECT job_title FROM jobs ORDER BY job_id,False,,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,SELECT DISTINCT job_title FROM jobs,1,0,,anthropic,SELECT DISTINCT job_title FROM jobs,ast,valid,1,0,0,0.8876,1.1585,0.9936,0.0015,0.0306,0.571459,anthropic
+hr_tm_14,TABLE_MERGE,Count regions.,SELECT COUNT(*) FROM regions,False,,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,SELECT COUNT(*) FROM regions,1,0,,anthropic,SELECT COUNT(*) FROM regions,ast,valid,1,0,0,2.0206,1.0074,1.1372,0.0007,0.032,0.812416,anthropic
+hr_tm_15,TABLE_MERGE,List all cities.,,True,unanswerable_after_TABLE_MERGE,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM locations,,SELECT DISTINCT city FROM department_location,,SELECT DISTINCT city FROM locations,,1,no such table: locations,anthropic,SELECT DISTINCT city FROM department_location,ast,valid,,0,0,0.99,1.3326,0.9214,3.6836,1.0479,0.651166,anthropic
+hr_tm_16,TABLE_MERGE,Count locations.,,True,unanswerable_after_TABLE_MERGE,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM locations,,SELECT COUNT(*) FROM department_location,,SELECT COUNT(*) FROM locations,,1,no such table: locations,anthropic,SELECT COUNT(*) FROM department_location,ast,valid,,0,0,0.7977,0.9444,0.8813,39.6038,1.1526,0.79625,anthropic

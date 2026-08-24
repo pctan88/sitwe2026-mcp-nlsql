@@ -1,0 +1,35 @@
+{
+  "n_queries": 20,
+  "ex_pre": 0.65,
+  "ex_post_baseline": 0.05,
+  "ex_post_mcp": 0.65,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.25,
+  "mean_baseline_latency_s": 6.1671,
+  "mean_mcp_latency_s": 1.8244,
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "singer",
+      "to": "artist"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "artist",
+      "from": "Song_Name",
+      "to": "song_title"
+    },
+    {
+      "op": "COLUMN_RENAME",
+      "table": "artist",
+      "from": "Song_release_year",
+      "to": "debut_year"
+    }
+  ],
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "a3038e2117a9fe5edfa61e08b142426569b54b315a378c04a6e78c527612abac",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": false
+}

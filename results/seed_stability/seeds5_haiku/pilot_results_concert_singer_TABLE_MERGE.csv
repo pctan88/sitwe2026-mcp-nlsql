@@ -1,0 +1,170 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_tm_01,TABLE_MERGE,List concert names with singer IDs.,"SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID",False,,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+ORDER BY c.concert_Name, sic.Singer_ID",1,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+ORDER BY c.concert_Name, sic.Singer_ID",0,"SELECT concert_Name, Singer_ID FROM concert_performance",1,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+ORDER BY c.concert_Name, sic.Singer_ID",0,1,no such table: concert,anthropic,"SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY concert_Name, Singer_ID",ast,valid,1,1,0,1.1574,1.1099,1.2873,1.145,1.0982,7.344958,anthropic
+cs_tm_02,TABLE_MERGE,Count singers per concert.,"SELECT Concert_ID, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID",False,,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,"SELECT 
+    cp.Concert_ID,
+    cp.concert_Name,
+    COUNT(DISTINCT cp.Singer_ID) AS singer_count
+FROM concert_performance cp
+GROUP BY cp.Concert_ID, cp.concert_Name
+ORDER BY cp.Concert_ID",0,"SELECT 
+    c.Concert_ID,
+    c.concert_Name,
+    COUNT(s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Concert_ID, c.concert_Name
+ORDER BY c.Concert_ID",0,1,no such table: concert,anthropic,"SELECT cp.Concert_ID, cp.concert_Name, COUNT(DISTINCT cp.Singer_ID) AS singer_count FROM concert_performance AS cp LEFT JOIN singer AS s ON cp.Singer_ID = s.Singer_ID GROUP BY cp.Concert_ID, cp.concert_Name ORDER BY cp.Concert_ID",ast,valid,0,0,0,1.6099,1.2829,1.0968,1.2888,2.5275,7.2,anthropic
+cs_tm_03,TABLE_MERGE,Concerts in 2015 with singer IDs.,"SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year=2015 ORDER BY Singer_ID",False,,"SELECT c.Concert_ID, c.concert_Name, c.Year, sic.Singer_ID
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015
+ORDER BY c.Concert_ID, sic.Singer_ID",0,"SELECT c.Concert_ID, c.concert_Name, c.Theme, c.Year, sic.Singer_ID
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015
+ORDER BY c.Concert_ID, sic.Singer_ID",0,"SELECT Concert_ID, concert_Name, Singer_ID, Year
+FROM concert_performance
+WHERE Year = 2015",0,"SELECT c.Concert_ID, c.concert_Name, c.Theme, c.Year, sic.Singer_ID
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015
+ORDER BY c.Concert_ID, sic.Singer_ID",0,1,no such table: concert,anthropic,"SELECT Concert_ID, concert_Name, Theme, Year, Singer_ID FROM concert_performance WHERE Year = 2015 ORDER BY Concert_ID, Singer_ID",ast,valid,0,0,0,1.2535,1.5468,1.1055,1.5247,1.5978,1.783292,anthropic
+cs_tm_04,TABLE_MERGE,Themes with singer counts.,"SELECT Theme, COUNT(*) FROM concert_performance GROUP BY Theme ORDER BY Theme",False,,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Theme
+ORDER BY c.Theme",1,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Theme
+ORDER BY c.Theme",0,"SELECT Theme, COUNT(DISTINCT Singer_ID) as singer_count
+FROM concert_performance
+GROUP BY Theme
+ORDER BY Theme",1,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+GROUP BY c.Theme
+ORDER BY c.Theme",0,1,no such table: concert,anthropic,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) AS singer_count FROM concert_performance AS cp LEFT JOIN singer AS s ON cp.Singer_ID = s.Singer_ID GROUP BY cp.Theme ORDER BY cp.Theme",ast,valid,1,1,0,1.2326,1.3641,1.6086,1.1419,2.3763,1.832125,anthropic
+cs_tm_05,TABLE_MERGE,Distinct concert names.,SELECT DISTINCT concert_Name FROM concert_performance ORDER BY concert_Name,False,,SELECT DISTINCT concert_Name FROM concert,1,SELECT DISTINCT concert_Name FROM concert,0,SELECT DISTINCT concert_Name FROM concert_performance,1,SELECT DISTINCT concert_Name FROM concert,0,1,no such table: concert,anthropic,SELECT DISTINCT concert_Name FROM concert_performance,ast,valid,1,1,0,0.9023,1.0016,1.3217,1.3683,1.156,0.756958,anthropic
+cs_tm_06,TABLE_MERGE,Singer names in concert 2.,SELECT s.Name FROM singer s JOIN concert_performance cp ON s.Singer_ID=cp.Singer_ID WHERE cp.Concert_ID=2 ORDER BY s.Name,False,,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",0,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID
+WHERE cp.Concert_ID = 2",1,"SELECT DISTINCT s.Name
+FROM singer s
+JOIN concert c ON s.Singer_ID = c.Concert_ID
+WHERE c.Concert_ID = 2",0,1,no such table: singer_in_concert,anthropic,SELECT DISTINCT s.Name FROM singer AS s JOIN concert_performance AS cp ON s.Singer_ID = cp.Singer_ID WHERE cp.Concert_ID = 2,ast,valid,1,1,0,1.0861,1.1415,0.9669,1.4375,1.2739,1.204166,anthropic
+cs_tm_07,TABLE_MERGE,Themes for singer 3.,SELECT Theme FROM concert_performance WHERE Singer_ID=3 ORDER BY Theme,False,,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",1,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,"SELECT DISTINCT Theme
+FROM concert_performance
+WHERE Singer_ID = 3",1,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,1,no such table: concert,anthropic,SELECT DISTINCT Theme FROM concert_performance WHERE Singer_ID = 3,ast,valid,1,1,0,1.718,1.2659,0.9654,1.1088,1.2408,6.055333,anthropic
+cs_tm_08,TABLE_MERGE,Count distinct concerts for singer 5.,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID=5,False,,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,1,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,1,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,1,no such table: singer_in_concert,anthropic,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,ast,valid,1,1,0,1.0685,1.0092,1.0949,1.1254,1.9966,1.318333,anthropic
+cs_tm_09,TABLE_MERGE,List concert names with singer names.,"SELECT cp.concert_Name, s.Name FROM concert_performance cp JOIN singer s ON s.Singer_ID=cp.Singer_ID ORDER BY cp.Concert_ID, s.Name",False,,"SELECT c.concert_Name, s.Name
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",1,"SELECT c.concert_Name, s.Name
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",0,"SELECT DISTINCT cp.concert_Name, s.Name
+FROM concert_performance cp
+JOIN singer s ON cp.Singer_ID = s.Singer_ID
+ORDER BY cp.concert_Name, s.Name",1,"SELECT c.concert_Name, s.Name
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+JOIN singer s ON sic.Singer_ID = s.Singer_ID
+ORDER BY c.concert_Name, s.Name",0,1,no such table: concert,anthropic,"SELECT cp.concert_Name, s.Name FROM concert_performance AS cp JOIN singer AS s ON cp.Singer_ID = s.Singer_ID ORDER BY cp.concert_Name, s.Name",ast,valid,1,1,0,2.0277,1.2027,1.221,2.02,1.2857,7.919125,anthropic
+cs_tm_10,TABLE_MERGE,Concerts held in stadium 2.,SELECT Concert_ID FROM concert_performance WHERE Stadium_ID=2 ORDER BY Concert_ID,False,,SELECT * FROM concert WHERE Stadium_ID = 2,0,SELECT * FROM concert WHERE Stadium_ID = 2,0,SELECT * FROM concert_performance WHERE Stadium_ID = 2,0,SELECT * FROM concert WHERE Stadium_ID = 2,0,1,no such table: concert,anthropic,SELECT * FROM concert_performance WHERE Stadium_ID = 2,ast,valid,0,0,0,1.2378,2.3597,1.1099,0.9028,0.9885,0.974166,anthropic
+cs_tm_11,TABLE_MERGE,Singer counts per theme in 2014.,"SELECT Theme, COUNT(*) FROM concert_performance WHERE Year=2014 GROUP BY Theme ORDER BY Theme",False,,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) AS singer_count
+FROM concert c
+LEFT JOIN singer_in_concert s ON c.Concert_ID = s.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",1,"SELECT c.Theme, COUNT(DISTINCT s.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+LEFT JOIN singer s ON sic.Singer_ID = s.Singer_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme
+ORDER BY c.Theme",0,"SELECT Theme, COUNT(DISTINCT Singer_ID) as Singer_Count
+FROM concert_performance
+WHERE Year = 2014
+GROUP BY Theme",1,"SELECT c.Theme, COUNT(DISTINCT sic.Singer_ID) as singer_count
+FROM concert c
+LEFT JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme
+ORDER BY c.Theme",0,1,no such table: concert,anthropic,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) AS singer_count FROM concert_performance AS cp LEFT JOIN singer AS s ON cp.Singer_ID = s.Singer_ID WHERE cp.Year = 2014 GROUP BY cp.Theme ORDER BY cp.Theme",ast,valid,1,1,0,1.222,1.469,1.24,1.1676,1.8832,9.20025,anthropic
+cs_tm_12,TABLE_MERGE,Singer IDs for 'Week 1' concerts.,SELECT Singer_ID FROM concert_performance WHERE concert_Name='Week 1' ORDER BY Singer_ID,False,,"SELECT DISTINCT s.Singer_ID
+FROM singer_in_concert s
+JOIN concert c ON s.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",1,"SELECT DISTINCT s.Singer_ID
+FROM singer_in_concert s
+JOIN concert c ON s.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,"I need to find Singer IDs for 'Week 1' concerts. However, looking at the schema provided, I don't see a ""Week"" column in the concert_performance table. The concert_performance table has: Concert_ID, concert_Name, Theme, Stadium_ID, Year, and Singer_ID.
+
+Since there's no explicit ""Week 1"" field, the question likely refers to concerts with ""Week 1"" in the concert_Name. Let me write a query to find Singer IDs where the concert name contains ""Week 1"":
+
+```sql
+SELECT DISTINCT Singer_ID FROM concert_performance WHERE concert_Name LIKE '%Week 1%'",0,"SELECT DISTINCT sic.Singer_ID
+FROM singer_in_concert sic
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,1,no such table: singer_in_concert,anthropic,SELECT DISTINCT Singer_ID FROM concert_performance WHERE concert_Name = 'Week 1',ast,valid,1,1,0,1.0978,1.3935,2.3831,1.4091,1.1475,1.624834,anthropic
+cs_tm_13,TABLE_MERGE,List stadium locations.,SELECT Location FROM stadium ORDER BY Stadium_ID,False,,SELECT DISTINCT Location FROM stadium,1,SELECT DISTINCT Location FROM stadium,1,SELECT DISTINCT Location FROM stadium,1,SELECT DISTINCT Location FROM stadium,1,0,,anthropic,SELECT DISTINCT Location FROM stadium,ast,valid,1,0,0,1.0248,1.0619,1.0081,0.0006,0.0459,0.968792,anthropic
+cs_tm_14,TABLE_MERGE,Count stadiums.,SELECT COUNT(*) FROM stadium,False,,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,0,,anthropic,SELECT COUNT(*) FROM stadium,ast,valid,1,0,0,0.9343,1.0653,1.6216,0.0006,0.0455,0.931583,anthropic
+cs_tm_15,TABLE_MERGE,List all concert themes.,,True,unanswerable_after_TABLE_MERGE,SELECT DISTINCT Theme FROM concert,,SELECT DISTINCT Theme FROM concert,,SELECT DISTINCT Theme FROM concert_performance,,SELECT DISTINCT Theme FROM concert,,1,no such table: concert,anthropic,SELECT DISTINCT Theme FROM concert_performance,ast,valid,,0,0,0.868,1.1213,0.9431,1.5141,0.921,0.925042,anthropic
+cs_tm_16,TABLE_MERGE,Count concerts by year.,,True,unanswerable_after_TABLE_MERGE,"SELECT Year, COUNT(*) as concert_count
+FROM concert
+GROUP BY Year
+ORDER BY Year",,"SELECT Year, COUNT(*) as concert_count
+FROM concert
+GROUP BY Year
+ORDER BY Year",,"SELECT Year, COUNT(*) as concert_count
+FROM concert_performance
+GROUP BY Year
+ORDER BY Year",,"SELECT Year, COUNT(*) as concert_count
+FROM concert
+GROUP BY Year
+ORDER BY Year",,1,no such table: concert,anthropic,"SELECT Year, COUNT(DISTINCT Concert_ID) AS concert_count FROM concert_performance GROUP BY Year ORDER BY Year",ast,valid,,0,0,1.219,1.2704,2.8612,1.3519,1.1448,0.906125,anthropic

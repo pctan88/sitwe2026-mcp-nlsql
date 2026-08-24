@@ -1,0 +1,56 @@
+{
+  "database_id": "concert_singer_TABLE_SPLIT",
+  "pre_db": "concert_singer_pre.sqlite",
+  "post_db": "concert_singer_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "884bbd53445ab920",
+    "specs": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "singer",
+        "targets": [
+          "singer_info",
+          "singer_songs"
+        ],
+        "key": "Singer_ID",
+        "partition": {
+          "singer_info": [
+            "Name",
+            "Country",
+            "Age",
+            "Is_male"
+          ],
+          "singer_songs": [
+            "Song_Name",
+            "Song_release_year"
+          ]
+        }
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "singer",
+        "targets": [
+          "singer_info",
+          "singer_songs"
+        ],
+        "key": "Singer_ID",
+        "partition": {
+          "singer_info": [
+            "Name",
+            "Country",
+            "Age",
+            "Is_male"
+          ],
+          "singer_songs": [
+            "Song_Name",
+            "Song_release_year"
+          ]
+        }
+      }
+    ]
+  }
+}

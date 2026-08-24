@@ -1,0 +1,416 @@
+{
+  "database_id": "concert_singer_TABLE_SPLIT",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.875,
+  "ex_post_baseline": 0.125,
+  "ex_post_refreshed_schema": 0.9375,
+  "ex_post_error_feedback": 0.125,
+  "ex_post_mcp": 0.875,
+  "recovery_rate": 0.9231,
+  "silent_failure_detection_rate": 0.5,
+  "mean_baseline_latency_s": 1.4501,
+  "mean_refreshed_schema_latency_s": 1.273,
+  "mean_error_feedback_latency_s": 1.4914,
+  "mean_mcp_latency_s": 1.5395,
+  "latencies": {
+    "pre_s": [
+      0.9059,
+      2.4195,
+      1.74,
+      1.4667,
+      1.4504,
+      2.206,
+      1.6268,
+      0.8356,
+      0.6257,
+      0.7902,
+      4.797,
+      0.9351,
+      0.7313,
+      0.9653,
+      0.864,
+      0.5166
+    ],
+    "baseline_s": [
+      0.844,
+      0.866,
+      2.3886,
+      1.1548,
+      1.1572,
+      1.201,
+      1.5545,
+      1.6023,
+      4.1029,
+      0.8049,
+      0.5219,
+      1.6013,
+      1.0347,
+      0.7104,
+      1.044,
+      2.6131
+    ],
+    "refreshed_schema_s": [
+      1.2221,
+      0.6873,
+      1.1141,
+      1.6637,
+      1.4866,
+      0.6861,
+      1.2077,
+      1.0196,
+      2.4742,
+      1.2535,
+      1.249,
+      1.5359,
+      0.912,
+      1.1745,
+      0.7527,
+      1.9297
+    ],
+    "error_feedback_s": [
+      0.7796,
+      1.1319,
+      0.7817,
+      1.41,
+      1.1865,
+      3.4013,
+      0.6387,
+      2.081,
+      1.2254,
+      1.591,
+      0.7208,
+      1.2644,
+      6.2724,
+      1.3756,
+      0.0011,
+      0.0014
+    ],
+    "mcp_s": [
+      1.6624,
+      1.0969,
+      1.4784,
+      1.737,
+      4.3255,
+      0.9119,
+      2.6456,
+      1.3735,
+      1.0424,
+      0.8037,
+      0.6736,
+      1.1317,
+      4.2155,
+      1.5304,
+      0.0022,
+      0.0019
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 1.429756,
+      "median": 0.9502,
+      "q1": 0.8129,
+      "q3": 1.6834,
+      "iqr": 0.8705,
+      "p95": 4.797,
+      "min": 0.5166,
+      "max": 4.797
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 1.4501,
+      "median": 1.156,
+      "q1": 0.855,
+      "q3": 1.6018,
+      "iqr": 0.7468,
+      "p95": 4.1029,
+      "min": 0.5219,
+      "max": 4.1029
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.273044,
+      "median": 1.2149,
+      "q1": 0.9658,
+      "q3": 1.51125,
+      "iqr": 0.54545,
+      "p95": 2.4742,
+      "min": 0.6861,
+      "max": 2.4742
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 1.491425,
+      "median": 1.20595,
+      "q1": 0.7502,
+      "q3": 1.5005,
+      "iqr": 0.7503,
+      "p95": 6.2724,
+      "min": 0.0011,
+      "max": 6.2724
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 1.539538,
+      "median": 1.2526,
+      "q1": 0.8578,
+      "q3": 1.6997,
+      "iqr": 0.8419,
+      "p95": 4.3255,
+      "min": 0.0019,
+      "max": 4.3255
+    }
+  },
+  "fingerprint_diff_ms": 0.176274,
+  "ast_relink_ms": [
+    0.455695,
+    28.028576,
+    0.560014,
+    0.863909,
+    0.681986,
+    0.590848,
+    0.613385,
+    0.612219,
+    0.683698,
+    0.569817,
+    0.650987,
+    24.765042,
+    1.075741,
+    0.655701,
+    0.581479,
+    0.450831
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.176274,
+      "median": 0.176274,
+      "q1": 0.176274,
+      "q3": 0.176274,
+      "iqr": 0.0,
+      "p95": 0.176274,
+      "min": 0.176274,
+      "max": 0.176274
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 3.864996,
+      "median": 0.632186,
+      "q1": 0.575648,
+      "q3": 0.773804,
+      "iqr": 0.198156,
+      "p95": 28.028576,
+      "min": 0.450831,
+      "max": 28.028576
+    }
+  },
+  "per_operator": {
+    "TABLE_SPLIT": {
+      "n": 16,
+      "baseline_correct": 2,
+      "refreshed_schema_correct": 15,
+      "error_feedback_correct": 2,
+      "mcp_correct": 14,
+      "recovered": 12,
+      "degraded": 0,
+      "baseline_ex": 0.125,
+      "refreshed_schema_ex": 0.9375,
+      "error_feedback_ex": 0.125,
+      "mcp_ex": 0.875
+    }
+  },
+  "error_categories": {
+    "correct": 2,
+    "execution_error": 14,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 12,
+      "c": 0,
+      "statistic": 10.083333,
+      "p_value": 0.000488
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 13,
+      "c": 0,
+      "statistic": 11.076923,
+      "p_value": 0.000244
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 12,
+      "statistic": 10.083333,
+      "p_value": 0.000488
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 2,
+      "total": 16,
+      "lower": 0.034977,
+      "upper": 0.360233
+    },
+    "refreshed_schema": {
+      "successes": 15,
+      "total": 16,
+      "lower": 0.716707,
+      "upper": 0.988881
+    },
+    "error_feedback": {
+      "successes": 2,
+      "total": 16,
+      "lower": 0.034977,
+      "upper": 0.360233
+    },
+    "mcp": {
+      "successes": 14,
+      "total": 16,
+      "lower": 0.639767,
+      "upper": 0.965023
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 1.539538,
+      "lower": 0.957119,
+      "upper": 2.100725
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_SPLIT",
+      "source": "singer",
+      "targets": [
+        "singer_info",
+        "singer_songs"
+      ],
+      "key": "Singer_ID"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "884bbd53445ab920",
+    "specs": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "singer",
+        "targets": [
+          "singer_info",
+          "singer_songs"
+        ],
+        "key": "Singer_ID",
+        "partition": {
+          "singer_info": [
+            "Name",
+            "Country",
+            "Age",
+            "Is_male"
+          ],
+          "singer_songs": [
+            "Song_Name",
+            "Song_release_year"
+          ]
+        }
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_SPLIT",
+        "source": "singer",
+        "targets": [
+          "singer_info",
+          "singer_songs"
+        ],
+        "key": "Singer_ID",
+        "partition": {
+          "singer_info": [
+            "Name",
+            "Country",
+            "Age",
+            "Is_male"
+          ],
+          "singer_songs": [
+            "Song_Name",
+            "Song_release_year"
+          ]
+        }
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "de03032e351c9e2da2f01e39ae8f99714bcf878aeb387736e4c5ef06fd12dec9",
+  "backend": "openai_compat",
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "model_short_name": "llama31",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 0.875,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 0.9375,
+  "seed_disagreements": [
+    {
+      "id": "cs_ts_10",
+      "pre_ok": [
+        0,
+        1
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        1
+      ]
+    },
+    {
+      "id": "cs_ts_11",
+      "pre_ok": [
+        0,
+        1
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        1
+      ]
+    },
+    {
+      "id": "cs_ts_14",
+      "pre_ok": [
+        0
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        0,
+        1
+      ]
+    }
+  ]
+}

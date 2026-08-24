@@ -1,0 +1,24 @@
+{
+  "database_id": "hr_1_TABLE_RENAME",
+  "pre_db": "hr_1_pre.sqlite",
+  "post_db": "hr_1_post.sqlite",
+  "queries": "queries.json",
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "6ad56b7c0503dcf7",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ]
+  }
+}

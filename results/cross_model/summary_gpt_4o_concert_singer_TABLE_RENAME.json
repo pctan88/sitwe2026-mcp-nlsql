@@ -1,0 +1,354 @@
+{
+  "database_id": "concert_singer_TABLE_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.875,
+  "ex_post_baseline": 0.125,
+  "ex_post_refreshed_schema": 0.875,
+  "ex_post_error_feedback": 0.125,
+  "ex_post_mcp": 0.875,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.5,
+  "mean_baseline_latency_s": 0.7432,
+  "mean_refreshed_schema_latency_s": 1.0775,
+  "mean_error_feedback_latency_s": 0.9403,
+  "mean_mcp_latency_s": 0.055,
+  "latencies": {
+    "pre_s": [
+      0.7129,
+      1.4058,
+      1.3278,
+      0.568,
+      0.6501,
+      0.5931,
+      0.7401,
+      0.8326,
+      1.3087,
+      0.7522,
+      0.827,
+      0.69,
+      0.6452,
+      0.9388,
+      0.5624,
+      0.57
+    ],
+    "baseline_s": [
+      0.6568,
+      0.7892,
+      0.7005,
+      0.5678,
+      0.7912,
+      0.9252,
+      0.7066,
+      0.7679,
+      0.9034,
+      0.8378,
+      0.8268,
+      0.7562,
+      0.679,
+      0.6517,
+      0.763,
+      0.5688
+    ],
+    "refreshed_schema_s": [
+      0.7236,
+      0.7134,
+      0.8849,
+      0.7057,
+      0.9106,
+      0.7759,
+      0.7861,
+      1.9426,
+      1.1461,
+      0.9982,
+      0.8695,
+      0.6432,
+      0.756,
+      0.875,
+      3.8286,
+      0.6807
+    ],
+    "error_feedback_s": [
+      0.626,
+      0.9391,
+      0.7179,
+      0.6722,
+      0.7812,
+      1.4263,
+      0.9141,
+      1.046,
+      1.5803,
+      3.0623,
+      0.6778,
+      0.7574,
+      1.0169,
+      0.8254,
+      0.0012,
+      0.0012
+    ],
+    "mcp_s": [
+      0.0018,
+      0.0024,
+      0.0023,
+      0.0025,
+      0.8325,
+      0.0026,
+      0.0026,
+      0.0136,
+      0.0031,
+      0.0024,
+      0.0025,
+      0.0023,
+      0.0024,
+      0.0021,
+      0.002,
+      0.0022
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 0.820294,
+      "median": 0.7265,
+      "q1": 0.61915,
+      "q3": 0.8857,
+      "iqr": 0.26655,
+      "p95": 1.4058,
+      "min": 0.5624,
+      "max": 1.4058
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 0.743244,
+      "median": 0.7596,
+      "q1": 0.6679,
+      "q3": 0.809,
+      "iqr": 0.1411,
+      "p95": 0.9252,
+      "min": 0.5678,
+      "max": 0.9252
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.077506,
+      "median": 0.8278,
+      "q1": 0.7185,
+      "q3": 0.9544,
+      "iqr": 0.2359,
+      "p95": 3.8286,
+      "min": 0.6432,
+      "max": 3.8286
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 0.940331,
+      "median": 0.8033,
+      "q1": 0.675,
+      "q3": 1.03145,
+      "iqr": 0.35645,
+      "p95": 3.0623,
+      "min": 0.0012,
+      "max": 3.0623
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 0.054956,
+      "median": 0.0024,
+      "q1": 0.00225,
+      "q3": 0.0026,
+      "iqr": 0.00035,
+      "p95": 0.8325,
+      "min": 0.0018,
+      "max": 0.8325
+    }
+  },
+  "fingerprint_diff_ms": 0.129045,
+  "ast_relink_ms": [
+    0.451809,
+    0.734744,
+    0.645311,
+    0.648892,
+    0.734866,
+    0.683887,
+    0.747214,
+    11.703708,
+    1.107586,
+    0.665548,
+    0.739609,
+    0.659944,
+    0.672875,
+    0.55737,
+    0.625155,
+    0.602772
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.129045,
+      "median": 0.129045,
+      "q1": 0.129045,
+      "q3": 0.129045,
+      "iqr": 0.0,
+      "p95": 0.129045,
+      "min": 0.129045,
+      "max": 0.129045
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 1.373831,
+      "median": 0.669212,
+      "q1": 0.635233,
+      "q3": 0.737237,
+      "iqr": 0.102005,
+      "p95": 11.703708,
+      "min": 0.451809,
+      "max": 11.703708
+    }
+  },
+  "per_operator": {
+    "TABLE_RENAME": {
+      "n": 16,
+      "baseline_correct": 2,
+      "refreshed_schema_correct": 14,
+      "error_feedback_correct": 2,
+      "mcp_correct": 14,
+      "recovered": 12,
+      "degraded": 0,
+      "baseline_ex": 0.125,
+      "refreshed_schema_ex": 0.875,
+      "error_feedback_ex": 0.125,
+      "mcp_ex": 0.875
+    }
+  },
+  "error_categories": {
+    "correct": 2,
+    "execution_error": 14,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 12,
+      "c": 0,
+      "statistic": 10.083333,
+      "p_value": 0.000488
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 12,
+      "c": 0,
+      "statistic": 10.083333,
+      "p_value": 0.000488
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 12,
+      "statistic": 10.083333,
+      "p_value": 0.000488
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 2,
+      "total": 16,
+      "lower": 0.034977,
+      "upper": 0.360233
+    },
+    "refreshed_schema": {
+      "successes": 14,
+      "total": 16,
+      "lower": 0.639767,
+      "upper": 0.965023
+    },
+    "error_feedback": {
+      "successes": 2,
+      "total": 16,
+      "lower": 0.034977,
+      "upper": 0.360233
+    },
+    "mcp": {
+      "successes": 14,
+      "total": 16,
+      "lower": 0.639767,
+      "upper": 0.965023
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 0.054956,
+      "lower": 0.002331,
+      "upper": 0.159356
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "singer",
+      "to": "artist"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "befe776345c2064b",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "singer",
+        "to": "artist"
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "b7b2289ea1d6c062aa8dfd530822e2aaa4255cac1a52a1ebcff56ba0dc6b89ed",
+  "backend": "openai_compat",
+  "model": "gpt-4o",
+  "model_short_name": "gpt-4o",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 0.9375,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": [
+    {
+      "id": "cs_tr_09",
+      "pre_ok": [
+        0,
+        1
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        1
+      ]
+    }
+  ]
+}

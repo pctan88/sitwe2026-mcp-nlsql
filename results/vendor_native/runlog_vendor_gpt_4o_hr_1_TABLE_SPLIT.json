@@ -1,0 +1,24 @@
+{
+  "database_id": "hr_1_TABLE_SPLIT",
+  "model": "gpt-4o",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "hr_ts_01",
+    "hr_ts_02",
+    "hr_ts_03",
+    "hr_ts_04",
+    "hr_ts_05",
+    "hr_ts_06",
+    "hr_ts_07",
+    "hr_ts_08",
+    "hr_ts_09",
+    "hr_ts_10",
+    "hr_ts_11",
+    "hr_ts_12",
+    "hr_ts_13",
+    "hr_ts_14",
+    "hr_ts_15",
+    "hr_ts_16"
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "database_id": "concert_singer_COLUMN_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "COLUMN_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.4286,
+  "ex_post_baseline": 0.2857,
+  "ex_post_refreshed_schema": 0.6429,
+  "ex_post_error_feedback": 0.2857,
+  "ex_post_mcp": 0.5,
+  "recovery_rate": 0.6,
+  "silent_failure_detection_rate": 0.2857,
+  "mean_baseline_latency_s": 1.048,
+  "mean_refreshed_schema_latency_s": 1.6761,
+  "mean_error_feedback_latency_s": 0.5166,
+  "mean_mcp_latency_s": 0.594,
+  "latencies": {
+    "pre_s": [
+      0.6207,
+      1.06,
+      0.619,
+      0.9072,
+      0.7856,
+      1.2124,
+      0.832,
+      1.3504,
+      1.1619,
+      0.719,
+      1.597,
+      0.5055,
+      0.5906,
+      0.5492
+    ],
+    "baseline_s": [
+      0.6222,
+      0.8182,
+      0.7042,
+      3.995,
+      0.6926,
+      0.6892,
+      0.6747,
+      1.1619,
+      0.6605,
+      0.9558,
+      1.1338,
+      0.6128,
+      0.5855,
+      1.3657
+    ],
+    "refreshed_schema_s": [
+      0.7836,
+      0.6129,
+      0.5952,
+      13.5445,
+      0.6177,
+      1.0509,
+      0.6488,
+      1.0802,
+      0.6046,
+      1.2715,
+      0.7018,
+      0.4981,
+      0.7198,
+      0.7357
+    ],
+    "error_feedback_s": [
+      0.6959,
+      0.5913,
+      0.9343,
+      0.5959,
+      0.6041,
+      0.001,
+      0.7908,
+      1.2867,
+      0.8348,
+      0.8934,
+      0.0013,
+      0.0011,
+      0.001,
+      0.001
+    ],
+    "mcp_s": [
+      0.5819,
+      0.6718,
+      1.8016,
+      0.8845,
+      0.6045,
+      0.0278,
+      0.6506,
+      1.1205,
+      0.7144,
+      1.2302,
+      0.0026,
+      0.0221,
+      0.002,
+      0.0019
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 0.893607,
+      "median": 0.8088,
+      "q1": 0.619,
+      "q3": 1.1619,
+      "iqr": 0.5429,
+      "p95": 1.597,
+      "min": 0.5055,
+      "max": 1.597
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.048007,
+      "median": 0.6984,
+      "q1": 0.6605,
+      "q3": 1.1338,
+      "iqr": 0.4733,
+      "p95": 3.995,
+      "min": 0.5855,
+      "max": 3.995
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 1.676093,
+      "median": 0.7108,
+      "q1": 0.6129,
+      "q3": 1.0509,
+      "iqr": 0.438,
+      "p95": 13.5445,
+      "min": 0.4981,
+      "max": 13.5445
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 0.516614,
+      "median": 0.6,
+      "q1": 0.0011,
+      "q3": 0.8348,
+      "iqr": 0.8337,
+      "p95": 1.2867,
+      "min": 0.001,
+      "max": 1.2867
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 0.594029,
+      "median": 0.62755,
+      "q1": 0.0221,
+      "q3": 0.8845,
+      "iqr": 0.8624,
+      "p95": 1.8016,
+      "min": 0.0019,
+      "max": 1.8016
+    }
+  },
+  "fingerprint_diff_ms": 0.182406,
+  "ast_relink_ms": [
+    0.54027,
+    1.261347,
+    0.775643,
+    0.662278,
+    0.585451,
+    25.83578,
+    0.509422,
+    0.804502,
+    0.880314,
+    1.199974,
+    0.70766,
+    0.72147,
+    0.402438,
+    0.516792
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.182406,
+      "median": 0.182406,
+      "q1": 0.182406,
+      "q3": 0.182406,
+      "iqr": 0.0,
+      "p95": 0.182406,
+      "min": 0.182406,
+      "max": 0.182406
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 2.52881,
+      "median": 0.714565,
+      "q1": 0.54027,
+      "q3": 0.880314,
+      "iqr": 0.340044,
+      "p95": 25.83578,
+      "min": 0.402438,
+      "max": 25.83578
+    }
+  },
+  "per_operator": {
+    "COLUMN_MERGE": {
+      "n": 14,
+      "baseline_correct": 4,
+      "refreshed_schema_correct": 9,
+      "error_feedback_correct": 4,
+      "mcp_correct": 7,
+      "recovered": 3,
+      "degraded": 0,
+      "baseline_ex": 0.2857,
+      "refreshed_schema_ex": 0.6429,
+      "error_feedback_ex": 0.2857,
+      "mcp_ex": 0.5
+    }
+  },
+  "error_categories": {
+    "correct": 4,
+    "execution_error": 9,
+    "silent_failure": 0,
+    "wrong_result": 1,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 3,
+      "c": 0,
+      "statistic": 1.333333,
+      "p_value": 0.25
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 5,
+      "c": 0,
+      "statistic": 3.2,
+      "p_value": 0.0625
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 3,
+      "statistic": 1.333333,
+      "p_value": 0.25
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 4,
+      "total": 14,
+      "lower": 0.117212,
+      "upper": 0.546495
+    },
+    "refreshed_schema": {
+      "successes": 9,
+      "total": 14,
+      "lower": 0.38764,
+      "upper": 0.836555
+    },
+    "error_feedback": {
+      "successes": 4,
+      "total": 14,
+      "lower": 0.117212,
+      "upper": 0.546495
+    },
+    "mcp": {
+      "successes": 7,
+      "total": 14,
+      "lower": 0.267989,
+      "upper": 0.732011
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 0.594029,
+      "lower": 0.308143,
+      "upper": 0.874114
+    }
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "singer",
+      "from": "Country",
+      "to": "Name_Country"
+    },
+    {
+      "op": "COLUMN_REMOVE",
+      "table": "singer",
+      "column": "Name"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "b66966337026a91b",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Name",
+          "Country"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "singer",
+        "sources": [
+          "Country",
+          "Name"
+        ],
+        "target": "Name_Country",
+        "expression": "Name || ' - ' || Country",
+        "reversible": false
+      }
+    ]
+  },
+  "fingerprint_pre": "1a3492d503f6e9d8c892b5f3622aa93445f9ed345972745bd3bf7738d3b8a761",
+  "fingerprint_post": "7e71964bb5df4c6dcd5988b5d424f8d45c3aab3cf669ec9215622b34df626377",
+  "backend": "openai_compat",
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "model_short_name": "llama31",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": []
+}

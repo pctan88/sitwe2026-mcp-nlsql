@@ -1,0 +1,225 @@
+id,perturbation,expected_failure,seed,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_cm_01,COLUMN_MERGE,False,0,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT Name_Country FROM singer,1,SELECT singer.Name || ' (' || singer.Country || ')' AS Singer_Name_With_Country FROM singer,0,1,no such column: Name,openai_compat,SELECT Song_Name || ' (' || Name_Country || ')' AS Singer_Name_With_Country FROM singer,ast,valid,0,1.0073,0.9793,0.9438,1.398,1.2291,1.34575,openai_compat
+cs_cm_01,COLUMN_MERGE,False,1,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT Name_Country FROM singer,1,SELECT singer.Name || ' (' || singer.Country || ')' AS Singer_Name_With_Country FROM singer,0,1,no such column: Name,openai_compat,SELECT Song_Name || ' (' || Name_Country || ')' AS Singer_Name_With_Country FROM singer,ast,valid,0,0.9964,1.27,0.881,1.0729,0.9461,1.108208,openai_compat
+cs_cm_01,COLUMN_MERGE,False,2,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT Name || ' (' || Country || ')' AS Singer_Name_With_Country FROM singer,0,SELECT DISTINCT Name_Country FROM singer,1,SELECT singer.Name || ' (' || singer.Country || ')' AS Singer_Name_With_Country FROM singer,0,1,no such column: Name,openai_compat,SELECT Song_Name || ' (' || Name_Country || ')' AS Singer_Name_With_Country FROM singer,ast,valid,0,1.3041,1.1818,1.3074,1.0273,1.1252,1.064125,openai_compat
+cs_cm_02,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,0.9982,1.1208,0.8587,0.9665,1.1211,1.428084,openai_compat
+cs_cm_02,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,1.1087,1.0156,1.0544,0.9999,1.0408,1.046916,openai_compat
+cs_cm_02,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Country = 'France',1,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',0,SELECT COUNT(*) FROM singer WHERE Country = 'France',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country = 'France',ast,silent_failure_suspected,0,0.9063,0.9705,1.1048,1.0037,1.1872,1.273834,openai_compat
+cs_cm_03,COLUMN_MERGE,False,0,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Song_Name || ' ' || Name_Country AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,ast,valid,0,1.0447,1.1256,0.9187,1.1602,1.2189,1.1725,openai_compat
+cs_cm_03,COLUMN_MERGE,False,1,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Song_Name || ' ' || Name_Country AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,ast,valid,0,1.249,0.9913,0.9093,1.0779,1.2138,1.497417,openai_compat
+cs_cm_03,COLUMN_MERGE,False,2,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Name || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT Song_Name || ' ' || Name_Country AS Merged_Name FROM singer WHERE Singer_ID = 1,0,SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Singer_ID = 1,ast,valid,0,1.0016,0.9359,1.0037,1.3186,1.3317,1.110959,openai_compat
+cs_cm_04,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names
+FROM singer s
+WHERE s.Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(Name_Country, ', ') AS Merged_Names FROM singer WHERE Age > 40",ast,valid,0,0.9985,1.2033,1.1494,0.9959,1.2165,1.472833,openai_compat
+cs_cm_04,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names
+FROM singer s
+WHERE s.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(Name_Country, ', ') AS Merged_Names FROM singer WHERE Age > 40",ast,valid,0,1.0353,1.0787,1.6265,1.0017,1.2171,1.329625,openai_compat
+cs_cm_04,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Age > 40",0,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names
+FROM singer s
+WHERE s.Age > 40",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+WHERE singer.Age > 40",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(Name_Country, ', ') AS Merged_Names FROM singer WHERE Age > 40",ast,valid,0,1.1451,1.0594,1.1656,1.4004,1.4692,1.13575,openai_compat
+cs_cm_05,COLUMN_MERGE,False,0,"SELECT Name || ' ' || Song_Name AS Merged_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT Name || ' - ' || Song_Name AS Merged_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT Song_Name || ' - ' || Name_Country AS Merged_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,"SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name
+FROM singer
+WHERE singer.Song_Name = 'Sun'",0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name FROM singer WHERE Song_Name = 'Sun',ast,valid,0,1.3602,1.1755,1.2514,1.1218,1.0672,1.378625,openai_compat
+cs_cm_05,COLUMN_MERGE,False,1,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,"SELECT Song_Name || ' - ' || Name_Country AS Merged_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,SELECT singer.Name FROM singer WHERE Song_Name = 'Sun',0,1,no such column: Name,openai_compat,SELECT Name_Country FROM singer WHERE Song_Name = 'Sun',ast,silent_failure_suspected,1,0.9728,3.1166,1.0696,1.0941,0.8609,0.868333,openai_compat
+cs_cm_05,COLUMN_MERGE,False,2,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,SELECT Name FROM singer WHERE Song_Name = 'Sun',0,"SELECT Song_Name || ' - ' || Name_Country AS Merged_Name
+FROM singer
+WHERE Song_Name = 'Sun'",0,SELECT singer.Name FROM singer WHERE Song_Name = 'Sun',0,1,no such column: Name,openai_compat,SELECT Name_Country FROM singer WHERE Song_Name = 'Sun',ast,silent_failure_suspected,1,0.9964,1.0728,0.9273,1.1452,0.895,1.167,openai_compat
+cs_cm_06,COLUMN_MERGE,False,0,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,0,,openai_compat,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.0205,0.9962,0.9938,0.0006,0.0455,1.031459,openai_compat
+cs_cm_06,COLUMN_MERGE,False,1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,0,,openai_compat,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,2.643,1.272,0.9527,0.0007,0.0487,1.105542,openai_compat
+cs_cm_06,COLUMN_MERGE,False,2,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,"SELECT COUNT(DISTINCT Singer_ID) 
+FROM singer 
+WHERE Song_release_year >= 2010",1,0,,openai_compat,SELECT COUNT(DISTINCT Singer_ID) FROM singer WHERE Song_release_year >= 2010,ast,valid,1,1.0123,0.9443,0.9713,0.001,0.0528,6.682917,openai_compat
+cs_cm_07,COLUMN_MERGE,False,0,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name_Country || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name_Song FROM singer,ast,valid,0,0.8983,1.021,0.9528,0.9571,1.1803,1.000291,openai_compat
+cs_cm_07,COLUMN_MERGE,False,1,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name_Country || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name_Song FROM singer,ast,valid,0,1.1185,1.0238,1.069,1.1518,1.3295,1.106958,openai_compat
+cs_cm_07,COLUMN_MERGE,False,2,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT Name || ' - ' || Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name_Country || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,"SELECT singer.Name || ' - ' || singer.Song_Name AS Merged_Name_Song
+FROM singer",0,1,no such column: Name,openai_compat,SELECT Name_Country || ' - ' || Song_Name AS Merged_Name_Song FROM singer,ast,valid,0,0.9297,0.9093,1.1216,1.0955,1.1069,1.24425,openai_compat
+cs_cm_08,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,"SELECT GROUP_CONCAT(singer.Name_Country) AS Merged_Names
+FROM singer
+WHERE singer.Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'Yes'",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(SUBSTR(Name_Country, INSTR(Name_Country, ',') + 2), ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",ast,valid,0,1.3168,1.0321,3.0425,1.1254,1.5195,1.270417,openai_compat
+cs_cm_08,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS Merged_Names
+FROM singer
+WHERE singer.Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+WHERE singer.Is_male = 'yes'",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(SUBSTR(Name_Country, INSTR(Name_Country, ',') + 2), ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",ast,valid,0,0.9943,1.1171,1.1459,1.0265,1.9325,1.573708,openai_compat
+cs_cm_08,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,"SELECT GROUP_CONCAT(Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS Merged_Names
+FROM singer
+WHERE singer.Is_male = 'Yes'",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",0,1,no such column: Name,openai_compat,"SELECT GROUP_CONCAT(SUBSTR(Name_Country, INSTR(Name_Country, ',') + 2), ', ') AS Merged_Names
+FROM singer
+WHERE Is_male = 'yes'",ast,valid,0,0.9858,1.0471,1.4073,1.1228,1.6282,1.479166,openai_compat
+cs_cm_09,COLUMN_MERGE,False,0,"SELECT COUNT(*) 
+FROM singer 
+WHERE Country = 'United States'",1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country LIKE '%United States%',ast,valid,1,0.9983,0.9356,0.9318,1.1415,1.1207,1.336291,openai_compat
+cs_cm_09,COLUMN_MERGE,False,1,"SELECT COUNT(*) 
+FROM singer 
+WHERE Country = 'United States'",1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,"SELECT COUNT(*) 
+FROM singer 
+WHERE Name_Country = 'United States'",0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.1962,0.9871,1.4354,0.9376,1.2264,1.314167,openai_compat
+cs_cm_09,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Country = 'United States',1,SELECT COUNT(*) FROM singer WHERE Country = 'United States',0,"SELECT COUNT(*) 
+FROM singer 
+WHERE Name_Country = 'United States'",0,SELECT COUNT(*) FROM singer WHERE Country = 'USA',0,1,no such column: Country,openai_compat,SELECT COUNT(*) FROM singer WHERE Name_Country = 'United States',ast,silent_failure_suspected,0,1.0972,1.2566,1.0884,1.1376,1.2819,1.301292,openai_compat
+cs_cm_10,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,1,no such column: s.Name,openai_compat,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names 
+FROM singer AS s 
+JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID 
+WHERE sic.Concert_ID = 1",ast,valid,0,1.2993,1.2647,2.1906,1.6622,1.7597,7.465875,openai_compat
+cs_cm_10,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,1,no such column: s.Name,openai_compat,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names 
+FROM singer AS s 
+JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID 
+WHERE sic.Concert_ID = 1",ast,valid,0,1.1811,1.3689,1.9337,1.2649,1.4565,1.793667,openai_compat
+cs_cm_10,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(s.Name, ', ') AS Merged_Names
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name_Country, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,"SELECT GROUP_CONCAT(singer.Name, ', ') AS Merged_Names
+FROM singer
+JOIN singer_in_concert ON singer.Singer_ID = singer_in_concert.Singer_ID
+WHERE singer_in_concert.Concert_ID = 1",0,1,no such column: s.Name,openai_compat,"SELECT GROUP_CONCAT(s.Name_Country, ', ') AS Merged_Names FROM singer AS s JOIN singer_in_concert AS sic ON s.Singer_ID = sic.Singer_ID WHERE sic.Concert_ID = 1",ast,valid,0,1.614,1.253,1.5791,1.4432,1.4479,7.360917,openai_compat
+cs_cm_11,COLUMN_MERGE,False,0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,openai_compat,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.0664,1.3658,1.3686,0.0012,0.0478,1.242458,openai_compat
+cs_cm_11,COLUMN_MERGE,False,1,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,openai_compat,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.0707,1.2989,1.2019,0.0006,0.0484,1.054,openai_compat
+cs_cm_11,COLUMN_MERGE,False,2,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names
+FROM singer
+WHERE Song_release_year BETWEEN 2000 AND 2014",0,0,,openai_compat,"SELECT GROUP_CONCAT(Song_Name, ', ') AS Merged_Song_Names FROM singer WHERE Song_release_year BETWEEN 2000 AND 2014",ast,valid,0,1.7203,1.1939,1.1627,0.0009,0.0478,1.10725,openai_compat
+cs_cm_12,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,openai_compat,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,0.95,0.8884,0.9799,0.001,0.0489,0.970792,openai_compat
+cs_cm_12,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,openai_compat,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,4.3711,0.9881,1.0853,0.0012,0.0539,1.187917,openai_compat
+cs_cm_12,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,SELECT COUNT(*) FROM singer WHERE Age >= 30,1,0,,openai_compat,SELECT COUNT(*) FROM singer WHERE Age >= 30,ast,valid,1,0.9475,1.0197,0.9993,0.0008,0.0454,0.981834,openai_compat
+cs_cm_13,COLUMN_MERGE,False,0,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0.9985,1.0763,1.0987,0.0007,0.0483,0.889958,openai_compat
+cs_cm_13,COLUMN_MERGE,False,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,1.0893,0.9948,0.9108,0.0007,0.0477,0.919834,openai_compat
+cs_cm_13,COLUMN_MERGE,False,2,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,SELECT Name FROM stadium WHERE Capacity > 10000,1,0,,openai_compat,SELECT Name FROM stadium WHERE Capacity > 10000,ast,valid,1,0.9228,0.8392,0.8774,0.0006,0.0482,0.686125,openai_compat
+cs_cm_14,COLUMN_MERGE,False,0,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,1.0711,0.8169,0.95,0.0009,0.072,0.97875,openai_compat
+cs_cm_14,COLUMN_MERGE,False,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,0.8822,0.7926,1.0566,0.001,0.0499,1.073459,openai_compat
+cs_cm_14,COLUMN_MERGE,False,2,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,SELECT COUNT(*) FROM concert,1,0,,openai_compat,SELECT COUNT(*) FROM concert,ast,valid,1,0.8172,0.8754,1.131,0.0005,0.0487,0.797125,openai_compat
+cs_cm_15,COLUMN_MERGE,True,0,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT singer.Name FROM singer,,1,no such column: Name,openai_compat,"SELECT SUBSTRING_INDEX(Name_Country, '_', 1) AS Name FROM singer",ast,execution_error,,0.8706,1.0058,0.9412,0.9435,1.3465,0.806916,openai_compat
+cs_cm_15,COLUMN_MERGE,True,1,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT Name FROM singer,,1,no such column: Name,openai_compat,SELECT Name_Country FROM singer,ast,valid,,0.9136,0.9937,1.0229,0.9173,0.9242,1.15775,openai_compat
+cs_cm_15,COLUMN_MERGE,True,2,SELECT Name FROM singer,,SELECT Name FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT Name FROM singer,,1,no such column: Name,openai_compat,SELECT Name_Country FROM singer,ast,valid,,0.9382,0.9989,1.3357,0.933,1.2237,1.164333,openai_compat
+cs_cm_16,COLUMN_MERGE,True,0,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer,,1,no such column: Country,openai_compat,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.8322,1.0597,1.0865,1.1734,0.0492,1.208584,openai_compat
+cs_cm_16,COLUMN_MERGE,True,1,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer,,1,no such column: Country,openai_compat,SELECT DISTINCT Name_Country FROM singer,ast,valid,,1.0753,0.9424,0.8655,0.9576,0.0493,1.27325,openai_compat
+cs_cm_16,COLUMN_MERGE,True,2,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Country FROM singer,,SELECT DISTINCT Name_Country FROM singer,,SELECT DISTINCT Country FROM singer,,1,no such column: Country,openai_compat,SELECT DISTINCT Name_Country FROM singer,ast,valid,,0.9379,0.9799,0.8893,1.0976,0.0487,1.156208,openai_compat

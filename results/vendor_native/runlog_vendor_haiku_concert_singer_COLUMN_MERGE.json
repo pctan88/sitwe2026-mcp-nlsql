@@ -1,0 +1,24 @@
+{
+  "database_id": "concert_singer_COLUMN_MERGE",
+  "model": "haiku",
+  "status": "complete",
+  "failed_ids": [],
+  "completed_ids": [
+    "cs_cm_01",
+    "cs_cm_02",
+    "cs_cm_03",
+    "cs_cm_04",
+    "cs_cm_05",
+    "cs_cm_06",
+    "cs_cm_07",
+    "cs_cm_08",
+    "cs_cm_09",
+    "cs_cm_10",
+    "cs_cm_11",
+    "cs_cm_12",
+    "cs_cm_13",
+    "cs_cm_14",
+    "cs_cm_15",
+    "cs_cm_16"
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "database_id": "hr_1_TABLE_RENAME",
+  "n_queries": 16,
+  "n_queries_scored": 16,
+  "expected_failures": {
+    "n": 0,
+    "by_operator": {},
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.5625,
+  "ex_post_baseline": 0.1875,
+  "ex_post_refreshed_schema": 0.5625,
+  "ex_post_error_feedback": 0.1875,
+  "ex_post_mcp": 0.5625,
+  "recovery_rate": 1.0,
+  "silent_failure_detection_rate": 0.5714,
+  "mean_baseline_latency_s": 1.2944,
+  "mean_refreshed_schema_latency_s": 1.0295,
+  "mean_error_feedback_latency_s": 0.9785,
+  "mean_mcp_latency_s": 0.2972,
+  "latencies": {
+    "pre_s": [
+      1.0235,
+      0.8286,
+      2.291,
+      0.8304,
+      0.9896,
+      0.901,
+      0.9712,
+      2.6867,
+      1.0107,
+      1.2041,
+      2.4389,
+      1.4876,
+      2.4666,
+      0.9829,
+      0.8963,
+      0.9216
+    ],
+    "baseline_s": [
+      0.867,
+      0.8128,
+      5.457,
+      1.0195,
+      1.0094,
+      0.8787,
+      1.3841,
+      1.2524,
+      1.0871,
+      0.8528,
+      1.1267,
+      0.9079,
+      0.9341,
+      0.9891,
+      1.1321,
+      0.9995
+    ],
+    "refreshed_schema_s": [
+      0.9584,
+      0.806,
+      1.0393,
+      1.2033,
+      0.8101,
+      1.0985,
+      0.8663,
+      1.2266,
+      1.1215,
+      0.9668,
+      1.014,
+      0.9438,
+      1.015,
+      1.8102,
+      0.79,
+      0.8021
+    ],
+    "error_feedback_s": [
+      2.2266,
+      0.9611,
+      1.2334,
+      1.0757,
+      1.0386,
+      0.8624,
+      1.1686,
+      1.4027,
+      1.8772,
+      0.8581,
+      1.0727,
+      1.0564,
+      0.0017,
+      0.819,
+      0.0013,
+      0.0012
+    ],
+    "mcp_s": [
+      0.0023,
+      0.0024,
+      1.4868,
+      0.0028,
+      0.0022,
+      0.0022,
+      0.0024,
+      0.0037,
+      1.0713,
+      1.308,
+      0.003,
+      0.0065,
+      0.0022,
+      0.8558,
+      0.002,
+      0.0022
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 16,
+      "mean": 1.370669,
+      "median": 1.00015,
+      "q1": 0.9113,
+      "q3": 1.8893,
+      "iqr": 0.978,
+      "p95": 2.6867,
+      "min": 0.8286,
+      "max": 2.6867
+    },
+    "baseline_s": {
+      "n": 16,
+      "mean": 1.294388,
+      "median": 1.00445,
+      "q1": 0.8933,
+      "q3": 1.1294,
+      "iqr": 0.2361,
+      "p95": 5.457,
+      "min": 0.8128,
+      "max": 5.457
+    },
+    "refreshed_schema_s": {
+      "n": 16,
+      "mean": 1.029494,
+      "median": 0.9904,
+      "q1": 0.8382,
+      "q3": 1.11,
+      "iqr": 0.2718,
+      "p95": 1.8102,
+      "min": 0.79,
+      "max": 1.8102
+    },
+    "error_feedback_s": {
+      "n": 16,
+      "mean": 0.978544,
+      "median": 1.0475,
+      "q1": 0.83855,
+      "q3": 1.201,
+      "iqr": 0.36245,
+      "p95": 2.2266,
+      "min": 0.0012,
+      "max": 2.2266
+    },
+    "mcp_s": {
+      "n": 16,
+      "mean": 0.297237,
+      "median": 0.0026,
+      "q1": 0.0022,
+      "q3": 0.43115,
+      "iqr": 0.42895,
+      "p95": 1.4868,
+      "min": 0.002,
+      "max": 1.4868
+    }
+  },
+  "fingerprint_diff_ms": 0.209153,
+  "ast_relink_ms": [
+    0.57971,
+    0.663505,
+    0.923321,
+    0.75962,
+    0.512894,
+    0.57937,
+    0.529646,
+    1.397491,
+    1.065678,
+    0.645018,
+    1.036466,
+    0.769988,
+    0.604603,
+    0.634275,
+    0.531902,
+    0.538588
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.209153,
+      "median": 0.209153,
+      "q1": 0.209153,
+      "q3": 0.209153,
+      "iqr": 0.0,
+      "p95": 0.209153,
+      "min": 0.209153,
+      "max": 0.209153
+    },
+    "ast_relink_ms": {
+      "n": 16,
+      "mean": 0.735755,
+      "median": 0.639647,
+      "q1": 0.558979,
+      "q3": 0.846654,
+      "iqr": 0.287675,
+      "p95": 1.397491,
+      "min": 0.512894,
+      "max": 1.397491
+    }
+  },
+  "per_operator": {
+    "TABLE_RENAME": {
+      "n": 16,
+      "baseline_correct": 3,
+      "refreshed_schema_correct": 9,
+      "error_feedback_correct": 3,
+      "mcp_correct": 9,
+      "recovered": 6,
+      "degraded": 0,
+      "baseline_ex": 0.1875,
+      "refreshed_schema_ex": 0.5625,
+      "error_feedback_ex": 0.1875,
+      "mcp_ex": 0.5625
+    }
+  },
+  "error_categories": {
+    "correct": 3,
+    "execution_error": 13,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 6,
+      "c": 0,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 6,
+      "c": 0,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 6,
+      "statistic": 4.166667,
+      "p_value": 0.03125
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "refreshed_schema": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    },
+    "error_feedback": {
+      "successes": 3,
+      "total": 16,
+      "lower": 0.065915,
+      "upper": 0.430094
+    },
+    "mcp": {
+      "successes": 9,
+      "total": 16,
+      "lower": 0.331782,
+      "upper": 0.769016
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 16,
+      "estimate": 0.297237,
+      "lower": 0.069556,
+      "upper": 0.540944
+    }
+  },
+  "diff_events": [
+    {
+      "op": "TABLE_RENAME",
+      "from": "employees",
+      "to": "staff"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "6ad56b7c0503dcf7",
+    "specs": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ],
+    "events": [
+      {
+        "op": "TABLE_RENAME",
+        "from": "employees",
+        "to": "staff"
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "100e16a3a7c773c91a2110e1f9af6a33a48f7d9442309a1df399572dbfb98b05",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 3,
+  "seed_stability_pre": 1.0,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": []
+}

@@ -1,0 +1,70 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_cm_01,COLUMN_MERGE,List merged employee full names.,SELECT full_name FROM employees ORDER BY employee_id,False,,"SELECT DISTINCT CONCAT(e1.first_name, ' ', e1.last_name) AS full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id
+WHERE e1.first_name = e2.first_name AND e1.last_name = e2.last_name
+ORDER BY full_name",0,"SELECT DISTINCT CONCAT(e1.first_name, ' ', e1.last_name) AS full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id 
+  AND e1.first_name = e2.first_name 
+  AND e1.last_name = e2.last_name
+ORDER BY full_name",0,"SELECT DISTINCT full_name
+FROM employees
+WHERE full_name IS NOT NULL
+ORDER BY full_name",1,"SELECT DISTINCT e1.first_name || ' ' || e1.last_name AS full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id 
+  AND e1.first_name = e2.first_name 
+  AND e1.last_name = e2.last_name
+ORDER BY full_name",0,1,no such column: e1.first_name,anthropic,SELECT DISTINCT e1.full_name FROM employees AS e1 JOIN employees AS e2 ON e1.employee_id <> e2.employee_id AND e1.full_name = e2.full_name ORDER BY e1.full_name,ast,silent_failure_suspected,0,0,0,3.2493,1.8494,2.8887,1.1922,1.6806,1.614667,anthropic
+hr_cm_02,COLUMN_MERGE,Count employees with last names starting with S.,SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%',False,,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',1,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,SELECT COUNT(*) FROM employees WHERE full_name LIKE '% S%',1,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,1,no such column: last_name,anthropic,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%S%',ast,valid,1,1,0,2.6929,0.9808,1.1668,0.9512,1.0519,0.999458,anthropic
+hr_cm_03,COLUMN_MERGE,Full name for employee 1.,SELECT full_name FROM employees WHERE employee_id=1,False,,"SELECT first_name, last_name FROM employees WHERE employee_id = 1",0,"SELECT first_name, last_name FROM employees WHERE employee_id = 1",0,SELECT full_name FROM employees WHERE employee_id = 1,1,"SELECT first_name, last_name FROM employees WHERE employee_id = 1",0,1,no such column: first_name,anthropic,SELECT full_name FROM employees WHERE employee_id = 1,ast,valid,1,1,0,0.975,0.9802,1.5446,1.323,1.4837,0.753208,anthropic
+hr_cm_04,COLUMN_MERGE,Full names for employees with salary over 7000.,SELECT full_name FROM employees WHERE salary > 7000 ORDER BY employee_id,False,,"SELECT first_name, last_name FROM employees WHERE salary > 7000",0,"SELECT first_name, last_name FROM employees WHERE salary > 7000",0,SELECT full_name FROM employees WHERE salary > 7000,1,"SELECT first_name, last_name FROM employees WHERE salary > 7000",0,1,no such column: first_name,anthropic,SELECT full_name FROM employees WHERE salary > 7000,ast,valid,1,1,0,1.3191,1.1108,0.9523,0.9176,0.8756,0.618625,anthropic
+hr_cm_05,COLUMN_MERGE,Full names with emails.,"SELECT full_name, email FROM employees ORDER BY employee_id",False,,"SELECT first_name, last_name, email FROM employees",0,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM employees",0,"SELECT full_name, email FROM employees",1,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM employees",0,1,no such column: first_name,anthropic,"SELECT full_name, email FROM employees",ast,valid,1,1,0,1.2702,0.8817,1.149,0.9294,1.0354,1.193875,anthropic
+hr_cm_06,COLUMN_MERGE,Full names with department IDs.,"SELECT full_name, department_id FROM employees ORDER BY employee_id",False,,"SELECT CONCAT(first_name, ' ', last_name) AS full_name, department_id
+FROM employees",1,"SELECT CONCAT(first_name, ' ', last_name) AS full_name, department_id
+FROM employees",0,"SELECT full_name, department_id FROM employees",1,"SELECT CONCAT(e.first_name, ' ', e.last_name) AS full_name, e.department_id
+FROM employees e",0,1,no such column: first_name,anthropic,"SELECT full_name, department_id FROM employees",ast,valid,1,1,0,1.8704,1.351,0.9319,1.03,1.1386,1.333834,anthropic
+hr_cm_07,COLUMN_MERGE,Full names and job IDs for the first five employees.,"SELECT full_name, job_id FROM employees WHERE employee_id <= 5 ORDER BY employee_id",False,,"SELECT first_name || ' ' || last_name AS full_name, job_id
+FROM employees
+LIMIT 5",1,"SELECT first_name || ' ' || last_name AS full_name, job_id
+FROM employees
+LIMIT 5",0,"SELECT full_name, job_id FROM employees LIMIT 5",1,"SELECT first_name || ' ' || last_name AS full_name, job_id
+FROM employees
+LIMIT 5",0,1,no such column: first_name,anthropic,"SELECT full_name, job_id FROM employees LIMIT 5",ast,valid,1,1,0,0.9791,1.3127,0.9714,2.0412,1.0679,0.722125,anthropic
+hr_cm_08,COLUMN_MERGE,Count employees with 'a' in their full name.,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%',False,,SELECT COUNT(*) FROM employees WHERE first_name LIKE '%a%' OR last_name LIKE '%a%' OR first_name LIKE '%A%' OR last_name LIKE '%A%',1,SELECT COUNT(*) FROM employees WHERE first_name LIKE '%a%' OR last_name LIKE '%a%' OR first_name LIKE '%A%' OR last_name LIKE '%A%',0,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%',1,SELECT COUNT(*) FROM employees WHERE (first_name LIKE '%a%' OR first_name LIKE '%A%') OR (last_name LIKE '%a%' OR last_name LIKE '%A%'),0,1,no such column: first_name,anthropic,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%',ast,valid,1,1,0,1.0809,1.0361,1.6129,1.242,1.2542,1.482834,anthropic
+hr_cm_09,COLUMN_MERGE,Full names for employees with commissions.,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT first_name, last_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",0,"SELECT first_name, last_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",0,SELECT full_name FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0,1,"SELECT employees.first_name, employees.last_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",0,1,no such column: first_name,anthropic,SELECT full_name FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0,ast,valid,1,1,0,1.6842,1.9316,1.0441,1.7525,1.0979,1.618875,anthropic
+hr_cm_10,COLUMN_MERGE,Job history start date with full name for employee 1.,"SELECT j.start_date, e.full_name FROM job_history j JOIN employees e ON j.employee_id=e.employee_id WHERE e.employee_id=1",False,,"SELECT jh.start_date, e.first_name, e.last_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,"SELECT jh.start_date, e.first_name, e.last_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,"SELECT jh.start_date, e.full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",1,"SELECT jh.start_date, e.first_name, e.last_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,1,no such column: e.first_name,anthropic,"SELECT jh.start_date, e.full_name FROM job_history AS jh JOIN employees AS e ON jh.employee_id = e.employee_id WHERE jh.employee_id = 1",ast,valid,1,1,0,1.7721,1.2398,1.3861,1.0368,1.1581,1.659625,anthropic
+hr_cm_11,COLUMN_MERGE,Full names for employees managed by 1.,SELECT full_name FROM employees WHERE manager_id=1 ORDER BY employee_id,False,,"SELECT first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,"SELECT first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,SELECT full_name FROM employees WHERE manager_id = 1,1,"SELECT e.first_name, e.last_name
+FROM employees e
+WHERE e.manager_id = 1",0,1,no such column: first_name,anthropic,SELECT full_name FROM employees WHERE manager_id = 1,ast,valid,1,1,0,1.1943,1.0795,0.9572,2.1644,1.0857,1.128459,anthropic
+hr_cm_12,COLUMN_MERGE,Count employees with salary at least 6000.,SELECT COUNT(*) FROM employees WHERE salary >= 6000,False,,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,0,,anthropic,SELECT COUNT(*) FROM employees WHERE salary >= 6000,ast,valid,1,0,0,1.0863,1.1743,1.1478,0.0009,0.0446,1.033583,anthropic
+hr_cm_13,COLUMN_MERGE,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT region_name FROM regions,1,0,,anthropic,SELECT region_name FROM regions,ast,valid,1,0,0,1.0124,1.0312,0.971,0.0007,0.0469,0.753792,anthropic
+hr_cm_14,COLUMN_MERGE,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,anthropic,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,1.3153,1.5586,0.9196,0.0011,0.0485,1.027667,anthropic
+hr_cm_15,COLUMN_MERGE,List employee first names.,,True,unanswerable_after_COLUMN_MERGE,SELECT first_name FROM employees,,SELECT first_name FROM employees,,"SELECT SUBSTR(full_name, 1, INSTR(full_name, ' ') - 1) AS first_name
+FROM employees",,SELECT first_name FROM employees,,1,no such column: first_name,anthropic,SELECT full_name FROM employees,ast,valid,,0,0,1.1885,1.0723,0.9483,0.9785,0.0504,0.954167,anthropic
+hr_cm_16,COLUMN_MERGE,List employee last names.,,True,unanswerable_after_COLUMN_MERGE,SELECT last_name FROM employees,,SELECT last_name FROM employees,,SELECT DISTINCT last_name FROM employees,,SELECT last_name FROM employees,,1,no such column: last_name,anthropic,SELECT full_name FROM employees,ast,valid,,0,0,1.1223,2.4091,0.9627,1.6276,1.6098,1.139875,anthropic

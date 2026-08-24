@@ -1,0 +1,502 @@
+{
+  "backend": "v1_token",
+  "threshold": 0.1,
+  "labels_file": "sfd_labels.json",
+  "generator_version": "1.0.0",
+  "n_cases": 60,
+  "n_scored": 60,
+  "exec_errors": 0,
+  "confusion": {
+    "tp": 12,
+    "fp": 1,
+    "fn": 28,
+    "tn": 19
+  },
+  "precision": 0.9231,
+  "recall": 0.3,
+  "f1": 0.4528,
+  "gate_g1_precision_gt_0.5": true,
+  "wall_time_s": 0.02,
+  "per_case": [
+    {
+      "id": "cs_tr_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.7272727272727273,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_tr_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.6363636363636364,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_tr_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.45454545454545453,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_tr_02__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5555555555555556,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_tr_03__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.8,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_tr_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.4375,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_ts_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.6666666666666666,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_ts_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5833333333333334,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_ts_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.4166666666666667,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_ts_02__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_ts_03__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.8,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_ts_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5625,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_tm_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.6,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_tm_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5714285714285714,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_tm_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.42857142857142855,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_tm_02__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.4,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_tm_03__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.3076923076923077,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_tm_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.2222222222222222,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_cr_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5384615384615384,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_cr_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.21428571428571427,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_cr_02__gold",
+      "label": "valid",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.0625,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_cr_02__drop_where",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.08333333333333333,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_cr_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.6875,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_cr_04__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.2857142857142857,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_cm_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5714285714285714,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_cm_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5384615384615384,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "cs_cm_01__stale_merge_eq",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "empty_result_on_affirmative_question",
+      "similarity": 0.5714285714285714,
+      "mutation": "stale_merge_eq"
+    },
+    {
+      "id": "cs_cm_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.38461538461538464,
+      "mutation": "none"
+    },
+    {
+      "id": "cs_cm_02__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5555555555555556,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "cs_cm_02__stale_merge_eq",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "empty_result_on_affirmative_question",
+      "similarity": 0.3076923076923077,
+      "mutation": "stale_merge_eq"
+    },
+    {
+      "id": "hr_tr_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5454545454545454,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_tr_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_tr_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.16666666666666666,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_tr_03__drop_where",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.0,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "hr_tr_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.08333333333333333,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_tr_04__swap_agg_avg",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.0,
+      "mutation": "swap_agg_avg"
+    },
+    {
+      "id": "hr_ts_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.6363636363636364,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_ts_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_ts_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.14285714285714285,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_ts_03__drop_where",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.0,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "hr_ts_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.08333333333333333,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_ts_04__swap_agg_avg",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.1,
+      "mutation": "swap_agg_avg"
+    },
+    {
+      "id": "hr_tm_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.45454545454545453,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_tm_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.36363636363636365,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_tm_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.16666666666666666,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_tm_02__wrong_column",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.08333333333333333,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_tm_03__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.42857142857142855,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "hr_tm_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.1111111111111111,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_cr_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.4166666666666667,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_cr_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.5,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_cr_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.4,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_cr_03__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.1111111111111111,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "hr_cr_03__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.2,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_cr_04__swap_agg_avg",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "low_token_overlap",
+      "similarity": 0.0,
+      "mutation": "swap_agg_avg"
+    },
+    {
+      "id": "hr_cm_01__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.45454545454545453,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_cm_01__wrong_column",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.36363636363636365,
+      "mutation": "wrong_column"
+    },
+    {
+      "id": "hr_cm_01__stale_merge_eq",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "empty_result_on_affirmative_question",
+      "similarity": 0.45454545454545453,
+      "mutation": "stale_merge_eq"
+    },
+    {
+      "id": "hr_cm_02__gold",
+      "label": "valid",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.23076923076923078,
+      "mutation": "none"
+    },
+    {
+      "id": "hr_cm_02__drop_where",
+      "label": "silent_failure",
+      "pred": "valid",
+      "reason": null,
+      "similarity": 0.2,
+      "mutation": "drop_where"
+    },
+    {
+      "id": "hr_cm_02__stale_merge_eq",
+      "label": "silent_failure",
+      "pred": "silent_failure",
+      "reason": "empty_result_on_affirmative_question",
+      "similarity": 0.15384615384615385,
+      "mutation": "stale_merge_eq"
+    }
+  ]
+}

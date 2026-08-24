@@ -1,0 +1,428 @@
+{
+  "haiku": {
+    "model": "haiku",
+    "missing_configs": [],
+    "n_configs": 10,
+    "n_scored": 152,
+    "ex": {
+      "stale_canonical": 0.15789473684210525,
+      "stale_sanity": 0.15789473684210525,
+      "refreshed_canonical": 0.6907894736842105,
+      "diff_in_prompt": 0.6644736842105263,
+      "vendor_native": 0.6578947368421053,
+      "mcp_canonical": 0.6052631578947368
+    },
+    "agreement_sanity_vs_canonical": 1.0,
+    "wilson_ci": {
+      "stale_sanity": {
+        "successes": 24,
+        "total": 152,
+        "lower": 0.108459,
+        "upper": 0.224196
+      },
+      "diff_in_prompt": {
+        "successes": 101,
+        "total": 152,
+        "lower": 0.586175,
+        "upper": 0.734664
+      },
+      "vendor_native": {
+        "successes": 100,
+        "total": 152,
+        "lower": 0.579415,
+        "upper": 0.72859
+      },
+      "mcp_canonical": {
+        "successes": 92,
+        "total": 152,
+        "lower": 0.525881,
+        "upper": 0.679455
+      }
+    },
+    "mcnemar": {
+      "vendor_vs_mcp": {
+        "b": 17,
+        "c": 9,
+        "statistic": 1.884615,
+        "p_value": 0.168638
+      },
+      "diff_vs_mcp": {
+        "b": 11,
+        "c": 2,
+        "statistic": 4.923077,
+        "p_value": 0.022461
+      },
+      "vendor_vs_diff": {
+        "b": 11,
+        "c": 12,
+        "statistic": 0.0,
+        "p_value": 1.0
+      }
+    },
+    "rr": {
+      "diff_in_prompt": 0.9506172839506172,
+      "vendor_native": 0.9382716049382716,
+      "mcp_canonical": 0.8395061728395061
+    },
+    "per_operator": {
+      "TABLE_RENAME": {
+        "n": 32,
+        "ex_stale": 0.125,
+        "ex_refreshed": 0.6562,
+        "ex_diff_in_prompt": 0.625,
+        "rr_diff_in_prompt": 0.9412,
+        "ex_vendor_native": 0.6562,
+        "rr_vendor_native": 1.0,
+        "ex_mcp_canonical": 0.5625,
+        "rr_mcp_canonical": 0.8235
+      },
+      "TABLE_SPLIT": {
+        "n": 32,
+        "ex_stale": 0.125,
+        "ex_refreshed": 0.6562,
+        "ex_diff_in_prompt": 0.5938,
+        "rr_diff_in_prompt": 0.8824,
+        "ex_vendor_native": 0.5625,
+        "rr_vendor_native": 0.8235,
+        "ex_mcp_canonical": 0.5938,
+        "rr_mcp_canonical": 0.8824
+      },
+      "TABLE_MERGE": {
+        "n": 28,
+        "ex_stale": 0.1429,
+        "ex_refreshed": 0.7143,
+        "ex_diff_in_prompt": 0.7857,
+        "rr_diff_in_prompt": 1.125,
+        "ex_vendor_native": 0.7857,
+        "rr_vendor_native": 1.125,
+        "ex_mcp_canonical": 0.7143,
+        "rr_mcp_canonical": 1.0
+      },
+      "COLUMN_RENAME": {
+        "n": 32,
+        "ex_stale": 0.1875,
+        "ex_refreshed": 0.6875,
+        "ex_diff_in_prompt": 0.7188,
+        "rr_diff_in_prompt": 1.0625,
+        "ex_vendor_native": 0.6562,
+        "rr_vendor_native": 0.9375,
+        "ex_mcp_canonical": 0.6562,
+        "rr_mcp_canonical": 0.9375
+      },
+      "COLUMN_MERGE": {
+        "n": 28,
+        "ex_stale": 0.2143,
+        "ex_refreshed": 0.75,
+        "ex_diff_in_prompt": 0.6071,
+        "rr_diff_in_prompt": 0.7333,
+        "ex_vendor_native": 0.6429,
+        "rr_vendor_native": 0.8,
+        "ex_mcp_canonical": 0.5,
+        "rr_mcp_canonical": 0.5333
+      }
+    },
+    "cost_latency": {
+      "sanity": {
+        "mean_tokens_in": 240.2,
+        "mean_tokens_out": 30.2,
+        "total_usd": 0.0594,
+        "usd_per_query": 0.000391,
+        "latency": {
+          "n": 152,
+          "mean": 1.269464,
+          "median": 1.1351,
+          "q1": 0.99655,
+          "q3": 1.4302,
+          "iqr": 0.43365,
+          "p95": 2.0701,
+          "min": 0.8382,
+          "max": 3.2925
+        }
+      },
+      "diff_in_prompt": {
+        "mean_tokens_in": 336.4,
+        "mean_tokens_out": 32.8,
+        "total_usd": 0.0761,
+        "usd_per_query": 0.0005,
+        "latency": {
+          "n": 152,
+          "mean": 1.256949,
+          "median": 1.1217,
+          "q1": 1.01195,
+          "q3": 1.31425,
+          "iqr": 0.3023,
+          "p95": 2.1667,
+          "min": 0.8086,
+          "max": 3.8367
+        }
+      },
+      "vendor_native": {
+        "mean_tokens_in": 4837.5,
+        "mean_tokens_out": 256.5,
+        "total_usd": 0.9303,
+        "usd_per_query": 0.00612,
+        "latency": {
+          "n": 152,
+          "mean": 5.374119,
+          "median": 4.55005,
+          "q1": 4.0741,
+          "q3": 5.83325,
+          "iqr": 1.75915,
+          "p95": 10.7905,
+          "min": 2.0721,
+          "max": 15.1808
+        }
+      },
+      "mcp_canonical_latency": {
+        "n": 152,
+        "mean": 0.710121,
+        "median": 0.8682,
+        "q1": 0.0024,
+        "q3": 1.13595,
+        "iqr": 1.13355,
+        "p95": 2.1673,
+        "min": 0.0015,
+        "max": 3.6525
+      }
+    },
+    "tool_loop": {
+      "mean_api_calls_per_query": 3.401,
+      "mean_tool_calls_per_query": 2.428,
+      "pct_queries_using_tool": {
+        "get_schema_diff": 0.9934,
+        "relink_sql": 0.1118,
+        "validate_sql": 0.9934
+      },
+      "pct_queries_no_tools": 0.0066,
+      "pct_queries_capped": 0.0263
+    },
+    "contaminated_queries": 0,
+    "strict_all_runs": true,
+    "low_agreement_configs": [],
+    "per_config_agreement": {
+      "concert_singer_COLUMN_MERGE": 1.0,
+      "concert_singer_COLUMN_RENAME": 1.0,
+      "concert_singer_TABLE_MERGE": 1.0,
+      "concert_singer_TABLE_RENAME": 1.0,
+      "concert_singer_TABLE_SPLIT": 1.0,
+      "hr_1_COLUMN_MERGE": 1.0,
+      "hr_1_COLUMN_RENAME": 1.0,
+      "hr_1_TABLE_MERGE": 1.0,
+      "hr_1_TABLE_RENAME": 1.0,
+      "hr_1_TABLE_SPLIT": 1.0
+    }
+  },
+  "gpt-4o": {
+    "model": "gpt-4o",
+    "missing_configs": [],
+    "n_configs": 10,
+    "n_scored": 152,
+    "ex": {
+      "stale_canonical": 0.18421052631578946,
+      "stale_sanity": 0.18421052631578946,
+      "refreshed_canonical": 0.75,
+      "diff_in_prompt": 0.7236842105263158,
+      "vendor_native": 0.7368421052631579,
+      "mcp_canonical": 0.7236842105263158
+    },
+    "agreement_sanity_vs_canonical": 1.0,
+    "wilson_ci": {
+      "stale_sanity": {
+        "successes": 28,
+        "total": 152,
+        "lower": 0.130635,
+        "upper": 0.253355
+      },
+      "diff_in_prompt": {
+        "successes": 110,
+        "total": 152,
+        "lower": 0.647745,
+        "upper": 0.788595
+      },
+      "vendor_native": {
+        "successes": 112,
+        "total": 152,
+        "lower": 0.661621,
+        "upper": 0.800387
+      },
+      "mcp_canonical": {
+        "successes": 110,
+        "total": 152,
+        "lower": 0.647745,
+        "upper": 0.788595
+      }
+    },
+    "mcnemar": {
+      "vendor_vs_mcp": {
+        "b": 7,
+        "c": 5,
+        "statistic": 0.083333,
+        "p_value": 0.774414
+      },
+      "diff_vs_mcp": {
+        "b": 3,
+        "c": 3,
+        "statistic": 0.166667,
+        "p_value": 1.0
+      },
+      "vendor_vs_diff": {
+        "b": 7,
+        "c": 5,
+        "statistic": 0.083333,
+        "p_value": 0.774414
+      }
+    },
+    "rr": {
+      "diff_in_prompt": 0.9534883720930233,
+      "vendor_native": 0.9767441860465116,
+      "mcp_canonical": 0.9534883720930233
+    },
+    "per_operator": {
+      "TABLE_RENAME": {
+        "n": 32,
+        "ex_stale": 0.1562,
+        "ex_refreshed": 0.7188,
+        "ex_diff_in_prompt": 0.7188,
+        "rr_diff_in_prompt": 1.0,
+        "ex_vendor_native": 0.6562,
+        "rr_vendor_native": 0.8889,
+        "ex_mcp_canonical": 0.7188,
+        "rr_mcp_canonical": 1.0
+      },
+      "TABLE_SPLIT": {
+        "n": 32,
+        "ex_stale": 0.1562,
+        "ex_refreshed": 0.75,
+        "ex_diff_in_prompt": 0.7188,
+        "rr_diff_in_prompt": 0.9474,
+        "ex_vendor_native": 0.75,
+        "rr_vendor_native": 1.0,
+        "ex_mcp_canonical": 0.7188,
+        "rr_mcp_canonical": 0.9474
+      },
+      "TABLE_MERGE": {
+        "n": 28,
+        "ex_stale": 0.1429,
+        "ex_refreshed": 0.8214,
+        "ex_diff_in_prompt": 0.7143,
+        "rr_diff_in_prompt": 0.8421,
+        "ex_vendor_native": 0.8571,
+        "rr_vendor_native": 1.0526,
+        "ex_mcp_canonical": 0.7857,
+        "rr_mcp_canonical": 0.9474
+      },
+      "COLUMN_RENAME": {
+        "n": 32,
+        "ex_stale": 0.2188,
+        "ex_refreshed": 0.7812,
+        "ex_diff_in_prompt": 0.8125,
+        "rr_diff_in_prompt": 1.0556,
+        "ex_vendor_native": 0.75,
+        "rr_vendor_native": 0.9444,
+        "ex_mcp_canonical": 0.7812,
+        "rr_mcp_canonical": 1.0
+      },
+      "COLUMN_MERGE": {
+        "n": 28,
+        "ex_stale": 0.25,
+        "ex_refreshed": 0.6786,
+        "ex_diff_in_prompt": 0.6429,
+        "rr_diff_in_prompt": 0.9167,
+        "ex_vendor_native": 0.6786,
+        "rr_vendor_native": 1.0,
+        "ex_mcp_canonical": 0.6071,
+        "rr_mcp_canonical": 0.8333
+      }
+    },
+    "cost_latency": {
+      "sanity": {
+        "mean_tokens_in": 203.3,
+        "mean_tokens_out": 22.7,
+        "total_usd": 0.1117,
+        "usd_per_query": 0.000735,
+        "latency": {
+          "n": 152,
+          "mean": 1.102944,
+          "median": 1.0004,
+          "q1": 0.9017,
+          "q3": 1.133,
+          "iqr": 0.2313,
+          "p95": 1.6412,
+          "min": 0.6973,
+          "max": 5.5885
+        }
+      },
+      "diff_in_prompt": {
+        "mean_tokens_in": 290.2,
+        "mean_tokens_out": 22.0,
+        "total_usd": 0.1437,
+        "usd_per_query": 0.000945,
+        "latency": {
+          "n": 152,
+          "mean": 1.289371,
+          "median": 1.0672,
+          "q1": 0.9473,
+          "q3": 1.2643,
+          "iqr": 0.317,
+          "p95": 2.2154,
+          "min": 0.7758,
+          "max": 8.2676
+        }
+      },
+      "vendor_native": {
+        "mean_tokens_in": 2506.5,
+        "mean_tokens_out": 92.6,
+        "total_usd": 1.0933,
+        "usd_per_query": 0.007193,
+        "latency": {
+          "n": 152,
+          "mean": 4.471036,
+          "median": 4.2293,
+          "q1": 3.7648,
+          "q3": 4.86825,
+          "iqr": 1.10345,
+          "p95": 7.689,
+          "min": 0.9332,
+          "max": 13.4826
+        }
+      },
+      "mcp_canonical_latency": {
+        "n": 152,
+        "mean": 0.601694,
+        "median": 0.6839,
+        "q1": 0.0024,
+        "q3": 0.959,
+        "iqr": 0.9566,
+        "p95": 1.4557,
+        "min": 0.0016,
+        "max": 10.9786
+      }
+    },
+    "tool_loop": {
+      "mean_api_calls_per_query": 3.717,
+      "mean_tool_calls_per_query": 3.0,
+      "pct_queries_using_tool": {
+        "get_schema_diff": 0.9803,
+        "relink_sql": 0.8618,
+        "validate_sql": 0.8882
+      },
+      "pct_queries_no_tools": 0.0197,
+      "pct_queries_capped": 0.0
+    },
+    "contaminated_queries": 0,
+    "strict_all_runs": true,
+    "low_agreement_configs": [],
+    "per_config_agreement": {
+      "concert_singer_COLUMN_MERGE": 1.0,
+      "concert_singer_COLUMN_RENAME": 1.0,
+      "concert_singer_TABLE_MERGE": 1.0,
+      "concert_singer_TABLE_RENAME": 1.0,
+      "concert_singer_TABLE_SPLIT": 1.0,
+      "hr_1_COLUMN_MERGE": 1.0,
+      "hr_1_COLUMN_RENAME": 1.0,
+      "hr_1_TABLE_MERGE": 1.0,
+      "hr_1_TABLE_RENAME": 1.0,
+      "hr_1_TABLE_SPLIT": 1.0
+    }
+  }
+}

@@ -1,0 +1,86 @@
+id,perturbation,question,expected_failure,sanity_sql,sanity_ok,sanity_latency_s,sanity_tokens_in,sanity_tokens_out,canonical_baseline_ok,canonical_mcp_ok,diff_sql,diff_ok,diff_latency_s,diff_tokens_in,diff_tokens_out,vendor_sql,vendor_ok,vendor_latency_s,vendor_tokens_in,vendor_tokens_out,vendor_n_api_calls,vendor_n_tool_calls,vendor_capped,tool_calls_json,backend
+hr_ts_01,TABLE_SPLIT,List employee first and last names.,False,"SELECT first_name, last_name FROM employees",0,1.7617,301,14,0,1,"SELECT first_name, last_name FROM employee_personal",1,1.1735,391,16,"SELECT first_name, last_name FROM employee_personal",1,4.4031,4438,200,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT first_name, last_name FROM employee_personal""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_02,TABLE_SPLIT,Count employees.,False,SELECT COUNT(*) FROM employees,0,1.0646,297,10,0,1,SELECT COUNT(DISTINCT employee_id) FROM employee_personal,1,1.1787,387,21,"Perfect! The query is valid.
+
+SELECT COUNT(DISTINCT employee_id) FROM employee_job",0,6.4268,6256,313,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM employees""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(DISTINCT employee_id) FROM employee_job""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_03,TABLE_SPLIT,Employees with salary over 7000.,False,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,0.9889,303,33,0,0,"SELECT e.employee_id, e.first_name, e.last_name, e.salary
+FROM employee_personal e
+WHERE e.salary > 7000",0,1.0477,393,41,"Perfect! The query is valid. Since the question asks for ""Employees with salary over 7000"" and the salary information is in the `employee_job` table, here's the final SQL:
+
+SELECT * FROM employee_job WHERE salary > 7000",0,7.6026,8384,463,5,4,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ej.salary\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.salary > 7000""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT employee_id, first_name, last_name, salary\nFROM employee_personal\nNATURAL JOIN employee_job\nWHERE salary > 7000""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT * FROM employee_job WHERE salary > 7000""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_04,TABLE_SPLIT,Average employee salary.,False,SELECT AVG(salary) FROM employees,0,1.436,298,12,0,1,SELECT AVG(salary) FROM employee_job,1,1.1816,388,18,SELECT AVG(salary) FROM employee_job,1,4.8284,4413,188,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT AVG(salary) FROM employee_job""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_05,TABLE_SPLIT,List employee emails.,False,SELECT email FROM employees,0,1.2091,298,8,0,1,SELECT email FROM employee_personal,1,1.0334,388,10,SELECT email FROM employee_personal,1,3.7985,4407,179,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT email FROM employee_personal""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_06,TABLE_SPLIT,Employees in department 10.,False,SELECT * FROM employees WHERE department_id = 10,0,0.9875,301,15,0,0,"SELECT e.employee_id, e.first_name, e.last_name
+FROM employee_personal e
+WHERE e.department_id = 10",0,2.1446,391,38,"Perfect! The query is valid. Here's the final SQL:
+
+SELECT * FROM employee_job WHERE department_id = 10",0,9.7213,10399,541,6,5,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT * FROM employees WHERE department_id = 10""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT * FROM employees WHERE department_id = 10""}, ""result"": {""verdict"": ""execution_error"", ""reason"": ""no such table: employees""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ep.email, ep.phone_number, ej.hire_date, ej.job_id, ej.salary, ej.commission_pct, ej.manager_id, ej.department_id FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.department_id = 10""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT * FROM employee_job WHERE department_id = 10""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_07,TABLE_SPLIT,List employee job IDs.,False,SELECT DISTINCT job_id FROM employees,0,1.1379,300,12,0,0,SELECT DISTINCT job_id FROM employee_job,0,1.3179,390,14,SELECT job_id FROM employee_job,0,4.6075,4422,188,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT job_id FROM employee_job""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_08,TABLE_SPLIT,Count employees per department.,False,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,1.4879,299,79,0,0,"SELECT 
+    d.department_id,
+    d.department_name,
+    COUNT(ep.employee_id) as employee_count
+FROM departments d
+LEFT JOIN employee_personal ep ON d.department_id = ep.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,1.7774,389,86,"Perfect! The query is valid. Here's the final SQL:
+
+```sql
+SELECT department_id, COUNT(*) as employee_count FROM employee_job GROUP BY department_id ORDER BY department_id
+```
+
+SELECT department_id, COUNT(*) as employee_count FROM employee_job GROUP BY department_id ORDER BY department_id",0,6.2231,6325,378,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT department_id, COUNT(*) as employee_count FROM employees GROUP BY department_id ORDER BY department_id""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT department_id, COUNT(*) as employee_count FROM employee_job GROUP BY department_id ORDER BY department_id""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_09,TABLE_SPLIT,Employees with commissions.,False,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,1.1063,300,47,0,0,"SELECT 
+    ep.employee_id,
+    ep.first_name,
+    ep.last_name,
+    ej.commission_pct
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0
+ORDER BY ep.employee_id",0,1.5236,390,96,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0",0,7.0329,6404,422,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT employee_id, first_name, last_name, commission_pct FROM employees WHERE commission_pct IS NOT NULL AND commission_pct > 0""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ej.commission_pct FROM employee_personal ep JOIN employee_job ej ON ep.employee_id = ej.employee_id WHERE ej.commission_pct IS NOT NULL AND ej.commission_pct > 0""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_10,TABLE_SPLIT,Employees managed by 1.,False,SELECT * FROM employees WHERE manager_id = 1,0,0.9539,301,15,0,0,"SELECT e.employee_id, e.first_name, e.last_name
+FROM employee_personal e
+WHERE e.manager_id = 1",0,1.1474,391,42,"SELECT ep.first_name, ep.last_name
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.manager_id = 1",0,13.7021,15756,922,8,8,1,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ep.email, ep.phone_number, ej.hire_date, ej.job_id, ej.salary, ej.commission_pct, ej.department_id\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT *\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT employee_id\nFROM employee_job\nWHERE manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ej.manager_id\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.manager_id = 1\nORDER BY ep.employee_id""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT *\nFROM employee_job\nWHERE manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.first_name, ep.last_name\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.manager_id = 1""}, ""result"": {""verdict"": ""silent_failure_suspected"", ""reason"": ""low_semantic_similarity""}}]",anthropic
+hr_ts_11,TABLE_SPLIT,Job title for employee 1.,False,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1.2511,301,40,0,1,"SELECT j.job_title
+FROM employee_job ej
+JOIN jobs j ON ej.job_id = j.job_id
+WHERE ej.employee_id = 1",1,1.0777,391,49,SELECT j.job_title FROM employee_job e JOIN jobs j ON e.job_id = j.job_id WHERE e.employee_id = 1,1,6.3386,6369,344,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT j.job_title FROM employees e JOIN jobs j ON e.job_id = j.job_id WHERE e.employee_id = 1""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT j.job_title FROM employee_job e JOIN jobs j ON e.job_id = j.job_id WHERE e.employee_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_12,TABLE_SPLIT,Department name for employee 1.,False,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,0.9581,301,40,0,1,"SELECT d.department_name
+FROM employee_personal ep
+JOIN employees e ON ep.employee_id = e.employee_id
+JOIN departments d ON e.department_id = d.department_id
+WHERE ep.employee_id = 1",0,1.2909,391,63,SELECT d.department_name FROM employee_job e JOIN departments d ON e.department_id = d.department_id WHERE e.employee_id = 1,1,8.2169,6384,359,4,3,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""relink_sql"", ""args"": {""sql"": ""SELECT d.department_name FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.employee_id = 1""}, ""result"": {""method"": ""ast""}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT d.department_name FROM employee_job e JOIN departments d ON e.department_id = d.department_id WHERE e.employee_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_13,TABLE_SPLIT,Job history start date for employee 1.,False,SELECT start_date FROM job_history WHERE employee_id = 1,1,1.0497,303,19,1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,1.6133,393,19,SELECT start_date FROM job_history WHERE employee_id = 1,1,6.5121,4443,201,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT start_date FROM job_history WHERE employee_id = 1""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_14,TABLE_SPLIT,Employees hired after 2007-06-20.,False,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,1.2753,306,20,0,0,"SELECT e.employee_id, e.first_name, e.last_name, e.hire_date
+FROM employee_personal e
+WHERE e.hire_date > '2007-06-20'
+ORDER BY e.hire_date",0,1.4609,396,58,"SELECT ep.employee_id, ep.first_name, ep.last_name, ej.hire_date
+FROM employee_personal ep
+JOIN employee_job ej ON ep.employee_id = ej.employee_id
+WHERE ej.hire_date > '2007-06-20'
+ORDER BY ej.hire_date",0,4.8632,4523,335,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT ep.employee_id, ep.first_name, ep.last_name, ej.hire_date\nFROM employee_personal ep\nJOIN employee_job ej ON ep.employee_id = ej.employee_id\nWHERE ej.hire_date > '2007-06-20'\nORDER BY ej.hire_date""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_15,TABLE_SPLIT,List region names.,False,SELECT region_name FROM regions,1,0.8863,298,10,1,1,SELECT DISTINCT region_name FROM regions,1,1.66,388,12,SELECT region_name FROM regions,1,4.1553,4419,191,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT region_name FROM regions""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic
+hr_ts_16,TABLE_SPLIT,Count jobs.,False,SELECT COUNT(*) FROM jobs,1,0.8838,297,10,1,1,SELECT COUNT(*) FROM jobs,1,1.0063,387,10,SELECT COUNT(*) FROM jobs,1,4.1012,4414,185,3,2,0,"[{""tool"": ""get_schema_diff"", ""args"": {}, ""result"": {""changed"": true, ""n_events"": 1}}, {""tool"": ""validate_sql"", ""args"": {""sql"": ""SELECT COUNT(*) FROM jobs""}, ""result"": {""verdict"": ""valid"", ""reason"": """"}}]",anthropic

@@ -1,0 +1,363 @@
+{
+  "database_id": "hr_1_COLUMN_MERGE",
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "expected_failures": {
+    "n": 2,
+    "by_operator": {
+      "COLUMN_MERGE": 2
+    },
+    "path_d_flagged": 0
+  },
+  "ex_pre": 0.5,
+  "ex_post_baseline": 0.2143,
+  "ex_post_refreshed_schema": 1.0,
+  "ex_post_error_feedback": 0.2143,
+  "ex_post_mcp": 0.9286,
+  "recovery_rate": 0.9091,
+  "silent_failure_detection_rate": 1.0,
+  "mean_baseline_latency_s": 1.2513,
+  "mean_refreshed_schema_latency_s": 1.2602,
+  "mean_error_feedback_latency_s": 1.0416,
+  "mean_mcp_latency_s": 0.9335,
+  "latencies": {
+    "pre_s": [
+      3.2493,
+      2.6929,
+      0.975,
+      1.3191,
+      1.2702,
+      1.8704,
+      0.9791,
+      1.0809,
+      1.6842,
+      1.7721,
+      1.1943,
+      1.0863,
+      1.0124,
+      1.3153
+    ],
+    "baseline_s": [
+      1.8494,
+      0.9808,
+      0.9802,
+      1.1108,
+      0.8817,
+      1.351,
+      1.3127,
+      1.0361,
+      1.9316,
+      1.2398,
+      1.0795,
+      1.1743,
+      1.0312,
+      1.5586
+    ],
+    "refreshed_schema_s": [
+      2.8887,
+      1.1668,
+      1.5446,
+      0.9523,
+      1.149,
+      0.9319,
+      0.9714,
+      1.6129,
+      1.0441,
+      1.3861,
+      0.9572,
+      1.1478,
+      0.971,
+      0.9196
+    ],
+    "error_feedback_s": [
+      1.1922,
+      0.9512,
+      1.323,
+      0.9176,
+      0.9294,
+      1.03,
+      2.0412,
+      1.242,
+      1.7525,
+      1.0368,
+      2.1644,
+      0.0009,
+      0.0007,
+      0.0011
+    ],
+    "mcp_s": [
+      1.6806,
+      1.0519,
+      1.4837,
+      0.8756,
+      1.0354,
+      1.1386,
+      1.0679,
+      1.2542,
+      1.0979,
+      1.1581,
+      1.0857,
+      0.0446,
+      0.0469,
+      0.0485
+    ]
+  },
+  "latency_stats": {
+    "pre_s": {
+      "n": 14,
+      "mean": 1.535821,
+      "median": 1.29275,
+      "q1": 1.0809,
+      "q3": 1.7721,
+      "iqr": 0.6912,
+      "p95": 3.2493,
+      "min": 0.975,
+      "max": 3.2493
+    },
+    "baseline_s": {
+      "n": 14,
+      "mean": 1.251264,
+      "median": 1.14255,
+      "q1": 1.0312,
+      "q3": 1.351,
+      "iqr": 0.3198,
+      "p95": 1.9316,
+      "min": 0.8817,
+      "max": 1.9316
+    },
+    "refreshed_schema_s": {
+      "n": 14,
+      "mean": 1.260243,
+      "median": 1.09595,
+      "q1": 0.9572,
+      "q3": 1.3861,
+      "iqr": 0.4289,
+      "p95": 2.8887,
+      "min": 0.9196,
+      "max": 2.8887
+    },
+    "error_feedback_s": {
+      "n": 14,
+      "mean": 1.041643,
+      "median": 1.0334,
+      "q1": 0.9176,
+      "q3": 1.323,
+      "iqr": 0.4054,
+      "p95": 2.1644,
+      "min": 0.0007,
+      "max": 2.1644
+    },
+    "mcp_s": {
+      "n": 14,
+      "mean": 0.933543,
+      "median": 1.0768,
+      "q1": 0.8756,
+      "q3": 1.1581,
+      "iqr": 0.2825,
+      "p95": 1.6806,
+      "min": 0.0446,
+      "max": 1.6806
+    }
+  },
+  "fingerprint_diff_ms": 0.102208,
+  "ast_relink_ms": [
+    1.614667,
+    0.999458,
+    0.753208,
+    0.618625,
+    1.193875,
+    1.333834,
+    0.722125,
+    1.482834,
+    1.618875,
+    1.659625,
+    1.128459,
+    1.033583,
+    0.753792,
+    1.027667
+  ],
+  "step_latency_stats_ms": {
+    "fingerprint_diff_ms": {
+      "n": 1,
+      "mean": 0.102208,
+      "median": 0.102208,
+      "q1": 0.102208,
+      "q3": 0.102208,
+      "iqr": 0.0,
+      "p95": 0.102208,
+      "min": 0.102208,
+      "max": 0.102208
+    },
+    "ast_relink_ms": {
+      "n": 14,
+      "mean": 1.138616,
+      "median": 1.081021,
+      "q1": 0.753792,
+      "q3": 1.482834,
+      "iqr": 0.729042,
+      "p95": 1.659625,
+      "min": 0.618625,
+      "max": 1.659625
+    }
+  },
+  "per_operator": {
+    "COLUMN_MERGE": {
+      "n": 14,
+      "baseline_correct": 3,
+      "refreshed_schema_correct": 14,
+      "error_feedback_correct": 3,
+      "mcp_correct": 13,
+      "recovered": 10,
+      "degraded": 0,
+      "baseline_ex": 0.2143,
+      "refreshed_schema_ex": 1.0,
+      "error_feedback_ex": 0.2143,
+      "mcp_ex": 0.9286
+    }
+  },
+  "error_categories": {
+    "correct": 3,
+    "execution_error": 11,
+    "silent_failure": 0,
+    "wrong_result": 0,
+    "unknown": 0
+  },
+  "mcnemar": {
+    "baseline_vs_mcp": {
+      "b": 10,
+      "c": 0,
+      "statistic": 8.1,
+      "p_value": 0.001953
+    },
+    "baseline_vs_refreshed_schema": {
+      "b": 11,
+      "c": 0,
+      "statistic": 9.090909,
+      "p_value": 0.000977
+    },
+    "baseline_vs_error_feedback": {
+      "b": 0,
+      "c": 0,
+      "statistic": null,
+      "p_value": 1.0
+    },
+    "mcp_vs_error_feedback": {
+      "b": 0,
+      "c": 10,
+      "statistic": 8.1,
+      "p_value": 0.001953
+    }
+  },
+  "wilson_ci": {
+    "baseline": {
+      "successes": 3,
+      "total": 14,
+      "lower": 0.075712,
+      "upper": 0.475897
+    },
+    "refreshed_schema": {
+      "successes": 14,
+      "total": 14,
+      "lower": 0.784683,
+      "upper": 1.0
+    },
+    "error_feedback": {
+      "successes": 3,
+      "total": 14,
+      "lower": 0.075712,
+      "upper": 0.475897
+    },
+    "mcp": {
+      "successes": 13,
+      "total": 14,
+      "lower": 0.685307,
+      "upper": 0.987278
+    }
+  },
+  "bootstrap_ci": {
+    "mcp_latency_mean_s": {
+      "n": 14,
+      "estimate": 0.933543,
+      "lower": 0.655093,
+      "upper": 1.170121
+    }
+  },
+  "diff_events": [
+    {
+      "op": "COLUMN_RENAME",
+      "table": "employees",
+      "from": "first_name",
+      "to": "full_name"
+    },
+    {
+      "op": "COLUMN_REMOVE",
+      "table": "employees",
+      "column": "last_name"
+    }
+  ],
+  "perturbation_manifest": {
+    "engine_version": "1.0.0",
+    "content_hash": "f387e688668ff77c",
+    "specs": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "employees",
+        "sources": [
+          "first_name",
+          "last_name"
+        ],
+        "target": "full_name",
+        "expression": "first_name || ' ' || last_name",
+        "target_type": "TEXT",
+        "reversible": false
+      }
+    ],
+    "events": [
+      {
+        "op": "COLUMN_MERGE",
+        "table": "employees",
+        "sources": [
+          "first_name",
+          "last_name"
+        ],
+        "target": "full_name",
+        "expression": "first_name || ' ' || last_name",
+        "reversible": false
+      }
+    ]
+  },
+  "fingerprint_pre": "75de96eccfd6f92d6d5eae413a8f997a96fb8fc9464746cded83eba0128125e9",
+  "fingerprint_post": "e34a624d74cbcd126fd61e6b736e09d55744a0e9967aa06202df3842a10e344b",
+  "backend": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "model_short_name": "haiku",
+  "anthropic_api_key_present": true,
+  "gemini_api_key_present": true,
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0,
+  "contamination_fraction": 0.0,
+  "strict_mode": true,
+  "n_seeds": 5,
+  "seed_stability_pre": 0.9286,
+  "seed_stability_baseline": 1.0,
+  "seed_stability_mcp": 1.0,
+  "seed_disagreements": [
+    {
+      "id": "hr_cm_05",
+      "pre_ok": [
+        0,
+        1
+      ],
+      "baseline_ok": [
+        0
+      ],
+      "mcp_ok": [
+        1
+      ]
+    }
+  ]
+}

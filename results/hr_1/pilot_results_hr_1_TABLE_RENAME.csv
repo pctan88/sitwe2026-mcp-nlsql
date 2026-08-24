@@ -1,0 +1,93 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+hr_tr_01,TABLE_RENAME,List employee first and last names.,"SELECT first_name, last_name FROM staff ORDER BY employee_id",False,,"SELECT first_name, last_name FROM employees",1,"SELECT first_name, last_name FROM employees",0,"SELECT first_name, last_name FROM staff",1,"SELECT first_name, last_name FROM employees",0,1,no such table: employees,anthropic,"SELECT first_name, last_name FROM staff",ast,valid,1,1,0,1.0235,0.867,0.9584,2.2266,0.0023,0.57971,anthropic
+hr_tr_02,TABLE_RENAME,Count employees.,SELECT COUNT(*) FROM staff,False,,SELECT COUNT(*) FROM employees,1,SELECT COUNT(*) FROM employees,0,SELECT COUNT(*) FROM staff,1,SELECT COUNT(*) FROM employees,0,1,no such table: employees,anthropic,SELECT COUNT(*) FROM staff,ast,valid,1,1,0,0.8286,0.8128,0.806,0.9611,0.0024,0.663505,anthropic
+hr_tr_03,TABLE_RENAME,Employees with salary over 7000.,SELECT employee_id FROM staff WHERE salary > 7000 ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM staff
+WHERE salary > 7000
+ORDER BY salary DESC",0,"SELECT employee_id, first_name, last_name, salary
+FROM employees
+WHERE salary > 7000
+ORDER BY salary DESC",0,1,no such table: employees,anthropic,"SELECT employee_id, first_name, last_name, salary FROM staff WHERE salary > 7000 ORDER BY salary DESC",ast,silent_failure_suspected,0,0,0,2.291,5.457,1.0393,1.2334,1.4868,0.923321,anthropic
+hr_tr_04,TABLE_RENAME,Average employee salary.,SELECT AVG(salary) FROM staff,False,,SELECT AVG(salary) FROM employees,1,SELECT AVG(salary) FROM employees,0,SELECT AVG(salary) FROM staff,1,SELECT AVG(salary) FROM employees,0,1,no such table: employees,anthropic,SELECT AVG(salary) FROM staff,ast,valid,1,1,0,0.8304,1.0195,1.2033,1.0757,0.0028,0.75962,anthropic
+hr_tr_05,TABLE_RENAME,List employee emails.,SELECT email FROM staff ORDER BY employee_id,False,,SELECT email FROM employees,1,SELECT email FROM employees,0,SELECT email FROM staff,1,SELECT email FROM employees,0,1,no such table: employees,anthropic,SELECT email FROM staff,ast,valid,1,1,0,0.9896,1.0094,0.8101,1.0386,0.0022,0.512894,anthropic
+hr_tr_06,TABLE_RENAME,Employees in department 10.,SELECT employee_id FROM staff WHERE department_id=10,False,,SELECT * FROM employees WHERE department_id = 10,0,SELECT * FROM employees WHERE department_id = 10,0,SELECT * FROM staff WHERE department_id = 10,0,SELECT * FROM employees WHERE department_id = 10,0,1,no such table: employees,anthropic,SELECT * FROM staff WHERE department_id = 10,ast,valid,0,0,0,0.901,0.8787,1.0985,0.8624,0.0022,0.57937,anthropic
+hr_tr_07,TABLE_RENAME,List employee job IDs.,"SELECT employee_id, job_id FROM staff ORDER BY employee_id",False,,SELECT DISTINCT job_id FROM employees,0,SELECT DISTINCT job_id FROM employees,0,SELECT DISTINCT job_id FROM staff,0,SELECT DISTINCT job_id FROM employees,0,1,no such table: employees,anthropic,SELECT DISTINCT job_id FROM staff,ast,valid,0,0,0,0.9712,1.3841,0.8663,1.1686,0.0024,0.529646,anthropic
+hr_tr_08,TABLE_RENAME,Count employees per department.,"SELECT department_id, COUNT(*) FROM staff GROUP BY department_id ORDER BY department_id",False,,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(s.employee_id) as employee_count
+FROM departments d
+LEFT JOIN staff s ON d.department_id = s.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,"SELECT 
+  d.department_id,
+  d.department_name,
+  COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_id, d.department_name
+ORDER BY d.department_id",0,1,no such table: employees,anthropic,"SELECT d.department_id, d.department_name, COUNT(e.employee_id) AS employee_count FROM departments AS d LEFT JOIN staff AS e ON d.department_id = e.department_id GROUP BY d.department_id, d.department_name ORDER BY d.department_id",ast,valid,0,0,0,2.6867,1.2524,1.2266,1.4027,0.0037,1.397491,anthropic
+hr_tr_09,TABLE_RENAME,Employees with commissions.,SELECT employee_id FROM staff WHERE commission_pct IS NOT NULL ORDER BY employee_id,False,,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, email, salary, commission_pct
+FROM staff
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,"SELECT employee_id, first_name, last_name, commission_pct
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0
+ORDER BY employee_id",0,1,no such table: employees,anthropic,"SELECT employee_id, first_name, last_name, commission_pct FROM staff WHERE NOT commission_pct IS NULL AND commission_pct > 0 ORDER BY employee_id",ast,silent_failure_suspected,0,0,0,1.0107,1.0871,1.1215,1.8772,1.0713,1.065678,anthropic
+hr_tr_10,TABLE_RENAME,Employees managed by 1.,SELECT employee_id FROM staff WHERE manager_id=1 ORDER BY employee_id,False,,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,SELECT * FROM staff WHERE manager_id = 1,0,SELECT * FROM employees WHERE manager_id = 1,0,1,no such table: employees,anthropic,SELECT * FROM staff WHERE manager_id = 1,ast,silent_failure_suspected,0,0,0,1.2041,0.8528,0.9668,0.8581,1.308,0.645018,anthropic
+hr_tr_11,TABLE_RENAME,Job title for employee 1.,SELECT j.job_title FROM staff e JOIN jobs j ON e.job_id=j.job_id WHERE e.employee_id=1,False,,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,"SELECT j.job_title
+FROM staff s
+JOIN jobs j ON s.job_id = j.job_id
+WHERE s.employee_id = 1",1,"SELECT j.job_title
+FROM employees e
+JOIN jobs j ON e.job_id = j.job_id
+WHERE e.employee_id = 1",0,1,no such table: employees,anthropic,SELECT j.job_title FROM staff AS e JOIN jobs AS j ON e.job_id = j.job_id WHERE e.employee_id = 1,ast,valid,1,1,0,2.4389,1.1267,1.014,1.0727,0.003,1.036466,anthropic
+hr_tr_12,TABLE_RENAME,Department name for employee 1.,SELECT d.department_name FROM staff e JOIN departments d ON e.department_id=d.department_id WHERE e.employee_id=1,False,,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",1,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,"SELECT d.department_name
+FROM staff s
+JOIN departments d ON s.department_id = d.department_id
+WHERE s.employee_id = 1",1,"SELECT d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.employee_id = 1",0,1,no such table: employees,anthropic,SELECT d.department_name FROM staff AS e JOIN departments AS d ON e.department_id = d.department_id WHERE e.employee_id = 1,ast,valid,1,1,0,1.4876,0.9079,0.9438,1.0564,0.0065,0.769988,anthropic
+hr_tr_13,TABLE_RENAME,Job history start date for employee 1.,SELECT j.start_date FROM job_history j JOIN staff e ON j.employee_id=e.employee_id WHERE e.employee_id=1,False,,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,SELECT start_date FROM job_history WHERE employee_id = 1,1,0,,anthropic,SELECT start_date FROM job_history WHERE employee_id = 1,ast,valid,1,0,0,2.4666,0.9341,1.015,0.0017,0.0022,0.604603,anthropic
+hr_tr_14,TABLE_RENAME,Employees hired after 2007-06-20.,SELECT employee_id FROM staff WHERE hire_date > '2007-06-20' ORDER BY employee_id,False,,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,SELECT * FROM staff WHERE hire_date > '2007-06-20',0,SELECT * FROM employees WHERE hire_date > '2007-06-20',0,1,no such table: employees,anthropic,SELECT * FROM staff WHERE hire_date > '2007-06-20',ast,silent_failure_suspected,0,0,0,0.9829,0.9891,1.8102,0.819,0.8558,0.634275,anthropic
+hr_tr_15,TABLE_RENAME,List region names.,SELECT region_name FROM regions ORDER BY region_id,False,,SELECT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,SELECT DISTINCT region_name FROM regions,1,0,,anthropic,SELECT DISTINCT region_name FROM regions,ast,valid,1,0,0,0.8963,1.1321,0.79,0.0013,0.002,0.531902,anthropic
+hr_tr_16,TABLE_RENAME,Count jobs.,SELECT COUNT(*) FROM jobs,False,,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,SELECT COUNT(*) FROM jobs,1,0,,anthropic,SELECT COUNT(*) FROM jobs,ast,valid,1,0,0,0.9216,0.9995,0.8021,0.0012,0.0022,0.538588,anthropic

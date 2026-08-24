@@ -1,0 +1,64 @@
+query_id,operator,expected_failure,baseline_sql,baseline_ok,mcp_ok_A,sql_A,verdict_A,mcp_ok_B,sql_B,verdict_B,mcp_ok_C,sql_C,verdict_C,mcp_ok_D,sql_D,verdict_D
+hr_cm_01,COLUMN_MERGE,False,"SELECT DISTINCT CONCAT(e1.first_name, ' ', e1.last_name) AS full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id
+WHERE e1.first_name = e2.first_name AND e1.last_name = e2.last_name
+ORDER BY full_name",0,0,SELECT DISTINCT e1.full_name AS full_name FROM employees AS e1 JOIN employees AS e2 ON e1.employee_id <> e2.employee_id WHERE e1.full_name = e2.full_name ORDER BY full_name,execution_error,0,"SELECT DISTINCT e1.full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id
+WHERE e1.full_name = e2.full_name
+ORDER BY e1.full_name",execution_error,0,"SELECT DISTINCT e1.full_name
+FROM employees e1
+JOIN employees e2 ON e1.employee_id != e2.employee_id
+WHERE e1.full_name = e2.full_name
+ORDER BY e1.full_name",execution_error,0,SELECT DISTINCT e1.full_name || ' ' || e1.last_name AS full_name FROM employees AS e1 JOIN employees AS e2 ON e1.employee_id <> e2.employee_id WHERE e1.full_name = e2.full_name AND e1.last_name = e2.last_name ORDER BY full_name,skipped
+hr_cm_02,COLUMN_MERGE,False,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',0,0,SELECT COUNT(*) FROM employees WHERE full_name LIKE 'S%',execution_error,0,SELECT COUNT(*) FROM employees WHERE full_name LIKE 'S%',execution_error,0,SELECT COUNT(*) FROM employees WHERE full_name LIKE 'S%',execution_error,0,SELECT COUNT(*) FROM employees WHERE last_name LIKE 'S%',skipped
+hr_cm_03,COLUMN_MERGE,False,"SELECT first_name, last_name FROM employees WHERE employee_id = 1",0,1,SELECT full_name FROM employees WHERE employee_id = 1,execution_error,1,SELECT full_name FROM employees WHERE employee_id = 1,execution_error,1,SELECT full_name FROM employees WHERE employee_id = 1,execution_error,0,"SELECT full_name, last_name FROM employees WHERE employee_id = 1",skipped
+hr_cm_04,COLUMN_MERGE,False,"SELECT first_name, last_name FROM employees WHERE salary > 7000",0,1,SELECT full_name FROM employees WHERE salary > 7000,execution_error,0,"SELECT SUBSTRING_INDEX(full_name, ' ', 1) AS first_name, SUBSTRING_INDEX(full_name, ' ', -1) AS last_name FROM employees WHERE salary > 7000",execution_error,1,SELECT full_name FROM employees WHERE salary > 7000,execution_error,0,"SELECT full_name, last_name FROM employees WHERE salary > 7000",skipped
+hr_cm_05,COLUMN_MERGE,False,"SELECT first_name || ' ' || last_name AS full_name, email
+FROM employees",0,1,"SELECT full_name, email FROM employees",execution_error,1,"SELECT full_name, email
+FROM employees",execution_error,1,"SELECT full_name, email
+FROM employees",execution_error,0,"SELECT full_name || ' ' || last_name AS full_name, email FROM employees",skipped
+hr_cm_06,COLUMN_MERGE,False,"SELECT CONCAT(first_name, ' ', last_name) AS full_name, department_id
+FROM employees",0,1,"SELECT full_name, department_id FROM employees",execution_error,1,"SELECT full_name, department_id
+FROM employees",execution_error,1,"SELECT full_name, department_id
+FROM employees",execution_error,0,"SELECT full_name || ' ' || last_name AS full_name, department_id FROM employees",skipped
+hr_cm_07,COLUMN_MERGE,False,"SELECT first_name || ' ' || last_name AS full_name, job_id
+FROM employees
+LIMIT 5",0,1,"SELECT full_name, job_id FROM employees LIMIT 5",execution_error,1,"SELECT full_name, job_id
+FROM employees
+LIMIT 5",execution_error,1,"SELECT full_name, job_id
+FROM employees
+LIMIT 5",execution_error,0,"SELECT full_name || ' ' || last_name AS full_name, job_id FROM employees LIMIT 5",skipped
+hr_cm_08,COLUMN_MERGE,False,SELECT COUNT(*) FROM employees WHERE first_name LIKE '%a%' OR last_name LIKE '%a%' OR first_name LIKE '%A%' OR last_name LIKE '%A%',0,1,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%',execution_error,1,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%',execution_error,1,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR full_name LIKE '%A%',execution_error,0,SELECT COUNT(*) FROM employees WHERE full_name LIKE '%a%' OR last_name LIKE '%a%' OR full_name LIKE '%A%' OR last_name LIKE '%A%',skipped
+hr_cm_09,COLUMN_MERGE,False,"SELECT first_name, last_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",0,1,SELECT full_name FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0,execution_error,1,"SELECT full_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",execution_error,1,"SELECT full_name
+FROM employees
+WHERE commission_pct IS NOT NULL AND commission_pct > 0",execution_error,0,"SELECT full_name, last_name FROM employees WHERE NOT commission_pct IS NULL AND commission_pct > 0",skipped
+hr_cm_10,COLUMN_MERGE,False,"SELECT jh.start_date, e.first_name, e.last_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",0,1,"SELECT jh.start_date, e.full_name FROM job_history AS jh JOIN employees AS e ON jh.employee_id = e.employee_id WHERE jh.employee_id = 1",execution_error,1,"SELECT jh.start_date, e.full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",execution_error,1,"SELECT jh.start_date, e.full_name
+FROM job_history jh
+JOIN employees e ON jh.employee_id = e.employee_id
+WHERE jh.employee_id = 1",execution_error,0,"SELECT jh.start_date, e.full_name, e.last_name FROM job_history AS jh JOIN employees AS e ON jh.employee_id = e.employee_id WHERE jh.employee_id = 1",skipped
+hr_cm_11,COLUMN_MERGE,False,"SELECT first_name, last_name
+FROM employees
+WHERE manager_id = 1",0,1,SELECT full_name FROM employees WHERE manager_id = 1,execution_error,0,"SELECT 
+  SUBSTRING_INDEX(full_name, ' ', 1) AS first_name,
+  SUBSTRING_INDEX(full_name, ' ', -1) AS last_name
+FROM employees
+WHERE manager_id = 1",execution_error,1,"SELECT full_name
+FROM employees
+WHERE manager_id = 1",execution_error,0,"SELECT full_name, last_name FROM employees WHERE manager_id = 1",skipped
+hr_cm_12,COLUMN_MERGE,False,SELECT COUNT(*) FROM employees WHERE salary >= 6000,1,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,valid,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,valid,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,valid,1,SELECT COUNT(*) FROM employees WHERE salary >= 6000,skipped
+hr_cm_13,COLUMN_MERGE,False,SELECT DISTINCT region_name FROM regions,1,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,valid,1,SELECT DISTINCT region_name FROM regions,skipped
+hr_cm_14,COLUMN_MERGE,False,SELECT COUNT(*) FROM jobs,1,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,valid,1,SELECT COUNT(*) FROM jobs,skipped
+hr_cm_15,COLUMN_MERGE,True,SELECT first_name FROM employees,,,SELECT full_name FROM employees,valid,,SELECT full_name FROM employees,execution_error,,SELECT full_name FROM employees,execution_error,,SELECT full_name FROM employees,skipped
+hr_cm_16,COLUMN_MERGE,True,SELECT last_name FROM employees,,,SELECT full_name FROM employees,execution_error,,"SELECT SUBSTRING_INDEX(full_name, ' ', -1) AS last_name FROM employees",execution_error,,SELECT full_name FROM employees,execution_error,,SELECT last_name FROM employees,skipped

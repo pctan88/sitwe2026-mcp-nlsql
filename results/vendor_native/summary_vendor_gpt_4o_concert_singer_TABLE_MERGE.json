@@ -1,0 +1,143 @@
+{
+  "database_id": "concert_singer_TABLE_MERGE",
+  "model": "gpt-4o",
+  "model_id": "gpt-4o",
+  "backend": "openai_compat",
+  "validate_mode": "embedding",
+  "strict_mode": true,
+  "max_turns": 8,
+  "n_queries": 16,
+  "n_queries_scored": 14,
+  "ex_stale_sanity": 0.1429,
+  "sanity_agreement_with_canonical": 1.0,
+  "ex_diff_in_prompt": 0.7143,
+  "ex_vendor_native": 0.9286,
+  "canonical_ex_stale": 0.1429,
+  "canonical_ex_refreshed": 0.8571,
+  "canonical_ex_mcp": 0.8571,
+  "canonical_recovery_rate": 1.0,
+  "rr_diff_in_prompt": 0.8,
+  "rr_vendor_native": 1.1001,
+  "wilson_ci": {
+    "stale_sanity": {
+      "successes": 2,
+      "total": 14,
+      "lower": 0.040093,
+      "upper": 0.399419
+    },
+    "diff_in_prompt": {
+      "successes": 10,
+      "total": 14,
+      "lower": 0.453505,
+      "upper": 0.882788
+    },
+    "vendor_native": {
+      "successes": 13,
+      "total": 14,
+      "lower": 0.685307,
+      "upper": 0.987278
+    }
+  },
+  "mcnemar": {
+    "vendor_vs_mcp": {
+      "b": 1,
+      "c": 0,
+      "statistic": 0.0,
+      "p_value": 1.0
+    },
+    "diff_vs_mcp": {
+      "b": 1,
+      "c": 3,
+      "statistic": 0.25,
+      "p_value": 0.625
+    },
+    "vendor_vs_diff": {
+      "b": 3,
+      "c": 0,
+      "statistic": 1.333333,
+      "p_value": 0.25
+    }
+  },
+  "latency_stats": {
+    "sanity_s": {
+      "n": 14,
+      "mean": 1.176264,
+      "median": 1.22825,
+      "q1": 1.0861,
+      "q3": 1.3182,
+      "iqr": 0.2321,
+      "p95": 1.4063,
+      "min": 0.8331,
+      "max": 1.4063
+    },
+    "diff_in_prompt_s": {
+      "n": 14,
+      "mean": 1.374643,
+      "median": 1.2197,
+      "q1": 0.9473,
+      "q3": 1.3372,
+      "iqr": 0.3899,
+      "p95": 3.882,
+      "min": 0.8705,
+      "max": 3.882
+    },
+    "vendor_native_s": {
+      "n": 14,
+      "mean": 4.817364,
+      "median": 4.5907,
+      "q1": 4.0922,
+      "q3": 6.3963,
+      "iqr": 2.3041,
+      "p95": 6.8977,
+      "min": 1.8264,
+      "max": 6.8977
+    }
+  },
+  "cost": {
+    "prices_usd_per_mtok": {
+      "input": 2.5,
+      "output": 10.0
+    },
+    "sanity": {
+      "tokens_in": 2194,
+      "tokens_out": 472,
+      "usd": 0.010205,
+      "usd_per_query": 0.000729,
+      "mean_tokens_in": 156.7,
+      "mean_tokens_out": 33.7
+    },
+    "diff_in_prompt": {
+      "tokens_in": 3384,
+      "tokens_out": 437,
+      "usd": 0.01283,
+      "usd_per_query": 0.000916,
+      "mean_tokens_in": 241.7,
+      "mean_tokens_out": 31.2
+    },
+    "vendor_native": {
+      "tokens_in": 37567,
+      "tokens_out": 1962,
+      "usd": 0.113537,
+      "usd_per_query": 0.00811,
+      "mean_tokens_in": 2683.4,
+      "mean_tokens_out": 140.1
+    }
+  },
+  "tool_loop": {
+    "mean_tool_calls_per_query": 3.643,
+    "mean_api_calls_per_query": 4.214,
+    "pct_queries_using_tool": {
+      "get_schema_diff": 1.0,
+      "relink_sql": 0.9286,
+      "validate_sql": 0.9286
+    },
+    "pct_queries_no_tools": 0.0,
+    "pct_queries_capped": 0.0
+  },
+  "fallback_counts": {
+    "anthropic_fallback": 0,
+    "gemini_fallback": 0,
+    "openai_compat_fallback": 0
+  },
+  "contaminated_queries": 0
+}

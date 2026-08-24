@@ -1,0 +1,136 @@
+id,perturbation,question,gold_post,expected_failure,failure_reason,pre_sql,pre_ok,baseline_sql,baseline_ok,refreshed_schema_sql,refreshed_schema_ok,error_feedback_sql,error_feedback_ok,error_feedback_retry,error_feedback_error,error_feedback_backend,mcp_sql,mcp_method,mcp_verdict,mcp_ok,recovered,degraded,latency_pre_s,latency_baseline_s,latency_refreshed_schema_s,latency_error_feedback_s,latency_mcp_s,ast_relink_ms,backend
+cs_tm_01,TABLE_MERGE,List concert names with singer IDs.,"SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID",False,,"SELECT concert.concert_Name, singer_in_concert.Singer_ID
+FROM concert
+JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID",1,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID",0,"SELECT concert_Name, Singer_ID FROM concert_performance",1,"SELECT c.concert_Name, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID",0,1,no such table: concert,openai_compat,"SELECT cp.concert_Name, cp.Singer_ID FROM concert_performance AS cp",ast,valid,1,1,0,1.0882,1.3464,2.0624,1.1018,1.5082,1.614,openai_compat
+cs_tm_02,TABLE_MERGE,Count singers per concert.,"SELECT Concert_ID, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID",False,,"SELECT c.concert_Name, COUNT(sic.Singer_ID) AS singer_count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID",0,"SELECT c.concert_Name, COUNT(sic.Singer_ID) AS singer_count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID",0,"SELECT cp.Concert_ID, cp.concert_Name, COUNT(DISTINCT cp.Singer_ID) AS Singer_Count
+FROM concert_performance cp
+GROUP BY cp.Concert_ID, cp.concert_Name",0,"SELECT c.concert_Name, COUNT(sic.Singer_ID) AS singer_count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Concert_ID",0,1,no such table: concert,openai_compat,"SELECT cp.concert_Name, COUNT(cp.Singer_ID) AS singer_count 
+FROM concert_performance AS cp 
+GROUP BY cp.Concert_ID",ast,valid,0,0,0,1.5362,1.2944,1.6509,1.2655,2.1245,8.301416,openai_compat
+cs_tm_03,TABLE_MERGE,Concerts in 2015 with singer IDs.,"SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year=2015 ORDER BY Singer_ID",False,,"SELECT c.Concert_ID, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015",1,"SELECT c.Concert_ID, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015",0,"SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year = 2015",1,"SELECT c.Concert_ID, sic.Singer_ID
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2015",0,1,no such table: concert,openai_compat,"SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year = 2015",ast,valid,1,1,0,1.7047,1.2276,0.9903,1.1935,1.3191,1.833709,openai_compat
+cs_tm_04,TABLE_MERGE,Themes with singer counts.,"SELECT Theme, COUNT(*) FROM concert_performance GROUP BY Theme ORDER BY Theme",False,,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Theme",1,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Theme",0,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) AS Singer_Count
+FROM concert_performance cp
+GROUP BY cp.Theme",1,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+GROUP BY c.Theme",0,1,no such table: concert,openai_compat,"SELECT cp.Theme, COUNT(cp.Singer_ID) AS Singer_Count 
+FROM concert_performance AS cp 
+GROUP BY cp.Theme",ast,valid,1,1,0,1.2885,1.4204,1.0288,1.3818,1.6274,7.613167,openai_compat
+cs_tm_05,TABLE_MERGE,Distinct concert names.,SELECT DISTINCT concert_Name FROM concert_performance ORDER BY concert_Name,False,,SELECT DISTINCT concert_Name FROM concert,1,SELECT DISTINCT concert_Name FROM concert,0,SELECT DISTINCT concert_Name FROM concert_performance,1,SELECT DISTINCT concert_Name FROM Concert,0,1,no such table: concert,openai_compat,SELECT DISTINCT concert_Name FROM concert_performance,ast,valid,1,1,0,0.9957,0.9096,1.0705,0.9553,1.0757,1.00675,openai_compat
+cs_tm_06,TABLE_MERGE,Singer names in concert 2.,SELECT s.Name FROM singer s JOIN concert_performance cp ON s.Singer_ID=cp.Singer_ID WHERE cp.Concert_ID=2 ORDER BY s.Name,False,,"SELECT s.Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",1,"SELECT s.Name 
+FROM singer s
+JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",0,"SELECT s.Name 
+FROM singer s
+JOIN concert_performance cp ON s.Singer_ID = cp.Singer_ID
+WHERE cp.Concert_ID = 2",1,"SELECT s.Name 
+FROM singer s
+JOIN Singer_in_Concert sic ON s.Singer_ID = sic.Singer_ID
+WHERE sic.Concert_ID = 2",0,1,no such table: singer_in_concert,openai_compat,"SELECT s.Name 
+FROM singer AS s 
+JOIN concert_performance AS cp ON s.Singer_ID = cp.Singer_ID 
+WHERE cp.Concert_ID = 2",ast,valid,1,1,0,1.4642,1.6184,2.3983,1.4274,1.1949,1.717292,openai_compat
+cs_tm_07,TABLE_MERGE,Themes for singer 3.,SELECT Theme FROM concert_performance WHERE Singer_ID=3 ORDER BY Theme,False,,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",1,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,"SELECT DISTINCT cp.Theme 
+FROM concert_performance cp
+WHERE cp.Singer_ID = 3",1,"SELECT DISTINCT c.Theme
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE sic.Singer_ID = 3",0,1,no such table: concert,openai_compat,SELECT DISTINCT cp.Theme FROM concert_performance AS cp WHERE cp.Singer_ID = 3,ast,valid,1,1,0,1.111,1.3379,1.0615,1.114,0.9632,1.326167,openai_compat
+cs_tm_08,TABLE_MERGE,Count distinct concerts for singer 5.,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID=5,False,,"SELECT COUNT(DISTINCT Concert_ID) 
+FROM singer_in_concert 
+WHERE Singer_ID = 5",1,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,1,SELECT COUNT(DISTINCT Concert_ID) FROM singer_in_concert WHERE Singer_ID = 5,0,1,no such table: singer_in_concert,openai_compat,SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID = 5,ast,valid,1,1,0,1.052,1.033,1.246,1.0314,0.9125,1.380459,openai_compat
+cs_tm_09,TABLE_MERGE,List concert names with singer names.,"SELECT cp.concert_Name, s.Name FROM concert_performance cp JOIN singer s ON s.Singer_ID=cp.Singer_ID ORDER BY cp.Concert_ID, s.Name",False,,"SELECT concert.concert_Name, singer.Name
+FROM concert
+JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID
+JOIN singer ON singer_in_concert.Singer_ID = singer.Singer_ID",1,"SELECT concert.concert_Name, singer.Name
+FROM concert
+JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID
+JOIN singer ON singer_in_concert.Singer_ID = singer.Singer_ID",0,"SELECT cp.concert_Name, s.Name 
+FROM concert_performance cp
+JOIN singer s ON cp.Singer_ID = s.Singer_ID",1,"SELECT concert.concert_Name, singer.Name
+FROM concert
+JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID
+JOIN singer ON singer_in_concert.Singer_ID = singer.Singer_ID",0,1,no such table: concert,openai_compat,"SELECT concert_performance.concert_Name, singer.Name 
+FROM concert_performance 
+JOIN singer ON concert_performance.Singer_ID = singer.Singer_ID",ast,valid,1,1,0,1.223,1.3493,1.2869,1.3007,1.2334,1.686458,openai_compat
+cs_tm_10,TABLE_MERGE,Concerts held in stadium 2.,SELECT Concert_ID FROM concert_performance WHERE Stadium_ID=2 ORDER BY Concert_ID,False,,SELECT concert_Name FROM concert WHERE Stadium_ID = 2,0,SELECT concert_Name FROM concert WHERE Stadium_ID = 2,0,SELECT concert_Name FROM concert_performance WHERE Stadium_ID = 2,0,SELECT concert_Name FROM Concert WHERE Stadium_ID = 2,0,1,no such table: concert,openai_compat,SELECT concert_Name FROM concert_performance WHERE Stadium_ID = 2,ast,valid,0,0,0,1.1102,1.1335,1.0523,1.1681,0.9652,1.267375,openai_compat
+cs_tm_11,TABLE_MERGE,Singer counts per theme in 2014.,"SELECT Theme, COUNT(*) FROM concert_performance WHERE Year=2014 GROUP BY Theme ORDER BY Theme",False,,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",1,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",0,"SELECT cp.Theme, COUNT(DISTINCT cp.Singer_ID) AS Singer_Count
+FROM concert_performance cp
+WHERE cp.Year = 2014
+GROUP BY cp.Theme",1,"SELECT c.Theme, COUNT(sic.Singer_ID) AS Singer_Count
+FROM concert c
+JOIN singer_in_concert sic ON c.Concert_ID = sic.Concert_ID
+WHERE c.Year = 2014
+GROUP BY c.Theme",0,1,no such table: concert,openai_compat,"SELECT cp.Theme, COUNT(cp.Singer_ID) AS Singer_Count 
+FROM concert_performance AS cp 
+WHERE cp.Year = 2014 
+GROUP BY cp.Theme",ast,valid,1,1,0,1.1848,2.4244,1.1855,1.1493,1.535,10.923083,openai_compat
+cs_tm_12,TABLE_MERGE,Singer IDs for 'Week 1' concerts.,SELECT Singer_ID FROM concert_performance WHERE concert_Name='Week 1' ORDER BY Singer_ID,False,,"SELECT singer_in_concert.Singer_ID
+FROM concert
+JOIN singer_in_concert ON concert.Concert_ID = singer_in_concert.Concert_ID
+WHERE concert.concert_Name = 'Week 1'",1,"SELECT sic.Singer_ID
+FROM singer_in_concert sic
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,"SELECT Singer_ID 
+FROM concert_performance 
+WHERE concert_Name = 'Week 1'",1,"SELECT sic.Singer_ID
+FROM singer_in_concert sic
+JOIN concert c ON sic.Concert_ID = c.Concert_ID
+WHERE c.concert_Name = 'Week 1'",0,1,no such table: singer_in_concert,openai_compat,SELECT cp.Singer_ID FROM concert_performance AS cp WHERE cp.concert_Name = 'Week 1',ast,valid,1,1,0,1.0789,1.0287,0.9501,1.2057,1.2746,1.339209,openai_compat
+cs_tm_13,TABLE_MERGE,List stadium locations.,SELECT Location FROM stadium ORDER BY Stadium_ID,False,,SELECT Location FROM stadium,1,SELECT Location FROM stadium,1,SELECT Location FROM stadium,1,SELECT Location FROM stadium,1,0,,openai_compat,SELECT Location FROM stadium,ast,valid,1,0,0,0.8501,1.2216,0.9172,0.0007,0.055,0.710375,openai_compat
+cs_tm_14,TABLE_MERGE,Count stadiums.,SELECT COUNT(*) FROM stadium,False,,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,SELECT COUNT(*) FROM stadium,1,0,,openai_compat,SELECT COUNT(*) FROM stadium,ast,valid,1,0,0,1.0207,0.944,0.9421,0.0009,0.0512,1.087,openai_compat
+cs_tm_15,TABLE_MERGE,List all concert themes.,,True,unanswerable_after_TABLE_MERGE,SELECT DISTINCT Theme FROM concert,,SELECT DISTINCT Theme FROM concert,,SELECT DISTINCT Theme FROM concert_performance,,SELECT DISTINCT Theme FROM concert,,1,no such table: concert,openai_compat,SELECT DISTINCT Theme FROM concert_performance,ast,valid,,0,0,0.8839,0.9396,0.9526,0.8373,1.2048,1.16575,openai_compat
+cs_tm_16,TABLE_MERGE,Count concerts by year.,,True,unanswerable_after_TABLE_MERGE,"SELECT Year, COUNT(*) AS Concert_Count
+FROM concert
+GROUP BY Year",,"SELECT Year, COUNT(*) AS Concert_Count
+FROM concert
+GROUP BY Year",,"SELECT Year, COUNT(*) AS concert_count
+FROM concert_performance
+GROUP BY Year",,"SELECT Year, COUNT(*) AS Concert_Count
+FROM Concert
+GROUP BY Year",,1,no such table: concert,openai_compat,"SELECT Year, COUNT(*) AS Concert_Count FROM concert_performance GROUP BY Year",ast,valid,,0,0,1.0762,4.4123,0.9374,1.0153,1.2447,1.555875,openai_compat

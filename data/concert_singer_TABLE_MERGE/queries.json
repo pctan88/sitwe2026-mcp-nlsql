@@ -1,0 +1,191 @@
+[
+  {
+    "id": "cs_tm_01",
+    "question": "List concert names with singer IDs.",
+    "gold_pre": "SELECT c.concert_Name, sc.Singer_ID FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID ORDER BY c.Concert_ID, sc.Singer_ID",
+    "gold_post": "SELECT concert_Name, Singer_ID FROM concert_performance ORDER BY Concert_ID, Singer_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_02",
+    "question": "Count singers per concert.",
+    "gold_pre": "SELECT c.Concert_ID, COUNT(*) AS singer_count FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID GROUP BY c.Concert_ID ORDER BY c.Concert_ID",
+    "gold_post": "SELECT Concert_ID, COUNT(*) AS singer_count FROM concert_performance GROUP BY Concert_ID ORDER BY Concert_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_03",
+    "question": "Concerts in 2015 with singer IDs.",
+    "gold_pre": "SELECT c.Concert_ID, sc.Singer_ID FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE c.Year=2015 ORDER BY sc.Singer_ID",
+    "gold_post": "SELECT Concert_ID, Singer_ID FROM concert_performance WHERE Year=2015 ORDER BY Singer_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_04",
+    "question": "Themes with singer counts.",
+    "gold_pre": "SELECT c.Theme, COUNT(*) FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID GROUP BY c.Theme ORDER BY c.Theme",
+    "gold_post": "SELECT Theme, COUNT(*) FROM concert_performance GROUP BY Theme ORDER BY Theme",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_05",
+    "question": "Distinct concert names.",
+    "gold_pre": "SELECT DISTINCT c.concert_Name FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID ORDER BY c.concert_Name",
+    "gold_post": "SELECT DISTINCT concert_Name FROM concert_performance ORDER BY concert_Name",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_06",
+    "question": "Singer names in concert 2.",
+    "gold_pre": "SELECT s.Name FROM singer s JOIN singer_in_concert sc ON s.Singer_ID=sc.Singer_ID WHERE sc.Concert_ID=2 ORDER BY s.Name",
+    "gold_post": "SELECT s.Name FROM singer s JOIN concert_performance cp ON s.Singer_ID=cp.Singer_ID WHERE cp.Concert_ID=2 ORDER BY s.Name",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "singer",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_07",
+    "question": "Themes for singer 3.",
+    "gold_pre": "SELECT c.Theme FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE sc.Singer_ID=3 ORDER BY c.Theme",
+    "gold_post": "SELECT Theme FROM concert_performance WHERE Singer_ID=3 ORDER BY Theme",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_08",
+    "question": "Count distinct concerts for singer 5.",
+    "gold_pre": "SELECT COUNT(DISTINCT c.Concert_ID) FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE sc.Singer_ID=5",
+    "gold_post": "SELECT COUNT(DISTINCT Concert_ID) FROM concert_performance WHERE Singer_ID=5",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_09",
+    "question": "List concert names with singer names.",
+    "gold_pre": "SELECT c.concert_Name, s.Name FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID JOIN singer s ON s.Singer_ID=sc.Singer_ID ORDER BY c.Concert_ID, s.Name",
+    "gold_post": "SELECT cp.concert_Name, s.Name FROM concert_performance cp JOIN singer s ON s.Singer_ID=cp.Singer_ID ORDER BY cp.Concert_ID, s.Name",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance",
+      "singer"
+    ]
+  },
+  {
+    "id": "cs_tm_10",
+    "question": "Concerts held in stadium 2.",
+    "gold_pre": "SELECT c.Concert_ID FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE c.Stadium_ID=2 ORDER BY c.Concert_ID",
+    "gold_post": "SELECT Concert_ID FROM concert_performance WHERE Stadium_ID=2 ORDER BY Concert_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_11",
+    "question": "Singer counts per theme in 2014.",
+    "gold_pre": "SELECT c.Theme, COUNT(*) FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE c.Year=2014 GROUP BY c.Theme ORDER BY c.Theme",
+    "gold_post": "SELECT Theme, COUNT(*) FROM concert_performance WHERE Year=2014 GROUP BY Theme ORDER BY Theme",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_12",
+    "question": "Singer IDs for 'Week 1' concerts.",
+    "gold_pre": "SELECT sc.Singer_ID FROM concert c JOIN singer_in_concert sc ON c.Concert_ID=sc.Concert_ID WHERE c.concert_Name='Week 1' ORDER BY sc.Singer_ID",
+    "gold_post": "SELECT Singer_ID FROM concert_performance WHERE concert_Name='Week 1' ORDER BY Singer_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert",
+      "singer_in_concert",
+      "concert_performance"
+    ]
+  },
+  {
+    "id": "cs_tm_13",
+    "question": "List stadium locations.",
+    "gold_pre": "SELECT Location FROM stadium ORDER BY Stadium_ID",
+    "gold_post": "SELECT Location FROM stadium ORDER BY Stadium_ID",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "stadium"
+    ]
+  },
+  {
+    "id": "cs_tm_14",
+    "question": "Count stadiums.",
+    "gold_pre": "SELECT COUNT(*) FROM stadium",
+    "gold_post": "SELECT COUNT(*) FROM stadium",
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "stadium"
+    ]
+  },
+  {
+    "id": "cs_tm_15",
+    "question": "List all concert themes.",
+    "gold_pre": "SELECT Theme FROM concert ORDER BY Concert_ID",
+    "gold_post": null,
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_TABLE_MERGE"
+  },
+  {
+    "id": "cs_tm_16",
+    "question": "Count concerts by year.",
+    "gold_pre": "SELECT Year, COUNT(*) FROM concert GROUP BY Year ORDER BY Year",
+    "gold_post": null,
+    "perturbation": "TABLE_MERGE",
+    "touches": [
+      "concert"
+    ],
+    "expected_failure": true,
+    "failure_reason": "unanswerable_after_TABLE_MERGE"
+  }
+]
